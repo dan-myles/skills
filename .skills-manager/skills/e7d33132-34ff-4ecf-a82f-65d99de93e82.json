@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "e7d33132-34ff-4ecf-a82f-65d99de93e82",
+  "path": "agent-device",
+  "path_key": "agent-device",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "callstack/agent-device/agent-device",
+    "subpath": "skills/agent-device",
+    "branch": null
+  }
+}
