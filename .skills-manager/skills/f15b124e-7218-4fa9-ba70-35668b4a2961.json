@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "f15b124e-7218-4fa9-ba70-35668b4a2961",
+  "path": "paseo",
+  "path_key": "paseo",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "getpaseo/paseo/paseo",
+    "subpath": "skills/paseo",
+    "branch": null
+  }
+}

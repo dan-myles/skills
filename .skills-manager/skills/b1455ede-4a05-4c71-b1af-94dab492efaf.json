@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "b1455ede-4a05-4c71-b1af-94dab492efaf",
+  "path": "paseo-committee",
+  "path_key": "paseo-committee",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "getpaseo/paseo/paseo-committee",
+    "subpath": "skills/paseo-committee",
+    "branch": null
+  }
+}

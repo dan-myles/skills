@@ -3,5 +3,19 @@
   "scenario_id": "e1791670-bbde-4560-bd44-9547d1deaa60",
   "skill_id": "c28605af-3d9b-491d-9002-e767dce873c8",
   "sort_order": 9,
-  "tools": {}
+  "tools": {
+    "claude_code": true,
+    "cline": true,
+    "codex": true,
+    "cursor": true,
+    "droid": true,
+    "gemini_cli": true,
+    "grok": true,
+    "kimi": true,
+    "mistral_vibe": true,
+    "omp_agent": true,
+    "opencode": true,
+    "pi": true,
+    "qwen_code": true
+  }
 }
