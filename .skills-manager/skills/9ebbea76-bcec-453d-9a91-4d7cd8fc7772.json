@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "9ebbea76-bcec-453d-9a91-4d7cd8fc7772",
+  "path": "superset-standup",
+  "path_key": "superset-standup",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "superset-sh/skills/superset-standup",
+    "subpath": "skills/superset-standup",
+    "branch": null
+  }
+}

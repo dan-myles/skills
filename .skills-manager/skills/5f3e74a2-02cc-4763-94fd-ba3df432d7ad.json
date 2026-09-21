@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "5f3e74a2-02cc-4763-94fd-ba3df432d7ad",
+  "path": "superset-automate",
+  "path_key": "superset-automate",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "superset-sh/skills/superset-automate",
+    "subpath": "skills/superset-automate",
+    "branch": null
+  }
+}
