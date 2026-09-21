@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "bf75c070-9315-4092-b953-935986397f03",
+  "path": "orca-emulator-android",
+  "path_key": "orca-emulator-android",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "stablyai/orca/orca-emulator-android",
+    "subpath": "skills/orca-emulator-android",
+    "branch": null
+  }
+}

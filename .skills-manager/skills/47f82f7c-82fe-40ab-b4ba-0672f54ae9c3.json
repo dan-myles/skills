@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "47f82f7c-82fe-40ab-b4ba-0672f54ae9c3",
+  "path": "orchestration",
+  "path_key": "orchestration",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "stablyai/orca/orchestration",
+    "subpath": "skills/orchestration",
+    "branch": null
+  }
+}

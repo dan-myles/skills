@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "9eb4f979-d99a-411d-bae5-388a927131e2",
+  "path": "superset-10x",
+  "path_key": "superset-10x",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "superset-sh/skills/superset-10x",
+    "subpath": "skills/superset-10x",
+    "branch": null
+  }
+}

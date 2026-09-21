@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "9054b50b-04bd-45d4-9843-10c1e4a96789",
+  "path": "superset-mcp",
+  "path_key": "superset-mcp",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "superset-sh/skills/superset-mcp",
+    "subpath": "skills/superset-mcp",
+    "branch": null
+  }
+}

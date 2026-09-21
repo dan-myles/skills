@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "c52f27ed-5881-4670-b145-5174068b6eb1",
+  "path": "orca-per-workspace-env",
+  "path_key": "orca-per-workspace-env",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "stablyai/orca/orca-per-workspace-env",
+    "subpath": "skills/orca-per-workspace-env",
+    "branch": null
+  }
+}

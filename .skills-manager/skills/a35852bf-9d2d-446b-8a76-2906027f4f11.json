@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "a35852bf-9d2d-446b-8a76-2906027f4f11",
+  "path": "orca-emulator",
+  "path_key": "orca-emulator",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "skillssh",
+    "ref": "stablyai/orca/orca-emulator",
+    "subpath": "skills/orca-emulator",
+    "branch": null
+  }
+}
