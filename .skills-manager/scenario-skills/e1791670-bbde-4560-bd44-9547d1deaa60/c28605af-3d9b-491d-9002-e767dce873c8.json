@@ -11,6 +11,7 @@
     "droid": true,
     "gemini_cli": true,
     "grok": true,
+    "hermes": true,
     "kimi": true,
     "mistral_vibe": true,
     "omp_agent": true,
