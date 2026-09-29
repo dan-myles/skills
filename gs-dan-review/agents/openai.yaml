@@ -1,0 +1,7 @@
+interface:
+  display_name: "gs-dan-review"
+  short_description: "Review a teammate's PR as Dan through to approval"
+  default_prompt: "Use $gs-dan-review on this PR: review it, draft short texting-style comments for my approval, post them, watch for replies and pushes, verify each fix or pushback, wait for green CI, and approve only when I say so. Never merge."
+
+policy:
+  allow_implicit_invocation: false
