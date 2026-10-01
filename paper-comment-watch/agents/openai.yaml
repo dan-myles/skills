@@ -1,0 +1,7 @@
+interface:
+  display_name: "paper-comment-watch"
+  short_description: "Watch Paper comments and resolve each one in the design"
+  default_prompt: "Use $paper-comment-watch on the open Paper file: watch for new comments, make each requested change, verify it with a screenshot, and resolve the thread."
+
+policy:
+  allow_implicit_invocation: true
