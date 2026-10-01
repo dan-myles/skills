@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "ebe467b2-cde7-4997-9446-e4f8ae3cc57c",
+  "path": "mercury-receipts",
+  "path_key": "mercury-receipts",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
