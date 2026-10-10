@@ -1,10 +1,10 @@
 ---
-name: ship
+name: dma
 disable-model-invocation: true
-description: "Dan's way of working a task. Sorts it into Feature, Bug, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/ship <goal>` in Claude Code, `$ship <goal>` in Codex."
+description: "Dan's way of working a task. Sorts it into Feature, Bug, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/dma <goal>` in Claude Code, `$dma <goal>` in Codex."
 ---
 
-# Ship
+# DMA
 
 The playbook decides the order of work. The repo decides the commands.
 
