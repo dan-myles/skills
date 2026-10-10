@@ -1,76 +1,72 @@
 ---
 name: ship
 disable-model-invocation: true
-description: "Dan's delivery pipeline. Routes a task to the Feature, Bug, or Investigation playbook, copies its steps into the todo list, and runs them to verified work with evidence. Manual-only: `/ship <goal>` in Claude Code, `$ship <goal>` in Codex. Adapted from pstack's poteto-mode."
+description: "Dan's way of working a task. Sorts it into Feature, Bug, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/ship <goal>` in Claude Code, `$ship <goal>` in Codex."
 ---
 
 # Ship
 
-Take a goal from "here's what I want" to verified work with evidence. The playbook holds the process. The repo holds the commands.
+The playbook decides the order of work. The repo decides the commands.
 
 ## Start
 
-1. Read the repo's agent rules: `AGENTS.md`, `CLAUDE.md`, and any nested ones for the area you touch. Its commands, test policy, commit style, and PR skill override anything generic here.
-2. Match the task to one playbook.
-   - **Investigation.** A read-only question: how does X work, why is Y this way, should we do X or Y, or the user said not to change code. `playbooks/investigation.md`.
-   - **Bug.** Something that should work and doesn't. `playbooks/bug.md`.
-   - **Feature.** New or changed behavior. `playbooks/feature.md`.
+1. Read the repo's agent instructions first: `AGENTS.md`, `CLAUDE.md`, and any nested files for the area in play. When they name a command, a test policy, a commit style, or a PR skill, use theirs.
+2. Sort the task.
+   - **Investigation.** The user wants an answer, not a change: how something works, why it is built that way, which option is better, or "don't touch the code". `playbooks/investigation.md`.
+   - **Bug.** Behavior is wrong and should be right. `playbooks/bug.md`.
+   - **Feature.** The user wants behavior that doesn't exist yet, or different behavior. `playbooks/feature.md`.
 
-   No clean fit: take the closest, say in one line what doesn't fit, and skip the steps that don't apply.
-3. Open the todo list with the playbook's steps copied in verbatim, before any task-specific items. A step you don't do stays in the list as `skip: <reason>`.
-4. "new task" from the user means match again from step 2. Short follow-ups like "do it" or "continue" carry on the current playbook.
+   If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
+3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
+4. When the user says "new task", sort again. Anything else, like "go on" or "do it", continues the current playbook.
 
-## Rules for every playbook
+## Standing rules
 
-- **Smallest change that solves it.** Delete before you add. No speculative abstractions, flags, or code that "might help".
-- **Root causes, not symptoms.** Ask why until you reach the mechanism.
-- **Name the data shape before writing logic.** Encode the domain in a structure (a typed model, a state machine, a table) instead of scattered conditionals.
-- **Prove it works on the real surface.** Compiling and passing unit tests don't prove user-facing behavior. Wrong surface or inconclusive is not a pass. Say so.
-- **Every claim carries its evidence or a label.** Measured, read in code (`file:line`), or a guess.
-- **Candor.** If the premise is wrong or an idea doesn't earn its place, say so.
+- **Do less.** Take the smallest change that solves the problem. Remove before you add. Leave out abstractions, flags, and code that's only there "just in case".
+- **Fix the mechanism.** Keep asking why until you hit the actual cause, then fix that.
+- **Shape first.** Decide the data shape before writing logic, and pick a structure that carries the rules (a typed model, a state machine, a lookup table) over branches spread across files.
+- **Check where users look.** A build that compiles and green unit tests don't show the feature works. A check on the wrong surface, or one that's unclear, hasn't passed. Report it that way.
+- **Back every claim.** Each claim says what supports it: a run, a line of code (`file:line`), or that it's a guess.
+- **Be honest.** When the premise looks wrong, or an idea isn't worth its cost, say it plainly.
 
-## Autonomy
+## When to ask
 
-Proceed without asking on reversible work: reading, editing in a branch or worktree, running checks, local commits, and delegating to subagents.
+Go ahead without asking on anything you can undo: reading, editing on a branch or worktree, running checks, committing locally, using subagents.
 
-Pause for irreversible or outward-facing steps: force-pushes to shared branches, deploys, data deletion, messages to other people, and every **Checkpoint** a playbook names.
+Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Also stop at every **Checkpoint** a playbook names.
 
-Don't ask a question you can answer by running something. Ask only for product or preference calls, with a recommended default.
+If running something would answer a question, run it instead of asking. Bring the user only product or taste decisions, each with the option you'd pick.
 
 ## Subagents
 
-Use the harness's subagent tool when it has one.
+Use subagents when the harness supports them.
 
-- Brief with a specific scope: files, the named data shape, success criteria, and the repo rules that apply. Point at files instead of pasting them.
-- Pick the model by difficulty. The strongest model takes cross-cutting design and subtle logic. A faster model takes mechanical edits.
-- Send broad searches and bulk output to subagents. Keep summaries in the main thread.
-- You own the result. Review the diff yourself and write your own summary.
-- New work goes to a fresh subagent with the full brief. Resume one only when the work needs its live state, such as uncommitted changes or a running process.
-- No subagent tool: do the work yourself, then review the diff as if a stranger wrote it.
+- Give each one a tight brief: which files, the data shape, what done looks like, and which repo rules matter. Link to files rather than pasting them.
+- Match the model to the job. Hard design and tricky logic get the strongest model; routine edits get a quick one.
+- Push wide searches and noisy output into subagents so the main thread holds only conclusions.
+- Their work is yours. Read the diff and summarize it in your own words.
+- Start a new subagent, with the complete brief, for each new piece of work. Go back to an old one only when the work depends on something it holds, like uncommitted edits or a running server.
+- Without subagents, do the work directly and then read the diff cold, as a reviewer would.
 
 ## Review
 
-A non-trivial diff gets a fresh-context review before the PR. Non-trivial means several modules, a few hundred lines, or anything touching auth, money, stored data, or a public API. The reviewer sees only the brief and the diff. When the harness offers a second model family, run the same review there too. Agreement is high signal. Fix each finding or rebut it with a reason. Small, obvious diffs skip review with `skip: <reason>`.
+Get an outside review before the PR when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. The reviewer gets the brief and the diff, nothing else. If a second model family is available, have it review too; findings both raise are the ones to trust most. Address each finding with a fix or a reason. Small, plain diffs mark this `skip: <why>`.
 
 ## Opening the PR
 
-Feature and Bug end here.
+Feature and Bug finish here.
 
-1. Run the repo's fix and check commands (format, lint, typecheck, tests, generated output) until they pass.
-2. Make small, ordered commits, each one landable, with conventional commit titles unless the repo says otherwise. Keep them small even when the repo squash-merges. They make review easier.
-3. Use the repo's PR skill when it has one. Otherwise run `gh pr create` and open the PR ready, not as a draft.
-4. Write the PR body as why, what changed, scope (what it leaves out), and verification. Keep it short and apply the unslop skill.
-5. Merge per playbook. A bug fix follows the repo's flow, merging when that's how the repo works. A feature stops at an open PR even when the repo's PR skill would merge. Stop before that step and hand back the link.
-6. Opening a PR doesn't start a babysit. Post the link and finish.
+1. Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
+2. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
+3. Open the PR with the repo's PR skill if there is one. If not, use `gh pr create` and open it ready for review.
+4. The PR body covers why, what changed, what's out of scope, and how it was checked. Keep it brief and run the unslop skill on it.
+5. Merging depends on the playbook. Bug fixes go through the repo's normal flow, merge included when that's the norm. Features end at an open PR even if the repo's PR skill would merge them; stop before that step and return the link.
+6. Don't start watching the PR after opening it. Share the link and stop.
 
 ## The reply
 
-- Lead with the outcome. Short declarative sentences. Apply the unslop skill.
-- Each playbook names what its reply must carry. Don't drop a section to stay brief.
-- Say who the change is for and what they'll notice, then what the next maintainer inherits.
-- Link only what you produced or read this session. Give PR links in full.
-- When an explanation has several moving parts and the harness can render a diagram or HTML page, show it visually.
-
-## Credits
-
-Adapted from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan, MIT licensed. See `LICENSE-pstack`.
+- Open with the result. Keep sentences short. Run the unslop skill.
+- Include every section the playbook asks for, even when keeping it short.
+- Say who benefits and what they'll see change, then what the next person to own this code needs to know.
+- Only link things you made or read in this session. Write PR links out in full.
+- If the answer has several moving parts and the harness can show a diagram or an HTML page, draw it.
