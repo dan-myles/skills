@@ -1,5 +1,5 @@
 ---
-name: gs-dan-review
+name: personal-dan-review
 disable-model-invocation: true
 description: "Review a teammate's GameStock PR end to end as Dan: audit it, draft short texting-style comments, post them after Dan approves the wording, watch for replies and pushes, verify every fix or pushback against the code, wait for green CI, then approve on Dan's go-ahead. Never merges. Manual-only; takes a PR URL, number, or branch. A rules-only audit with nothing posted is `pr-review`; driving your own PR is `pr-ship`."
 ---

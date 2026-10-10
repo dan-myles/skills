@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "skill_id": "5ef5a8bb-7fed-4cfa-b687-9091ea97552c",
-  "path": "paper-comment-watch",
-  "path_key": "paper-comment-watch",
+  "path": "personal-paper-comment-watch",
+  "path_key": "personal-paper-comment-watch",
   "enabled": true,
   "tags": [],
   "source": {

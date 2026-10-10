@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "skill_id": "cb0734b4-deab-42e4-b207-52f346904178",
-  "path": "gs-dan-review",
-  "path_key": "gs-dan-review",
+  "path": "personal-dan-review",
+  "path_key": "personal-dan-review",
   "enabled": true,
   "tags": [
     "gamestock"
