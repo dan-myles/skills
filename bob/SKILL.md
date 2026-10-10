@@ -1,10 +1,10 @@
 ---
-name: dma
+name: bob
 disable-model-invocation: true
-description: "Dan's way of working a task. Sorts it into Feature, Bug, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/dma <goal>` in Claude Code, `$dma <goal>` in Codex."
+description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/bob <goal>` in Claude Code, `$bob <goal>` in Codex."
 ---
 
-# DMA
+# Bob
 
 The playbook decides the order of work. The repo decides the commands.
 
@@ -22,7 +22,7 @@ The playbook decides the order of work. The repo decides the commands.
 
 ## Helpers
 
-Some steps name a helper skill: `how` for how code works, `why` for why it was built that way. Helpers sit in folders next to this one, at `../how/SKILL.md` and `../why/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
+Some steps name a helper skill: `bob-how` for how code works, `bob-why` for why it was built that way. Helpers sit in folders next to this one, at `../bob-how/SKILL.md` and `../bob-why/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
 ## Standing rules
 
@@ -63,14 +63,15 @@ Feature and Bug finish here.
 1. Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
 2. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
 3. Open the PR with the repo's PR skill if there is one. If not, use `gh pr create` and open it ready for review.
-4. The PR body covers why, what changed, what's out of scope, and how it was checked. Keep it brief and run the unslop skill on it.
+4. The PR body covers why, what changed, what's out of scope, and how it was checked. Keep it brief and run `bob-unslop` on it.
 5. Merging depends on the playbook. Bug fixes go through the repo's normal flow, merge included when that's the norm. Features end at an open PR even if the repo's PR skill would merge them; stop before that step and return the link.
 6. Don't start watching the PR after opening it. Share the link and stop.
 
 ## The reply
 
-- Open with the result. Keep sentences short. Run the unslop skill.
+- Open with the result. Keep sentences short. Run `bob-unslop`.
 - Include every section the playbook asks for, even when keeping it short.
 - Say who benefits and what they'll see change, then what the next person to own this code needs to know.
 - Only link things you made or read in this session. Write PR links out in full.
 - If the answer has several moving parts and the harness can show a diagram or an HTML page, draw it.
+- If the session hit a correction, a missing step, or a skill that got in the way, end with one line suggesting `/bob-improve`.

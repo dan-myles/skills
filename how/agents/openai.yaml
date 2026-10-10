@@ -1,7 +1,0 @@
-interface:
-  display_name: "how"
-  short_description: "Explain how a subsystem works, with a flow, file map, and gotchas"
-  default_prompt: "Use $how to explain how this works: trace the code, then give an overview, key concepts, the flow, where things live, and gotchas."
-
-policy:
-  allow_implicit_invocation: false

@@ -25,7 +25,7 @@ Write one comment per finding, the way Dan texts a coworker:
 - lowercase, short, one idea each; lead with `nit:`, `q:`, or `tiny:` when it fits
 - say what is off and where, and offer the fix in a few words; no headers, no bullet lists, no essays
 - soften honest uncertainty ("guessing X? if so, fine", "ignore if you had a reason")
-- no AI tells: apply `unslop` when it is available
+- no AI tells: apply `bob-unslop` when it is available
 - praise or an overall note goes in the review body, not an inline comment
 
 Anchor every comment to a line on the right side at `HEAD_SHA`. Confirm each line number with `git show <HEAD_SHA>:<path> | grep -n` before drafting. New files: line numbers of the file itself. Modified files: the new-side line.

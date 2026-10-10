@@ -1,12 +1,12 @@
 ---
-name: why
+name: bob-why
 disable-model-invocation: true
-description: "Find out why code is the way it is: design rationale, why an option was picked, what caused a regression, postmortems, and where a threshold came from. Searches every evidence source the session can reach (git and PRs, tickets, docs, chat, telemetry, error tracking, analytics) in parallel and returns a cited answer that separates fact from inference. For how code behaves at runtime, use `how`."
+description: "Find out why code is the way it is: design rationale, why an option was picked, what caused a regression, postmortems, and where a threshold came from. Searches every evidence source the session can reach (git and PRs, tickets, docs, chat, telemetry, error tracking, analytics) in parallel and returns a cited answer that separates fact from inference. For how code behaves at runtime, use `bob-how`."
 ---
 
 # Why
 
-`how` explains what code does. `why` explains the forces that shaped it.
+`bob-how` explains what code does. `bob-why` explains the forces that shaped it.
 
 Work like a careful investigator. Keep what the record says apart from what you infer. `references/confidence.md` defines the confidence levels and the wording for each. The synthesizer must follow it.
 

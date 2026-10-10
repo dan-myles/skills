@@ -1,7 +1,7 @@
 ---
-name: how
+name: bob-how
 disable-model-invocation: true
-description: "Explain how part of a codebase works: subsystem architecture, runtime flow, and where something belongs (which package owns it, which layer it sits in). Use before changing unfamiliar code, for walkthroughs, and for onboarding. For why code is shaped the way it is, use `why`."
+description: "Explain how part of a codebase works: subsystem architecture, runtime flow, and where something belongs (which package owns it, which layer it sits in). Use before changing unfamiliar code, for walkthroughs, and for onboarding. For why code is shaped the way it is, use `bob-why`."
 ---
 
 # How

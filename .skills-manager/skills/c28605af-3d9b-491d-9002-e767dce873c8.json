@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "skill_id": "c28605af-3d9b-491d-9002-e767dce873c8",
-  "path": "unslop",
-  "path_key": "unslop",
+  "path": "bob-unslop",
+  "path_key": "bob-unslop",
   "enabled": true,
   "tags": [],
   "source": {

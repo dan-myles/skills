@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "skill_id": "e9d9f62a-5e21-4dc2-9d8f-74bbff72c722",
-  "path": "why",
-  "path_key": "why",
+  "path": "bob-why",
+  "path_key": "bob-why",
   "enabled": true,
   "tags": [],
   "source": {

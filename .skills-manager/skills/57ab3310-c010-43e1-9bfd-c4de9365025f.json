@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "skill_id": "57ab3310-c010-43e1-9bfd-c4de9365025f",
-  "path": "dma",
-  "path_key": "dma",
+  "path": "bob",
+  "path_key": "bob",
   "enabled": true,
   "tags": [],
   "source": {
