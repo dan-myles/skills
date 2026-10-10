@@ -20,6 +20,10 @@ The playbook decides the order of work. The repo decides the commands.
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
 4. When the user says "new task", sort again. Anything else, like "go on" or "do it", continues the current playbook.
 
+## Helpers
+
+Some steps name a helper skill: `how` for how code works, `why` for why it was built that way. Helpers sit in folders next to this one, at `../how/SKILL.md` and `../why/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
+
 ## Standing rules
 
 - **Do less.** Take the smallest change that solves the problem. Remove before you add. Leave out abstractions, flags, and code that's only there "just in case".

@@ -2,7 +2,7 @@
 
 The design is yours. Hand off the typing, keep the decisions.
 
-1. Learn the ground first: which code paths, data shapes, and module boundaries the change touches, and what the repo's rules say about that area. For a wide area, send a subagent to survey it.
+1. Learn the ground first. Run `how` over the area the change touches: its code paths, data shapes, and module boundaries. Read what the repo's rules say about that area. When the design would rework code that looks deliberate, run `why` on it too and carry its Keep/Change/Avoid/Risk into the draft.
 2. Draft the design: the data shape and its structure, where it lives, its public signatures, and how current code will call it. Bring two drafts only when two directions are both reasonable. **Checkpoint:** show the draft and wait for the user to agree before writing code, unless they said to skip this.
 3. Plan the work as four todo items. Keep an item that doesn't apply, marked `n/a: <why>`.
    - **Goes first.** Anything the rest depends on: schemas, API specs, shared types, generated code.
