@@ -63,13 +63,13 @@ Feature and Bug finish here.
 1. Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
 2. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
 3. Open the PR with the repo's PR skill if there is one. If not, use `gh pr create` and open it ready for review.
-4. The PR body covers why, what changed, what's out of scope, and how it was checked. Keep it brief and run `bob-unslop` on it.
+4. The PR body covers why, what changed, what's out of scope, and how it was checked. Keep it brief and run `unslop` on it.
 5. Merging depends on the playbook. Bug fixes go through the repo's normal flow, merge included when that's the norm. Features end at an open PR even if the repo's PR skill would merge them; stop before that step and return the link.
 6. Don't start watching the PR after opening it. Share the link and stop.
 
 ## The reply
 
-- Open with the result. Keep sentences short. Run `bob-unslop`.
+- Open with the result. Keep sentences short. Run `unslop`.
 - Include every section the playbook asks for, even when keeping it short.
 - Say who benefits and what they'll see change, then what the next person to own this code needs to know.
 - Only link things you made or read in this session. Write PR links out in full.

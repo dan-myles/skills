@@ -17,7 +17,7 @@ Bob gets better one approved edit at a time. Every edit traces back to something
 
 ## Where Bob lives
 
-The bob- skills are folders next to this one: `bob`, `bob-how`, `bob-why`, `bob-unslop`, `bob-improve`. Resolve this folder's real path first, since it may be a symlink into the skills repo. Edits are made and committed in that repo.
+The bob- skills are folders next to this one: `bob`, `bob-how`, `bob-why`, `bob-improve`. Resolve this folder's real path first, since it may be a symlink into the skills repo. Edits are made and committed in that repo.
 
 ## Where a lesson lands
 
@@ -34,7 +34,7 @@ Each lesson goes to exactly one place.
 - Change the existing section before adding a new one. When the guidance was there and got missed, fix its wording or placement instead of saying it twice.
 - A skill that should have run and didn't needs a better trigger, not a longer body. For model-invoked skills that's the `description`. For manual-only helpers it's the playbook step that should have called them.
 - Point at other skills by path. Don't restate them.
-- Write in Bob's voice: short declarative sentences. Run `bob-unslop` on new prose.
+- Write in Bob's voice: short declarative sentences. Run `unslop` on new prose.
 - After each edit, check that the frontmatter `name` matches the folder, the `description` is there, every referenced file exists, sibling paths resolve, and `agents/openai.yaml` uses the same name.
 - A new skill gets the `bob-` prefix and `disable-model-invocation: true` unless the user wants it to trigger itself. Give it an `agents/openai.yaml` with `allow_implicit_invocation: false`. Register it with skills-manager: a `.skills-manager/skills/<uuid>.json` whose `path` and `path_key` match the folder, plus an entry in the Default scenario. Link it into `~/.agents/skills` and `~/.claude/skills`.
 - Commit each approved change on its own, titled after the skill it touches (`bob: …`, `bob-why: …`). Approving a row approves committing and pushing it.
