@@ -28,6 +28,6 @@ Turn one session into approved edits.
 
 - **Applied.** Skill path, what changed, and the commit, one line each.
 - **Repo notes.** AGENTS.md edits left in the working tree, one line each.
-- **Backlog.** One line each. A mechanism in a repo is written as a ready-to-run `/bob <task>`.
+- **Backlog.** One line each. A mechanism in a repo is written as a ready-to-run `/bob-improve correct <class>`.
 - **Dropped.** One line each, with the reason.
 - **Models.** From step 9, one line each, or "no model changes".

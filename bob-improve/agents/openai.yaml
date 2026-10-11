@@ -1,6 +1,6 @@
 interface:
   display_name: "bob-improve"
-  short_description: "Turn a finished session into approved edits to the bob- skills, test a skill change blind, or recommend model changes"
+  short_description: "Turn a finished session into approved edits to the bob- skills, test a skill change blind, recommend model changes, or make a repo's repeated agent mistakes impossible"
   default_prompt: "Use $bob-improve to reflect on this session: run the three reviewers, synthesize, and show me the Accepted, Rejected, and Backlog lists before changing anything."
 
 policy:
