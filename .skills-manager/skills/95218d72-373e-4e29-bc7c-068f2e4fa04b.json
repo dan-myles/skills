@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "95218d72-373e-4e29-bc7c-068f2e4fa04b",
+  "path": "bob-principle-never-block-on-the-human",
+  "path_key": "bob-principle-never-block-on-the-human",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

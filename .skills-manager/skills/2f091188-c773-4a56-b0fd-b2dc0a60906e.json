@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "2f091188-c773-4a56-b0fd-b2dc0a60906e",
+  "path": "bob-principle-encode-lessons-in-structure",
+  "path_key": "bob-principle-encode-lessons-in-structure",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

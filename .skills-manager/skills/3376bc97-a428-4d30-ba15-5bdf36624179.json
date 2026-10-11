@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "3376bc97-a428-4d30-ba15-5bdf36624179",
+  "path": "bob-principle-fix-root-causes",
+  "path_key": "bob-principle-fix-root-causes",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

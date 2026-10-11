@@ -18,7 +18,7 @@ Bob gets better one approved edit at a time. Every edit traces back to something
 
 ## Where Bob lives
 
-The bob- skills are folders next to this one: `bob`, `bob-how`, `bob-why`, `bob-architect`, `bob-adversarial-review`, `bob-blast-radius`, `bob-models`, `bob-verify`, `bob-improve`. Resolve this folder's real path first, since it may be a symlink into the skills repo. Edits are made and committed in that repo.
+The bob- skills are folders next to this one: `bob`, `bob-how`, `bob-why`, `bob-architect`, `bob-adversarial-review`, `bob-blast-radius`, `bob-models`, `bob-verify`, `bob-improve`, and the `bob-principle-*` skills. Resolve this folder's real path first, since it may be a symlink into the skills repo. Edits are made and committed in that repo.
 
 ## Where a lesson lands
 
@@ -27,7 +27,7 @@ Each lesson goes to exactly one place.
 - **A bob- skill** when it holds in any repo: how Bob sorts work, builds, checks, reviews, or writes.
 - **The repo's AGENTS.md** (the nearest nested one) when it's about one codebase: a command, a boundary, a trap. Repo facts never go into a bob- skill.
 - **The repo's verify skill** (`.claude/skills/verify-<app>/`) when it's about launching or driving that app: a handle, a readiness signal, a gotcha. Route a big drift to `/bob-verify maintain` instead.
-- **A mechanism** when a type, lint, test, or script could enforce it. Pick the strongest that fits: a state that can't compile, then a lint or banned API that fails CI, then a shared helper, then a runtime check. Prose is for what only judgment can catch. A mechanism inside a repo becomes a `/bob` task.
+- **A mechanism** when a type, lint, test, or script could enforce it, per `../bob-principle-encode-lessons-in-structure/SKILL.md`. Pick the strongest that fits: a state that can't compile, then a lint or banned API that fails CI, then a shared helper, then a runtime check. Prose is for what only judgment can catch. A mechanism inside a repo becomes a `/bob` task.
 - **Nowhere** when it happened once.
 
 ## Editing a skill

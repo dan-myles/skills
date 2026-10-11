@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-type-system-discipline"
+  short_description: "Use the type checker to rule out impossible states, mixed-up values, and unhandled cases before the code runs."
+  default_prompt: "Use $bob-principle-type-system-discipline on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

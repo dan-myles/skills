@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "b7546dda-49ca-453f-937e-638a7fab6b59",
+  "path": "bob-principle-minimize-reader-load",
+  "path_key": "bob-principle-minimize-reader-load",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

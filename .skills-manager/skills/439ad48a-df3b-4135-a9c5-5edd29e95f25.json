@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "439ad48a-df3b-4135-a9c5-5edd29e95f25",
+  "path": "bob-principle-subtract-before-you-add",
+  "path_key": "bob-principle-subtract-before-you-add",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

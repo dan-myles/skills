@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-guard-the-context-window"
+  short_description: "Context is finite within a session."
+  default_prompt: "Use $bob-principle-guard-the-context-window on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

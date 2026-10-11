@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "32cdb2e2-e22e-4f15-ad0e-a9a8074542c7",
+  "path": "bob-principle-test-behavior-not-implementation",
+  "path_key": "bob-principle-test-behavior-not-implementation",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

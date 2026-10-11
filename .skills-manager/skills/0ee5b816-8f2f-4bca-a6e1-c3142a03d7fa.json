@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "0ee5b816-8f2f-4bca-a6e1-c3142a03d7fa",
+  "path": "bob-principle-build-the-lever",
+  "path_key": "bob-principle-build-the-lever",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

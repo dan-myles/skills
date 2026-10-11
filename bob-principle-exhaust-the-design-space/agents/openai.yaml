@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-exhaust-the-design-space"
+  short_description: "When there's no precedent to copy, build two or three real alternatives and compare them side by side before picking one."
+  default_prompt: "Use $bob-principle-exhaust-the-design-space on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

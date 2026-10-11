@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "a56fb8cd-9959-4310-821d-17b2f800126b",
+  "path": "bob-principle-migrate-callers-then-delete-legacy-apis",
+  "path_key": "bob-principle-migrate-callers-then-delete-legacy-apis",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

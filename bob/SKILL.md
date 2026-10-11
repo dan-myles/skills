@@ -38,16 +38,49 @@ When a step drives the app, use the repo's verify skill if it has one: `.claude/
 
 ## Standing rules
 
-- **Do less.** Take the smallest change that solves the problem. Remove before you add. Leave out abstractions, flags, and code that's only there "just in case".
-- **Fix the mechanism.** Keep asking why until you hit the actual cause, then fix that.
-- **Shape first.** Decide the data shape before writing logic, and pick a structure that carries the rules (a typed model, a state machine, a lookup table) over branches spread across files.
-- **Check where users look.** A build that compiles and green unit tests don't show the feature works. A check on the wrong surface, or one that's unclear, hasn't passed. Report it that way.
+- **Do less.** Take the smallest change that solves the problem. Remove before you add. Leave out abstractions, flags, and code that's only there "just in case". (`laziness-protocol`, `subtract-before-you-add`)
+- **Fix the mechanism.** Keep asking why until you hit the actual cause, then fix that. (`fix-root-causes`)
+- **Shape first.** Decide the data shape before writing logic, and pick a structure that carries the rules (a typed model, a state machine, a lookup table) over branches spread across files. (`model-the-domain`, `foundational-thinking`)
+- **Check where users look.** A build that compiles and green unit tests don't show the feature works. A check on the wrong surface, or one that's unclear, hasn't passed. Report it that way. (`prove-it-works`)
 - **Back every claim.** Each claim says what supports it: a run, a line of code (`file:line`), or that it's a guess.
 - **Be honest.** When the premise looks wrong, or an idea isn't worth its cost, say it plainly.
 
+## Principles
+
+Each principle is a skill next to this one: `<name>` below means `../bob-principle-<name>/SKILL.md`. Read one when its trigger fits the work or a step names it. Like the helpers, they never load on their own.
+
+- **Design:**
+  - `model-the-domain`: stateful logic, heavy branching, a shape assumed in several files.
+  - `foundational-thinking`: picking core types, what to build first, state more than one actor touches.
+  - `type-system-discipline`: designing types or signatures in a typed language.
+  - `boundary-discipline`: wiring validation, error handling, or a framework adapter.
+  - `minimize-reader-load`: code that's hard to trace, or judging whether a refactor paid off.
+  - `redesign-from-first-principles`: a new requirement landing in an existing design.
+  - `exhaust-the-design-space`: a choice with no precedent to copy.
+  - `experience-first`: product, UX, or scope tradeoffs.
+  - `make-operations-idempotent`: commands, migrations, or loops that crash and retry.
+  - `separate-before-serializing-shared-state`: parallel writers on one file, branch, or key.
+- **Changing code:**
+  - `laziness-protocol`: sizing a diff, or tempted to add a layer.
+  - `subtract-before-you-add`: ordering an addition, refactor, or rewrite.
+  - `migrate-callers-then-delete-legacy-apis`: a new internal API replacing an old one.
+  - `outcome-oriented-execution`: a planned rewrite or migration with phases.
+  - `build-the-lever`: any edit, migration, or check that isn't trivial.
+  - `sequence-verifiable-units`: multi-step work, and ordering commits.
+- **Debugging and checking:**
+  - `fix-root-causes`: any debugging.
+  - `attack-the-premise`: two fixes on the same assumption failed the same check.
+  - `prove-it-works`: before calling anything done.
+  - `explain-the-number`: before trusting a measured number.
+  - `test-behavior-not-implementation`: writing, changing, or keeping a test.
+- **Working:**
+  - `never-block-on-the-human`: about to ask permission for something you can undo.
+  - `guard-the-context-window`: big outputs, long files, planning a fan-out.
+  - `encode-lessons-in-structure`: the same correction twice.
+
 ## When to ask
 
-Go ahead without asking on anything you can undo: reading, editing on a branch or worktree, running checks, committing locally, using subagents.
+Go ahead without asking on anything you can undo (`never-block-on-the-human`): reading, editing on a branch or worktree, running checks, committing locally, using subagents.
 
 Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Also stop at every **Checkpoint** a playbook names.
 
@@ -58,7 +91,7 @@ If running something would answer a question, run it instead of asking. Bring th
 Use subagents when the harness supports them.
 
 - Give each one a tight brief: which files, the data shape, what done looks like, and which repo rules matter. Link to files rather than pasting them.
-- Push wide searches and noisy output into subagents so the main thread holds only conclusions.
+- Push wide searches and noisy output into subagents so the main thread holds only conclusions (`guard-the-context-window`).
 - Their work is yours. Read the diff and summarize it in your own words.
 - Start a new subagent, with the complete brief, for each new piece of work. Go back to an old one only when the work depends on something it holds, like uncommitted edits or a running server.
 - Without subagents, do the work directly and then read the diff cold, as a reviewer would.

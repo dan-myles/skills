@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "009457a8-7aab-4cfc-bf04-74ec357b9ede",
+  "path": "bob-principle-explain-the-number",
+  "path_key": "bob-principle-explain-the-number",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

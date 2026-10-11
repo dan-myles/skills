@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "75840082-3a9e-4361-9f03-ee287234bc57",
+  "path": "bob-principle-experience-first",
+  "path_key": "bob-principle-experience-first",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

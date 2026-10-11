@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-outcome-oriented-execution"
+  short_description: "In a planned rewrite or migration, aim for the finished state."
+  default_prompt: "Use $bob-principle-outcome-oriented-execution on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

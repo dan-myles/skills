@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "7fdf1593-6818-4d3d-bb2b-3df677d7eae7",
+  "path": "bob-principle-outcome-oriented-execution",
+  "path_key": "bob-principle-outcome-oriented-execution",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

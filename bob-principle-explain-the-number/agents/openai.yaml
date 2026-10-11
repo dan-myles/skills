@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-explain-the-number"
+  short_description: "Before you trust, report, or act on a measured number, find what limits it and rule out that it measured something else."
+  default_prompt: "Use $bob-principle-explain-the-number on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

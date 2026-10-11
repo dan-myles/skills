@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "68a6cbf2-af4a-4356-ade4-92af52d915f7",
+  "path": "bob-principle-prove-it-works",
+  "path_key": "bob-principle-prove-it-works",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

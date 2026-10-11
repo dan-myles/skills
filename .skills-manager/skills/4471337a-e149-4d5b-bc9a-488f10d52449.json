@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "4471337a-e149-4d5b-bc9a-488f10d52449",
+  "path": "bob-principle-make-operations-idempotent",
+  "path_key": "bob-principle-make-operations-idempotent",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

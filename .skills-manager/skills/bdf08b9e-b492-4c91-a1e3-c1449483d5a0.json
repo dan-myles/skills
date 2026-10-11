@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "bdf08b9e-b492-4c91-a1e3-c1449483d5a0",
+  "path": "bob-principle-boundary-discipline",
+  "path_key": "bob-principle-boundary-discipline",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

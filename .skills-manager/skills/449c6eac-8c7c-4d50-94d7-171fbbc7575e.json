@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "449c6eac-8c7c-4d50-94d7-171fbbc7575e",
+  "path": "bob-principle-separate-before-serializing-shared-state",
+  "path_key": "bob-principle-separate-before-serializing-shared-state",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

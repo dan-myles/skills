@@ -4,7 +4,7 @@ The answer is yours. Change nothing: no edits, commits, or PRs.
 
 1. Run `bob-how` on the area in question. It follows the code from where the behavior starts to where it lands, reading it rather than inferring it.
 2. When the question is "why", run `bob-why` on the target. It works through the history and every other evidence source the session can reach.
-3. Lay out the answer in `bob-how`'s sections: overview, the ideas you need, how it works step by step, where it lives (`file:line`), and the traps. Add `bob-why`'s findings with their confidence levels. When the question is a choice, recommend one and back it with a table comparing the options.
+3. Lay out the answer in `bob-how`'s sections: overview, the ideas you need, how it works step by step, where it lives (`file:line`), and the traps. Add `bob-why`'s findings with their confidence levels. When the question is a choice, recommend one and back it with a table comparing the options. When the answer rests on a measured number, apply `explain-the-number` first.
 4. Run `unslop` on the reply.
 
 If you conclude the code needs to change, stop there and say so. The user picks whether Bug or Feature comes next.

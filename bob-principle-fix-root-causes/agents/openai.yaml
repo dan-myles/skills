@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-fix-root-causes"
+  short_description: "Trace every symptom to its cause and fix it there."
+  default_prompt: "Use $bob-principle-fix-root-causes on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

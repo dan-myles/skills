@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-prove-it-works"
+  short_description: "Check the real thing before calling work done."
+  default_prompt: "Use $bob-principle-prove-it-works on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

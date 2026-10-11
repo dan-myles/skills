@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "6f90144a-eff8-47ed-96a2-5935d8fa5b5f",
+  "path": "bob-principle-exhaust-the-design-space",
+  "path_key": "bob-principle-exhaust-the-design-space",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

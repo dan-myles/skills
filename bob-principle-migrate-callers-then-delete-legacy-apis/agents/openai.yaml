@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-principle-migrate-callers-then-delete-legacy-apis"
+  short_description: "When a new internal API replaces an old one, move every caller and delete the old one in the same change."
+  default_prompt: "Use $bob-principle-migrate-callers-then-delete-legacy-apis on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "ab00cab7-e017-43dd-bda2-8872d6e1d94f",
+  "path": "bob-principle-sequence-verifiable-units",
+  "path_key": "bob-principle-sequence-verifiable-units",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
