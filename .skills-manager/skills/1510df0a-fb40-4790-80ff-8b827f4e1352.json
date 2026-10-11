@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "skill_id": "1510df0a-fb40-4790-80ff-8b827f4e1352",
-  "path": "bob-interrogate",
-  "path_key": "bob-interrogate",
+  "path": "bob-adversarial-review",
+  "path_key": "bob-adversarial-review",
   "enabled": true,
   "tags": [],
   "source": {

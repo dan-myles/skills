@@ -1,10 +1,10 @@
 ---
-name: bob-interrogate
+name: bob-adversarial-review
 disable-model-invocation: true
-description: "Adversarial review of a change by two model families. Claude and GPT get the same intent, diff, and rubric; Bob merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/bob-interrogate [diff or files]` in Claude Code, `$bob-interrogate ...` in Codex. `bob` runs it from its Review step."
+description: "Adversarial review of a change by two model families. Claude and GPT get the same intent, diff, and rubric; Bob merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/bob-adversarial-review [diff or files]` in Claude Code, `$bob-adversarial-review ...` in Codex. `bob` runs it from its Review step."
 ---
 
-# Interrogate
+# Adversarial review
 
 Two reviewers from different model families get the same prompt. The pressure comes from the models being different, not from giving them personas. What both raise is the strongest signal.
 

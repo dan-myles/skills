@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-interrogate"
-  short_description: "Adversarial review of a change by two model families, merged into one verdict"
-  default_prompt: "Use $bob-interrogate to review this change: state its intent, have Claude and GPT review the same diff, and sort the findings into Act on, Consider, Noted, and Dismissed."
-
-policy:
-  allow_implicit_invocation: false

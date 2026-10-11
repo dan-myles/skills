@@ -27,7 +27,7 @@ Some steps name a helper skill:
 - `bob-how`: how code works.
 - `bob-why`: why it was built that way.
 - `bob-architect`: two designs from two model families, merged into one sketch.
-- `bob-interrogate`: an adversarial review by two model families.
+- `bob-adversarial-review`: an adversarial review by two model families.
 
 Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
@@ -63,7 +63,7 @@ Use subagents when the harness supports them.
 
 ## Review
 
-Run `bob-interrogate` before the PR when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each **Act on** finding in its own commit, put **Consider** findings in the PR body or ask the user, and list the dismissals in the reply. Small, plain diffs mark this `skip: <why>`.
+Run `bob-adversarial-review` before the PR when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each **Act on** finding in its own commit, put **Consider** findings in the PR body or ask the user, and list the dismissals in the reply. Small, plain diffs mark this `skip: <why>`.
 
 ## Opening the PR
 
