@@ -18,4 +18,4 @@ Feature adds behavior and Bug corrects it; a refactor does neither. When the cle
 8. Review per **Review** in the skill. A refactor usually reaches past its diff, so `bob-blast-radius` usually applies.
 9. Run **Opening the PR**. Order the commits as pin, deletions, reshape, then follow-on cleanup. Refactors end at a merge-ready PR, unmerged.
 
-**Reply:** the structure that changed, the pin and the proof behavior held, what got easier to read (layers or state removed), what you reverted, any bug or feature you split out, and the PR link. No new behavior.
+**Reply:** the structure that changed, the pin and the proof behavior held, what got easier to read (layers or state removed), what you reverted, any bug or feature you split out, and the PR link. No new behavior. **Show:** the structure before and after, with what was deleted marked.

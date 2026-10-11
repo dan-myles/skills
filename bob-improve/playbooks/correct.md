@@ -27,4 +27,4 @@ This playbook edits the target repo, not the bob- skills. Work on a branch and f
 
 After this, the table does the work. When the user corrects an agent in this repo, fix the mistake and add the rule. If the rule was already in the table with nothing enforcing it, that's a repeat: fix it at the highest level that works, in the same change.
 
-**Reply:** each class with its evidence, the level picked and why a higher one didn't work, the proof each check fails on a past mistake, the rule table changes, the PR link, and the classes left for later.
+**Reply:** each class with its evidence, the level picked and why a higher one didn't work, the proof each check fails on a past mistake, the rule table changes, the PR link, and the classes left for later. **Show:** the classes by frequency, each with its level and proof.

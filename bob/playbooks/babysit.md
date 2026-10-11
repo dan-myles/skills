@@ -22,4 +22,4 @@ Babysitting never merges. Merge only when the user explicitly says to merge or l
 5. **Wait without polling.** In T3, call `watch_pull_request` and end the turn; T3 wakes this thread when checks finish, someone comments, or the branch conflicts. After each wake, go back to step 3. Outside T3, use `gh pr checks <n> --watch`. Answer user questions mid-loop and keep going until they say stop.
 6. **Stop at merge-ready:** checks green, GitHub reports it mergeable with no blockers, and no unresolved threads. A required approval is a wait, not a blocker to fix; report it. In T3, call `unwatch_pull_request` before handing back.
 
-**Reply:** the mode, the PR's state, what you fixed and what you dismissed with reasons, what's pending, and what needs the user.
+**Reply:** the mode, the PR's state, what you fixed and what you dismissed with reasons, what's pending, and what needs the user. **Show:** a status grid of checks and threads (fixed, dismissed, open), with what needs the user on top.

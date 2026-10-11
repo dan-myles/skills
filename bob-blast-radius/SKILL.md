@@ -35,7 +35,7 @@ Rung 4 is the usual target: one small script that imports the library the app sh
 4. **Weigh each risk.** Give it real odds and a real cost. Keep the ones that hold. List the ones you checked and cleared separately. Cite a real `file:line` for each. A search that found nothing is an answer; say what you searched. Never invent a caller or an API.
 5. **Prove the fact.** Write the script or test in a scratch folder (`/tmp/bob-blast-radius-<slug>/`), run it, and paste the output. If it shows the fact is false, that's the headline.
 
-**Reply:** no preamble.
+**Reply:** no preamble. Show it per `../bob/references/visuals.md`: the change at the center, what it reaches outward, each risk on its path, and the safety fact with its rung on the proof ladder.
 
 - **What it does.** What changed, including the part that isn't obvious.
 - **Safe because.** The fact, the rung it reached, and the proof output. If you couldn't prove it, say "unproven".

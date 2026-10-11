@@ -55,7 +55,7 @@ Do all of these together:
 
 Bob babysits every PR he opens unless told not to, and replies to human reviewers and bots without asking. Dan chose both.
 
-`bob/references/benchmark-checklist.md` vets every performance number.
+`bob/references/benchmark-checklist.md` vets every performance number. `bob/references/visuals.md` makes replies visual-first: in T3 Bob draws most replies and every checkpoint as an HTML page (`html_preview`, then `html_render`) and keeps the text to what the picture doesn't say. Every playbook's Reply names what to **Show**.
 
 **Helpers** Bob runs from playbook steps:
 

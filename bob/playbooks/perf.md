@@ -26,7 +26,7 @@ Vet every number, the baseline included, with `references/benchmark-checklist.md
 6. Review per **Review** in the skill.
 7. Run **Opening the PR**. The PR body gets one headline number. The runs, range, and limiter go in the details or a linked artifact.
 
-**Reply:** the verdict, baseline and after with units, run count, range, the limiter, the fix, the artifact path, and the PR link.
+**Reply:** the verdict, baseline and after with units, run count, range, the limiter, the fix, the artifact path, and the PR link. **Show:** a before-and-after chart with units, range, and the limiter.
 
 ## Climb
 
@@ -45,4 +45,4 @@ One change, one measurement, keep or revert. Never stack untested changes. Never
 7. Stop when the rule is met, or when the ideas left aren't worth their cost. Don't loosen the rule to meet it, and don't quit with cheap ideas untried. If you're stuck, say so.
 8. Review per **Review** in the skill, then run **Opening the PR** with the kept commits in the order they landed.
 
-**Reply:** the metric and target, baseline to final with the percent change, tries kept and reverted, each kept change in one line, the `decision.tsv` path, and the next idea you'd try.
+**Reply:** the metric and target, baseline to final with the percent change, tries kept and reverted, each kept change in one line, the `decision.tsv` path, and the next idea you'd try. **Show:** the metric across tries, kept and reverted marked, against the target.

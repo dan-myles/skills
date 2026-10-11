@@ -43,4 +43,4 @@ Bob's own model is the T3 thread's model, set in T3's composer. This file can't 
    - Parse the file afterwards and re-run step 3's checks.
 7. **Commit** in the skills repo with a short lowercase message, the skill edits from a pin in the same commit. Resolve this folder's real path first; it may be a symlink.
 
-**Reply:** the final table, what changed, and recommendations left open with their reasons.
+**Reply:** the final table, what changed, and recommendations left open with their reasons. Show the table and the before and after per `../bob/references/visuals.md`.

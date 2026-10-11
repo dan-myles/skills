@@ -24,7 +24,7 @@ Turn one session into approved edits.
 8. Apply the picked rows per **Editing a skill**. Commit and push each one in the skills repo. For AGENTS.md rows, make the edit in that repo's working tree and leave it for the user's next change, unless they ask for a PR. When a row changes behavior you can't judge by reading it, offer Eval before committing.
 9. Check models per `playbooks/models.md`, on this session. It only recommends; nothing to approve.
 
-**Reply:** no preamble.
+**Reply:** no preamble. Show the Checkpoint's lists, and the final result, per `../bob/references/visuals.md`.
 
 - **Applied.** Skill path, what changed, and the commit, one line each.
 - **Repo notes.** AGENTS.md edits left in the working tree, one line each.

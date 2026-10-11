@@ -58,6 +58,8 @@ Each finding names who raised it, its bucket, and a one-line reason for the buck
 
 ## Output
 
+Show it per `../bob/references/visuals.md`: findings grouped by bucket, each marked with which reviewers raised it. The sections below are the content.
+
 ### Intent
 > the paragraph from step 2
 

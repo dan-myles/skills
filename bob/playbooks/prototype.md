@@ -11,4 +11,4 @@ This is the one playbook where speed beats polish. Code quality doesn't matter, 
 5. Look at it the way the user would. For a visual call, screenshot each variant and drive the interaction. For a behavior call, watch the thing you're deciding: log the timing, print the output, watch it render. Here the observation is the test. When the harness can show HTML or a preview inline, show the variants there.
 6. Present the variants, the tradeoffs, and your pick. **Checkpoint:** wait for the user to choose. The chosen direction goes to Feature for the real build, through `bob-architect` when it needs a shape.
 
-**Reply:** the variants, the evidence (screenshots for a visual call, the observed output or timing for a behavior one), the tradeoffs, your pick, and the scratch path. Say plainly that the prototype is throwaway.
+**Reply:** the variants, the evidence (screenshots for a visual call, the observed output or timing for a behavior one), the tradeoffs, your pick, and the scratch path. Say plainly that the prototype is throwaway. **Show:** the variants behind their switcher, inline when the harness can.

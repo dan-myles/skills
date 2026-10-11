@@ -11,4 +11,4 @@ The fix is yours. Work from evidence: each line you ship should answer something
 7. Review per **Review** in the skill.
 8. Run **Opening the PR**. Bug fixes follow the repo's merge flow.
 
-**Reply:** what went wrong, the cause and the evidence for it, the fix, how you checked it, the reproduction output from before and after copied exactly, and the PR link.
+**Reply:** what went wrong, the cause and the evidence for it, the fix, how you checked it, the reproduction output from before and after copied exactly, and the PR link. **Show:** the failure path with the point it broke, and the reproduction before and after.

@@ -16,7 +16,7 @@ If you conclude the code needs to change, stop there and say so. The user picks 
 3. Lay out the answer in `bob-how`'s sections: overview, the ideas you need, how it works step by step, where it lives (`file:line`), and the traps. Add `bob-why`'s findings with their confidence levels. When the question is a choice, recommend one and back it with a table comparing the options. When the answer rests on a measured number, apply `explain-the-number` first.
 4. Run `unslop` on the reply.
 
-**Reply:** the answer, each claim tied to code, history, or a run, or flagged as a guess. On "are we sure?" questions, give your honest call and challenge the question if it rests on a wrong assumption. Draw flows when the harness can render them.
+**Reply:** the answer, each claim tied to code, history, or a run, or flagged as a guess. On "are we sure?" questions, give your honest call and challenge the question if it rests on a wrong assumption. **Show:** the flow, with `file:line` on each step, or a comparison table for a choice.
 
 ## Diagnose
 
@@ -32,4 +32,4 @@ Work from a real capture, never a theory from reading source.
 4. **Prove the mechanism.** Live: inject logging or instrumentation into the running process (a debugger, CDP eval) to confirm it cheaply. From a capture: diff it against a paired before-and-after capture. Without either, call it the strongest hypothesis the capture supports, not a confirmed cause.
 5. **Map it to source:** file, symbol, and the line that allocates, schedules, or blocks. A frame with no source mapping isn't a diagnosis yet; resolve the symbols or say the capture doesn't carry them.
 
-**Reply:** the capture and its format, the reduced finding, how you proved the mechanism (or "hypothesis"), the source location, the artifact paths, and which playbook should fix it.
+**Reply:** the capture and its format, the reduced finding, how you proved the mechanism (or "hypothesis"), the source location, the artifact paths, and which playbook should fix it. **Show:** the hot path, retainer chain, or blocked thread, down to the source line.

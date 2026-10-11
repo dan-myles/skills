@@ -14,4 +14,4 @@ The design is yours. Hand off the typing, keep the decisions.
 6. Review per **Review** in the skill.
 7. Run **Opening the PR**. Features end at a merge-ready PR, unmerged.
 
-**Reply:** what you built and for whom, the choices you made and why (a table when you weighed options), the evidence that it works, the PR link, and anything still undecided.
+**Reply:** what you built and for whom, the choices you made and why (a table when you weighed options), the evidence that it works, the PR link, and anything still undecided. **Show:** the shape that changed as a module map or a before and after, plus a table when you weighed options.

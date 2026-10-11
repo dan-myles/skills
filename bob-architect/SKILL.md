@@ -57,7 +57,7 @@ Fill the merged rationale's **Synthesis decision**: the base and why, what came 
 
 ## 7. Hand back
 
-Return the merged `rationale.md` and the sketch. When `bob` called this, its step 2 **Checkpoint** shows them to the user and waits. When run alone, show them and stop. For a contested design, `../bob-adversarial-review/SKILL.md` can review the sketch before the user sees it.
+Return the merged `rationale.md` and the sketch, shown per `../bob/references/visuals.md`: the module map and types of the chosen shape, and the two designs side by side with the judge's scores. When `bob` called this, its step 2 **Checkpoint** shows them to the user and waits. When run alone, show them and stop. For a contested design, `../bob-adversarial-review/SKILL.md` can review the sketch before the user sees it.
 
 The repo's rules decide where the rationale is kept. If they're silent, it goes in the PR body. After approval, the sketch lands as the first commit on the branch. Delete the working folder when the PR is open.
 

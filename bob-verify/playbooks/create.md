@@ -21,4 +21,4 @@ Write `verify-<app>` for this repo and prove it works before handing it over.
 6. **Prove it.** Follow the new skill end to end, as written: launch, doctor, drive one mapped feature, capture evidence, clean up. Then check the evidence is still there. Fix whatever failed, and run cleanup after every failed try so nothing is left running. A skill that was never run is a draft.
 7. **Ship it.** Commit on a branch and open a PR per the repo's AGENTS.md. It's a new file set and nothing else.
 
-**Reply:** the surface and harness you chose and why, the features mapped, the proof run's evidence paths, what you couldn't reach and why, the PR link, and a pointer to `/bob-verify maintain` for when the app changes.
+**Reply:** the surface and harness you chose and why, the features mapped, the proof run's evidence paths, what you couldn't reach and why, the PR link, and a pointer to `/bob-verify maintain` for when the app changes. **Show:** the feature map with what the proof run covered.

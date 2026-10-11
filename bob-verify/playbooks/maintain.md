@@ -25,4 +25,4 @@ Only edit the verify skill's own folder: its `SKILL.md`, `features/`, and the sc
 
 Keep run notes (features covered, unreachable prerequisites, drift found) in a scratch folder. Don't commit them.
 
-**Reply:** the outcome, coverage per feature (source and live), drift fixed, harness gaps fixed, product bugs found, unreachable features with their prerequisites, and the PR link if any.
+**Reply:** the outcome, coverage per feature (source and live), drift fixed, harness gaps fixed, product bugs found, unreachable features with their prerequisites, and the PR link if any. **Show:** a grid of features against source and live coverage, drift and gaps marked.

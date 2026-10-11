@@ -22,4 +22,4 @@ Find out whether a skill change changes what an agent does, before keeping it. Y
 7. **Read every output yourself.** Where you disagree with the judge, decide whether the rubric was unclear or the judge was biased, and say which.
 8. **Delete the sandboxes.**
 
-**Reply:** the change, the rubric, notes on each candidate, the judge's verdict, your own read, and whether to keep the change.
+**Reply:** the change, the rubric, notes on each candidate, the judge's verdict, your own read, and whether to keep the change. **Show:** the candidates scored against the rubric, old and new side by side.

@@ -30,3 +30,4 @@ Every repo Bob works in needs a scripted way to prove behavior on the surface a 
 - Evidence survives cleanup. Check it's still at its named location after teardown.
 - Subagents run on your own model and never drive the app; the main thread does all driving.
 - Follow the repo's AGENTS.md for branches, commits, and PRs.
+- Show replies per `../bob/references/visuals.md`, with short text around them.

@@ -86,7 +86,7 @@ Each principle is a skill next to this one: `<name>` below means `../bob-princip
 
 Go ahead without asking on anything you can undo (`never-block-on-the-human`): reading, editing on a branch or worktree, running checks, committing locally, using subagents.
 
-Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Replying on a PR's review threads while babysitting it is the exception; go ahead. Also stop at every **Checkpoint** a playbook names.
+Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Replying on a PR's review threads while babysitting it is the exception; go ahead. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
 
 If running something would answer a question, run it instead of asking. Bring the user only product or taste decisions, each with the option you'd pick.
 
@@ -122,10 +122,12 @@ Feature, Bug, Refactor, and Perf finish here.
 
 ## The reply
 
-- Open with the result. Keep sentences short. Run `unslop`.
-- Include every section the playbook asks for, even when keeping it short.
-- After babysitting, end with Babysit's reply: the PR's state, what was fixed and dismissed, and what needs the user.
-- Say who benefits and what they'll see change, then what the next person to own this code needs to know.
+Show, then tell. Draw the reply per `references/visuals.md` (in T3, `html_preview` then `html_render`, before the text), and keep the text to what the picture doesn't carry. Most replies get a visual; a one-line answer doesn't.
+
+- Open with the result in one line.
+- Cover every section the playbook asks for, mostly in the visual. The text is a few short lines: the decision you need, caveats, links, next step. No preamble, no recap, no paragraphs that retell the picture.
+- One line on who benefits and what they'll see change, and one on what the next owner of this code needs to know.
+- After babysitting, add Babysit's status: the PR's state, what was fixed and dismissed, and what needs the user.
 - Only link things you made or read in this session. Write PR links out in full.
-- If the answer has several moving parts and the harness can show a diagram or an HTML page, draw it.
+- Run `unslop` on the text.
 - If the session hit a correction, a missing step, or a skill that got in the way, end with one line suggesting `/bob-improve`.
