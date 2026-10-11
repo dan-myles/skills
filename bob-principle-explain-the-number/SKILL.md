@@ -14,6 +14,8 @@ A broken run still prints a plausible number. Failed requests, a cache that skip
 - **List what else it could be measuring** and rule each out with evidence: errors, skipped or cached work, an untuned side, noise, a piece too small to matter end to end.
 - **Keep the evidence with the number:** run count, spread, and limiter.
 
+For a performance number, run the full procedure in `../bob/references/benchmark-checklist.md`.
+
 For an eval: did every run do the task, does the gap hold across trials and models, and does the scenario matter?
 
 **You skipped it when** the number has no run count, no spread, or no named limiter, or the time saved is bigger than the time the changed piece took.
