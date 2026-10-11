@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-blast-radius"
+  short_description: "Find what a change breaks outside its diff and prove the fact it's safe because of"
+  default_prompt: "Use $bob-blast-radius on this change: find what it could break beyond the diff, name the one fact it's safe because of, and prove it by running the real code."
+
+policy:
+  allow_implicit_invocation: false

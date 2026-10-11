@@ -28,6 +28,7 @@ Some steps name a helper skill:
 - `bob-why`: why it was built that way.
 - `bob-architect`: two designs from two model families, merged into one sketch.
 - `bob-adversarial-review`: an adversarial review by reviewers on different models.
+- `bob-blast-radius`: what a change breaks outside its diff, with the fact it's safe because of proven by running code.
 
 Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
@@ -64,7 +65,12 @@ Use subagents when the harness supports them.
 
 ## Review
 
-Run `bob-adversarial-review` before the PR when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each **Act on** finding in its own commit, put **Consider** findings in the PR body or ask the user, and list the dismissals in the reply. Small, plain diffs mark this `skip: <why>`.
+Before the PR, pick by what the change risks. Run both when both apply.
+
+- **`bob-blast-radius`** when the change reaches past its diff: shared code other modules call, a data shape (an API response, a DB column, a wire format, a config key), a dependency bump, or a deletion. Size doesn't matter; one line can qualify. If its safety fact comes back false or unproven, fix that first. Put the fact in the PR body, and keep its **Before merging** test when it's worth having. Skip it when the Bug playbook already ran it and the fix kept that shape.
+- **`bob-adversarial-review`** when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each **Act on** finding in its own commit, put **Consider** findings in the PR body or ask the user, and list the dismissals in the reply.
+
+Small, contained diffs mark this `skip: <why>`.
 
 ## Opening the PR
 
