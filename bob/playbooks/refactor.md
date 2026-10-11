@@ -16,6 +16,6 @@ Feature adds behavior and Bug corrects it; a refactor does neither. When the cle
 6. Prove nothing changed. Rerun the pin and the repo's checks, and drive every entry point the change touches on the real app. For a larger move, run the old-against-new diff.
 7. Decide it's worth keeping, per `minimize-reader-load`. Somewhere there should be fewer layers to trace or less state to hold. If there aren't, revert it and say so.
 8. Review per **Review** in the skill. A refactor usually reaches past its diff, so `bob-blast-radius` usually applies.
-9. Run **Opening the PR**. Order the commits as pin, deletions, reshape, then follow-on cleanup. Refactors end at an open PR.
+9. Run **Opening the PR**. Order the commits as pin, deletions, reshape, then follow-on cleanup. Refactors end at a merge-ready PR, unmerged.
 
 **Reply:** the structure that changed, the pin and the proof behavior held, what got easier to read (layers or state removed), what you reverted, any bug or feature you split out, and the PR link. No new behavior.

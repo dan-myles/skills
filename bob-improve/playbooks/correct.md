@@ -23,7 +23,7 @@ This playbook edits the target repo, not the bob- skills. Work on a branch and f
 5. **Fix** the picked classes, most frequent first, one commit each.
 6. **Prove each check.** Reapply a real past mistake (from the commit or the transcript) on a scratch branch and show the new check failing with its message. Then show it passing on the fixed code. The check runs from the same command locally and in CI. An exception sits on the offending line with a reason, an expiry date, and who approved it.
 7. **Update the rule table** in AGENTS.md: each rule next to what enforces it (the type, the lint rule, the test, or "judgment"). Drop a rule once its mistake can't happen anymore.
-8. **Open the PR** per **Opening the PR** in `../bob/SKILL.md`. Correct ends at an open PR.
+8. **Open the PR** per **Opening the PR** in `../bob/SKILL.md`. Correct ends at a merge-ready PR, unmerged.
 
 After this, the table does the work. When the user corrects an agent in this repo, fix the mistake and add the rule. If the rule was already in the table with nothing enforcing it, that's a repeat: fix it at the highest level that works, in the same change.
 
