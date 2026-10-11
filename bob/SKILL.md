@@ -22,16 +22,7 @@ The playbook decides the order of work. The repo decides the commands.
 
 ## Helpers
 
-Some steps name a helper skill:
-
-- `bob-how`: how code works.
-- `bob-why`: why it was built that way.
-- `bob-architect`: two designs from two model families, merged into one sketch.
-- `bob-interrogate`: an adversarial review by two model families.
-
-Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
-
-Steps that need a second model family get it through T3 Code, per `references/second-model.md`.
+Some steps name a helper skill: `bob-how` for how code works, `bob-why` for why it was built that way. Helpers sit in folders next to this one, at `../bob-how/SKILL.md` and `../bob-why/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
 ## Standing rules
 
@@ -63,7 +54,7 @@ Use subagents when the harness supports them.
 
 ## Review
 
-Run `bob-interrogate` before the PR when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each **Act on** finding in its own commit, put **Consider** findings in the PR body or ask the user, and list the dismissals in the reply. Small, plain diffs mark this `skip: <why>`.
+Get an outside review before the PR when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. The reviewer gets the brief and the diff, nothing else. If a second model family is available, have it review too; findings both raise are the ones to trust most. Address each finding with a fix or a reason. Small, plain diffs mark this `skip: <why>`.
 
 ## Opening the PR
 
