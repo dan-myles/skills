@@ -1,7 +1,7 @@
 ---
 name: bob
 disable-model-invocation: true
-description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/bob <goal>` in Claude Code, `$bob <goal>` in Codex."
+description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, Prototype, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/bob <goal>` in Claude Code, `$bob <goal>` in Codex."
 ---
 
 # Bob
@@ -17,6 +17,7 @@ The playbook decides the order of work. The repo decides the commands.
    - **Feature.** The user wants behavior that doesn't exist yet, or different behavior. `playbooks/feature.md`.
    - **Refactor.** The user wants better structure and the same behavior: cleanup, reshaping, replacing an internal API. `playbooks/refactor.md`.
    - **Perf.** It works but it's too slow or uses too much (time, memory, size, cost), or the user wants a metric pushed toward a target. `playbooks/perf.md`.
+   - **Prototype.** The user wants to try ideas before building: "mock it up", "try this layout", "sketch it so we can decide". Throwaway, no PR. `playbooks/prototype.md`.
 
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
