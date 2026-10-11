@@ -4,7 +4,7 @@ Where the Bob work stands, for the next agent who picks it up. Read this before 
 
 ## What this repo is
 
-Dan's global skills library, used by every agent he runs (Claude Code, Codex, and T3 Code, which runs both). Each folder is one skill. skills-manager tracks them and links each folder into `~/.claude/skills` and `~/.agents/skills`.
+Dan's global skills library, used by every agent he runs (Claude Code, Codex, and T3 Code, which runs both). Each folder is one skill. The repo is a skills-manager library: `.skills-manager/` holds its registry, and the skills-manager CLI deploys every skill in the Default preset to Claude Code (`~/.claude/skills`) and Codex (`~/.codex/skills`) as symlinks back into this repo. Don't make or remove those links by hand.
 
 Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `bob-` skills. Bob is a port of pstack, a Cursor plugin, rewritten in our own words and rebuilt for T3 Code.
 
@@ -35,7 +35,7 @@ Do all of these together:
 2. `disable-model-invocation: true` in the frontmatter.
 3. `agents/openai.yaml` with the same name and `allow_implicit_invocation: false`.
 4. Register it: `.skills-manager/skills/<uuid>.json` (its `path` and `path_key` match the folder) and `.skills-manager/scenario-skills/e1791670-bbde-4560-bd44-9547d1deaa60/<uuid>.json` with the next `sort_order`. Copy an existing pair as the template.
-5. Symlink the folder into `~/.claude/skills/` and `~/.agents/skills/`.
+5. Deploy it: `skills-manager-cli --skills-root ~/Developer/personal/skills presets deploy Default --agent claude_code --agent codex`. The CLI lives at `~/.local/bin/skills-manager-cli` (standalone release from `xingkongliang/skills-manager`). `skills status <name>` shows where a skill is deployed.
 6. Add it to the skills list in `bob-improve/SKILL.md`, and to `bob/SKILL.md` if Bob uses it.
 7. Run `unslop` on new prose.
 
