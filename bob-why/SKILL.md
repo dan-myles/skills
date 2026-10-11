@@ -57,7 +57,7 @@ Start one investigator subagent per source that's reachable, all at once, one so
 4. the anchor from step 2
 5. the user's question
 
-Investigators need the same tool access you have, including MCP servers, but they must not write or change anything. A faster model is fine for them.
+Investigators need the same tool access you have, including MCP servers, but they must not write or change anything.
 
 Skip a source only with a written reason, and list it in the answer:
 
@@ -70,7 +70,7 @@ Without subagents, work through the sources yourself one at a time, following th
 
 ## 4. Synthesize
 
-Start one synthesizer subagent on the strongest model available, with the same tool access so it can spot-check citations. Give it every investigator's findings (empty results and skipped sources included), the anchor, the question, `references/confidence.md`, and `references/synthesizer.md`.
+Start one synthesizer subagent, with the same tool access so it can spot-check citations. Give it every investigator's findings (empty results and skipped sources included), the anchor, the question, `references/confidence.md`, and `references/synthesizer.md`.
 
 ## 5. Present
 

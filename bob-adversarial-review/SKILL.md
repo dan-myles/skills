@@ -1,12 +1,12 @@
 ---
 name: bob-adversarial-review
 disable-model-invocation: true
-description: "Adversarial review of a change by two model families. Claude and GPT get the same intent, diff, and rubric; Bob merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/bob-adversarial-review [diff or files]` in Claude Code, `$bob-adversarial-review ...` in Codex. `bob` runs it from its Review step."
+description: "Adversarial review of a change by reviewers on different models, Claude and GPT by default (set in bob-models). All get the same intent, diff, and rubric; Bob merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/bob-adversarial-review [diff or files]` in Claude Code, `$bob-adversarial-review ...` in Codex. `bob` runs it from its Review step."
 ---
 
 # Adversarial review
 
-Two reviewers from different model families get the same prompt. The pressure comes from the models being different, not from giving them personas. What both raise is the strongest signal.
+Reviewers on different models get the same prompt. The pressure comes from the models being different, not from giving them personas. What two or more raise is the strongest signal.
 
 The output is a verdict. Don't change any code here. When `bob` called this from its Review step, Bob acts on the verdict there.
 
@@ -33,20 +33,17 @@ Fill `references/reviewer-prompt.md` with:
 3. `references/rubric.md`
 4. `references/code-quality.md`
 
-Both reviewers get the same filled prompt and stay read-only:
+Start one reviewer per entry of `bob-adversarial-review.reviewers` in `../bob-models/models.yaml`, labeled A, B, C in order, per `../bob-models/references/delegation.md`. All get the same filled prompt and stay read-only.
 
-- **Reviewer A:** a subagent on the strongest model in your own family.
-- **Reviewer B:** the other family, delegated through T3 per `../bob/references/second-model.md`.
-
-Use absolute paths in the prompt, since Reviewer B starts with none of this session. Start both at once. If one fails, finish with the other and say so in **Reviewers**.
+Use absolute paths in the prompt, since reviewers start with none of this session. Start them all at once. If one fails, finish with the rest and say so in **Reviewers**.
 
 ## 4. Merge
 
-1. Collect every finding from both reviewers.
+1. Collect every finding from every reviewer.
 2. Merge findings that describe the same problem in different words. Note who raised each one.
-3. Mark findings both reviewers raised on their own. These carry the most weight.
+3. Mark findings two or more reviewers raised on their own. These carry the most weight.
 4. Mark findings only one raised. Read them, but weigh them lower.
-5. Note where one reviewer says the opposite of the other.
+5. Note where one reviewer says the opposite of another.
 
 ## 5. Judge
 
@@ -65,8 +62,7 @@ Each finding names who raised it, its bucket, and a one-line reason for the buck
 > the paragraph from step 2
 
 ### Reviewers
-- A: model, number of findings
-- B: model, number of findings (or "same family: <why>")
+- One line per reviewer: label, model, number of findings. Note any substitute model, and when every reviewer ran on one provider.
 
 ### Act on
 Each finding: what's wrong, who raised it, why it matters.

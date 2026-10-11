@@ -27,11 +27,11 @@ Some steps name a helper skill:
 - `bob-how`: how code works.
 - `bob-why`: why it was built that way.
 - `bob-architect`: two designs from two model families, merged into one sketch.
-- `bob-adversarial-review`: an adversarial review by two model families.
+- `bob-adversarial-review`: an adversarial review by reviewers on different models.
 
 Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
-Steps that need a second model family get it through T3 Code, per `references/second-model.md`.
+Subagents run on Bob's own model unless a helper names a line in `../bob-models/models.yaml`. Those are panels and judges, where mixing model families is the point; start them per `../bob-models/references/delegation.md`.
 
 ## Standing rules
 
@@ -55,7 +55,6 @@ If running something would answer a question, run it instead of asking. Bring th
 Use subagents when the harness supports them.
 
 - Give each one a tight brief: which files, the data shape, what done looks like, and which repo rules matter. Link to files rather than pasting them.
-- Match the model to the job. Hard design and tricky logic get the strongest model; routine edits get a quick one.
 - Push wide searches and noisy output into subagents so the main thread holds only conclusions.
 - Their work is yours. Read the diff and summarize it in your own words.
 - Start a new subagent, with the complete brief, for each new piece of work. Go back to an old one only when the work depends on something it holds, like uncommitted edits or a running server.

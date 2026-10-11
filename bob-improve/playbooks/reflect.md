@@ -12,16 +12,17 @@ Turn one session into approved edits.
 3. List the skills the session used: `Skill` tool calls, slash commands like `/bob`, reads of any `SKILL.md` or `playbooks/*.md`, and `$bob` mentions in Codex. Reviewers get this list.
 4. Run three reviewers in parallel. Pass each its prompt verbatim, with the transcript path (or the digest) and the skills list filled in.
 
-   | Lens | Looks for | Model | Prompt |
-   |---|---|---|---|
-   | Judgment | The rule behind a mistake, a correction, or a preference | Strongest | `references/judgment-reviewer.md` |
-   | Tooling | Commands, flags, and quirks, and context the user had to hand over | Quick | `references/tooling-reviewer.md` |
-   | Divergent | The lesson under the obvious one, second-order misses, skipped checks | Strongest | `references/divergent-reviewer.md` |
+   | Lens | Looks for | Prompt |
+   |---|---|---|
+   | Judgment | The rule behind a mistake, a correction, or a preference | `references/judgment-reviewer.md` |
+   | Tooling | Commands, flags, and quirks, and context the user had to hand over | `references/tooling-reviewer.md` |
+   | Divergent | The lesson under the obvious one, second-order misses, skipped checks | `references/divergent-reviewer.md` |
 
 5. Synthesize. One subagent gets `references/synthesizer.md` with all three reviewers' output pasted in full.
 6. Check the Accepted rows yourself. Read each target before keeping its row. Move a row to Backlog when a mechanism would enforce it better. Move a row to the repo's AGENTS.md when it's about one codebase.
 7. **Checkpoint:** show the full Accepted, Rejected, and Backlog lists and wait. The user picks rows.
 8. Apply the picked rows per **Editing a skill**. Commit and push each one in the skills repo. For AGENTS.md rows, make the edit in that repo's working tree and leave it for the user's next change, unless they ask for a PR. When a row changes behavior you can't judge by reading it, offer Eval before committing.
+9. Check models per `playbooks/models.md`, on this session. It only recommends; nothing to approve.
 
 **Reply:** no preamble.
 
@@ -29,3 +30,4 @@ Turn one session into approved edits.
 - **Repo notes.** AGENTS.md edits left in the working tree, one line each.
 - **Backlog.** One line each. A mechanism in a repo is written as a ready-to-run `/bob <task>`.
 - **Dropped.** One line each, with the reason.
+- **Models.** From step 9, one line each, or "no model changes".

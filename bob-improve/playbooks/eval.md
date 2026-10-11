@@ -16,8 +16,8 @@ Find out whether a skill change changes what an agent does, before keeping it. Y
 1. **Frame.** Name the change (old against new, as a diff), what success looks like, and a rubric of three to six concrete criteria. Only the judge sees the rubric. Say how many agent runs this will take before starting.
 2. **Build sandboxes.** One temp folder per candidate, holding a small project the task makes sense in. Install the skill version where the harness loads project skills: `.claude/skills/<name>/` for Claude Code, `.agents/skills/<name>/` for Codex. Half the sandboxes get the old version, half the new.
 3. **Write one prompt**, the way the user would type it, for example `/bob <task>`.
-4. **Run the candidates** in parallel, headless, from inside each sandbox (`claude -p "<prompt>"` or `codex exec "<prompt>"`). Allow edits inside the sandbox. Run at least two per side, across more than one model when you can.
-5. **Judge.** One judge, from a different model family than the candidates and started through T3 per `bob/references/second-model.md`, gets the rubric and the outputs under neutral labels.
+4. **Run the candidates** in parallel, headless, from inside each sandbox with each entry of `bob-improve.eval-candidates` in `../bob-models/models.yaml`, per the headless commands in `../bob-models/references/delegation.md`. Allow edits inside the sandbox. Run at least two per side.
+5. **Judge.** One judge, on `bob-improve.eval-judge`, gets the rubric and the outputs under neutral labels.
 6. **Check what each candidate actually read**, from its transcript (for Claude Code, `~/.claude/projects/<sandbox slug>/`). A user-level copy of the skill can shadow the sandbox's copy. A run that loaded the wrong version doesn't count; run it again.
 7. **Read every output yourself.** Where you disagree with the judge, decide whether the rubric was unclear or the judge was biased, and say which.
 8. **Delete the sandboxes.**

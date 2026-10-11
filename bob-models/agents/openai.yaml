@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-models"
+  short_description: "Review, change, and get upgrade recommendations for the models behind Bob's panels and judges"
+  default_prompt: "Use $bob-models to show the current models, check them against T3's live catalog, and recommend upgrades with reasons before changing anything."
+
+policy:
+  allow_implicit_invocation: false

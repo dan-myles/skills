@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "a6e08b02-18a8-44b4-91a9-ad4f87105c62",
+  "path": "bob-models",
+  "path_key": "bob-models",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

@@ -19,11 +19,11 @@ When unsure, treat it as small.
 
 ## 2. Explore in parallel (large questions)
 
-Split the question into two to four angles that don't overlap, such as entry points, data model, outbound integrations, and failure handling. Start one explorer subagent per angle, all at once. Brief each with `references/explorer.md` and its angle. A faster model is fine for explorers. They only read.
+Split the question into two to four angles that don't overlap, such as entry points, data model, outbound integrations, and failure handling. Start one explorer subagent per angle, all at once. Brief each with `references/explorer.md` and its angle. They only read.
 
 ## 3. Explain
 
-Start one explainer subagent on the strongest model available, read-only, briefed with `references/explainer.md`. For a large question, include every explorer's findings. For a small one, leave that section out; the explainer explores on its own.
+Start one explainer subagent, read-only, briefed with `references/explainer.md`. For a large question, include every explorer's findings. For a small one, leave that section out; the explainer explores on its own.
 
 Without subagents, do both roles yourself in that order: gather facts first, then write.
 

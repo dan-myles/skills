@@ -1,7 +1,7 @@
 ---
 name: bob-architect
 disable-model-invocation: true
-description: "Design a change before writing it. Two designers from different model families each sketch the types, signatures, and module map, a judge from the other family scores them, and Bob merges the stronger sketch with the best of the weaker one into a rationale and a type sketch with empty bodies. Use when a change adds a service, module, or public interface, or moves ownership. Manual-only: `/bob-architect <change>` in Claude Code, `$bob-architect ...` in Codex. `bob` runs it from Feature step 2."
+description: "Design a change before writing it. Two designers from different model families each sketch the types, signatures, and module map, a judge scores them, and Bob merges the stronger sketch with the best of the weaker one into a rationale and a type sketch with empty bodies. Use when a change adds a service, module, or public interface, or moves ownership. Manual-only: `/bob-architect <change>` in Claude Code, `$bob-architect ...` in Codex. `bob` runs it from Feature step 2."
 ---
 
 # Architect
@@ -26,10 +26,7 @@ Make a working folder, `/tmp/bob-architect-<slug>/`, and write the grounding to 
 
 ## 3. Sketch
 
-Two designers, at the same time, on different families, per `../bob/references/second-model.md`:
-
-- **Designer A:** a subagent on the strongest model in your family.
-- **Designer B:** the other family, delegated through T3.
+Two designers at the same time, from `bob-architect.designers` in `../bob-models/models.yaml`: Designer A on its first entry, Designer B on its second. Start them per `../bob-models/references/delegation.md`.
 
 Each gets the task, the path to `grounding.md`, its own folder, and `references/designer-prompt.md`. Each writes a sketch and a `rationale.md` shaped by `references/rationale-template.md` into its folder.
 
@@ -43,7 +40,7 @@ Compare interface depth: prefer the design that hides more behind a smaller publ
 
 ## 5. Judge and pick
 
-Once both sketches are written, start one judge from the family you're not in, per `../bob/references/second-model.md`, with `references/judge-prompt.md`. It sees the rubric and the sketches under neutral labels.
+Once both sketches are written, start one judge on `bob-architect.judge`, with `references/judge-prompt.md`. It sees the rubric and the sketches under neutral labels.
 
 While it runs, read both sketches end to end yourself and score them on the rubric one criterion at a time. Then compare with the judge. If you agree on the base, that confirms it. If you disagree, one of you is biased or the rubric was vague. Reread both rationales before deciding.
 

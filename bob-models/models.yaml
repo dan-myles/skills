@@ -1,0 +1,23 @@
+# Models for Bob's panels and judges, where mixing model families is the point.
+# Every other subagent runs on Bob's own model and has no line here.
+# Each entry: `provider` and `model` ids from T3's orchestrator_capabilities, and `options`
+# passed to delegate_task as given (`effort` for Claude, `reasoningEffort` for GPT).
+# Check it against the live catalog with /bob-models.
+checked: "2026-10-11"
+
+bob-architect:
+  designers:                          # exactly two, from different providers
+    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: max}}
+    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
+  judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
+
+bob-adversarial-review:
+  reviewers:                          # two or more, mixing providers
+    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: max}}
+    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
+
+bob-improve:
+  eval-candidates:                    # each skill version runs once per entry
+    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: max}}
+    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
+  eval-judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
