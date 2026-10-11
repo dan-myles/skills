@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "3b7ce768-5410-4c27-8052-b2c235deee90",
+  "path": "bob-architect",
+  "path_key": "bob-architect",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
