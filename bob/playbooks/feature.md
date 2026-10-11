@@ -10,7 +10,7 @@ The design is yours. Hand off the typing, keep the decisions.
    - **Contended.** Files or resources more than one worker would edit. Split them up, or do them one at a time.
    - **Worker count.** How many workers, and the reason.
 4. Build it. Brief subagents from the plan with files, data shape, and what done looks like. Finish the "goes first" work, then run the parallel pieces together. Commit each piece once it works. A `bob-architect` sketch is the contract: follow its **Building against the sketch** and **Scrapping it** sections.
-5. Check it where the user will meet it: the page, the screen, the endpoint, the command. Run the repo's checks. A check that's unclear or on the wrong surface hasn't passed. Report it that way.
+5. Check it where the user will meet it: the page, the screen, the endpoint, the command, through the repo's verify skill when it has one. Run the repo's checks. A check that's unclear or on the wrong surface hasn't passed. Report it that way.
 6. Review per **Review** in the skill.
 7. Run **Opening the PR**. Features end at an open PR.
 

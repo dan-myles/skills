@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "91939366-ce27-422e-b58c-e8b14d6c331c",
+  "path": "bob-verify",
+  "path_key": "bob-verify",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

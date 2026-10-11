@@ -33,6 +33,8 @@ Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manu
 
 Subagents run on Bob's own model unless a helper names a line in `../bob-models/models.yaml`. Those are panels and judges, where mixing model families is the point; start them per `../bob-models/references/delegation.md`.
 
+When a step drives the app, use the repo's verify skill if it has one: `.claude/skills/verify-*/` or `.agents/skills/verify-*/`. Follow its launch, doctor, and cleanup, and its feature map's recipe for every entry point the change touches. If the repo has none, drive the app with the harness's tools and offer `/bob-verify` once in the reply. If a recipe turns out wrong, finish the check another way and note the drift in the reply, with a pointer to `/bob-verify maintain`.
+
 ## Standing rules
 
 - **Do less.** Take the smallest change that solves the problem. Remove before you add. Leave out abstractions, flags, and code that's only there "just in case".
