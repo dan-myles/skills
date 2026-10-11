@@ -1,7 +1,7 @@
 ---
 name: bob
 disable-model-invocation: true
-description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/bob <goal>` in Claude Code, `$bob <goal>` in Codex."
+description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, or Investigation, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/bob <goal>` in Claude Code, `$bob <goal>` in Codex."
 ---
 
 # Bob
@@ -15,6 +15,7 @@ The playbook decides the order of work. The repo decides the commands.
    - **Investigation.** The user wants an answer, not a change: how something works, why it is built that way, which option is better, or "don't touch the code". `playbooks/investigation.md`.
    - **Bug.** Behavior is wrong and should be right. `playbooks/bug.md`.
    - **Feature.** The user wants behavior that doesn't exist yet, or different behavior. `playbooks/feature.md`.
+   - **Refactor.** The user wants better structure and the same behavior: cleanup, reshaping, replacing an internal API. `playbooks/refactor.md`.
 
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
@@ -107,13 +108,13 @@ Small, contained diffs mark this `skip: <why>`.
 
 ## Opening the PR
 
-Feature and Bug finish here.
+Feature, Bug, and Refactor finish here.
 
 1. Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
 2. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
 3. Open the PR with the repo's PR skill if there is one. If not, use `gh pr create` and open it ready for review.
 4. The PR body covers why, what changed, what's out of scope, and how it was checked. Keep it brief and run `unslop` on it.
-5. Merging depends on the playbook. Bug fixes go through the repo's normal flow, merge included when that's the norm. Features end at an open PR even if the repo's PR skill would merge them; stop before that step and return the link.
+5. Merging depends on the playbook. Bug fixes go through the repo's normal flow, merge included when that's the norm. Features and refactors end at an open PR even if the repo's PR skill would merge them; stop before that step and return the link.
 6. Don't start watching the PR after opening it. Share the link and stop.
 
 ## The reply
