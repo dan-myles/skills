@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+  File map template. Copy it, replace the tree and the Mermaid graph, keep the styles.
+  Left: the files, grouped by folder, each with a status badge and one line on what it owns.
+  Right: how the folders and files connect (imports or calls), with module boundaries as boxes.
+  Badges: add (new), mod (changed), mov (moved, say from where), del (deleted, add class "gone" to the li).
+  Leave out badges entirely when mapping existing code before a change.
+-->
+<html><head><style>
+body{margin:0;font:13px/1.45 ui-sans-serif,system-ui;color:var(--foreground)}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted-foreground);margin:0 0 8px}
+.wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.tree{font:12.5px/1.7 ui-monospace,monospace}
+.tree ul{list-style:none;margin:0;padding-left:16px;border-left:1px solid var(--border)}
+.tree>ul{border-left:0;padding-left:0}
+.tree li{white-space:nowrap}
+.dir>span.n{font-weight:600}
+.badge{display:inline-block;font:600 10px/16px ui-sans-serif,system-ui;padding:0 6px;border-radius:999px;margin-left:6px;vertical-align:1px}
+.add{background:color-mix(in srgb,#22c55e 22%,transparent);color:#22c55e}
+.mod{background:color-mix(in srgb,#eab308 22%,transparent);color:#eab308}
+.mov{background:color-mix(in srgb,#3b82f6 22%,transparent);color:#3b82f6}
+.del{background:color-mix(in srgb,#ef4444 22%,transparent);color:#ef4444}
+li.gone>span.n{text-decoration:line-through;color:var(--muted-foreground)}
+.why{font:12px ui-sans-serif,system-ui;color:var(--muted-foreground);margin-left:8px}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script></head><body>
+<div class="wrap">
+<div><h2>Files</h2><div class="tree"><ul>
+<li class="dir"><span class="n">src/</span><ul>
+ <li class="dir"><span class="n">billing/</span><span class="why">owns invoices and charges</span><ul>
+  <li><span class="n">invoice.ts</span><span class="badge mod">changed</span><span class="why">uses the new Money type</span></li>
+  <li><span class="n">money.ts</span><span class="badge add">new</span><span class="why">Money: amount + currency, one place</span></li>
+  <li><span class="n">charge.ts</span><span class="badge mov">moved from api/</span><span class="why">billing owns charging</span></li>
+ </ul></li>
+ <li class="dir"><span class="n">api/</span><span class="why">HTTP only, no rules</span><ul>
+  <li><span class="n">routes.ts</span><span class="badge mod">changed</span><span class="why">calls billing/charge</span></li>
+  <li class="gone"><span class="n">price-utils.ts</span><span class="badge del">deleted</span><span class="why">replaced by money.ts</span></li>
+ </ul></li>
+</ul></li></ul></div>
+<div class="legend"><span class="badge add">new</span><span class="badge mod">changed</span><span class="badge mov">moved</span><span class="badge del">deleted</span></div></div>
+<div><h2>How they connect</h2><div id="graph"></div></div>
+</div>
+<script>
+(async () => {
+  const css = getComputedStyle(document.documentElement), v = n => css.getPropertyValue(n).trim();
+  mermaid.initialize({ startOnLoad: false, theme: "base", themeVariables: {
+    primaryColor: v("--muted"), primaryTextColor: v("--foreground"),
+    primaryBorderColor: v("--muted-foreground"), lineColor: v("--muted-foreground"),
+    clusterBkg: "transparent", clusterBorder: v("--border"),
+    fontFamily: "ui-sans-serif, system-ui", fontSize: "12px" } });
+  const { svg } = await mermaid.render("g1", `flowchart TD
+    subgraph api["api/ (HTTP)"]
+      R[routes.ts]
+    end
+    subgraph billing["billing/ (rules)"]
+      C[charge.ts] --> I[invoice.ts]
+      C --> M[money.ts]
+      I --> M
+    end
+    R --> C`);
+  document.getElementById("graph").innerHTML = svg;
+})();
+</script></body></html>

@@ -11,7 +11,7 @@ Vet every number, the baseline included, with `references/benchmark-checklist.md
 
 ## Fix
 
-1. Reproduce and measure. Find a case that shows the slowness the user sees, on the surface where they see it, through the repo's verify skill when it has one. Capture a baseline with a profile or trace and vet it.
+1. Reproduce and measure. Find a case that shows the slowness the user sees, on the surface where they see it, through the repo's verify skill when it has one. Capture a baseline with a profile or trace and vet it. Show the baseline: where the time or memory goes, as flame-style bars.
 2. Ground your guesses. Run `bob-how` over the hot path the profile points at and map the hot spot to source. Don't claim a limit you haven't measured. Try fixes cheapest first, and stop at the first that meets the target:
    1. Don't do it. Drop work whose result nothing uses.
    2. Do it once. Stop repeating it.
@@ -26,7 +26,7 @@ Vet every number, the baseline included, with `references/benchmark-checklist.md
 6. Review per **Review** in the skill.
 7. Run **Opening the PR**. The PR body gets one headline number. The runs, range, and limiter go in the details or a linked artifact.
 
-**Reply:** the verdict, baseline and after with units, run count, range, the limiter, the fix, the artifact path, and the PR link. **Show:** a before-and-after chart with units, range, and the limiter.
+**Reply:** the verdict, baseline and after with units, run count, range, the limiter, the fix, the artifact path, and the PR link. **Show:** a before-and-after chart with units, range, and the limiter, and the file map of what changed.
 
 ## Climb
 

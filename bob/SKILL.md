@@ -22,7 +22,8 @@ The playbook decides the order of work. The repo decides the commands.
 
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
-4. When the user says "new task", sort again. Anything else, like "go on" or "do it", continues the current playbook.
+4. Show the plan per `references/visuals.md`: the playbook's steps as a pipeline, with the helpers each one runs and the checkpoints marked. Keep the text to one line on how you sorted the task.
+5. When the user says "new task", sort again. Anything else, like "go on" or "do it", continues the current playbook.
 
 ## Helpers
 
@@ -88,7 +89,7 @@ Go ahead without asking on anything you can undo (`never-block-on-the-human`): r
 
 Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Replying on a PR's review threads while babysitting it is the exception; go ahead. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
 
-If running something would answer a question, run it instead of asking. Bring the user only product or taste decisions, each with the option you'd pick.
+If running something would answer a question, run it instead of asking. Bring the user only product or taste decisions, drawn as option cards with the one you'd pick marked.
 
 ## Subagents
 
@@ -116,13 +117,13 @@ Feature, Bug, Refactor, and Perf finish here.
 1. Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
 2. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
 3. Open the PR with the repo's PR skill if there is one. If not, use `gh pr create` and open it ready for review.
-4. The PR body covers why, what changed, what's out of scope, and how it was checked. Keep it brief and run `unslop` on it.
+4. The PR body covers why, what changed, what's out of scope, and how it was checked. What changed includes the file map as a text tree, per **File maps** in `references/visuals.md`. Keep it brief and run `unslop` on it.
 5. Babysit it. Put `playbooks/babysit.md`'s Drive steps on the todo list and run them until the PR is merge-ready. Skip this only when the user said not to ("don't babysit", "just open the PR").
 6. Merging depends on the playbook. Bug fixes go through the repo's normal flow once merge-ready, merge included when that's the norm. Everything else ends at a merge-ready PR even if the repo's PR skill would merge it; stop before that step and return the link.
 
 ## The reply
 
-Show, then tell. Draw the reply per `references/visuals.md` (in T3, `html_preview` then `html_render`, before the text), and keep the text to what the picture doesn't carry. Most replies get a visual; a one-line answer doesn't.
+Show, then tell. The user is a visual learner. Draw per `references/visuals.md` (in T3, `html_preview` then `html_render`, before the text) whenever there's anything to show: the plan, every checkpoint, every question, progress worth seeing, explanations, and the final reply. Only a yes or no, one fact, or a one-line confirmation goes without. Keep the text to what the picture doesn't carry, five short lines or fewer.
 
 - Open with the result in one line.
 - Cover every section the playbook asks for, mostly in the visual. The text is a few short lines: the decision you need, caveats, links, next step. No preamble, no recap, no paragraphs that retell the picture.
