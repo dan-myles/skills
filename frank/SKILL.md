@@ -18,6 +18,7 @@ Everything lives in `~/.bob-n-frank/`, created on first run:
 - `frank/board.tsv`: one row per item: id, source link, kind, repo, state (`new`, `triaged`, `proposed`, `approved`, `dispatched`, `merge-ready`, `done`, `dropped`), thread id, PR, proposed rank, updated, note. **Status lives here, not in your memory.**
 - `frank/seen.tsv`: every source item already read, so nothing is triaged twice.
 - `frank/briefs/<id>.md`: the exact brief each dispatched item got.
+- `frank/reports/<id>.md`: each Bob thread's final report.
 - `frank/decisions.tsv`: append-only: time, decision, why, evidence.
 
 Orchestrate programs keep their own stores in `~/.bob-n-frank/orchestrate/`.
@@ -71,7 +72,7 @@ For each item not in `seen.tsv`:
 
 ## Dispatch
 
-- Write the brief with the template in **The brief** in `../bob/playbooks/orchestrate.md`. For an auto-dispatched bug, RULES says: started by Frank, don't ask the user anything, report a decision you can't make as a gate. For an item the user approved, the Bob thread runs its playbook normally and asks the user at its own checkpoints.
+- Write the brief per `../bob/references/brief.md`, with REPORT at `~/.bob-n-frank/frank/reports/<id>.md`. An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
 - Launch a Bob thread with `t3_thread_launch`: a new worktree off the repo's default branch, title `frank: <item>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead: `/bob orchestrate <program brief>`.
 - Save the brief, set the row to `dispatched` with the thread id, and link the thread in the brief as `[title](t3-thread://v1/<threadId>)`.
 

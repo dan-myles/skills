@@ -34,27 +34,7 @@ One folder per program, outside every repo: `~/.bob-n-frank/orchestrate/<program
 
 ## The brief
 
-Every field filled, or the unit isn't scoped yet and doesn't spawn. Size it to the unit: a one-command unit gets a paragraph that still names the goal, scope, check, and report.
-
-```
-/bob <goal, one sentence a stranger could act on>
-
-PLAYBOOK     which Bob playbook fits (Feature, Bug, Refactor, Perf)
-SCOPE        paths this unit may write, paths it may not, its branch and base
-CONTEXT      files and PRs to read; upstream reports pasted in full, since workers can't see each other
-ACCEPTANCE   checkable criteria, one per line
-VERIFY       exact commands or the verify-<app> recipe, plus known gotchas
-TIMEBOX      rough cap; on expiry, report what you have and stop
-RULES        You were started by an orchestrator, not a person. Skip checkpoints; the design is approved
-             in CONTEXT. Don't ask the user anything: when a decision isn't yours, stop and report it as a
-             gate. Babysit your PR to merge-ready, then stop. Never merge, rebase, force-push, or retarget.
-             Don't settle or archive this thread. No fixes outside SCOPE; note them as follow-ups.
-REPORT       write ~/.bob-n-frank/orchestrate/<program>/reports/<unit>.md and end with the same text: status,
-             branch, head SHA, PR, what you ran and its output, deviations, gates, follow-ups
-STANDING     <standing-orders.md pasted word for word>
-```
-
-A dependency means passing context, not just ordering: paste the upstream report into the downstream brief.
+Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.bob-n-frank/orchestrate/<program>/reports/<unit>.md` and STANDING set to `standing-orders.md` word for word. Save it to `briefs/<unit>.md`.
 
 ## Steps
 
