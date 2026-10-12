@@ -31,7 +31,7 @@ Orchestrate programs keep their own stores in `~/.bob-n-frank/orchestrate/`.
 - `/frank event <payload>`: a webhook delivered one inbound item. Triage it, dispatch if the rules allow, and stay quiet unless it's a fire.
 - `/frank <anything else>`: the user talking to Frank. Answer from the board, or take it in as a new item.
 
-Every run starts by reading `config.yaml` and the board, and ends with the board written back.
+Every run starts by reading `config.yaml` and the board, and ends with the board written back. When `config.yaml` is missing, run on the defaults in `references/config.example.yaml` (T3 threads only, since it lists no repos), start an empty board, and put "Run `/frank setup` to pick repos and sources" at the top of the brief.
 
 ## Sources
 
@@ -97,7 +97,7 @@ When nothing changed since the last brief, say "Nothing new since <time>." and s
 
 ## Setup
 
-1. Create `~/.bob-n-frank/` and copy `references/config.example.yaml` to `config.yaml`, with the timezone from the system. If `~/.bob-n-frank/models.yaml` doesn't exist, copy `../bob-models/models.example.yaml` there too.
+1. Create `~/.bob-n-frank/` and copy `references/config.example.yaml` to `config.yaml`, with the timezone from the system. If `~/.bob-n-frank/models.yaml` doesn't exist, copy `../bob-models/models.example.yaml` there too, so the user has a file to edit.
 2. Detect sources and repos (`gh repo list`, the T3 projects in `t3_project_list`). Show what was found and ask per **How to ask** which repos and channels to watch. Write them into `config.yaml`.
 3. Schedule the briefs with `schedule_task`, bound to this thread: `{type: "fixed_time", timeOfDay: <time>, weekdays: <weekdays>}` for each brief time, prompt `/frank brief`. Schedule the sweep: `{type: "interval", everyMs: <sweep.every_hours in ms>}`, prompt `/frank sweep`. Report each next run time.
 4. Offer webhooks, so fires arrive between briefs: a `schedule_task` with `{type: "webhook"}` per source, prompt `/frank event {{body}}`. For GitHub, get the signing secret through `request_secret` and set the signature check. Give the user the webhook URL to add in the repo's settings; if T3 returns none, T3 Connect remote access needs turning on.

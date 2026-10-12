@@ -1,6 +1,7 @@
 # Starting models for every role in Bob and Frank. Each skill names its line where it starts the work.
-# This is the template: the live file is ~/.bob-n-frank/models.yaml, copied from here on first use.
-# Edit that one (or run /bob-models); a repo can override lines in <repo>/.bob-n-frank/models.yaml.
+# This is the built-in default. It runs as is when ~/.bob-n-frank/models.yaml doesn't exist, and fills any
+# line that file lacks. Customize in ~/.bob-n-frank/models.yaml (or run /bob-models); a repo can override
+# lines in <repo>/.bob-n-frank/models.yaml.
 # Each entry: `provider` and `model` ids from T3's orchestrator_capabilities, and `options` passed as given
 # (`effort` for Claude, `reasoningEffort` and `serviceTier` for GPT). `inherit` runs on the thread's own model.
 # Frank's own thread is set in T3's composer.
