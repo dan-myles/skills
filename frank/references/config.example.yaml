@@ -7,6 +7,11 @@ briefs:
   times: ["08:30", "16:30"]
   weekdays: [1, 2, 3, 4, 5]        # 0 is Sunday
 
+sweep:                              # blocker and inbox check between briefs
+  every_hours: 2
+  hours: ["08:30", "18:30"]          # sweeps outside this window do nothing
+  weekdays: [1, 2, 3, 4, 5]
+
 # Repos Frank watches and may send Bob into.
 repos: []
 #  - path: ~/Developer/acme/app
@@ -28,7 +33,7 @@ slack:
 
 auto_dispatch:
   small_bugs: true                  # confirmed, contained bugs go straight to a Bob thread
-  per_brief: 3                      # at most this many per brief
+  per_run: 3                        # at most this many per brief or sweep
   never_paths: []                   # globs never auto-dispatched, on top of auth, money, data, migrations
 
 in_flight_cap: 4                    # Bob threads Frank keeps running at once

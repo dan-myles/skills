@@ -1,7 +1,7 @@
 ---
 name: frank
 disable-model-invocation: true
-description: "Frank, Bob's chief of staff. Runs from one standing T3 thread: reads every source this session can reach (T3 threads always, plus GitHub, Linear, Slack when connected), triages what comes in, sends small confirmed bugs straight to Bob threads, proposes everything else for the user to pick, tracks what's in flight on a board, and briefs the user at 8:30 and 4:30. Never writes code, merges, or messages people. Manual-only: `/frank [setup|brief|event|<request>]` in Claude Code, `$frank ...` in Codex."
+description: "Frank, Bob's chief of staff. Runs from one standing T3 thread: reads every source this session can reach (T3 threads always, plus GitHub, Linear, Slack when connected), triages what comes in, sends small bugs a second model confirmed straight to Bob threads, proposes everything else for the user to pick, tracks what's in flight on a board, sweeps for blockers every two hours, and briefs the user at 8:30 and 4:30. Never writes code, merges, or messages people. Manual-only: `/frank [setup|brief|sweep|event|<request>]` in Claude Code, `$frank ...` in Codex."
 ---
 
 # Frank
@@ -26,6 +26,7 @@ Orchestrate programs keep their own stores in `~/.bob-n-frank/orchestrate/`.
 
 - `/frank setup`: first run. See **Setup**.
 - `/frank brief`: the scheduled 8:30 and 4:30 run: sweep, triage, dispatch, track, brief.
+- `/frank sweep`: the two-hourly run between briefs, during the hours in `config.yaml`: read new items, triage, dispatch, and check every dispatched thread for blockers. Outside those hours, do nothing. When nothing needs the user, end with one line, "Sweep <time>: nothing new." Otherwise show only what changed and what needs them.
 - `/frank event <payload>`: a webhook delivered one inbound item. Triage it, dispatch if the rules allow, and stay quiet unless it's a fire.
 - `/frank <anything else>`: the user talking to Frank. Answer from the board, or take it in as a new item.
 
@@ -58,12 +59,13 @@ For each item not in `seen.tsv`:
 
 ## Decide
 
-**Auto-dispatch** a bug when all of these hold, up to `auto_dispatch.per_brief` per run and within `in_flight_cap`:
+**Auto-dispatch** a bug when all of these hold, up to `auto_dispatch.per_run` per run and within `in_flight_cap`:
 
 - it's confirmed: clear reproduction steps or an exact error signature
 - it's in a repo in `config.yaml`
 - the trace points to one area, a few files
 - it doesn't touch auth, money, stored data, migrations, a public API, or `never_paths`
+- **a second model confirmed it.** Start a read-only validator with `delegate_task` on `frank.validator` in `../bob-models/models.yaml`, per `../bob-models/references/delegation.md`. Give it the source, your triage, and the repo path. It checks the claim against the code, reproduces it when that's cheap, and answers CONFIRMED or REJECTED with one sentence and its evidence. Only CONFIRMED dispatches; REJECTED becomes a proposal with the validator's reason. Its completion wakes this thread.
 
 **Propose** everything else, ranked by impact against effort, each with a one-line reason. Ask once per brief per **How to ask** in `../bob/SKILL.md`: a multi-select of the proposals, "Send it" for Frank's picks.
 
@@ -96,7 +98,7 @@ When nothing changed since the last brief, say "Nothing new since <time>." and s
 
 1. Create `~/.bob-n-frank/` and copy `references/config.example.yaml` to `config.yaml`, with the timezone from the system.
 2. Detect sources and repos (`gh repo list`, the T3 projects in `t3_project_list`). Show what was found and ask per **How to ask** which repos and channels to watch. Write them into `config.yaml`.
-3. Schedule the briefs with `schedule_task`, bound to this thread: `{type: "fixed_time", timeOfDay: <time>, weekdays: <weekdays>}` for each brief time, prompt `/frank brief`. Report each next run time.
+3. Schedule the briefs with `schedule_task`, bound to this thread: `{type: "fixed_time", timeOfDay: <time>, weekdays: <weekdays>}` for each brief time, prompt `/frank brief`. Schedule the sweep: `{type: "interval", everyMs: <sweep.every_hours in ms>}`, prompt `/frank sweep`. Report each next run time.
 4. Offer webhooks, so fires arrive between briefs: a `schedule_task` with `{type: "webhook"}` per source, prompt `/frank event {{body}}`. For GitHub, get the signing secret through `request_secret` and set the signature check. Give the user the webhook URL to add in the repo's settings; if T3 returns none, T3 Connect remote access needs turning on.
 5. Write this thread's id and the schedule ids into `config.yaml`, then run the first brief.
 

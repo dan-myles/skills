@@ -79,7 +79,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - Models: recommends model changes from session evidence. Never edits `models.yaml` itself.
 - Correct: makes a repo's repeated agent mistakes impossible (architecture, then types, then lint, then tests), proven against a real past mistake.
 
-**`frank`**, Bob's chief of staff, its own front door: `/frank`. One standing T3 thread that reads every connected source (T3 threads always; GitHub, Linear, Slack when connected), triages benny-style, auto-dispatches small confirmed bugs to Bob threads, proposes the rest for Dan to pick, tracks everything on a board, and briefs at 8:30 and 4:30. Never writes code, merges, or messages people. Settings and state live in `~/.bob-n-frank/` (`config.yaml`, `frank/board.tsv`); a repo can override in `<repo>/.bob-n-frank/config.yaml`. Modeled on Lauren Tan's Grok Bot chief of staff, which isn't part of pstack.
+**`frank`**, Bob's chief of staff, its own front door: `/frank`. One standing T3 thread that reads every connected source (T3 threads always; GitHub, Linear, Slack when connected), triages benny-style, auto-dispatches small bugs once a validator on the other model family confirms them (`frank.validator` in `models.yaml`), proposes the rest for Dan to pick, tracks everything on a board, sweeps for blockers every two hours, and briefs at 8:30 and 4:30. Never writes code, merges, or messages people. Settings and state live in `~/.bob-n-frank/` (`config.yaml`, `frank/board.tsv`); a repo can override in `<repo>/.bob-n-frank/config.yaml`. Modeled on Lauren Tan's Grok Bot chief of staff, which isn't part of pstack.
 
 ## Decisions and why
 
