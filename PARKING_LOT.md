@@ -70,7 +70,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 
 **Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
 
-**`bob-models`**: `bob-models/models.yaml` pins models only for panels and judges (architect designers and judge, adversarial-review reviewers, eval candidates and judge). Everything else runs on Bob's own model. `/bob-models` reviews the file against T3's live catalog and recommends upgrades. `bob-models/references/delegation.md` says how to start a pinned subagent through T3's `delegate_task`.
+**`bob-models`**: `bob-models/models.yaml` sets the model for every role: each subagent (`<skill>.<name>`) and each thread Frank or Orchestrate launches (`threads.bob` is Opus 5.5 high). A repo can override lines in `<repo>/.bob-n-frank/models.yaml`; `inherit` uses the thread's model. Checkers stay on the other family from what they check. Frank's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/bob-models` checks the file against T3's live catalog and recommends upgrades. `bob-models/references/delegation.md` says how to start each one.
 
 **`bob-improve`**, its own front door because it changes skills or repos, not product code:
 
@@ -83,7 +83,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 
 ## Decisions and why
 
-- **Model choices pin only panels and judges.** Dan rejected per-subagent model choices, named-model indirection, and a single effort knob as overengineering. Mixing model families only matters where models check each other.
+- **Every role has a model line (since 2026-10-12).** Dan first kept lines to panels and judges, then asked to set every model up for success after comparing with pstack-t3, which resolves every role from a roles file. Still no named-model indirection and no single effort knob.
 - **`models.yaml` is data, not markdown.**
 - **Principles are separate skills,** like pstack, so Bob loads only the one a step needs. A single combined file was rejected.
 - **Verify skills live in each repo.** Only the generator is global.

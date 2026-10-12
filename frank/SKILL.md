@@ -73,7 +73,7 @@ For each item not in `seen.tsv`:
 ## Dispatch
 
 - Write the brief per `../bob/references/brief.md`, with REPORT at `~/.bob-n-frank/frank/reports/<id>.md`. An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
-- Launch a Bob thread with `t3_thread_launch`: a new worktree off the repo's default branch, title `frank: <item>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead: `/bob orchestrate <program brief>`.
+- Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `../bob-models/models.yaml`, a new worktree off the repo's default branch, title `frank: <item>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`.
 - Save the brief, set the row to `dispatched` with the thread id, and link the thread in the brief as `[title](t3-thread://v1/<threadId>)`.
 
 ## Track

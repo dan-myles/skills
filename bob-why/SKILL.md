@@ -49,7 +49,7 @@ Check which tools and MCP servers this session can reach. Sort them into these e
 | Error tracking | The exceptions that led to defensive code | `references/sources/errors.md` |
 | Product analytics | Usage data, experiments, and where a number came from | `references/sources/analytics.md` |
 
-Start one investigator subagent per source that's reachable, all at once, one source each. Each one gets:
+Start one investigator subagent per source that's reachable, on `bob-why.investigators` in `../bob-models/models.yaml`, all at once, one source each. Each one gets:
 
 1. the brief in `references/investigator.md`
 2. that source's guide
@@ -70,7 +70,7 @@ Without subagents, work through the sources yourself one at a time, following th
 
 ## 4. Synthesize
 
-Start one synthesizer subagent, with the same tool access so it can spot-check citations. Give it every investigator's findings (empty results and skipped sources included), the anchor, the question, `references/confidence.md`, and `references/synthesizer.md`.
+Start one synthesizer subagent on `bob-why.synthesizer`, with the same tool access so it can spot-check citations. Give it every investigator's findings (empty results and skipped sources included), the anchor, the question, `references/confidence.md`, and `references/synthesizer.md`.
 
 ## 5. Present
 

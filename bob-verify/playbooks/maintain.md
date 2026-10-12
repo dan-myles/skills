@@ -5,7 +5,7 @@ Keep `verify-<app>` true to the app. Cover every feature file from source and dr
 Only edit the verify skill's own folder: its `SKILL.md`, `features/`, and the scripts it owns.
 
 1. **Check the index.** Read `features/README.md` and list the folder. Fix missing, extra, duplicate, or dead entries.
-2. **Read the source.** Start one read-only subagent per feature file, all at once. Each explains how that feature works from the code, flags where the map has drifted (with `file:line`), and returns one recipe to drive it. Subagents never drive the app or edit files. Each returns: summary, source entry points, drift or "none", recipe.
+2. **Read the source.** Start one read-only subagent per feature file, all at once, on `bob-verify.readers` in `../bob-models/models.yaml`. Each explains how that feature works from the code, flags where the map has drifted (with `file:line`), and returns one recipe to drive it. Subagents never drive the app or edit files. Each returns: summary, source entry points, drift or "none", recipe.
 3. **Reconcile.** Make sure every feature file got a summary. Merge recipes that share an app state. Spot-check the drift they cite; don't re-prove claims that came back clean. Look through recent commits for user-facing surfaces the map doesn't have, and add one only with a concrete source path.
 4. **Drive it live.** Required even when the source looked clean. Follow the skill's own Launch: one long-lived instance driven in order for a server or UI, a fresh session per drive for a short-lived CLI. Drive every feature at least once. Throughout:
    - Run doctor before the first drive, on every fresh session, and after any failed drive. When doctor can't see the problem (a stuck UI on a healthy process), reset to a known state or relaunch.

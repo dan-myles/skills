@@ -10,7 +10,7 @@ Turn one session into approved edits.
    - If nothing matches, write a tight digest instead: the task, what was done, every correction from the user, and what went wrong.
 2. Decide whether there's anything to learn. A trivial session, or one that followed the skills without friction, has no lessons. Say so and stop.
 3. List the skills the session used: `Skill` tool calls, slash commands like `/bob`, reads of any `SKILL.md` or `playbooks/*.md`, and `$bob` mentions in Codex. Reviewers get this list.
-4. Run three reviewers in parallel. Pass each its prompt verbatim, with the transcript path (or the digest) and the skills list filled in.
+4. Run three reviewers in parallel, each on its line under `bob-improve` in `../bob-models/models.yaml` (`reflect-judgment`, `reflect-tooling`, `reflect-divergent`). Pass each its prompt verbatim, with the transcript path (or the digest) and the skills list filled in.
 
    | Lens | Looks for | Prompt |
    |---|---|---|
@@ -18,7 +18,7 @@ Turn one session into approved edits.
    | Tooling | Commands, flags, and quirks, and context the user had to hand over | `references/tooling-reviewer.md` |
    | Divergent | The lesson under the obvious one, second-order misses, skipped checks | `references/divergent-reviewer.md` |
 
-5. Synthesize. One subagent gets `references/synthesizer.md` with all three reviewers' output pasted in full.
+5. Synthesize. One subagent on `bob-improve.reflect-synthesizer` gets `references/synthesizer.md` with all three reviewers' output pasted in full.
 6. Check the Accepted rows yourself. Read each target before keeping its row. Move a row to Backlog when a mechanism would enforce it better. Move a row to the repo's AGENTS.md when it's about one codebase.
 7. **Checkpoint:** show the full Accepted, Rejected, and Backlog lists and wait. The user picks rows.
 8. Apply the picked rows per **Editing a skill**. Commit and push each one in the skills repo. For AGENTS.md rows, make the edit in that repo's working tree and leave it for the user's next change, unless they ask for a PR. When a row changes behavior you can't judge by reading it, offer Eval before committing.

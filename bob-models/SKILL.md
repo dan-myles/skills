@@ -1,14 +1,14 @@
 ---
 name: bob-models
 disable-model-invocation: true
-description: "Review and change the models behind Bob's panels and judges (bob-architect designers and judge, bob-adversarial-review reviewers, bob-improve eval, Orchestrate's verifiers, Frank's validator). Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes like swapping a model, adding a reviewer, or pinning a subagent that runs on Bob's model today. Every other subagent runs on Bob's own model. Manual-only: `/bob-models [change]` in Claude Code, `$bob-models ...` in Codex."
+description: "Review and change the model for every role in Bob and Frank: each subagent (explorers, workers, designers, reviewers, judges, verifiers) and each thread Frank or Orchestrate launches. Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes in plain words. A repo can override lines in .bob-n-frank/models.yaml. Manual-only: `/bob-models [change]` in Claude Code, `$bob-models ...` in Codex."
 ---
 
 # Models
 
-`models.yaml` in this folder holds the models for the subagents where mixing model families is the point: panels (designers, reviewers, eval candidates) and the judges that score them. Each line is keyed `<skill>.<name>` and gives the provider, model, and options inline; a list starts one subagent per entry. Every other subagent runs on Bob's own model and has no line here. The skills that use a line name it where they start the subagent, and start it per `references/delegation.md`.
+`models.yaml` in this folder sets the model for every role in Bob and Frank: each subagent (`<skill>.<name>`) and each thread Frank or Orchestrate launches (`threads.<name>`). Each line gives the provider, model, and options inline; a list starts one subagent per entry; `inherit` means the thread's own model. A repo can override any line in `<repo>/.bob-n-frank/models.yaml`. The skills name their line where they start the work, and start it per `references/delegation.md`.
 
-Bob's own model is the T3 thread's model, set in T3's composer. This file can't change it. If the user asks, say so and recommend one.
+Two threads aren't in the file because T3's composer sets them: Frank's own thread, and any Bob thread the user starts by hand. If the user asks, recommend one: a fast coordinator for Frank (a frontier model at medium effort with its fast tier), a strong model for Bob.
 
 ## Use
 
@@ -29,10 +29,12 @@ Bob's own model is the T3 thread's model, set in T3's composer. This file can't 
    - a model, provider, or option value the catalog doesn't list
    - a provider whose `canRunCrossProviderChildTask` is false
    - a panel that doesn't mix providers. `bob-architect.designers` must be two entries from different providers. `bob-adversarial-review.reviewers` and `bob-improve.eval-candidates` should mix them.
+   - a checker on the same family as what it checks: `bob.verifier` against `threads.bob`, `frank.validator` against Frank's thread model.
    - a line no skill names, or a `<skill>.<name>` a skill names that has no line. Search the bob- skills for `models.yaml` to find them.
 4. **Recommend.** On a review, or for a change the user left open ("a better reviewer"), propose what's worth changing. Each recommendation names the line, before and after, why, and the cost: more effort or a bigger model means slower and more expensive runs. Lead with the one that matters most. "No change" is a fine answer; don't churn models for their own sake.
    - **Newer models.** The catalog doesn't rank models or say what's new. Judge from names and versions (`gpt-6.1-sol` over `gpt-6-sol`), then look up the provider's release notes or model docs, when you can reach them, and cite what you found. Say when a ranking is only a guess from the name.
-   - **Fit the job.** Designers, reviewers, and judges do judgment work, so they get a top model at high effort or more. Eval candidates should be the models Bob actually runs on, since the eval tests a skill as Bob will use it.
+   - **Fit the job.** Designers, reviewers, judges, explainers, and synthesizers do judgment work: a top model at high effort or more. Workers write code: the strongest coding model for its price. Explorers, investigators, and readers only read: a fast model at medium. Coordinators run many short turns: lower effort on a strong model, never a small one. Eval candidates should be the models Bob actually runs on.
+   - **Effort.** `max` thinks for minutes per turn; save it for the rare line that needs it. Never use Claude Haiku 4.5 or a small model to coordinate, review, or judge.
    - **Diversity.** When the catalog gains a provider that can run child tasks, suggest it as an extra reviewer. Don't put a judge on the same provider as both entries it judges.
    - **Pin or unpin.** Pin a subagent only with a reason: a session where Bob's model fell short at that job, or a job that needs a different family. Unpin a line when Bob's model does that job as well.
    - Skip reasoning values that start more agents (`ultracode`), values injected into the prompt (`ultrathink`), and values whose effect the catalog doesn't describe (`ultra`).

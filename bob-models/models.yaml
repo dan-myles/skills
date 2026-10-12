@@ -1,29 +1,51 @@
-# Models for Bob's panels and judges, where mixing model families is the point.
-# Every other subagent runs on Bob's own model and has no line here.
-# Each entry: `provider` and `model` ids from T3's orchestrator_capabilities, and `options`
-# passed to delegate_task as given (`effort` for Claude, `reasoningEffort` for GPT).
+# The model for every role in Bob and Frank. Each skill names its line where it starts the work.
+# Each entry: `provider` and `model` ids from T3's orchestrator_capabilities, and `options` passed as given
+# (`effort` for Claude, `reasoningEffort` and `serviceTier` for GPT). `inherit` runs on the thread's own model.
+# A repo can override any line in <repo>/.bob-n-frank/models.yaml. Frank's own thread is set in T3's composer.
 # Check it against the live catalog with /bob-models.
-checked: "2026-10-11"
+checked: "2026-10-12"
+
+# Threads that Frank and Orchestrate launch with t3_thread_launch.
+threads:
+  bob: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}            # every Bob thread
+  orchestrate: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}  # a program's coordinator
 
 bob:
-  verifier: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}  # Orchestrate's verifiers; keep on the other family from Bob's own model
+  workers: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}   # build subagents inside a Bob thread
+  hard: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: xhigh}}    # cross-cutting design, tricky logic
+  verifier: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}  # Orchestrate's checks; other family from threads.bob
 
-frank:
-  validator: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}  # confirms a bug before Frank auto-dispatches it
+bob-how:
+  explorers: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}
+  explainer: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+
+bob-why:
+  investigators: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}
+  synthesizer: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
 
 bob-architect:
   designers:                          # exactly two, from different providers
-    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: max}}
-    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
-  judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
+    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: xhigh}}
+    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: xhigh}}
+  judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
 
 bob-adversarial-review:
   reviewers:                          # two or more, mixing providers
-    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: max}}
-    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
+    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
+
+bob-verify:
+  readers: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}   # maintain's source readers
 
 bob-improve:
-  eval-candidates:                    # each skill version runs once per entry
-    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: max}}
-    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
-  eval-judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: max}}
+  reflect-judgment: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+  reflect-tooling: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}
+  reflect-divergent: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}   # the other family on purpose
+  reflect-synthesizer: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+  eval-candidates:                    # the models Bob actually runs on
+    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+    - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
+  eval-judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
+
+frank:
+  validator: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}   # confirms a bug before auto-dispatch; other family from Frank's thread

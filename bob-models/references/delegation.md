@@ -1,22 +1,26 @@
-# Starting a pinned subagent
+# Starting a subagent or thread
 
-Most subagents run on Bob's own model: start them with the harness's native subagent tool and leave the model unset. This file covers the rest, the panels and judges with a line in `../models.yaml`. The step that starts one names its line, as `<skill>.<name>`, for example `bob-architect.judge`.
+Every subagent and every launched thread runs on its line in `../models.yaml`. The step that starts it names the line, as `<skill>.<name>` (for example `bob-architect.judge`) or `threads.<name>` for a thread.
 
 Pairing models from different providers is on purpose: Claude and GPT have different blind spots, so what both catch is likely real and what one catches alone gets a closer look.
 
 ## Resolve the model
 
-1. Read `../models.yaml` and look up the line. It is one entry or a list of them; a list starts one subagent per entry, in order.
+1. Read `../models.yaml` and look up the line. When the work is in a repo that has `.bob-n-frank/models.yaml`, a line there replaces the same line here. A line is one entry or a list of them; a list starts one subagent per entry, in order. A line set to `inherit` runs on this thread's own model: start it with the harness's native subagent tool and leave the model unset.
 2. Call T3's `orchestrator_capabilities` once per session. The T3 tools can load late, so call it once before deciding they're missing.
 3. Check each entry against the catalog: its `model` is listed under its `provider`, that provider's `canRunCrossProviderChildTask` is true, and each option value is offered.
 4. If an entry fails, use the closest model the catalog lists from the same provider, name the substitute in the output, and suggest running `/bob-models`. Don't block the step on it.
 
+## Threads
+
+A `threads.<name>` line goes to `t3_thread_launch` as `modelSelection: {instanceId: <provider>, model: <model>, options: <options>}`. It sets the whole thread's model, so the thread's own subagents still use their own lines.
+
 ## In T3
 
-Start each one with `delegate_task`, the same provider as yours included. Native subagent tools can't set the reasoning option, so they'd run a different setup than the file says.
+Start each subagent with `delegate_task`, the same provider as yours included. Native subagent tools can't set the reasoning option, so they'd run a different setup than the file says.
 
 - `target`: `providerInstanceId` from `provider`, `model`, and `options` from the entry as given. Pass every option you want; an override replaces the inherited options instead of merging with them.
-- `role`: `design` for designers, `review` for reviewers and judges, `test` for eval candidates.
+- `role`: `design` for designers, `review` for reviewers, judges, verifiers, and validators, `research` for explorers, investigators, and readers, `implementation` for workers, `test` for eval candidates.
 - `mode`: `async`.
 - `clientRequestId`: one per subagent per round, reused only when retrying that same call.
 - `task`: the whole filled prompt.
