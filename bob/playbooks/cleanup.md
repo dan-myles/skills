@@ -6,7 +6,7 @@ Free disk by pruning worktrees and other leftovers. Deleting is the one thing he
    - size (`du -sh`) and the age of its last commit
    - its branch, whether that's merged into the base, and its PR state (`gh pr list --head <branch> --state all`)
    - tracked edits not committed (`git -C <path> status --porcelain`): these are **wip**; untracked files are **scratch**
-   - the T3 thread bound to it (`t3_thread_list`, `t3_worktree_list`), when it last ran, and whether any `~/.bob/orchestrate/*/units.tsv` lists it as running
+   - the T3 thread bound to it (`t3_thread_list`, `t3_worktree_list`), when it last ran, and whether any `~/.bob-n-frank/orchestrate/*/units.tsv` lists it as running
 
    Write the audit as a script in `/tmp/bob-cleanup/`, per `build-the-lever`, so it can be rerun after pruning.
 2. **Bucket each one.** **Safe:** merged or closed PR, clean, no live thread. **Check:** a thread ran it recently, or nothing explains why it exists. **Hold:** wip, an open PR, a live or pinned thread, or a running Orchestrate unit. A bucket is advice, not permission.

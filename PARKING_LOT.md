@@ -52,7 +52,7 @@ Do all of these together:
 | Perf | Fix mode for one slowdown, Climb mode to push a metric over many kept-or-reverted tries. | A merge-ready PR, unmerged. |
 | Prototype | Throwaway sketches to settle a design call. | A pick. No PR. |
 | Babysit | Getting a PR merge-ready: conflicts, review threads, CI. Waits with T3's `watch_pull_request`. | Merge-ready. Never merges unless told. |
-| Orchestrate | A whole program handed to one T3 thread that never writes code: briefs, standing orders, a store of tables in `~/.bob/orchestrate/<program>/`, Bob worker threads in their own worktrees, verifiers on the other model family, drains on a T3 heartbeat. Ported from pstack's Orchestrate. | Merge-ready PRs; merges only if the standing orders allow it. |
+| Orchestrate | A whole program handed to one T3 thread that never writes code: briefs, standing orders, a store of tables in `~/.bob-n-frank/orchestrate/<program>/`, Bob worker threads in their own worktrees, verifiers on the other model family, drains on a T3 heartbeat. Ported from pstack's Orchestrate. | Merge-ready PRs; merges only if the standing orders allow it. |
 | Cleanup | Prunes worktrees and other disk leftovers after an audit; the user picks what goes. | Space reclaimed. |
 
 Bob babysits every PR he opens unless told not to, and replies to human reviewers and bots without asking. Dan chose both.
@@ -79,6 +79,8 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - Models: recommends model changes from session evidence. Never edits `models.yaml` itself.
 - Correct: makes a repo's repeated agent mistakes impossible (architecture, then types, then lint, then tests), proven against a real past mistake.
 
+**`frank`**, Bob's chief of staff, its own front door: `/frank`. One standing T3 thread that reads every connected source (T3 threads always; GitHub, Linear, Slack when connected), triages benny-style, auto-dispatches small confirmed bugs to Bob threads, proposes the rest for Dan to pick, tracks everything on a board, and briefs at 8:30 and 4:30. Never writes code, merges, or messages people. Settings and state live in `~/.bob-n-frank/` (`config.yaml`, `frank/board.tsv`); a repo can override in `<repo>/.bob-n-frank/config.yaml`. Modeled on Lauren Tan's Grok Bot chief of staff, which isn't part of pstack.
+
 ## Decisions and why
 
 - **Model choices pin only panels and judges.** Dan rejected per-subagent model choices, named-model indirection, and a single effort knob as overengineering. Mixing model families only matters where models check each other.
@@ -100,7 +102,6 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 - Run (pstack's Autonomous run), Shipping, Autopilot-stack, and Autopilot-full. Run and Shipping were ported, then removed on 2026-10-12 until needed; Orchestrate keeps its own Land step. Hold until Bob has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Bob's never-merge rule.
 - Pause safely and Session pickup. T3 threads already hold much of that context.
 - A `bob-grill` helper that questions Dan before `bob-architect` designs.
-- A chief-of-staff skill: the outer loop above Orchestrate (reads issues and chat, triages, hands briefs to an orchestrator thread). Lauren Tan runs hers as a Grok Bot, outside pstack.
 
 **Skipped on purpose:** `automate-me` (one-time use), `swarm` (T3 delegation covers it), `tdd` (the Bug playbook and `bob-principle-test-behavior-not-implementation` cover it), `teach` and `recall` (`bob-how`, `bob-why`, and T3 history cover them), `no-comments`, `bro`, `poteto-help`, `technical-writing`, `typescript-best-practices`, `make-bot-ui`, Visual parity, Worktree cleanup, and Multi-phase plan.
 

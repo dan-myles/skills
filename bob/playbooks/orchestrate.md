@@ -21,7 +21,7 @@ Keep it two levels deep: coordinator and workers. Split a program into tracks (b
 
 ## The store
 
-One folder per program, outside every repo: `~/.bob/orchestrate/<program-slug>/`. Every file has one writer: you, except `reports/`, where each worker writes only its own file.
+One folder per program, outside every repo: `~/.bob-n-frank/orchestrate/<program-slug>/`. Every file has one writer: you, except `reports/`, where each worker writes only its own file.
 
 - `standing-orders.md`: numbered lines, one constraint each (merge policy, verification bar, forbidden paths, in-flight cap, models, escalation). When you catch yourself restating an instruction, add a line first, per `encode-lessons-in-structure`. A stop line at the top halts new spawns.
 - `units.tsv`: one row per unit: id, track, state (`planned`, `running`, `needs-verify`, `verified`, `merge-ready`, `landed`, `failed`, `abandoned`), thread id, branch, PR, head SHA, brief path. Update rows in place.
@@ -49,7 +49,7 @@ RULES        You were started by an orchestrator, not a person. Skip checkpoints
              in CONTEXT. Don't ask the user anything: when a decision isn't yours, stop and report it as a
              gate. Babysit your PR to merge-ready, then stop. Never merge, rebase, force-push, or retarget.
              Don't settle or archive this thread. No fixes outside SCOPE; note them as follow-ups.
-REPORT       write ~/.bob/orchestrate/<program>/reports/<unit>.md and end with the same text: status,
+REPORT       write ~/.bob-n-frank/orchestrate/<program>/reports/<unit>.md and end with the same text: status,
              branch, head SHA, PR, what you ran and its output, deviations, gates, follow-ups
 STANDING     <standing-orders.md pasted word for word>
 ```
@@ -59,7 +59,7 @@ A dependency means passing context, not just ordering: paste the upstream report
 ## Steps
 
 1. **Frame.** Write the done condition as something countable ("all 40 call sites migrated, every PR `test-verified` or better and merge-ready"). Size it: units, rough effort, tracks, and the wall-clock budget. Set the merge policy: by default workers stop at merge-ready and the user lands; the coordinator merges only if the user says so in the standing orders. A contested split or a one-way door goes through `bob-architect` first. **Checkpoint:** show the plan per `references/visuals.md` (tracks, units, file map of what changes, budget) and ask per **How to ask** in the skill.
-2. **Set up.** Create the store, write the standing orders, and schedule a heartbeat with `schedule_task` (`{type: "interval", everyMs: 900000}`, bound to this thread) whose prompt is "/bob orchestrate drain <program>: store at ~/.bob/orchestrate/<program>/". The store path in the prompt is what lets a coordinator with no memory find its way back. Seed `frontier.md` from existing PRs.
+2. **Set up.** Create the store, write the standing orders, and schedule a heartbeat with `schedule_task` (`{type: "interval", everyMs: 900000}`, bound to this thread) whose prompt is "/bob orchestrate drain <program>: store at ~/.bob-n-frank/orchestrate/<program>/". The store path in the prompt is what lets a coordinator with no memory find its way back. Seed `frontier.md` from existing PRs.
 3. **Pilot.** Push one unit all the way through: brief, worker, verifier, ledger row, merge-ready PR. Fix the brief template, the check, or the unit size from what the pilot shows before fanning out. For many near-identical cheap units, the first unit is the pilot and fan-out starts when it lands.
 4. **Scale.** Keep a rolling window of workers up to the in-flight cap (default 4, since worktree threads run on this machine; raise it in the standing orders) and refill as units finish. Don't wait for a whole batch. Pass upstream reports into downstream briefs.
 5. **Drain** on every wake: the heartbeat, a verifier finishing, a watched PR changing, or a user message.

@@ -1,0 +1,7 @@
+interface:
+  display_name: "frank"
+  short_description: "Bob's chief of staff: triage what comes in, dispatch Bob threads, track them, brief twice a day"
+  default_prompt: "Use $frank to run a brief: read every connected source, triage new items, dispatch small confirmed bugs to Bob threads, propose the rest, and show the board."
+
+policy:
+  allow_implicit_invocation: false
