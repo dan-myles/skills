@@ -6,7 +6,7 @@
 checked: "2026-10-11"
 
 bob:
-  verifier: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}  # Orchestrate's and Shipping's verifiers; keep on the other family from Bob's own model
+  verifier: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}  # Orchestrate's verifiers; keep on the other family from Bob's own model
 
 bob-architect:
   designers:                          # exactly two, from different providers

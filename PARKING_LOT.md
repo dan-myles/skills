@@ -53,8 +53,6 @@ Do all of these together:
 | Prototype | Throwaway sketches to settle a design call. | A pick. No PR. |
 | Babysit | Getting a PR merge-ready: conflicts, review threads, CI. Waits with T3's `watch_pull_request`. | Merge-ready. Never merges unless told. |
 | Orchestrate | A whole program handed to one T3 thread that never writes code: briefs, standing orders, a store of tables in `~/.bob/orchestrate/<program>/`, Bob worker threads in their own worktrees, verifiers on the other model family, drains on a T3 heartbeat. Ported from pstack's Orchestrate. | Merge-ready PRs; merges only if the standing orders allow it. |
-| Shipping | Lands PRs the user said to land: each verified by another model, bottom of the stack first, one at a time, verdicts pinned to patch-ids. | Merged up to the verified ceiling. |
-| Run | One task driven to a checkable finish line without stopping: smallest change, check, keep or revert, log every round, heartbeat or event wakes. | A merge-ready PR. |
 | Cleanup | Prunes worktrees and other disk leftovers after an audit; the user picks what goes. | Space reclaimed. |
 
 Bob babysits every PR he opens unless told not to, and replies to human reviewers and bots without asking. Dan chose both.
@@ -99,7 +97,7 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 **Parked, Dan unsure:**
 
 - `figure-it-out` (a playbook for jobs no other playbook fits) and `show-me-your-work` (an auditable decision log). Refactor and Perf currently stop and propose a split when a job is too big.
-- Autopilot-stack and Autopilot-full. (Orchestrate, Run, and Shipping are ported.) Hold until Bob has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Bob's never-merge rule.
+- Run (pstack's Autonomous run), Shipping, Autopilot-stack, and Autopilot-full. Run and Shipping were ported, then removed on 2026-10-12 until needed; Orchestrate keeps its own Land step. Hold until Bob has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Bob's never-merge rule.
 - Pause safely and Session pickup. T3 threads already hold much of that context.
 - A `bob-grill` helper that questions Dan before `bob-architect` designs.
 - A chief-of-staff skill: the outer loop above Orchestrate (reads issues and chat, triages, hands briefs to an orchestrator thread). Lauren Tan runs hers as a Grok Bot, outside pstack.

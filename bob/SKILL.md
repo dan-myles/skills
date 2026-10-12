@@ -1,7 +1,7 @@
 ---
 name: bob
 disable-model-invocation: true
-description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, Prototype, Investigation, Babysit, Shipping, Run, Orchestrate, or Cleanup, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/bob <goal>` in Claude Code, `$bob <goal>` in Codex."
+description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, Prototype, Investigation, Babysit, Orchestrate, or Cleanup, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/bob <goal>` in Claude Code, `$bob <goal>` in Codex."
 ---
 
 # Bob
@@ -19,15 +19,13 @@ The playbook decides the order of work. The repo decides the commands.
    - **Perf.** It works but it's too slow or uses too much (time, memory, size, cost), or the user wants a metric pushed toward a target. `playbooks/perf.md`.
    - **Prototype.** The user wants to try ideas before building: "mock it up", "try this layout", "sketch it so we can decide". Throwaway, no PR. `playbooks/prototype.md`.
    - **Babysit.** The user asks to get an open PR merge-ready, answer its review comments, or check on it. `playbooks/babysit.md`.
-   - **Shipping.** The user says to land, ship, or merge a PR or stack. `playbooks/shipping.md`.
-   - **Run.** The user wants one task driven until something is true: "run until the tests pass", "keep going until it's fixed". `playbooks/run.md`.
    - **Cleanup.** The user wants disk space back: old worktrees, simulators, caches. `playbooks/cleanup.md`.
    - **Orchestrate.** A whole program too big for one thread: many units and PRs, days of work, handed to this thread to coordinate. This thread then writes briefs and runs workers, and never writes code. `playbooks/orchestrate.md`.
 
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
 4. Show the plan per `references/visuals.md`: the playbook's steps as a pipeline, with the helpers each one runs and the checkpoints marked. Keep the text to one line on how you sorted the task.
-5. `/bob orchestrate drain <program>`, `/bob orchestrate resume <program>`, and `/bob run continue <slug>` go straight to that playbook's drain or resume step: no sorting, no plan.
+5. `/bob orchestrate drain <program>` and `/bob orchestrate resume <program>` go straight to Orchestrate's Drain or Resume for that program: no sorting, no plan.
 6. When the user says "new task", sort again. Anything else, like "send it", "go on", or "do it", continues the current playbook.
 
 ## Helpers
@@ -126,7 +124,7 @@ Small, contained diffs mark this `skip: <why>`.
 
 ## Opening the PR
 
-Feature, Bug, Refactor, Perf, and Run finish here.
+Feature, Bug, Refactor, and Perf finish here.
 
 1. Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
 2. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
@@ -141,7 +139,7 @@ Feature, Bug, Refactor, Perf, and Run finish here.
 
    Add screenshots or video when they prove a claim. No SHAs, no file-by-file lists, no walls of text. Run `unslop` on it.
 5. Babysit it. Put `playbooks/babysit.md`'s Drive steps on the todo list and run them until the PR is merge-ready. Skip this only when the user said not to ("don't babysit", "just open the PR").
-6. Merging depends on the playbook. Bug fixes go through the repo's normal flow once merge-ready, merge included when that's the norm. Everything else ends at a merge-ready PR even if the repo's PR skill would merge it; stop before that step and return the link. When the user then says to land or ship it, that's `playbooks/shipping.md`.
+6. Merging depends on the playbook. Bug fixes go through the repo's normal flow once merge-ready, merge included when that's the norm. Everything else ends at a merge-ready PR even if the repo's PR skill would merge it; stop before that step and return the link.
 
 ## The reply
 
