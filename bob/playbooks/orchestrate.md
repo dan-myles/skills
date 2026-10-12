@@ -47,9 +47,10 @@ Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.
    - Read each running worker without disturbing it: `t3_thread_read`, its report file, `gh pr view`. Never message a worker to check on it.
    - Classify each: landed, merge-ready, needs-verify, failed, stuck, or noise. Update `units.tsv`, `ledger.tsv`, and `frontier.md`.
    - A finished unit that needs judgment gets a verifier unit. Don't review diffs inline.
+   - Settle each worker whose unit reached a final state (landed, abandoned, or a closed PR) per `references/settling.md`. A merge-ready PR waiting on the user keeps its worker active. The coordinator never settles itself.
    - Spawn the next units in one turn, then end the turn with a status board: counts by state, what changed, open gates.
 6. **Land, continuously.** Keep the lowest unmerged PR green before work above it. Workers never rebase; a conflict or restack is a unit with its own brief. Merge only under the merge policy, and only PRs whose current head SHA has a passing ledger row.
-7. **Close.** Drain one last time. Every spawned unit ends in a final state (landed, merge-ready, abandoned with a reason). Check the done condition on the real product. Delete the heartbeat with `delete_scheduled_task`. Turn recurring corrections into standing orders or brief changes. Leave the store as the record.
+7. **Close.** Drain one last time. Every spawned unit ends in a final state (landed, merge-ready, abandoned with a reason). Settle every worker that passes `references/settling.md`; list the ones left active and why. Check the done condition on the real product. Delete the heartbeat with `delete_scheduled_task`. Turn recurring corrections into standing orders or brief changes. Leave the store as the record.
 
 ## Verification
 
