@@ -2,6 +2,8 @@
 
 The decision is yours, not the code. A prototype is a throwaway tool for making a design call cheaply. The real build goes through Feature.
 
+Prototypes never ship. Nothing from `/tmp/bob-prototype-*` gets copied into the repo, a branch, or a PR. The real build starts fresh in Feature, using the prototype only as a reference for the decision.
+
 This is the one playbook where speed beats polish. Code quality doesn't matter, tests don't either, and there's no plan to agree. The care goes into picking the right design for little cost: offer variations the user didn't ask for, and throw an approach away to try another.
 
 1. Name the decision the prototype exists to make: which layout, which interaction, how dense, or for a behavior question, which timing or approach. No decision means no prototype; sort it as Feature instead.

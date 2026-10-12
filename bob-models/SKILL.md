@@ -1,7 +1,7 @@
 ---
 name: bob-models
 disable-model-invocation: true
-description: "Review and change the models behind Bob's panels and judges (bob-architect designers and judge, bob-adversarial-review reviewers, bob-improve eval). Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes like swapping a model, adding a reviewer, or pinning a subagent that runs on Bob's model today. Every other subagent runs on Bob's own model. Manual-only: `/bob-models [change]` in Claude Code, `$bob-models ...` in Codex."
+description: "Review and change the models behind Bob's panels and judges (bob-architect designers and judge, bob-adversarial-review reviewers, bob-improve eval, the Orchestrate and Shipping verifiers). Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes like swapping a model, adding a reviewer, or pinning a subagent that runs on Bob's model today. Every other subagent runs on Bob's own model. Manual-only: `/bob-models [change]` in Claude Code, `$bob-models ...` in Codex."
 ---
 
 # Models
