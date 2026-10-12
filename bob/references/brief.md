@@ -11,7 +11,7 @@ PLAYBOOK     which Bob playbook fits (Feature, Bug, Refactor, Perf)
 SCOPE        paths it may write, paths it may not, its branch and base
 CONTEXT      files, issues, and PRs to read; upstream reports pasted in full, since workers can't see each other
 ACCEPTANCE   checkable criteria, one per line
-VERIFY       exact commands or the verify-<app> recipe, plus known gotchas
+VERIFY       exact commands or the bob-verify-<app> recipe, plus known gotchas
 TIMEBOX      rough cap; on expiry, report what you have and stop
 RULES        <headless or attended, below>
 REPORT       write <report path> and end with the same text: status, branch, head SHA, PR,

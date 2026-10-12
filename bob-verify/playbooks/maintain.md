@@ -1,6 +1,6 @@
 # Maintain
 
-Keep `verify-<app>` true to the app. Cover every feature file from source and drive every feature live at least once. The unit is the feature, not every sentence.
+Keep `bob-verify-<app>` true to the app. Cover every feature file from source and drive every feature live at least once. The unit is the feature, not every sentence.
 
 Only edit the verify skill's own folder: its `SKILL.md`, `features/`, and the scripts it owns.
 

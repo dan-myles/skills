@@ -15,4 +15,4 @@ Indirect checks (file timestamps, an agent's summary, a cached screenshot) feel 
 - When a check fails, suspect how you looked before suspecting the system.
 - Script the check when you can. A rerunnable script beats a one-time look; keep its output where a reviewer can see and rerun it.
 
-On a repo with a `verify-<app>` skill, that's the check. Not `bob-principle-explain-the-number`, which asks whether a measured number means what you think.
+On a repo with a `bob-verify-<app>` skill, that's the check. Not `bob-principle-explain-the-number`, which asks whether a measured number means what you think.

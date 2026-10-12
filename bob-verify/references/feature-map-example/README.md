@@ -4,9 +4,9 @@ How to prove what a user sees in Tasks, a to-do app with a web UI and a `tasks` 
 
 ## Baseline
 
-- Start Tasks with `scripts/verify-tasks launch`. It serves `http://127.0.0.1:5310` with data in `/tmp/tasks-verify-$RUN_ID`, so parallel runs don't share state.
+- Start Tasks with `scripts/bob-verify-tasks launch`. It serves `http://127.0.0.1:5310` with data in `/tmp/tasks-verify-$RUN_ID`, so parallel runs don't share state.
 - The launch seeds two tasks: `Renew passport` (open) and `Water plants` (done).
-- Run `scripts/verify-tasks doctor`. It must report the URL, the data folder, and the current commit.
+- Run `scripts/bob-verify-tasks doctor`. It must report the URL, the data folder, and the current commit.
 - Drive only an instance this run started.
 
 ## Driving
@@ -14,7 +14,7 @@ How to prove what a user sees in Tasks, a to-do app with a web UI and a `tasks` 
 - Start each recipe from the baseline unless its preconditions say otherwise.
 - Find elements by role and accessible name, never by CSS path or position.
 - Copy commands exactly, quotes and flags included.
-- Browser steps go through `scripts/verify-tasks browser`, terminal steps through `scripts/verify-tasks cli --`.
+- Browser steps go through `scripts/bob-verify-tasks browser`, terminal steps through `scripts/bob-verify-tasks cli --`.
 - Undo seeded-data changes after a recipe. Keep the evidence.
 
 ## Proof

@@ -15,20 +15,20 @@ A user adds a task with a title and an optional due date from the browser or the
 - Pressing `a` when no text field has focus.
 - `tasks add "<title>" --due <date>` in a terminal.
 
-## Driving it with verify-tasks
+## Driving it with bob-verify-tasks
 
 Preconditions:
 
-- `scripts/verify-tasks doctor` passes.
+- `scripts/bob-verify-tasks doctor` passes.
 - No task is titled `Book dentist`.
 
-- **Open the form.** Run `scripts/verify-tasks browser click --role button --name "Add task"`. A form named `New task` appears with focus in `Title`.
-- **Fill it in.** Run `scripts/verify-tasks browser fill --role textbox --name "Title" --value "Book dentist"` and `scripts/verify-tasks browser fill --role textbox --name "Due" --value "2026-11-02"`. `Save` becomes enabled.
-- **Save.** Run `scripts/verify-tasks browser click --role button --name "Save"`. The status `Task added` appears and the list has `Book dentist` due Nov 2.
-- **Second view.** Run `scripts/verify-tasks cli -- tasks list --json`. Exit code `0`, and stdout has one task titled `Book dentist` with `"due": "2026-11-02"`.
-- **Cancel.** Open the form, type `Throwaway` as the title, then run `scripts/verify-tasks browser click --role button --name "Cancel"`. The list has no `Throwaway`.
-- **CLI entry.** Run `scripts/verify-tasks cli -- tasks add "Call bank" --json`. Exit code `0`, and stdout has the new task's ID and title.
-- **Proof.** Run `scripts/verify-tasks browser snapshot --path artifacts/add-task/list.aria.txt` and `scripts/verify-tasks browser screenshot --path artifacts/add-task/list.png`. Both show `Book dentist` and `Call bank`.
+- **Open the form.** Run `scripts/bob-verify-tasks browser click --role button --name "Add task"`. A form named `New task` appears with focus in `Title`.
+- **Fill it in.** Run `scripts/bob-verify-tasks browser fill --role textbox --name "Title" --value "Book dentist"` and `scripts/bob-verify-tasks browser fill --role textbox --name "Due" --value "2026-11-02"`. `Save` becomes enabled.
+- **Save.** Run `scripts/bob-verify-tasks browser click --role button --name "Save"`. The status `Task added` appears and the list has `Book dentist` due Nov 2.
+- **Second view.** Run `scripts/bob-verify-tasks cli -- tasks list --json`. Exit code `0`, and stdout has one task titled `Book dentist` with `"due": "2026-11-02"`.
+- **Cancel.** Open the form, type `Throwaway` as the title, then run `scripts/bob-verify-tasks browser click --role button --name "Cancel"`. The list has no `Throwaway`.
+- **CLI entry.** Run `scripts/bob-verify-tasks cli -- tasks add "Call bank" --json`. Exit code `0`, and stdout has the new task's ID and title.
+- **Proof.** Run `scripts/bob-verify-tasks browser snapshot --path artifacts/add-task/list.aria.txt` and `scripts/bob-verify-tasks browser screenshot --path artifacts/add-task/list.png`. Both show `Book dentist` and `Call bank`.
 
 ## Gotchas
 

@@ -66,7 +66,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - `bob-architect`: two designers on different model families, a judge, a merged sketch.
 - `bob-adversarial-review`: reviewers on different models attack a diff. Renamed from `bob-interrogate`.
 - `bob-blast-radius`: what a change breaks outside its diff, with its safety fact proven by running code.
-- `bob-verify`: writes and maintains a repo's own `verify-<app>` skill (committed in that repo at `.claude/skills/verify-<app>/`, symlinked from `.agents/skills/`). Bob uses it when driving an app and only offers to create one.
+- `bob-verify`: writes and maintains a repo's own `bob-verify-<app>` skill (committed in that repo at `.claude/skills/bob-verify-<app>/`, symlinked from `.agents/skills/`). Bob uses it when driving an app and only offers to create one.
 
 **Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
 

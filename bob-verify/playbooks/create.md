@@ -1,6 +1,6 @@
 # Create
 
-Write `verify-<app>` for this repo and prove it works before handing it over.
+Write `bob-verify-<app>` for this repo and prove it works before handing it over.
 
 1. **Read the repo.** Answer these from the code, the README, and the scripts. Ask the user only what you can't observe.
    - **Surface.** What a user touches: a web UI, a CLI or TUI, a desktop or mobile app, an API, a library. Pick the main one and note the others.
@@ -9,7 +9,7 @@ Write `verify-<app>` for this repo and prove it works before handing it over.
    - **Observe.** What evidence exists: screenshots, accessibility snapshots, terminal transcripts, response bodies, logs, exit codes, stored data.
    - **Isolate.** Whether two instances can run side by side (ports, data dirs, profiles). Parallel threads and worktrees are common, so plan for it. If they can't, the skill says so and refuses to drive an instance it didn't start.
 2. **Get it running.** If the checkout doesn't build or start, fix that or report exactly what's broken before writing anything. A skill written against a broken app teaches wrong steps. If a missing asset the feature doesn't need blocks startup, the skill may create it, marked as verification scaffolding, and remove it in cleanup.
-3. **Write `SKILL.md`.** Frontmatter: `name: verify-<app>` and a `description` naming the app, the surface, and when to use it ("prove a change to <app>'s UI or CLI works"). Then these sections, every one filled from what step 1 found, with no placeholders:
+3. **Write `SKILL.md`.** Frontmatter: `name: bob-verify-<app>` and a `description` naming the app, the surface, and when to use it ("prove a change to <app>'s UI or CLI works"). Then these sections, every one filled from what step 1 found, with no placeholders:
    - **Launch.** The exact command, how to tell it's ready (a log line, a port answering, a prompt), and how to stop it. For a short-lived CLI, launch means build once, then each drive gets its own fresh PTY or tmux session.
    - **Doctor.** One read-only check that this instance is worth driving: the process is up, it's the right build, the port is ours, auth works. Run it first, and again whenever something looks off.
    - **Drive.** The recipe with this repo's real handles: accessible names and roles, data attributes, prompt strings, routes. Never coordinates or tab order.
@@ -17,7 +17,7 @@ Write `verify-<app>` for this repo and prove it works before handing it over.
    - **Cleanup.** Stop what the run started and clear scratch state. Keep the evidence.
    - **Helpers.** Any script the skill ships is executable, and the skill shows how to call it.
 4. **Seed the feature map.** `features/README.md` plus one file per user-facing feature, starting with the top three to five (from routes, commands, menus, docs). Follow `references/feature-map-example/`. The README holds baseline preconditions, driving conventions, proof rules, and the index. Each feature file has a title, one paragraph of what the user sees, then four sections in order: `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, and `Gotchas`. List every entry point a user has; a proof through one convenient path doesn't cover the others.
-5. **Link it.** Create `.agents/skills/verify-<app>` as a relative symlink to `../../.claude/skills/verify-<app>`.
+5. **Link it.** Create `.agents/skills/bob-verify-<app>` as a relative symlink to `../../.claude/skills/bob-verify-<app>`.
 6. **Prove it.** Follow the new skill end to end, as written: launch, doctor, drive one mapped feature, capture evidence, clean up. Then check the evidence is still there. Fix whatever failed, and run cleanup after every failed try so nothing is left running. A skill that was never run is a draft.
 7. **Ship it.** Commit on a branch and open a PR per the repo's AGENTS.md. It's a new file set and nothing else.
 
