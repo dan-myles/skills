@@ -13,8 +13,8 @@ Three rules carry the rest:
 ## Roles
 
 - **Coordinator: this thread.** Frames the program, writes briefs, drains, reports to the user, makes judgment calls. It never writes or edits product code. Conflict fixes, restacks, and code changes are units with briefs like any other.
-- **Workers: Bob threads in their own worktrees.** Start each with `t3_thread_launch`, `modelSelection` from `threads.bob` in `../bob-models/models.yaml`, `workspaceStrategy: {type: "worktree", baseRef: <base>, branch: <unit branch>, startFromOrigin: false}`, and the brief as `message`. One writer per worktree and branch, per `separate-before-serializing-shared-state`. A worker runs Bob's matching playbook, babysits its own PR to merge-ready, and stops.
-- **Verifiers: `delegate_task` children,** read-only, on `bob.verifier` in `../bob-models/models.yaml` so they run on the other model family from the workers, started per `../bob-models/references/delegation.md`. Their completion wakes this thread on its own.
+- **Workers: Bob threads in their own worktrees.** Start each with `t3_thread_launch`, `modelSelection` from `threads.bob` in `~/.bob-n-frank/models.yaml`, `workspaceStrategy: {type: "worktree", baseRef: <base>, branch: <unit branch>, startFromOrigin: false}`, and the brief as `message`. One writer per worktree and branch, per `separate-before-serializing-shared-state`. A worker runs Bob's matching playbook, babysits its own PR to merge-ready, and stops.
+- **Verifiers: `delegate_task` children,** read-only, on `bob.verifier` in `~/.bob-n-frank/models.yaml` so they run on the other model family from the workers, started per `../bob-models/references/delegation.md`. Their completion wakes this thread on its own.
 - **Research or design units** that don't write code can also be `delegate_task` children.
 
 Keep it two levels deep: coordinator and workers. Split a program into tracks (build, landing, verification are common cuts), but don't add sub-coordinators unless one drain can't keep up with the tracks.

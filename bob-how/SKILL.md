@@ -19,11 +19,11 @@ When unsure, treat it as small.
 
 ## 2. Explore in parallel (large questions)
 
-Split the question into two to four angles that don't overlap, such as entry points, data model, outbound integrations, and failure handling. Start one explorer subagent per angle, all at once. Brief each with `references/explorer.md` and its angle. They run on `bob-how.explorers` in `../bob-models/models.yaml` and only read.
+Split the question into two to four angles that don't overlap, such as entry points, data model, outbound integrations, and failure handling. Start one explorer subagent per angle, all at once. Brief each with `references/explorer.md` and its angle. They run on `bob-how.explorers` in `~/.bob-n-frank/models.yaml` and only read.
 
 ## 3. Explain
 
-Start one explainer subagent on `bob-how.explainer` in `../bob-models/models.yaml`, read-only, briefed with `references/explainer.md`. For a large question, include every explorer's findings. For a small one, leave that section out; the explainer explores on its own.
+Start one explainer subagent on `bob-how.explainer` in `~/.bob-n-frank/models.yaml`, read-only, briefed with `references/explainer.md`. For a large question, include every explorer's findings. For a small one, leave that section out; the explainer explores on its own.
 
 Without subagents, do both roles yourself in that order: gather facts first, then write.
 

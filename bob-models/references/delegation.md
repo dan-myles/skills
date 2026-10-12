@@ -1,12 +1,12 @@
 # Starting a subagent or thread
 
-Every subagent and every launched thread runs on its line in `../models.yaml`. The step that starts it names the line, as `<skill>.<name>` (for example `bob-architect.judge`) or `threads.<name>` for a thread.
+Every subagent and every launched thread runs on its line in the user's models file, `~/.bob-n-frank/models.yaml`. The step that starts it names the line, as `<skill>.<name>` (for example `bob-architect.judge`) or `threads.<name>` for a thread.
 
 Pairing models from different providers is on purpose: Claude and GPT have different blind spots, so what both catch is likely real and what one catches alone gets a closer look.
 
 ## Resolve the model
 
-1. Read `../models.yaml` and look up the line. When the work is in a repo that has `.bob-n-frank/models.yaml`, a line there replaces the same line here. A line is one entry or a list of them; a list starts one subagent per entry, in order. A line set to `inherit` runs on this thread's own model: start it with the harness's native subagent tool and leave the model unset.
+1. Read `~/.bob-n-frank/models.yaml` and look up the line. If that file doesn't exist yet, copy `../models.example.yaml` there first and say so. When the work is in a repo that has `.bob-n-frank/models.yaml`, a line there replaces the same line in the user's file. A line missing from both falls back to `../models.example.yaml`. A line is one entry or a list of them; a list starts one subagent per entry, in order. A line set to `inherit` runs on this thread's own model: start it with the harness's native subagent tool and leave the model unset.
 2. Call T3's `orchestrator_capabilities` once per session. The T3 tools can load late, so call it once before deciding they're missing.
 3. Check each entry against the catalog: its `model` is listed under its `provider`, that provider's `canRunCrossProviderChildTask` is true, and each option value is offered.
 4. If an entry fails, use the closest model the catalog lists from the same provider, name the substitute in the output, and suggest running `/bob-models`. Don't block the step on it.

@@ -66,14 +66,14 @@ For each item not in `seen.tsv`:
 - it's in a repo in `config.yaml`
 - the trace points to one area, a few files
 - it doesn't touch auth, money, stored data, migrations, a public API, or `never_paths`
-- **a second model confirmed it.** Start a read-only validator with `delegate_task` on `frank.validator` in `../bob-models/models.yaml`, per `../bob-models/references/delegation.md`. Give it the source, your triage, and the repo path. It checks the claim against the code, reproduces it when that's cheap, and answers CONFIRMED or REJECTED with one sentence and its evidence. Only CONFIRMED dispatches; REJECTED becomes a proposal with the validator's reason. Its completion wakes this thread.
+- **a second model confirmed it.** Start a read-only validator with `delegate_task` on `frank.validator` in `~/.bob-n-frank/models.yaml`, per `../bob-models/references/delegation.md`. Give it the source, your triage, and the repo path. It checks the claim against the code, reproduces it when that's cheap, and answers CONFIRMED or REJECTED with one sentence and its evidence. Only CONFIRMED dispatches; REJECTED becomes a proposal with the validator's reason. Its completion wakes this thread.
 
 **Propose** everything else, ranked by impact against effort, each with a one-line reason. Ask once per brief per **How to ask** in `../bob/SKILL.md`: a multi-select of the proposals, "Send it" for Frank's picks.
 
 ## Dispatch
 
 - Write the brief per `../bob/references/brief.md`, with REPORT at `~/.bob-n-frank/frank/reports/<id>.md`. An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
-- Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `../bob-models/models.yaml`, a new worktree off the repo's default branch, title `frank: <item>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`.
+- Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `~/.bob-n-frank/models.yaml`, a new worktree off the repo's default branch, title `frank: <item>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`.
 - Save the brief, set the row to `dispatched` with the thread id, and link the thread in the brief as `[title](t3-thread://v1/<threadId>)`.
 
 ## Track
@@ -97,7 +97,7 @@ When nothing changed since the last brief, say "Nothing new since <time>." and s
 
 ## Setup
 
-1. Create `~/.bob-n-frank/` and copy `references/config.example.yaml` to `config.yaml`, with the timezone from the system.
+1. Create `~/.bob-n-frank/` and copy `references/config.example.yaml` to `config.yaml`, with the timezone from the system. If `~/.bob-n-frank/models.yaml` doesn't exist, copy `../bob-models/models.example.yaml` there too.
 2. Detect sources and repos (`gh repo list`, the T3 projects in `t3_project_list`). Show what was found and ask per **How to ask** which repos and channels to watch. Write them into `config.yaml`.
 3. Schedule the briefs with `schedule_task`, bound to this thread: `{type: "fixed_time", timeOfDay: <time>, weekdays: <weekdays>}` for each brief time, prompt `/frank brief`. Schedule the sweep: `{type: "interval", everyMs: <sweep.every_hours in ms>}`, prompt `/frank sweep`. Report each next run time.
 4. Offer webhooks, so fires arrive between briefs: a `schedule_task` with `{type: "webhook"}` per source, prompt `/frank event {{body}}`. For GitHub, get the signing secret through `request_secret` and set the signature check. Give the user the webhook URL to add in the repo's settings; if T3 returns none, T3 Connect remote access needs turning on.

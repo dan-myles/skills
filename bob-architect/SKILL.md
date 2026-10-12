@@ -26,7 +26,7 @@ Make a working folder, `/tmp/bob-architect-<slug>/`, and write the grounding to 
 
 ## 3. Sketch
 
-Two designers at the same time, from `bob-architect.designers` in `../bob-models/models.yaml`: Designer A on its first entry, Designer B on its second. Start them per `../bob-models/references/delegation.md`.
+Two designers at the same time, from `bob-architect.designers` in `~/.bob-n-frank/models.yaml`: Designer A on its first entry, Designer B on its second. Start them per `../bob-models/references/delegation.md`.
 
 Each gets the task, the path to `grounding.md`, its own folder, and `references/designer-prompt.md`. Each writes a sketch and a `rationale.md` shaped by `references/rationale-template.md` into its folder.
 

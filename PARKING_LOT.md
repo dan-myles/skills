@@ -39,6 +39,17 @@ Do all of these together:
 6. Add it to the skills list in `bob-improve/SKILL.md`, and to `bob/SKILL.md` if Bob uses it.
 7. Run `unslop` on new prose.
 
+## Bob and Frank's home
+
+Each user customizes Bob and Frank in `~/.bob-n-frank/`, outside every repo:
+
+- `models.yaml`: the model for every role. Every agent on the machine reads it.
+- `config.yaml`: Frank's settings (repos, sources, brief times, auto-dispatch rules).
+- `frank/`: Frank's board, briefs, reports, and decision log.
+- `orchestrate/<program>/`: each Orchestrate program's store.
+
+A repo can override `models.yaml` and Frank's per-repo settings in `<repo>/.bob-n-frank/`.
+
 ## Map
 
 **`bob`**, the front door: `/bob <goal>`. It sorts the task into one playbook in `bob/playbooks/`:
@@ -70,7 +81,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 
 **Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
 
-**`bob-models`**: `bob-models/models.yaml` sets the model for every role: each subagent (`<skill>.<name>`) and each thread Frank or Orchestrate launches (`threads.bob` is Opus 5.5 high). A repo can override lines in `<repo>/.bob-n-frank/models.yaml`; `inherit` uses the thread's model. Checkers stay on the other family from what they check. Frank's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/bob-models` checks the file against T3's live catalog and recommends upgrades. `bob-models/references/delegation.md` says how to start each one.
+**`bob-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `bob-models/models.example.yaml` in this repo is only the starting template and the fallback for missing lines. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Frank's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/bob-models` edits the home file and recommends upgrades. `bob-models/references/delegation.md` says how to start each one.
 
 **`bob-improve`**, its own front door because it changes skills or repos, not product code:
 
@@ -108,7 +119,7 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 ## Known gaps
 
 - Nothing has been run. Expect wording that reads fine and fails in practice.
-- `models.yaml`'s picks (`claude-opus-5-5` and `gpt-6.1-sol`, both at max effort) were guesses. Run `/bob-models` to check them against T3's live catalog.
+- The model picks came from research on 2026-10-12 (benchmarks, speed, pstack-t3's defaults). Recheck them with `/bob-models` as T3's catalog changes; Haiku 5.5 should replace Sonnet 5.5 for the read-only roles once T3 lists it.
 - Open T3 issues `delegation.md` works around:
   - #16808: `delegate_task` fails with `parent_not_active` from a background subagent.
   - #17548: a child's settle hook runs in the parent's worktree.
