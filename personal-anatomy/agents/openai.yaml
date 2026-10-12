@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-anatomy"
+  short_description: "Draw an idea as a live isometric machine you can turn and press"
+  default_prompt: "Use $personal-anatomy to explain how an LRU cache evicts entries, interactive."
+
+policy:
+  allow_implicit_invocation: true

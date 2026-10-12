@@ -11,7 +11,7 @@ Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `
 Also here, outside Bob:
 
 - `unslop`: cuts AI tells from writing. Global and unprefixed on purpose.
-- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch).
+- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT).
 
 ## Status
 
