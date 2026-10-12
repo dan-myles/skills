@@ -1,7 +1,7 @@
 ---
 name: frank
 disable-model-invocation: true
-description: "Frank, Bob's chief of staff. Runs from one standing T3 thread: reads every source this session can reach (T3 threads always, plus GitHub, Linear, Slack when connected), triages what comes in, sends small bugs a second model confirmed straight to Bob threads, proposes everything else for the user to pick, tracks what's in flight on a board, sweeps for blockers every two hours, and briefs the user at 8:30 and 4:30. Never writes code, merges, or messages people. Manual-only: `/frank [setup|brief|sweep|event|<request>]` in Claude Code, `$frank ...` in Codex."
+description: "Frank, Bob's chief of staff. Runs from one standing T3 thread: reads every source this session can reach (T3 threads always, plus GitHub, Linear, Slack when connected), triages what comes in, sends small bugs a second model confirmed straight to Bob threads, proposes everything else for the user to pick, tracks what's in flight on a board, sweeps for blockers every two hours, and briefs the user at 8:30 and 4:30. Never writes code, merges, or messages people. Manual-only: `/frank [setup|brief|sweep|report|event|<request>]` in Claude Code, `$frank ...` in Codex."
 ---
 
 # Frank
@@ -28,6 +28,7 @@ Orchestrate programs keep their own stores in `~/.bob-n-frank/orchestrate/`.
 - `/frank setup`: first run. See **Setup**.
 - `/frank brief`: the scheduled 8:30 and 4:30 run: sweep, triage, dispatch, track, brief.
 - `/frank sweep`: the two-hourly run between briefs, during the hours in `config.yaml`: read new items, triage, dispatch, and check every dispatched thread for blockers. Outside those hours, do nothing. When nothing needs the user, end with one line, "Sweep <time>: nothing new." Otherwise show only what changed and what needs them.
+- `/frank report <id>`: a Bob thread finished and reported back. Process that item now: read `frank/reports/<id>.md` and its PR, update the board, call `watch_pull_request` on a new PR so its CI and reviews wake you, and dispatch the next item if there's room. Reply only if it needs the user or something failed.
 - `/frank event <payload>`: a webhook delivered one inbound item. Triage it, dispatch if the rules allow, and stay quiet unless it's a fire.
 - `/frank <anything else>`: the user talking to Frank. Answer from the board, or take it in as a new item.
 
@@ -74,6 +75,7 @@ For each item not in `seen.tsv`:
 
 - Write the brief per `../bob/references/brief.md`, with REPORT at `~/.bob-n-frank/frank/reports/<id>.md`. An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
 - Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `~/.bob-n-frank/models.yaml`, a new worktree off the repo's default branch, title `frank: <item>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`.
+- Fill REPORT-BACK with this thread's id (`thread_id` in `config.yaml`) and the message `/frank report <id>`.
 - Save the brief, set the row to `dispatched` with the thread id, and link the thread in the brief as `[title](t3-thread://v1/<threadId>)`.
 
 ## Track
@@ -83,6 +85,7 @@ On every run, for each `dispatched` row: read its thread and PR without disturbi
 - A merge-ready PR moves the row to `merge-ready` and goes on the user's review list.
 - A thread waiting on the user goes under Fires.
 - No new commit or PR change for `stalled_after_hours` gets flagged as stalled, with what it last did.
+- A report file with no report-back (its row still `dispatched`) is a defect: process the report now, and note in the brief which thread didn't report back.
 
 ## The brief
 

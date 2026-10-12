@@ -34,15 +34,16 @@ One folder per program, outside every repo: `~/.bob-n-frank/orchestrate/<program
 
 ## The brief
 
-Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.bob-n-frank/orchestrate/<program>/reports/<unit>.md` and STANDING set to `standing-orders.md` word for word. Save it to `briefs/<unit>.md`.
+Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.bob-n-frank/orchestrate/<program>/reports/<unit>.md`, STANDING set to `standing-orders.md` word for word, and REPORT-BACK set to this thread's id with the message `/bob orchestrate drain <program>`. Save it to `briefs/<unit>.md`.
 
 ## Steps
 
 1. **Frame.** Write the done condition as something countable ("all 40 call sites migrated, every PR `test-verified` or better and merge-ready"). Size it: units, rough effort, tracks, and the wall-clock budget. Set the merge policy: by default workers stop at merge-ready and the user lands; the coordinator merges only if the user says so in the standing orders. A contested split or a one-way door goes through `bob-architect` first. **Checkpoint:** show the plan per `references/visuals.md` (tracks, units, file map of what changes, budget) and ask per **How to ask** in the skill.
-2. **Set up.** Create the store, write the standing orders, and schedule a heartbeat with `schedule_task` (`{type: "interval", everyMs: 900000}`, bound to this thread) whose prompt is "/bob orchestrate drain <program>: store at ~/.bob-n-frank/orchestrate/<program>/". The store path in the prompt is what lets a coordinator with no memory find its way back. Seed `frontier.md` from existing PRs.
+2. **Set up.** Create the store, record this thread's id in `coordinator.txt` (find it with `t3_thread_list`: the running thread with this title), write the standing orders, and schedule a heartbeat with `schedule_task` (`{type: "interval", everyMs: 900000}`, bound to this thread) whose prompt is "/bob orchestrate drain <program>: store at ~/.bob-n-frank/orchestrate/<program>/". The store path in the prompt is what lets a coordinator with no memory find its way back. Seed `frontier.md` from existing PRs.
 3. **Pilot.** Push one unit all the way through: brief, worker, verifier, ledger row, merge-ready PR. Fix the brief template, the check, or the unit size from what the pilot shows before fanning out. For many near-identical cheap units, the first unit is the pilot and fan-out starts when it lands.
 4. **Scale.** Keep a rolling window of workers up to the in-flight cap (default 4, since worktree threads run on this machine; raise it in the standing orders) and refill as units finish. Don't wait for a whole batch. Pass upstream reports into downstream briefs.
 5. **Drain** on every wake: the heartbeat, a verifier finishing, a watched PR changing, or a user message.
+   - Workers report back the moment they finish, so most drains start from a report-back message; the heartbeat is the backstop. A report file whose unit is still `running` means the report-back never came: drain it and note the defect.
    - Read each running worker without disturbing it: `t3_thread_read`, its report file, `gh pr view`. Never message a worker to check on it.
    - Classify each: landed, merge-ready, needs-verify, failed, stuck, or noise. Update `units.tsv`, `ledger.tsv`, and `frontier.md`.
    - A finished unit that needs judgment gets a verifier unit. Don't review diffs inline.

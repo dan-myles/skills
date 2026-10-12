@@ -17,10 +17,12 @@ RULES        <headless or attended, below>
 REPORT       write <report path> and end with the same text: status, branch, head SHA, PR,
              what you ran and its output, deviations, gates, follow-ups
 STANDING     <the coordinator's standing orders pasted word for word, when it has any>
+REPORT-BACK  <coordinator thread id>: <message>, sent the moment the report is written
 ```
 
 **RULES, headless** (no one is watching the thread): You were started by <coordinator>, not a person. Skip checkpoints; the design is approved in CONTEXT. Don't ask the user anything: when a decision isn't yours, stop and report it as a gate. Babysit your PR to merge-ready, then stop. Never merge, rebase, force-push, or retarget. Don't settle or archive this thread. No fixes outside SCOPE; note them as follow-ups.
 
 **RULES, attended** (the user approved the work and will answer in the thread): You were started by <coordinator> for work the user approved. Run the playbook as usual, checkpoints included; ask the user in this thread. Babysit your PR to merge-ready, then stop. Never merge. No fixes outside SCOPE; note them as follow-ups.
 
+**Report back, both RULES.** Each time you write the report (when the PR opens, again when it's merge-ready, or when you stop on a gate): call `t3_thread_send` with `threadId` from REPORT-BACK, `mode: "queue"`, the message exactly as given, and `clientRequestId` `<id>-report-<n>` where `n` counts your reports. This is what wakes the coordinator; without it, nobody hears you finished until its next check. 
 A dependency means passing context, not just ordering: paste the upstream report into the downstream brief. Save every brief exactly as sent, next to the coordinator's other state.
