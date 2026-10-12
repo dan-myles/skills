@@ -23,7 +23,7 @@ Bob is still being designed. **Nothing in it has run on real work yet.** Don't u
 - Bob is built for T3 Code. Headless CLIs (`claude -p`, `codex exec`) are only a fallback.
 - Every bob- skill is manual-only. Bob reads helpers and principles by path when a step names them.
 - Explain to Dan with rendered visuals, and keep the text to what the visual doesn't say.
-- Ask Dan questions in plain text with a recommended default, never through popup question tools.
+- Ask Dan with the question tool (`AskUserQuestion` in Claude Code and T3), the recommended option first. The confirm option is labeled **Send it**, and Dan types "send it" to approve. Bob's rule is **How to ask** in `bob/SKILL.md`.
 - Commit messages are short and lowercase (`add bob-verify`, `bob: add perf playbook`). Commit and push only when Dan asks.
 - Never print or copy secrets. The 1Password master password lives in `~/.config/agents/1password.txt`; leave it there.
 

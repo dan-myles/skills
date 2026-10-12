@@ -23,7 +23,7 @@ The playbook decides the order of work. The repo decides the commands.
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
 4. Show the plan per `references/visuals.md`: the playbook's steps as a pipeline, with the helpers each one runs and the checkpoints marked. Keep the text to one line on how you sorted the task.
-5. When the user says "new task", sort again. Anything else, like "go on" or "do it", continues the current playbook.
+5. When the user says "new task", sort again. Anything else, like "send it", "go on", or "do it", continues the current playbook.
 
 ## Helpers
 
@@ -90,6 +90,14 @@ Go ahead without asking on anything you can undo (`never-block-on-the-human`): r
 Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Replying on a PR's review threads while babysitting it is the exception; go ahead. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
 
 If running something would answer a question, run it instead of asking. Bring the user only product or taste decisions, drawn as option cards with the one you'd pick marked.
+
+**How to ask.** Every checkpoint and every question goes through the harness's question tool (`AskUserQuestion` in Claude Code and T3), right after the visual that shows what's being decided.
+
+- Put your pick first, labeled "(Recommended)". Give each option a one-line description of what happens and what it costs.
+- A go-ahead is labeled **Send it**: "Send it (Recommended)" to proceed, with the alternatives beside it. When the user types "send it", that's a yes.
+- Picking rows or items: `multiSelect`. Up to four options per question and four questions per call; with more, group them, or offer "Send it" for your recommended set plus "Let me pick".
+- Use an option's `preview` for a small comparison: two code shapes, two file trees.
+- Without a question tool, ask in plain text with your pick named, and treat "send it" as yes.
 
 ## Subagents
 

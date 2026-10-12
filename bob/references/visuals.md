@@ -116,4 +116,4 @@ Use Mermaid blocks or small ASCII diagrams in the reply, and markdown tables for
 - Then only what the picture doesn't carry: the decision you need, a caveat, the next step. Aim for five short lines or fewer.
 - Don't announce or describe the picture.
 - Keep clickable things in text: PR links, `file:line`, paths.
-- Ask questions in plain text under the option cards, each with the option you'd pick.
+- Ask with the question tool right after the picture, per **How to ask** in `../SKILL.md`: your pick first as "(Recommended)", and **Send it** for a go-ahead.

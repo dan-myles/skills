@@ -36,7 +36,7 @@ Bob's own model is the T3 thread's model, set in T3's composer. This file can't 
    - **Diversity.** When the catalog gains a provider that can run child tasks, suggest it as an extra reviewer. Don't put a judge on the same provider as both entries it judges.
    - **Pin or unpin.** Pin a subagent only with a reason: a session where Bob's model fell short at that job, or a job that needs a different family. Unpin a line when Bob's model does that job as well.
    - Skip reasoning values that start more agents (`ultracode`), values injected into the prompt (`ultrathink`), and values whose effect the catalog doesn't describe (`ultra`).
-5. **Confirm.** Show the changes as before and after, line by line, and ask in plain text whether to apply them. Wait for the answer. A change the user spelled out in full doesn't need a second confirmation.
+5. **Confirm.** Show the changes as before and after, line by line, and ask with the question tool whether to apply them, "Send it (Recommended)" to apply, per **How to ask** in `../bob/SKILL.md`. Wait for the answer. A change the user spelled out in full doesn't need a second confirmation.
 6. **Write.**
    - Edit `models.yaml`, keep its comments, and set `checked` to today's date.
    - Pinning adds a line here and changes the skill step that starts that subagent: name the line and point at `../bob-models/references/delegation.md`, the way `bob-architect` does for its judge. Unpinning removes both. Update a panel's comment when its count changes.
