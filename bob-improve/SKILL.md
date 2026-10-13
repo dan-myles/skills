@@ -19,7 +19,7 @@ Bob gets better one approved edit at a time. Every edit traces back to something
 
 ## Where Bob lives
 
-The bob- skills are folders next to this one: `bob`, `bob-how`, `bob-why`, `bob-architect`, `bob-adversarial-review`, `bob-blast-radius`, `bob-models`, `bob-verify`, `bob-improve`, `frank` (Bob's chief of staff), and the `bob-principle-*` skills. Resolve this folder's real path first, since it may be a symlink into the skills repo. Edits are made and committed in that repo.
+The bob- skills are folders next to this one: `bob`, `bob-how`, `bob-why`, `bob-architect`, `bob-adversarial-review`, `bob-blast-radius`, `bob-grill`, `bob-models`, `bob-verify`, `bob-improve`, `frank` (Bob's chief of staff), and the `bob-principle-*` skills. Resolve this folder's real path first, since it may be a symlink into the skills repo. Edits are made and committed in that repo.
 
 ## Where a lesson lands
 

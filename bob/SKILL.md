@@ -37,6 +37,7 @@ Some steps name a helper skill:
 - `bob-architect`: two designs from two model families, merged into one sketch.
 - `bob-adversarial-review`: an adversarial review by reviewers on different models.
 - `bob-blast-radius`: what a change breaks outside its diff, with the fact it's safe because of proven by running code.
+- `bob-grill`: settles every open decision with the user, round by round, before work that's complex, risky, or unclear.
 
 Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
@@ -93,7 +94,7 @@ Go ahead without asking on anything you can undo (`never-block-on-the-human`): r
 
 Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Replying on a PR's review threads while babysitting it is the exception; go ahead. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
 
-If running something would answer a question, run it instead of asking. Before asking "which approach" or "how should this behave", check whether a quick sketch would settle it (behavior, timing, layout, output); if so, build it per `playbooks/prototype.md` and let the result decide. Bring the user only product or taste decisions no experiment settles, drawn as option cards with the one you'd pick marked.
+If running something would answer a question, run it instead of asking. Before asking "which approach" or "how should this behave", check whether a quick sketch would settle it (behavior, timing, layout, output); if so, build it per `playbooks/prototype.md` and let the result decide. Bring the user only product or taste decisions no experiment settles, drawn as option cards with the one you'd pick marked. When several such decisions are open, or they depend on each other, or something could easily go wrong, run `bob-grill` instead of asking one at a time.
 
 **How to ask.** Every checkpoint and every question goes through the harness's question tool (`AskUserQuestion` in Claude Code and T3), right after the visual that shows what's being decided.
 

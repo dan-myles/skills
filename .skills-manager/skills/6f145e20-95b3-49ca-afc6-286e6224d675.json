@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "6f145e20-95b3-49ca-afc6-286e6224d675",
+  "path": "bob-grill",
+  "path_key": "bob-grill",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

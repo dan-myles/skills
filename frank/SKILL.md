@@ -69,6 +69,10 @@ For each item not in `seen.tsv`:
 - it doesn't touch auth, money, stored data, migrations, a public API, or `never_paths`
 - **a second model confirmed it.** Start a read-only validator with `delegate_task` on `frank.validator` in `~/.bob-n-frank/models.yaml`, per `../bob-models/references/delegation.md`. Give it the source, your triage, and the repo path. It checks the claim against the code, reproduces it when that's cheap, and answers CONFIRMED or REJECTED with one sentence and its evidence. Only CONFIRMED dispatches; REJECTED becomes a proposal with the validator's reason. Its completion wakes this thread.
 
+When anything about an item is unsure (the goal, the right behavior, its scope, or it could easily go wrong), it isn't auto-dispatched.
+
+**Grill before dispatching.** When the user picks an item that has open decisions, run `../bob-grill/SKILL.md` with them in this thread before writing its brief, so the Bob thread starts from settled decisions. Paste the saved grill into the brief's CONTEXT.
+
 **Propose** everything else, ranked by impact against effort, each with a one-line reason. Ask once per brief per **How to ask** in `../bob/SKILL.md`: a multi-select of the proposals, "Send it" for Frank's picks.
 
 ## Dispatch

@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-grill"
+  short_description: "Settle every open decision in complex or risky work, round by round, before building"
+  default_prompt: "Use $bob-grill on this plan: map the decisions as a tree, look up the facts, ask me each round's questions with your recommendations, and save what we agree."
+
+policy:
+  allow_implicit_invocation: false

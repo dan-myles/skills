@@ -25,5 +25,6 @@ REPORT-BACK  <coordinator thread id>: <message>, sent the moment the report is w
 
 **RULES, attended** (the user approved the work and will answer in the thread): You were started by <coordinator> for work the user approved. Run the playbook as usual, checkpoints included; ask the user in this thread. Babysit your PR to merge-ready, then stop. Never merge. Don't settle or archive this thread; the coordinator settles it after your final report. No fixes outside SCOPE; note them as follow-ups.
 
-**Report back, both RULES.** Each time you write the report (when the PR opens, again when it's merge-ready, or when you stop on a gate): call `t3_thread_send` with `threadId` from REPORT-BACK, `mode: "queue"`, the message exactly as given, and `clientRequestId` `<id>-report-<n>` where `n` counts your reports. This is what wakes the coordinator; without it, nobody hears you finished until its next check. 
+**Report back, both RULES.** Each time you write the report (when the PR opens, again when it's merge-ready, or when you stop on a gate): call `t3_thread_send` with `threadId` from REPORT-BACK, `mode: "queue"`, the message exactly as given, and `clientRequestId` `<id>-report-<n>` where `n` counts your reports. This is what wakes the coordinator; without it, nobody hears you finished until its next check.
+
 A dependency means passing context, not just ordering: paste the upstream report into the downstream brief. Save every brief exactly as sent, next to the coordinator's other state.
