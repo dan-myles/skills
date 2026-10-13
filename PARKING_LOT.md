@@ -19,7 +19,7 @@ Bob is still being designed. **Nothing in it has run on real work yet.** Don't u
 
 ## Ground rules
 
-- Port from pstack in our own words. No Cursor-specific config, no credits, no license file.
+- Port from pstack (and Matt Pocock's skills) in our own words. No Cursor-specific config and no license file. Credits live only in `README.md`, the human-facing intro, which names pstack, Matt Pocock's skills, and T3 Code at Dan's request.
 - Bob is built for T3 Code. Headless CLIs (`claude -p`, `codex exec`) are only a fallback.
 - Every bob- skill is manual-only. Bob reads helpers and principles by path when a step names them.
 - Explain to Dan with rendered visuals, and keep the text to what the visual doesn't say.
