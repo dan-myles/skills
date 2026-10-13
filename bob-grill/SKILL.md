@@ -10,14 +10,12 @@ Ask until you and the user understand the plan the same way, with nothing left a
 
 ## When
 
-Run it before designing, building, or dispatching work when any of these holds:
+Only for complex work that needs the user's decisions. Run it before designing, building, or dispatching when either holds:
 
-- three or more decisions only the user can make, or decisions that depend on each other
-- something could easily go wrong: auth, money, stored data, migrations, a public API, a change across modules, anything hard to undo
-- the goal or the right behavior is unclear
-- the user asks for it ("grill me")
+- several decisions only the user can make, especially ones that depend on each other
+- a one-way door: a data migration, deleting data, breaking a public API
 
-Skip it when the path is clear, or when the only open questions are facts.
+Or when the user asks for it ("grill me"). Never for small changes, however sensitive the area; Bob's review covers their risk. Never when the only open questions are facts, or details small and easy to change later; Bob picks those himself.
 
 ## Map the tree
 
