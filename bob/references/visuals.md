@@ -69,6 +69,28 @@ src/
     └── price-utils.ts − deleted
 ```
 
+## Proof gallery: the check, shown
+
+Whenever a step checks behavior on the real app (Feature's check, Bug's rerun of the reproduction, Refactor's proof nothing changed), show the proof instead of describing it:
+
+- **Before and after, side by side:** screenshots of each touched screen and state, captured through the repo's `bob-verify-*` skill when it has one, or the harness's browser and preview tools. Reference them by absolute path; T3 inlines them.
+- **Each step of the user's path** as a strip of screenshots, captioned with the action taken, when the change is a flow rather than one screen.
+- **A recording** when motion matters (an animation, a transition): record it with the harness's recording tools and link the file under the strip.
+- **For a CLI or API:** the command and its output, before and after, side by side.
+- **A caption per image:** what it proves, and the entry point used.
+
+Failures go in the gallery too, marked, so nothing passes by omission.
+
+## Activity board: what's running
+
+When the user asks what Bob threads are doing ("what are my bobs doing", "status", "what's running"), draw an activity board from real state, never memory:
+
+- each launched thread as a row: title, the playbook step it's on, its PR and checks, and when it last did something
+- a timeline of the last few hours, each thread a lane, with launches, reports, PR events, and settlements marked
+- what's waiting on the user on top, stalled threads flagged
+
+Build it from `t3_thread_list` and `t3_thread_read` (status and recent activity), the coordinator's board or `units.tsv`, and `gh pr view` for each PR.
+
 ## Make it interactive when that helps
 
 Pages can run script, so use it to keep a page small and explorable:

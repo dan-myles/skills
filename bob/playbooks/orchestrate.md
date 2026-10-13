@@ -76,6 +76,10 @@ The thread forgets; the store doesn't. Every drain writes its tables before the 
 - When spawning more would produce garbage (bad upstream output, broken checks, dead infrastructure), write a stop line at the top of the standing orders, let running units finish, fix the cause, then clear it.
 - Your own tools keep failing: stop retrying, write what's done and how to resume into `decisions.tsv`, and hand back.
 
+## When the user asks what's running
+
+Show the **Activity board** per `references/visuals.md`, built from `units.tsv` and the live threads and PRs, with each track as a group.
+
 ## What reaches the user
 
 Only, and batched into the status board: irreversible actions, product calls no experiment settles, a standing order that contradicts what you're seeing, and a dead end that survived a replan. Write each into `gates.md` first and keep other work moving around it. Ask per **How to ask** in the skill.
