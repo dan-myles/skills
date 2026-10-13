@@ -78,7 +78,8 @@ When anything about an item is unsure (the goal, the right behavior, its scope, 
 ## Dispatch
 
 - Write the brief per `../bob/references/brief.md`, with REPORT at `~/.bob-n-frank/frank/reports/<id>.md`. An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
-- Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `~/.bob-n-frank/models.yaml`, a new worktree off the repo's default branch, title `frank: <item>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`.
+- Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `~/.bob-n-frank/models.yaml`, a new worktree off the repo's default branch, title `bob: <what it does>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`, titled the same way.
+- Thread titles start with `bob: ` and then say what the work does in a few plain words, like `bob: add retry to market data fetch`. No ticket or issue IDs (`ENG-2919`, `#123`) in the title; they go in the brief's CONTEXT.
 - Fill REPORT-BACK with this thread's id (`thread_id` in `config.yaml`) and the message `/frank report <id>`.
 - Save the brief, set the row to `dispatched` with the thread id, and link the thread in the brief as `[title](t3-thread://v1/<threadId>)`.
 
