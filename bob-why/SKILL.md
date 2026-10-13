@@ -78,7 +78,7 @@ Give the user the synthesizer's answer. You can tighten it or add context from t
 
 The answer follows the structure in `references/synthesizer.md`. Keep facts and inferences in separate sections. List every source, one line each, including the empty and skipped ones with the reason.
 
-Present it per `../bob/references/visuals.md`: a timeline of the decisions and the evidence behind each, with its confidence marked.
+In T3, present it as a rendered HTML page per `../bob/references/visuals.md`, never as text alone: a timeline of the decisions and the evidence behind each, with its confidence marked.
 
 When the question is a lead-in to changing the code, end with a short plan input under four headings: **Keep**, **Change**, **Avoid**, **Risk**.
 
