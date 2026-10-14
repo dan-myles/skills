@@ -116,6 +116,21 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 
 **Skipped on purpose:** `automate-me` (one-time use), `swarm` (T3 delegation covers it), `tdd` (the Bug playbook and `bob-principle-test-behavior-not-implementation` cover it), `teach` and `recall` (`bob-how`, `bob-why`, and T3 history cover them), `no-comments`, `bro`, `poteto-help`, `technical-writing`, `typescript-best-practices`, `make-bot-ui`, Visual parity, Worktree cleanup, and Multi-phase plan.
 
+## PostHog's lessons, parked (2026-10-14)
+
+PostHog posted 38 lessons from building their AI products ([thread](https://x.com/posthog/status/2109706421919248499)). The full comparison with Bob is in [this doc](https://claude.ai/code/artifact/0b8b1ab0-eb10-4142-a150-053caffbd604). Ranked takeaways, none built yet:
+
+1. **Freeze features and run Bob on real work.** Watch a few real runs end to end before adding more skills. (Habit; matches **Next** above.)
+2. **Turn failures into evals.** `bob-improve reflect` saves each bad session as a case, and `bob-improve eval` replays the cases before a skill change ships.
+3. **Count lookups as missing skills.** Add a line to REPORT in `bob/references/brief.md` for what the thread had to look up or wished it had.
+4. **Cut subagents back to where they pay.** PostHog keeps readers on the parent model to share its cache. Dan doesn't mind either way, so the read-only roles stay on Sonnet in `models.yaml`.
+5. **Cost per thread.** Report tokens and dollars per thread so Frank can show spend.
+6. **Keep the harness thin.** Fewer rules in prompts, more of the model's own judgment. (Habit.)
+7. **Drift check after merges.** Frank's sweep flags skills that name files, flags, or tools that no longer exist.
+8. **Worked examples.** Add one short real run to each playbook.
+
+#3 and #5 are the cheapest to build, as two new REPORT lines plus a Frank roll-up.
+
 ## Known gaps
 
 - Nothing has been run. Expect wording that reads fine and fails in practice.
