@@ -11,7 +11,7 @@ Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `
 Also here, outside Bob:
 
 - `unslop`: cuts AI tells from writing. Global and unprefixed on purpose.
-- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT).
+- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT; `personal-taste`, Leon Lin's taste-skill v2 from github.com/Leonxlnx/taste-skill at f624f37, MIT). Third-party skills are copied as is with only `name` changed, keep their LICENSE, and stay model-invocable when upstream meant them to.
 
 ## Status
 
