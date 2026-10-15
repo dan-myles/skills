@@ -37,6 +37,7 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 | `/bob-how`, `/bob-why` | How code works, and why it ended up that way. Answers come back as interactive pages. |
 | `/bob-architect` | Two designers on two model families, a judge, one merged design. |
 | `/bob-adversarial-review` | Reviewers on different models try to break your diff. |
+| `/bob-no-comments` | Comment Sicko, a reviewer who hates comments, strips the diff before review. The code a comment was excusing gets fixed instead. |
 | `/bob-blast-radius` | What a change breaks outside its diff, with the safety claim proven by running code. |
 | `/bob-verify` | Writes a repo's own `bob-verify-<app>` skill so Bob can drive the real app and prove things work. |
 | `/bob-models` | Pick the model for every role, checked against T3's live catalog. |

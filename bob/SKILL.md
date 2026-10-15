@@ -38,6 +38,7 @@ Some steps name a helper skill:
 - `bob-adversarial-review`: an adversarial review by reviewers on different models.
 - `bob-blast-radius`: what a change breaks outside its diff, with the fact it's safe because of proven by running code.
 - `bob-grill`: settles the user's decisions, round by round, before complex work that needs them.
+- `bob-no-comments`: Comment Sicko strips the diff's comments, and the code they covered for gets fixed.
 
 Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
@@ -53,7 +54,7 @@ When a step drives the app, use the repo's verify skill if it has one: `.claude/
 - **Check where users look.** A build that compiles and green unit tests don't show the feature works. A check on the wrong surface, or one that's unclear, hasn't passed. Report it that way. (`prove-it-works`)
 - **Back every claim.** Each claim says what supports it: a run, a line of code (`file:line`), or that it's a guess.
 - **Be honest.** When the premise looks wrong, or an idea isn't worth its cost, say it plainly. No is an acceptable answer.
-- **Comments say why.** Keep a comment only for a reason the code can't show. No comments that narrate steps or describe the change; in scripts and tests, the assertion or log message says what's being checked. This holds for subagents' code too.
+- **Comments say why.** Keep a comment only for a reason the code can't show. No comments that narrate steps or describe the change; in scripts and tests, the assertion or log message says what's being checked. This holds for subagents' code too. `bob-no-comments` enforces it at Review.
 
 ## Principles
 
@@ -117,12 +118,14 @@ Use subagents when the harness supports them.
 
 ## Review
 
-Before the PR, pick by what the change risks. Run both when both apply.
+Before the PR, run **`bob-no-comments`** over the diff whenever it adds or changes comments or lint and type suppressions, at any size. It goes first, since its fixes change the code the others review.
+
+Then pick by what the change risks. Run both when both apply.
 
 - **`bob-blast-radius`** when the change reaches past its diff: shared code other modules call, a data shape (an API response, a DB column, a wire format, a config key), a dependency bump, or a deletion. Size doesn't matter; one line can qualify. If its safety fact comes back false or unproven, fix that first. Put the fact in the PR body, and keep its **Before merging** test when it's worth having. Skip it when the Bug playbook already ran it and the fix kept that shape.
 - **`bob-adversarial-review`** when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each **Act on** finding in its own commit, put **Consider** findings in the PR body or ask the user, and list the dismissals in the reply.
 
-Small, contained diffs mark this `skip: <why>`.
+Small, contained diffs mark these two `skip: <why>`.
 
 ## Opening the PR
 

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "bedfbba8-e14b-4622-9a97-e9ad8c582f67",
+  "path": "bob-no-comments",
+  "path_key": "bob-no-comments",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

@@ -78,6 +78,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - `bob-adversarial-review`: reviewers on different models attack a diff. Renamed from `bob-interrogate`.
 - `bob-blast-radius`: what a change breaks outside its diff, with its safety fact proven by running code.
 - `bob-grill`: settles every open decision with the user before complex, risky, or unclear work. It maps the decisions as a tree, asks each round's ready questions with recommendations through the question tool, looks facts up instead of asking, and saves the result to `~/.bob-n-frank/grills/<slug>.md`. Bob runs it in Feature (before design), Bug, and Refactor when unsure; Frank runs it before dispatching an item with open decisions. Not in Orchestrate for now. Adapted from Matt Pocock's grilling skill.
+- `bob-no-comments`: Comment Sicko, a read-only subagent on the other family, lists every comment to kill; Bob deletes them, fixes the code each `MUST KILL` flag blames, and encodes claimed constraints as types, tests, or lint without asking. Runs first at Review whenever a diff touches comments or suppressions. Ported from pstack's `no-comments` and its Comment Sicko agent, with the Sicko read-only so a child never edits Bob's worktree.
 - `bob-verify`: writes and maintains a repo's own `bob-verify-<app>` skill (committed in that repo at `.claude/skills/bob-verify-<app>/`, symlinked from `.agents/skills/`). Bob uses it when driving an app and only offers to create one.
 
 **Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
@@ -104,7 +105,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 
 ## Where we stopped
 
-Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf (with hillclimb and benchmark checklist), Prototype, Babysit, runtime and trace forensics (as Diagnose); `how`, `why`, `architect` (with `arena` folded in), `interrogate`, `blast-radius`, `reflect`, eval, `correct`, `setup-pstack` (as `bob-models`), `create-verification-skill` and `maintain-verification-skill` (as `bob-verify`), all 24 principles, and `unslop`.
+Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf (with hillclimb and benchmark checklist), Prototype, Babysit, runtime and trace forensics (as Diagnose); `how`, `why`, `architect` (with `arena` folded in), `interrogate`, `blast-radius`, `reflect`, eval, `correct`, `setup-pstack` (as `bob-models`), `create-verification-skill` and `maintain-verification-skill` (as `bob-verify`), all 24 principles, `no-comments` with Comment Sicko (as `bob-no-comments`), and `unslop`.
 
 **Next:** dry-run `/bob` on a small task in a throwaway repo, and fix what that turns up through `/bob-improve`.
 
@@ -114,7 +115,7 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 - Run (pstack's Autonomous run), Shipping, Autopilot-stack, and Autopilot-full. Run and Shipping were ported, then removed on 2026-10-12 until needed; Orchestrate keeps its own Land step. Hold until Bob has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Bob's never-merge rule.
 - Pause safely and Session pickup. T3 threads already hold much of that context.
 
-**Skipped on purpose:** `automate-me` (one-time use), `swarm` (T3 delegation covers it), `tdd` (the Bug playbook and `bob-principle-test-behavior-not-implementation` cover it), `teach` and `recall` (`bob-how`, `bob-why`, and T3 history cover them), `no-comments`, `bro`, `poteto-help`, `technical-writing`, `typescript-best-practices`, `make-bot-ui`, Visual parity, Worktree cleanup, and Multi-phase plan.
+**Skipped on purpose:** `automate-me` (one-time use), `swarm` (T3 delegation covers it), `tdd` (the Bug playbook and `bob-principle-test-behavior-not-implementation` cover it), `teach` and `recall` (`bob-how`, `bob-why`, and T3 history cover them), `bro`, `poteto-help`, `technical-writing`, `typescript-best-practices`, `make-bot-ui`, Visual parity, Worktree cleanup, and Multi-phase plan.
 
 ## PostHog's lessons, parked (2026-10-14)
 
