@@ -145,4 +145,4 @@ PostHog posted 38 lessons from building their AI products ([thread](https://x.co
 
 ## Porting source
 
-pstack lives in `github.com/cursor/plugins` under `pstack/`. A clone was at `/tmp/cursor-plugins` (commit `d73344b`, 2026-10-09) and may be gone; clone it again to keep porting. Its main skill is `skills/poteto-mode/` and its playbooks are under `skills/poteto-mode/playbooks/`. Prior art for running pstack inside T3: `github.com/uzairansaruzi/p3-stack`.
+pstack lives in `github.com/cursor/plugins` under `pstack/`. A clone was at `/tmp/cursor-plugins` and may be gone; clone it again to keep porting. Ported from `d73344b` (2026-10-09); updates to the skills we ported were brought over through `99743e9` on 2026-10-15 (four principles restated as reasoning, `correct`'s test step, `bob-verify` readiness, Cleanup's base branch, Orchestrate's one-stacker rule). To catch up again, diff from `99743e9` and take only changes to skills we already have. Its main skill is `skills/poteto-mode/` and its playbooks are under `skills/poteto-mode/playbooks/`. Prior art for running pstack inside T3: `github.com/uzairansaruzi/p3-stack`.

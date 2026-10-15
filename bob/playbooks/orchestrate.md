@@ -49,7 +49,7 @@ Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.
    - A finished unit that needs judgment gets a verifier unit. Don't review diffs inline.
    - Settle each worker whose unit reached a final state (landed, abandoned, or a closed PR) per `references/settling.md`. A merge-ready PR waiting on the user keeps its worker active. The coordinator never settles itself.
    - Spawn the next units in one turn, then end the turn with a status board: counts by state, what changed, open gates.
-6. **Land, continuously.** Keep the lowest unmerged PR green before work above it. Workers never rebase; a conflict or restack is a unit with its own brief. Merge only under the merge policy, and only PRs whose current head SHA has a passing ledger row.
+6. **Land, continuously.** Keep the lowest unmerged PR green before work above it. Workers never rebase; a conflict or restack is a unit with its own brief. Only one unit per stack may change its shape (rebase, force-push, retarget a base, merge) at a time, so two of them never fight over the same branches. Record which unit holds a stack in `standing-orders.md`, and clear it when that unit finishes. Stacks are plain `gh` branches, each PR based on its parent's; no Graphite. Merge only under the merge policy, and only PRs whose current head SHA has a passing ledger row.
 7. **Close.** Drain one last time. Every spawned unit ends in a final state (landed, merge-ready, abandoned with a reason). Settle every worker that passes `references/settling.md`; list the ones left active and why. Check the done condition on the real product. Delete the heartbeat with `delete_scheduled_task`. Turn recurring corrections into standing orders or brief changes. Leave the store as the record.
 
 ## Verification

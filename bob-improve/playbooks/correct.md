@@ -17,7 +17,7 @@ This playbook edits the target repo, not the bob- skills. Work on a branch and f
    1. **Architecture removes it.** One owner per piece of state and one supported way per task. Hide internals so the wrong import fails. Replace hand-synced lists with one source of truth. Delete old ways and dead code an agent would copy.
    2. **Types make the bad state unwritable**, per `../bob-principle-type-system-discipline/SKILL.md`.
    3. **A lint or CI check fails** when bad code still compiles. Its error names the file, type, or function to use instead. When the pattern is already common, fail only on new occurrences.
-   4. **A test catches it**, per `../bob-principle-test-behavior-not-implementation/SKILL.md`. Fix or delete tests that would pass if every function they call returned nothing.
+   4. **A test catches it**, per `../bob-principle-test-behavior-not-implementation/SKILL.md`. Fix or delete any test that still passes when the behavior it checks breaks, or fails when only the internals change.
    5. **Docs or agent rules**, last and only for judgment calls. Nothing fails when an agent skips them.
 4. **Checkpoint:** show every class, most frequent first, with its evidence, the level you picked, and why a higher level didn't work. Wait. The user picks which to fix.
 5. **Fix** the picked classes, most frequent first, one commit each.
