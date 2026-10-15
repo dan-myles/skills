@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "99fdebad-75c1-440b-ba88-cca6df541795",
+  "path": "personal-takeone",
+  "path_key": "personal-takeone",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
