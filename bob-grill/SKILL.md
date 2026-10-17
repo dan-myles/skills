@@ -23,7 +23,7 @@ List every decision the plan needs. A decision can hang off others: "retry polic
 
 ## Facts are yours
 
-A question the code, the repo, the tracker, or a quick run can answer isn't the user's. Look it up: `bob-how` explorers (`bob-how.explorers` in `~/.bob-n-frank/models.yaml`) for code, plain commands for the rest. When a quick sketch would settle it (a layout, a timing, an output), build it per `../bob/playbooks/prototype.md`. Don't hold the round for a lookup: only the questions that depend on it wait.
+A question the code, the repo, the tracker, or a quick run can answer isn't the user's. Look it up: `bob-how` explorers (`bob-how.explorers` in `~/.bob-n-frank/synara/models.yaml`) for code, plain commands for the rest. When a quick sketch would settle it (a layout, a timing, an output), build it per `../bob/playbooks/prototype.md`. Don't hold the round for a lookup: only the questions that depend on it wait.
 
 ## Rounds
 
@@ -40,6 +40,6 @@ When the user said not to be asked ("don't ask me", "just decide"), don't ask. T
 
 The grill is done when the frontier is empty: every branch visited, nothing silently assumed. Show the whole tree with every answer and ask the user to confirm it's the shared understanding. Nothing gets designed, built, or dispatched on it before they do.
 
-Save it to `~/.bob-n-frank/grills/<slug>.md`: the goal, each decision with its answer and the reason, the facts found and where they came from, and what's deliberately out of scope. Whatever runs next reads it: the Feature design draft, `bob-architect`'s grounding, or a brief's CONTEXT, pasted in full.
+Save it as `grills/<slug>.md` in this role's store per **State** in `../bob/references/synara.md`: a Hub document for a coordinator, a Library file for a Hub worker, `~/.bob-n-frank/synara/grills/` standalone. Older grills in `~/.bob-n-frank/grills/` are the T3 edition's; read them, never write there. The file holds the goal, each decision with its answer and the reason, the facts found and where they came from, and what's deliberately out of scope. Whatever runs next reads it: the Feature design draft, `bob-architect`'s grounding, or a brief's CONTEXT, pasted in full.
 
-**Reply:** the decisions, what's out of scope, and the file path. **Show:** the final tree.
+**Reply:** the decisions, what's out of scope, and where it's saved. **Show:** the final tree.

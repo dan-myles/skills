@@ -33,7 +33,7 @@ Fill `references/reviewer-prompt.md` with:
 3. `references/rubric.md`
 4. `references/code-quality.md`
 
-Start one reviewer per entry of `bob-adversarial-review.reviewers` in `~/.bob-n-frank/models.yaml`, labeled A, B, C in order, per `../bob-models/references/delegation.md`. All get the same filled prompt and stay read-only.
+Start one reviewer per entry of `bob-adversarial-review.reviewers` in `~/.bob-n-frank/synara/models.yaml`, labeled A, B, C in order, per `../bob-models/references/delegation.md`. All get the same filled prompt and stay read-only.
 
 Use absolute paths in the prompt, since reviewers start with none of this session. Start them all at once. If one fails, finish with the rest and say so in **Reviewers**.
 

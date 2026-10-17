@@ -1,6 +1,6 @@
 # Models
 
-Find subagents that would do better on a different model. Recommendations only: never edit `~/.bob-n-frank/models.yaml` here. Each one becomes a `/bob-models <change>` the user can run.
+Find subagents that would do better on a different model. Recommendations only: never edit `~/.bob-n-frank/synara/models.yaml` here. Each one becomes a `/bob-models <change>` the user can run.
 
 1. Pick the sessions: the one Reflect is reading, or the ones the user names. Find transcripts as in Reflect step 1.
 2. List every subagent that ran: its job (designer, reviewer, judge, explorer, build worker), its model (a `models.yaml` line, or Bob's own), and where its output is.

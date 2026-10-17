@@ -49,7 +49,7 @@ Check which tools and MCP servers this session can reach. Sort them into these e
 | Error tracking | The exceptions that led to defensive code | `references/sources/errors.md` |
 | Product analytics | Usage data, experiments, and where a number came from | `references/sources/analytics.md` |
 
-Start one investigator subagent per source that's reachable, on `bob-why.investigators` in `~/.bob-n-frank/models.yaml`, all at once, one source each. Each one gets:
+Start one investigator subagent per source that's reachable, on `bob-why.investigators` in `~/.bob-n-frank/synara/models.yaml`, all at once, one source each. Each one gets:
 
 1. the brief in `references/investigator.md`
 2. that source's guide

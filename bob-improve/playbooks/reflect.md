@@ -10,7 +10,7 @@ Turn one session into approved edits.
    - If nothing matches, write a tight digest instead: the task, what was done, every correction from the user, and what went wrong.
 2. Decide whether there's anything to learn. A trivial session, or one that followed the skills without friction, has no lessons. Say so and stop.
 3. List the skills the session used: `Skill` tool calls, slash commands like `/bob`, reads of any `SKILL.md` or `playbooks/*.md`, and `$bob` mentions in Codex. Reviewers get this list.
-4. Run three reviewers in parallel, each on its line under `bob-improve` in `~/.bob-n-frank/models.yaml` (`reflect-judgment`, `reflect-tooling`, `reflect-divergent`). Pass each its prompt verbatim, with the transcript path (or the digest) and the skills list filled in.
+4. Run three reviewers in parallel, each on its line under `bob-improve` in `~/.bob-n-frank/synara/models.yaml` (`reflect-judgment`, `reflect-tooling`, `reflect-divergent`). Pass each its prompt verbatim, with the transcript path (or the digest) and the skills list filled in.
 
    | Lens | Looks for | Prompt |
    |---|---|---|
