@@ -4,7 +4,7 @@ This edition of Bob and Frank runs inside Synara. This page is the one place for
 
 ## Which role this thread has
 
-Check once at the start of every run, with `synara_context` and the turn's own message:
+Check once at the start of every run, from the turn's own message (a Hub packet settles it), else `synara_context` and `synara_project_get_overview`:
 
 - **Hub worker.** The turn carries a Hub context packet saying this thread is a worker, with a work item id. It can't create threads or drive other threads. Its checklist, report, and artifacts go through the Hub (below).
 - **Hub coordinator.** `synara_project_get_overview` names this thread as `coordinatorThreadId`. Frank and Orchestrate run here. Workers are Hub work items, not threads it drives.
@@ -67,7 +67,7 @@ What the T3 edition used, and what this edition uses instead. **Gap** means Syna
 
 ## Automations
 
-Create one only when the user asked for it, or a playbook step names it and the user approved that step. Otherwise pass `suggested: true`, which shows an Accept card and runs nothing until they accept. Give every automation a `completionPolicy` with `stopWhen` for its natural end (a PR merge-ready, a program closed) and a `maxIterations` backstop. Use `heartbeat` mode to wake this same thread, `dedicated` for ongoing tracking in a thread the automation owns. Before `synara_update_automation`, call `synara_view_automation` and resend every mutable field. A run started by an automation ends with `synara_report_automation_result`; a later manual "continue" doesn't.
+A Hub worker never creates one; its coordinator watches what outlives the worker's turn. Elsewhere, create one only when the user asked for it, or a playbook step names it and the user approved that step. Otherwise pass `suggested: true`, which shows an Accept card and runs nothing until they accept. Give every automation a `completionPolicy` with `stopWhen` for its natural end (a PR merge-ready, a program closed) and a `maxIterations` backstop. Use `heartbeat` mode to wake this same thread, `dedicated` for ongoing tracking in a thread the automation owns. Before `synara_update_automation`, call `synara_view_automation` and resend every mutable field. A run started by an automation ends with `synara_report_automation_result`; a later manual "continue" doesn't.
 
 ## The final reply
 

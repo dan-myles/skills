@@ -28,14 +28,15 @@ REPORT-BACK  standalone only: <coordinator thread id>: <message>. Hub work leave
 
 ## Reporting
 
-Report each time the report changes: when the PR opens, again when it's merge-ready, and when you stop on a gate.
+Report each time the report changes: when the PR opens, again when it's merge-ready, and when you stop on a gate. The brief's RULES and SCOPE override a playbook's defaults where they differ: a headless worker never merges, even a bug fix in a repo that merges its own.
 
 **As a Hub worker** (the turn's Hub packet names your work item):
 
 1. Keep the playbook's steps as the work item's checklist with `synara_hub_update_progress`, passing the revision you last read (from the packet, or `synara_hub_list_work` after a conflict). A finished checklist doesn't finish the work item; the Hub does.
-2. Write the report to a file in your worktree, add it to the Hub Library with `synara_project_library_add` at the path REPORT names (same `requestId` on a retry), then delete the local copy so the worktree stays clean.
-3. When the brief names a project task id, also file the summary with `synara_project_report_result`.
-4. End the turn with the full report as your reply. The Hub records it and wakes the coordinator; don't message the coordinator yourself.
+2. Each version of the report goes to a file in your worktree, then to the Hub Library with `synara_project_library_add` at the path REPORT names, `requestId` `<id>-report-<n>` (the same one on a retry of that version), then the local copy is deleted so the worktree stays clean.
+3. An interim report (the PR opened, babysitting continues) is that Library file plus a checklist `summary` naming it; keep working in the same turn. Ending the turn hands the Hub your result.
+4. When the brief names a project task id, also file the summary with `synara_project_report_result`.
+5. End the turn once, at merge-ready, a gate, or the TIMEBOX, with the full report as your reply; the reply's usual five-line limit doesn't apply to it. The Hub records it and wakes the coordinator; don't message the coordinator yourself. A PR still waiting on CI or reviewers at the TIMEBOX is reported `final: no`, and the coordinator tracks it from there.
 
 **As a standalone worker:** write the report to the path REPORT names, end your reply with the same text, then call `synara_send_message` with the REPORT-BACK thread id, `mode: "queue"`, and the message exactly as given. Synara has no idempotency key for messages, so the coordinator treats a repeat as a no-op unless the report changed.
 

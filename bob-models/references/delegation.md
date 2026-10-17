@@ -48,7 +48,7 @@ For a later round (say, a reviewer re-checking a fix), start a new child with th
 
 A Hub worker can't create threads, and a Hub coordinator's threads are queued work, so both run cross-family subagents as local processes. Write the prompt to a file and pass it on stdin; run several in the background at once and wait for each to exit.
 
-- `codex`: `codex exec -m <model> -c model_reasoning_effort=<reasoningEffort> -s read-only -C <repo> --ephemeral -o <out.md> - < <prompt.md>`. One that writes files uses `-s workspace-write -C <its own folder>`.
+- `codex`: `codex exec -m <model> -c model_reasoning_effort=<reasoningEffort> -s read-only -C <repo> --ephemeral -o <out.md> - < <prompt.md>`. One that writes files uses `-s workspace-write -C <folder>`: this worktree when it's the only writer running, otherwise its own `git worktree add /tmp/bob-<slug>-<n> -b <branch>-<n>` off this branch, whose commits you review and merge back before the next step.
 - `claudeAgent`: `claude -p --model <model> --effort <effort> --disallowedTools "Edit,Write,NotebookEdit" < <prompt.md> > <out.md>`. Drop `--disallowedTools` for one that writes files.
 
 If a provider won't run at all, run its entries on one that does, give the stand-in a different focus from its pair, and say so in the output: agreement between two runs of one provider counts for less.
