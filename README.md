@@ -56,13 +56,16 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 
 ## Install
 
-You need Synara with its Claude and Codex providers, plus [skills-manager](https://github.com/xingkongliang/skills-manager). The installed skills are links into one checkout, so keep this edition in its own clone and point skills-manager at it only when you switch editions:
+You need Synara with its Claude and Codex providers, plus [skills-manager](https://github.com/xingkongliang/skills-manager). Synara and T3 Code read the same skill folders (`~/.claude/skills`, `~/.codex/skills`), so one edition is live at a time. Keep this edition in its own clone, next to the T3 one, and switch with each library's skills-manager preset:
 
 ```sh
 git clone -b synara-edition https://github.com/dan-myles/skills ~/Developer/personal/skills-synara
-skills-manager-cli --skills-root ~/Developer/personal/skills-synara skills sync --preset Default --tool claude_code
-skills-manager-cli --skills-root ~/Developer/personal/skills-synara skills sync --preset Default --tool codex
+~/Developer/personal/skills-synara/scripts/switch-edition.sh synara   # Synara edition live
+~/Developer/personal/skills-synara/scripts/switch-edition.sh t3       # back to the T3 edition
+~/Developer/personal/skills-synara/scripts/switch-edition.sh status
 ```
+
+The switch undeploys one library's `Default` preset from Claude Code and Codex and deploys the other's; it restores the old one if the deploy fails.
 
 Then, in a Synara Hub's coordinator thread:
 
