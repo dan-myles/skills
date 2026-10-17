@@ -1,30 +1,35 @@
 <!doctype html>
 <!--
-  File map template. Copy it, replace the tree and the Mermaid graph, keep the styles.
+  File map template for synara_show_visual (html). Copy it, replace the tree and GRAPH, keep the styles and script.
+  Synara's visual sandbox blocks CDN scripts and file images, so this draws the graph itself: no Mermaid.
   Left: the files, grouped by folder, each with a status badge and one line on what it owns.
-  Right: how the folders and files connect (imports or calls), with module boundaries as boxes.
+  Right: GRAPH. Each group is a module box (put them in layer order: UI, API, domain, data); edges are imports or calls.
+  List an edge in GRAPH.bad too when it crosses a boundary it shouldn't; it draws red.
   Badges: add (new), mod (changed), mov (moved, say from where), del (deleted, add class "gone" to the li).
   Leave out badges entirely when mapping existing code before a change.
 -->
 <html><head><style>
-body{margin:0;font:13px/1.45 ui-sans-serif,system-ui;color:var(--foreground)}
-h2{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted-foreground);margin:0 0 8px}
-.wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
-.tree{font:12.5px/1.7 ui-monospace,monospace}
+h2{font-size:.8em;text-transform:uppercase;letter-spacing:.04em;color:var(--muted-foreground);margin:0 0 8px}
+.wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.tree{font:.95em/1.7 var(--font-mono)}
 .tree ul{list-style:none;margin:0;padding-left:16px;border-left:1px solid var(--border)}
 .tree>ul{border-left:0;padding-left:0}
 .tree li{white-space:nowrap}
 .dir>span.n{font-weight:600}
-.badge{display:inline-block;font:600 10px/16px ui-sans-serif,system-ui;padding:0 6px;border-radius:999px;margin-left:6px;vertical-align:1px}
-.add{background:color-mix(in srgb,#22c55e 22%,transparent);color:#22c55e}
-.mod{background:color-mix(in srgb,#eab308 22%,transparent);color:#eab308}
-.mov{background:color-mix(in srgb,#3b82f6 22%,transparent);color:#3b82f6}
-.del{background:color-mix(in srgb,#ef4444 22%,transparent);color:#ef4444}
+.badge{display:inline-block;font:600 .75em/1.6 var(--font-sans);padding:0 6px;border-radius:999px;margin-left:6px;vertical-align:1px}
+.add{background:color-mix(in srgb,var(--success) 18%,transparent);color:var(--success)}
+.mod{background:color-mix(in srgb,var(--warning) 18%,transparent);color:var(--warning)}
+.mov{background:color-mix(in srgb,var(--info) 18%,transparent);color:var(--info)}
+.del{background:color-mix(in srgb,var(--destructive) 18%,transparent);color:var(--destructive)}
 li.gone>span.n{text-decoration:line-through;color:var(--muted-foreground)}
-.why{font:12px ui-sans-serif,system-ui;color:var(--muted-foreground);margin-left:8px}
+.why{font-size:.9em;font-family:var(--font-sans);color:var(--muted-foreground);margin-left:8px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-</style>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script></head><body>
+.graph{position:relative;display:flex;flex-wrap:wrap;gap:36px 48px;align-items:flex-start;padding:4px}
+.graph svg{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.box{border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px 10px;min-width:120px;background:var(--surface)}
+.box h3{font-size:.8em;font-weight:500;color:var(--muted-foreground);margin:0 0 6px}
+.node{font:.9em var(--font-mono);border:1px solid var(--border);border-radius:calc(var(--radius) - 2px);padding:3px 8px;margin-top:6px;background:var(--background)}
+</style></head><body>
 <div class="wrap">
 <div><h2>Files</h2><div class="tree"><ul>
 <li class="dir"><span class="n">src/</span><ul>
@@ -39,26 +44,61 @@ li.gone>span.n{text-decoration:line-through;color:var(--muted-foreground)}
  </ul></li>
 </ul></li></ul></div>
 <div class="legend"><span class="badge add">new</span><span class="badge mod">changed</span><span class="badge mov">moved</span><span class="badge del">deleted</span></div></div>
-<div><h2>How they connect</h2><div id="graph"></div></div>
+<div><h2>How they connect</h2><div class="graph" id="graph"></div></div>
 </div>
 <script>
-(async () => {
-  const css = getComputedStyle(document.documentElement), v = n => css.getPropertyValue(n).trim();
-  mermaid.initialize({ startOnLoad: false, theme: "base", themeVariables: {
-    primaryColor: v("--muted"), primaryTextColor: v("--foreground"),
-    primaryBorderColor: v("--muted-foreground"), lineColor: v("--muted-foreground"),
-    clusterBkg: "transparent", clusterBorder: v("--border"),
-    fontFamily: "ui-sans-serif, system-ui", fontSize: "12px" } });
-  const { svg } = await mermaid.render("g1", `flowchart TD
-    subgraph api["api/ (HTTP)"]
-      R[routes.ts]
-    end
-    subgraph billing["billing/ (rules)"]
-      C[charge.ts] --> I[invoice.ts]
-      C --> M[money.ts]
-      I --> M
-    end
-    R --> C`);
-  document.getElementById("graph").innerHTML = svg;
+const GRAPH = {
+  groups: [
+    { label: "api/ (HTTP)", nodes: [["R", "routes.ts"]] },
+    { label: "billing/ (rules)", nodes: [["C", "charge.ts"], ["I", "invoice.ts"], ["M", "money.ts"]] },
+  ],
+  edges: [["R", "C"], ["C", "I"], ["C", "M"], ["I", "M"]],
+  bad: [],
+};
+(() => {
+  const host = document.getElementById("graph"), nodes = {}, group = {};
+  GRAPH.groups.forEach((g, gi) => {
+    const box = host.appendChild(document.createElement("div"));
+    box.className = "box";
+    box.appendChild(document.createElement("h3")).textContent = g.label;
+    for (const [id, label] of g.nodes) {
+      const n = box.appendChild(document.createElement("div"));
+      n.className = "node";
+      n.textContent = label;
+      nodes[id] = n;
+      group[id] = gi;
+    }
+  });
+  const NS = "http://www.w3.org/2000/svg", svg = host.appendChild(document.createElementNS(NS, "svg"));
+  const isBad = (a, b) => GRAPH.bad.some(([x, y]) => x === a && y === b);
+  const marker = (id, color) =>
+    `<marker id="${id}" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="${color}"/></marker>`;
+  function draw() {
+    const o = host.getBoundingClientRect(), css = getComputedStyle(document.documentElement);
+    const line = css.getPropertyValue("--muted-foreground").trim(), red = css.getPropertyValue("--destructive").trim();
+    let out = `<defs>${marker("a", line)}${marker("b", red)}</defs>`;
+    for (const [a, b] of GRAPH.edges) {
+      const p = nodes[a].getBoundingClientRect(), q = nodes[b].getBoundingClientRect();
+      const px = p.left - o.left, py = p.top - o.top, qx = q.left - o.left, qy = q.top - o.top;
+      let d;
+      if (group[a] === group[b]) {
+        const x = Math.max(px + p.width, qx + q.width), y1 = py + p.height / 2, y2 = qy + q.height / 2, bend = x + 18;
+        d = `M${px + p.width} ${y1}C${bend} ${y1} ${bend} ${y2} ${qx + q.width + 2} ${y2}`;
+      } else if (Math.abs(qx - px) >= Math.abs(qy - py)) {
+        const fwd = qx > px, x1 = fwd ? px + p.width : px, x2 = fwd ? qx - 2 : qx + q.width + 2;
+        const y1 = py + p.height / 2, y2 = qy + q.height / 2, mid = (x1 + x2) / 2;
+        d = `M${x1} ${y1}C${mid} ${y1} ${mid} ${y2} ${x2} ${y2}`;
+      } else {
+        const down = qy > py, y1 = down ? py + p.height : py, y2 = down ? qy - 2 : qy + q.height + 2;
+        const x1 = px + p.width / 2, x2 = qx + q.width / 2, mid = (y1 + y2) / 2;
+        d = `M${x1} ${y1}C${x1} ${mid} ${x2} ${mid} ${x2} ${y2}`;
+      }
+      const bad = isBad(a, b);
+      out += `<path d="${d}" fill="none" stroke="${bad ? red : line}" stroke-width="${bad ? 1.6 : 1.1}" marker-end="url(#${bad ? "b" : "a"})"/>`;
+    }
+    svg.innerHTML = out;
+  }
+  new ResizeObserver(draw).observe(host);
+  draw();
 })();
 </script></body></html>
