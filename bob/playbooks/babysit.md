@@ -19,7 +19,12 @@ Babysitting never merges. Merge only when the user explicitly says to merge or l
 
      Reply to human reviewers and bots alike without asking first. Review bots get the same skepticism; never churn code to quiet one. Post replies with `gh api ... --input <file.json>`, never by putting comment text in a shell command.
    - **CI.** Classify before rerunning. A flaky or infrastructure failure gets one rerun of the whole run. The same failure twice is real: read the logs. A failure in code the diff doesn't touch usually means a stale base; check with `git merge-base --is-ancestor` and treat it as a conflict. Only a failure in the diff's own code gets a commit.
-5. **Wait without polling.** In T3, call `watch_pull_request` and end the turn; T3 wakes this thread when checks finish, someone comments, or the branch conflicts. After each wake, go back to step 3. Outside T3, use `gh pr checks <n> --watch`. Answer user questions mid-loop and keep going until they say stop.
-6. **Stop at merge-ready:** checks green, GitHub reports it mergeable with no blockers, and no unresolved threads. A required approval is a wait, not a blocker to fix; report it. In T3, call `unwatch_pull_request` before handing back.
+5. **Wait without spending turns.** Synara has no PR wake, so `../scripts/pr_watch.py` prints one line per change: a check result, a new comment or review, a new head, a merge-state change. It exits when the PR merges or closes.
+   - **Claude thread:** start `Monitor` on `python3 <bob-dir>/scripts/pr_watch.py <n> --repo <owner/name>` (30 minutes, the most `Monitor` allows) and treat each line as a wake: go back to step 3. Re-arm it when it expires and the PR isn't merge-ready.
+   - **Codex thread, or no `Monitor`:** run it with `--until-change` as a background command; its exit is the wake.
+   - **Longer than the session** (slow CI, waiting on a reviewer for hours): propose a heartbeat automation on this thread per **Automations** in `../references/synara.md`, with `suggested: true` unless the user asked for one: name `Babysit PR <n> to merge-ready`, every 15 minutes, prompt `/bob babysit <PR URL>: one Drive pass from step 3, then stop`, `completionPolicy` stopping when the PR is merge-ready, merged, or closed, `maxIterations: 48`.
+
+   Answer user questions mid-loop and keep going until they say stop.
+6. **Stop at merge-ready:** checks green, GitHub reports it mergeable with no blockers, and no unresolved threads. A required approval is a wait, not a blocker to fix; report it. Stop the `Monitor` or background watch before handing back; a babysit automation retires on its own `completionPolicy`, and if it's still enabled, cancel it with `synara_cancel_automation`.
 
 **Reply:** the mode, the PR's state, what you fixed and what you dismissed with reasons, what's pending, and what needs the user. **Show:** a status grid of checks and threads (fixed, dismissed, open), with what needs the user on top.

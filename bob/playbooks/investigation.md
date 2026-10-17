@@ -2,16 +2,16 @@
 
 The answer is yours. Change nothing: no edits, commits, or PRs.
 
-**The answer is a page, not prose.** In T3, every investigation answers with a rendered HTML page per `references/visuals.md` (`html_preview`, then `html_render`) before any text, and the text after it is a few lines at most. A text-only answer to an investigation is a failed answer. Make the page do the explaining:
+**The answer is a page, not prose.** In Synara, every investigation answers with a visual per `references/visuals.md` (`synara_show_visual`; an HTML page for flows and file maps) before any text, and the text after it is a few lines at most. A text-only answer to an investigation is a failed answer. Make the page do the explaining:
 
-- the flow as a diagram (Mermaid), `file:line` on every node, with a step-through the user can click through one step at a time
+- the flow as a diagram (the graph from `references/file-map.html`; the visual sandbox can't load Mermaid), `file:line` on every node, with a step-through the user can click through one step at a time
 - a file map of the area: where each piece lives and how the pieces connect
 - the key ideas as small cards, each with the code that shows it
 - for "why", a timeline of the decisions and their evidence, confidence marked
 - for a choice, comparison cards with your pick marked
 - the real evidence inline: code excerpts, command output, screenshots
 
-Outside T3, use Mermaid and tables in the reply instead.
+Outside Synara, use Mermaid and tables in the reply instead.
 
 Two modes. Pick one, say which, and put only its steps on the todo list.
 
@@ -25,7 +25,7 @@ If you conclude the code needs to change, stop there and say so. The user picks 
 1. Run `bob-how` on the area in question. It follows the code from where the behavior starts to where it lands, reading it rather than inferring it.
 2. When the question is "why", run `bob-why` on the target. It works through the history and every other evidence source the session can reach.
 3. Lay out the answer in `bob-how`'s sections: overview, the ideas you need, how it works step by step, where it lives (`file:line`), and the traps. Add `bob-why`'s findings with their confidence levels. When the question is a choice, recommend one and back it with a table comparing the options. When the answer rests on a measured number, apply `explain-the-number` first.
-4. Build the page, check it with `html_preview`, publish it with `html_render`, then write the few lines it doesn't say. Run `unslop` on those.
+4. Build the page, show it with `synara_show_visual`, then write the few lines it doesn't say. Run `unslop` on those.
 
 **Reply:** the answer, each claim tied to code, history, or a run, or flagged as a guess. On "are we sure?" questions, give your honest call and challenge the question if it rests on a wrong assumption. **Show:** the page above: flow with a step-through, file map, key ideas, plus the timeline for "why" or the comparison for a choice.
 
