@@ -16,11 +16,11 @@ Say which in the plan line. When a step needs something this role can't do, use 
 
 | Role | Authoritative state | Never |
 |---|---|---|
-| Hub coordinator | The Hub: work items (`synara_hub_list_work`) for anything dispatched; Hub documents for what the Hub doesn't track (Frank's `frank/board.tsv`, `frank/seen.tsv`, `frank/decisions.tsv`; Orchestrate's `orchestrate/<program>/…`); the Library for reports and evidence | Files in `~/.bob-n-frank/` |
+| Hub coordinator | The Hub: work items (`synara_hub_list_work`) for anything dispatched; Hub documents for what the Hub doesn't track (Frank's `frank/board.tsv`, `frank/seen.tsv`, `frank/decisions.tsv`; Orchestrate's `orchestrate/<program>/…`); the Library for reports and evidence | Its own state in `~/.bob-n-frank/` |
 | Hub worker | Its own work item: the progress checklist, its final reply, files it adds to the Library | Hub documents other than inbox entries |
 | Standalone | `~/.bob-n-frank/synara/` | The legacy files in `~/.bob-n-frank/` outside `synara/` |
 
-Write documents with `synara_project_write_document` and the `expectedRevision` you last read; on a conflict, reread and merge, never overwrite. A row for dispatched work keeps its work item id and takes its state from the Hub on every run; never hand-edit a state the Hub owns.
+Every role reads the user's settings in `~/.bob-n-frank/synara/models.yaml`; that file is configuration, not state. Write documents with `synara_project_write_document` and the `expectedRevision` you last read; on a conflict, reread and merge, never overwrite. A row for dispatched work keeps its work item id and takes its state from the Hub on every run; never hand-edit a state the Hub owns.
 
 `~/.bob-n-frank/` outside `synara/` belongs to the T3 edition. This edition only reads it: the user's grills, and the legacy Frank board for a migration they asked for (`../../frank/references/migration.md`). Its `models.yaml` uses T3 model ids that Synara rejects, so this edition keeps its own at `~/.bob-n-frank/synara/models.yaml`.
 
@@ -34,7 +34,7 @@ Each turn gets one creation plan (`limits.oneCreationPlanPerActiveTurn` in `syna
 
 ## Original context travels with the work
 
-Every dispatch from a conversation passes `contextMessageIds`: the ids of the user's original messages the work comes from. Synara forwards their text and attachments verbatim, so the worker sees what the user actually said, not your paraphrase. Omit them only when delegating the current human turn. Still write the brief per `brief.md`; the forwarded messages are its source data, not a replacement for it.
+Every dispatch from a conversation passes `contextMessageIds`: the ids of the user's earlier messages the work comes from. Synara forwards their text and attachments verbatim, so the worker sees what the user actually said, not your paraphrase. The current human turn is forwarded on its own; leave its id out. Work a source raised, with no user message behind it, passes none. Still write the brief per `brief.md`; the forwarded messages are its source data, not a replacement for it.
 
 ## Tool map
 
@@ -43,7 +43,7 @@ What the T3 edition used, and what this edition uses instead. **Gap** means Syna
 | Need | Synara | Notes |
 |---|---|---|
 | Model catalog | `synara_capabilities` | The only source of slugs and option keys. See `../../bob-models/references/delegation.md`. |
-| Start a Bob thread | `synara_create_threads` (`synara_create_thread` for one) | From a Hub coordinator these are queued work items. |
+| Start a Bob thread | `synara_create_threads` (`synara_create_thread` for one) | `projectId` is the repo's own Synara project (a Hub lists its linked repositories in `synara_project_get_overview`). From a Hub coordinator these are queued work items. |
 | Same-family subagent | The native subagent tool | Claude Agent: `Agent` with `model` and a `worker-<tier>` type for effort. |
 | Cross-family subagent | Standalone: a child thread through `synara_create_threads`. Hub worker: headless CLI | **Gap:** no in-thread cross-provider child task like T3's `delegate_task`. |
 | Wait for a child | `synara_wait_for_threads` with the returned `runIds`, repeated until `allTerminal` | A timeout is progress, not failure. |

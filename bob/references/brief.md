@@ -15,7 +15,7 @@ ACCEPTANCE   checkable criteria, one per line
 VERIFY       exact commands or the bob-verify-<app> recipe, plus known gotchas
 TIMEBOX      rough cap; on expiry, report what you have and stop
 RULES        <headless or attended, below>
-REPORT       <id>: status, final (yes or no), branch, head SHA, PR, what you ran and its output, deviations,
+REPORT       <id> at <path>: status, final (yes or no), branch, head SHA, PR, what you ran and its output, deviations,
              gates, follow-ups, and what this thread still owns (an open PR, running children, a question to
              the user), or "nothing". Delivered per "Reporting" below.
 STANDING     <the coordinator's standing orders pasted word for word, when it has any>
@@ -33,7 +33,7 @@ Report each time the report changes: when the PR opens, again when it's merge-re
 **As a Hub worker** (the turn's Hub packet names your work item):
 
 1. Keep the playbook's steps as the work item's checklist with `synara_hub_update_progress`, passing the revision you last read (from the packet, or `synara_hub_list_work` after a conflict). A finished checklist doesn't finish the work item; the Hub does.
-2. Write the report to a file in your worktree, add it to the Hub Library with `synara_project_library_add` at `reports/<id>.md` (same `requestId` on a retry), then delete the local copy so the worktree stays clean.
+2. Write the report to a file in your worktree, add it to the Hub Library with `synara_project_library_add` at the path REPORT names (same `requestId` on a retry), then delete the local copy so the worktree stays clean.
 3. When the brief names a project task id, also file the summary with `synara_project_report_result`.
 4. End the turn with the full report as your reply. The Hub records it and wakes the coordinator; don't message the coordinator yourself.
 

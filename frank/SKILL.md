@@ -28,7 +28,7 @@ Find this thread's role first. Frank belongs in a **Hub coordinator** thread; th
 - **Settings**: copied from `references/config.example.yaml` at setup and read at the start of every run. A repo can override its own entries in `<repo>/.bob-n-frank/synara/config.yaml`; a repo's `<repo>/.bob-n-frank/config.yaml` from the T3 edition is read as a fallback, never written.
 - **Board**: one row per item: id, source link, kind, repo, state (`new`, `triaged`, `proposed`, `approved`, `queued`, `working`, `merge-ready`, `done`, `dropped`, `legacy-t3`), work item id, thread id, PR, proposed rank, updated, note. **Status lives here, not in your memory.** For dispatched work the Hub is the authority: refresh `queued`, `working`, and the thread id from `synara_hub_list_work` every run, and never set them by hand.
 - **Seen**: every source item already read, so nothing is triaged twice.
-- **Decisions**: append-only: time, decision, why, evidence. Only decisions the user made about the product go in the Hub's own `decisions.md`, which every worker reads.
+- **Decisions**: append-only: time, decision, why, evidence. Only decisions the user made about the product also go in the Hub's own `decisions.md` document, which every worker's packet carries.
 
 Write Hub documents with the revision you last read; on a conflict, reread and merge. The T3 edition's `~/.bob-n-frank/frank/` is never written. Bringing its board over is `/frank migrate`.
 
@@ -42,7 +42,7 @@ Write Hub documents with the revision you last read; on a conflict, reread and m
 - `/frank migrate`: bring the T3 edition's board over, read-only, per `references/migration.md`.
 - `/frank <anything else>`: the user talking to Frank. Answer from the board, or take it in as a new item. A pasted issue, alert, or message is an inbound item: triage it, dispatch if the rules allow, and stay quiet unless it's a fire.
 
-Every run starts by reading the settings and the board, and ends with the board written back. When there are no settings yet, run on the defaults in `references/config.example.yaml` (Synara threads only, since it lists no repos), start an empty board, and put "Run `/frank setup` to pick repos and sources" at the top of the brief.
+The user's answer to a question Frank asked continues the run that asked it. Every run starts by reading the settings and the board, and ends with the board written back. When there are no settings yet, run on the defaults in `references/config.example.yaml` (Synara threads only, since it lists no repos), start an empty board, and put "Run `/frank setup` to pick repos and sources" at the top of the brief.
 
 A run an automation started ends with `synara_update_automation_memory` (where the store is, when this run ended, what's queued) and `synara_report_automation_result`: `silent` for "nothing new", `notify` with a one-line title otherwise.
 
@@ -89,8 +89,8 @@ When an item's goal, right behavior, or scope is unclear, it isn't auto-dispatch
 
 ## Dispatch
 
-- Write the brief per `../bob/references/brief.md`, REPORT for `<id>`. An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
-- Start every dispatch of the run in one `synara_create_threads` call, `requestId` `frank-<run time>`: per item `title` `bob: <what it does>`, `prompt` `/bob <brief>`, `target` from `threads.bob`, `environment: "worktree"`, `baseRef` the repo's default branch, `projectId` the repo's Synara project, and `contextMessageIds` of the user's messages that asked for or approved it (none for a bug a source raised). Omit `runtimeMode`, so workers inherit this thread's approval mode. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`, titled the same way.
+- Write the brief per `../bob/references/brief.md`, REPORT `<id>` at `frank/reports/<id>.md` (a Library path in a Hub). An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
+- Set each picked row to `approved` and write the board first, so the approval survives a failed call. Then start every dispatch of the run in one `synara_create_threads` call, `requestId` `frank-<YYYYMMDDTHHMMZ of the run>`, noted on each row: per item `title` `bob: <what it does>`, `prompt` `/bob <brief>`, `target` from `threads.bob`, `environment: "worktree"`, `baseRef` the repo's default branch, `projectId` the repo's own Synara project (from the Hub's linked repositories), and `contextMessageIds` per **Original context travels with the work** in `../bob/references/synara.md`. Omit `runtimeMode`, so workers inherit this thread's approval mode. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`, titled the same way.
 - Thread titles start with `bob: ` and then say what the work does in a few plain words, like `bob: add retry to market data fetch`. No ticket or issue IDs (`ENG-2919`, `#123`) in the title; they go in the brief's CONTEXT.
 - As a Hub coordinator the result is queued work: set each row to `queued` with its work item id and say "queued", not "started". Standalone, the threads start at once: set `working` with the thread id, and fill REPORT-BACK with this thread's id and `/frank report <id>`.
 - If the call fails before Synara accepts it, fix the plan and resend it with the same `requestId`. Once it returned an `operationId`, a retry resends that exact plan. Never create a replacement for queued, stuck, or failed work; the Hub owns retries. Report the failure instead.
