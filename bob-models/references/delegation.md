@@ -23,7 +23,7 @@ Pairing models from different providers is on purpose: Claude and GPT have diffe
 | Same as this thread, or `inherit` | any | Native subagent |
 | Different | Standalone | Child thread |
 | Different | Hub worker | Headless CLI |
-| Different | Hub coordinator | Hub work item; only for whole units of work per `../../bob/playbooks/orchestrate.md`, never for a reviewer or explorer inside a step |
+| Different | Hub coordinator | Headless CLI for a short read-only check (Frank's validator); a Hub work item for anything that needs its own worktree, per `../../bob/playbooks/orchestrate.md` |
 
 ### Native subagent
 
@@ -44,9 +44,9 @@ Then call `synara_wait_for_threads` with the returned thread ids, and again with
 
 For a later round (say, a reviewer re-checking a fix), start a new child with the original brief, the earlier findings, and what changed. Don't message the old child.
 
-### Headless CLI (Hub workers, or when child threads fail)
+### Headless CLI (Hub roles, or when child threads fail)
 
-A Hub worker can't create threads, so it runs cross-family subagents as local processes. Write the prompt to a file and pass it on stdin; run several in the background at once and wait for each to exit.
+A Hub worker can't create threads, and a Hub coordinator's threads are queued work, so both run cross-family subagents as local processes. Write the prompt to a file and pass it on stdin; run several in the background at once and wait for each to exit.
 
 - `codex`: `codex exec -m <model> -c model_reasoning_effort=<reasoningEffort> -s read-only -C <repo> --ephemeral -o <out.md> - < <prompt.md>`. One that writes files uses `-s workspace-write -C <its own folder>`.
 - `claudeAgent`: `claude -p --model <model> --effort <effort> --disallowedTools "Edit,Write,NotebookEdit" < <prompt.md> > <out.md>`. Drop `--disallowedTools` for one that writes files.
