@@ -1,5 +1,6 @@
-# Frank's settings. Frank copies this to ~/.bob-n-frank/config.yaml on first run and reads it every run.
-# A repo can override its own entries in <repo>/.bob-n-frank/config.yaml (tracker, slack channels, never_paths).
+# Frank's settings, Synara edition. /frank setup copies this to the Hub document frank/config.yaml (Hub coordinator)
+# or ~/.bob-n-frank/synara/config.yaml (standalone) and Frank reads it every run.
+# A repo can override its own entries in <repo>/.bob-n-frank/synara/config.yaml (tracker, slack channels, never_paths).
 
 timezone: America/Chicago
 
@@ -19,7 +20,7 @@ repos: []
 
 # auto: use when this session can reach it. on: expected, say so when it's missing. off: never read.
 sources:
-  t3_threads: on
+  synara_threads: on
   github: auto
   linear: auto
   slack: auto
@@ -36,9 +37,10 @@ auto_dispatch:
   per_run: 3                        # at most this many per brief or sweep
   never_paths: []                   # globs never auto-dispatched, on top of auth, money, data, migrations
 
-in_flight_cap: 4                    # Bob threads Frank keeps running at once
-stalled_after_hours: 24             # a dispatched thread with no new commit or PR change this long gets flagged
+in_flight_cap: 4                    # Bob threads Frank keeps queued or running at once; never above the Hub's maxConcurrentWorkers
+stalled_after_hours: 24             # dispatched work with no new commit, PR change, or progress step this long gets flagged
 
 # Filled in by /frank setup.
 thread_id: null
-schedules: []
+hub_project_id: null                # null when Frank runs standalone
+automations: []                     # ids of Frank's brief and sweep automations
