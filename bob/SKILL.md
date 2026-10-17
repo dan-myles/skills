@@ -1,7 +1,7 @@
 ---
 name: bob
 disable-model-invocation: true
-description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, Prototype, Investigation, Babysit, Orchestrate, or Cleanup, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Synara edition. Manual-only: `/bob <goal>` in Claude threads, `$bob <goal>` in Codex threads."
+description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, Prototype, Investigation, Babysit, Orchestrate, or Cleanup, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Synara edition. Manual-only: `/bob GOAL` in Claude threads, `$bob GOAL` in Codex threads."
 ---
 
 # Bob

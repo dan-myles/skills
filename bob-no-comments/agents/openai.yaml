@@ -1,0 +1,7 @@
+interface:
+  display_name: "bob-no-comments"
+  short_description: "Comment Sicko strips a diff's comments; the code they excused gets fixed"
+  default_prompt: "Use $bob-no-comments on this diff: start Comment Sicko, delete what it condemns, fix the code its flags blame, and turn claimed constraints into types, tests, or lint."
+
+policy:
+  allow_implicit_invocation: false

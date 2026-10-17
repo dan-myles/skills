@@ -1,7 +1,7 @@
 ---
 name: bob-verify
 disable-model-invocation: true
-description: "Write or maintain a repo's own verification skill, `bob-verify-<app>`: how to launch the real app, drive it the way a user does, capture evidence, and clean up, plus a feature map with one recipe per user-facing feature. Create builds it from the codebase and proves it once. Maintain checks every feature against source and drives each one live, then fixes drift in one PR. Manual-only: `/bob-verify [create|maintain]` in Claude threads, `$bob-verify ...` in Codex threads. `bob` offers it when a repo has none."
+description: "Write or maintain a repo's own verification skill, `bob-verify-APP`: how to launch the real app, drive it the way a user does, capture evidence, and clean up, plus a feature map with one recipe per user-facing feature. Create builds it from the codebase and proves it once. Maintain checks every feature against source and drives each one live, then fixes drift in one PR. Manual-only: `/bob-verify [create|maintain]` in Claude threads, `$bob-verify ...` in Codex threads. `bob` offers it when a repo has none."
 ---
 
 # Verify

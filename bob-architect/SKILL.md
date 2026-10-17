@@ -1,7 +1,7 @@
 ---
 name: bob-architect
 disable-model-invocation: true
-description: "Design a change before writing it. Two designers from different model families each sketch the types, signatures, and module map, a judge scores them, and Bob merges the stronger sketch with the best of the weaker one into a rationale and a type sketch with empty bodies. Use when a change adds a service, module, or public interface, or moves ownership. Manual-only: `/bob-architect <change>` in Claude threads, `$bob-architect ...` in Codex threads. `bob` runs it from Feature step 3."
+description: "Design a change before writing it. Two designers from different model families each sketch the types, signatures, and module map, a judge scores them, and Bob merges the stronger sketch with the best of the weaker one into a rationale and a type sketch with empty bodies. Use when a change adds a service, module, or public interface, or moves ownership. Manual-only: `/bob-architect CHANGE` in Claude threads, `$bob-architect ...` in Codex threads. `bob` runs it from Feature step 3."
 ---
 
 # Architect
