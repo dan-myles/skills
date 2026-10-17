@@ -9,7 +9,7 @@ Where the Bob work stands, for the next agent who picks it up. Read this before 
 - **Catch up from `main`** by merging `main` into this branch, then re-check every new or changed line against `bob/references/synara.md`: T3 tools (`t3_*`, `delegate_task`, `html_render`, `watch_pull_request`, `schedule_task`) never survive a merge. Never merge this branch into `main`.
 - **Names:** a branch can't be called `synara`, because Synara's own temporary branches live under `synara/…` and Git can't hold both.
 - **Home:** this edition writes only `~/.bob-n-frank/synara/` (and, inside a Hub, Hub documents and the Library). It reads the T3 edition's `~/.bob-n-frank/` only for grills and for `/frank migrate`. The two editions' `models.yaml` can't be shared: Synara's Claude slugs are `opus` and `sonnet`, not `claude-opus-5-5`.
-- **Install:** this edition lives in its own clone (`~/Developer/personal/skills-synara`) with its own skills-manager library. `scripts/switch-edition.sh synara|t3` swaps which library's `Default` preset is deployed to Claude Code and Codex. Both apps read the same folders, so one edition is live at a time; Synara itself is never modified.
+- **Install:** the installed skills link into `~/Developer/personal/skills`, so whichever branch is checked out there is live. `git switch synara-edition` or `git switch main` swaps editions for every agent at once.
 - Where the sections below name T3 tools, issues, or paths, they describe `main`; on this branch `bob/references/synara.md` supersedes them.
 
 ## What this repo is
