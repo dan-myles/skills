@@ -4,8 +4,8 @@ Find subagents that would do better on a different model. Recommendations only: 
 
 1. Pick the sessions: the one Reflect is reading, or the ones the user names. Find transcripts as in Reflect step 1.
 2. List every subagent that ran: its job (designer, reviewer, judge, explorer, build worker), its model (a `models.yaml` line, or Bob's own), and where its output is.
-   - Claude Code native subagents: `<session-id>/subagents/`.
-   - T3 delegated tasks: the child thread, read with `t3_thread_read`.
+   - Native subagents: `<session-id>/subagents/` next to the Claude transcript.
+   - Child threads (`bob child: …`): read with `synara_read_thread`, archived ones included (`synara_list_threads` with `includeArchived`).
    - Headless runs: the output files the transcript names.
 3. Look for signs a model was wrong for its job.
    - **Fell short.** Bob or the user had to redo or correct its work, it missed something plain that another subagent or the user caught, or its output was shallow or off-brief.
@@ -14,6 +14,6 @@ Find subagents that would do better on a different model. Recommendations only: 
    - **Substituted.** A line failed against the catalog and Bob used a stand-in, or a provider wouldn't run.
    - **Bob itself.** The main thread struggled in a way a stronger model would fix.
 4. Separate the model from the brief. A weak result from a vague brief, missing context, or a wrong skill step is a Reflect lesson, not a model change.
-5. Write each recommendation: the subagent, the evidence (what happened, with transcript lines), the change as a ready-to-run `/bob-models <change>`, and how strong the evidence is. One session is weak evidence; say so. For Bob itself, recommend a model for the Bob thread in T3's composer, since `models.yaml` doesn't set it.
+5. Write each recommendation: the subagent, the evidence (what happened, with transcript lines), the change as a ready-to-run `/bob-models <change>`, and how strong the evidence is. One session is weak evidence; say so. For Bob itself, recommend `threads.bob` for threads Frank and Orchestrate start, and a composer model for threads the user starts by hand, since `models.yaml` doesn't set those.
 
 **Reply:** **Models.** One line per recommendation, strongest evidence first. When nothing points at a model, say "no model changes".

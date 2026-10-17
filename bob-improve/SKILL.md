@@ -1,7 +1,7 @@
 ---
 name: bob-improve
 disable-model-invocation: true
-description: "Improve Bob from real sessions. Reflect reads a finished session with three reviewers and proposes edits to the bob- skills or the repo's AGENTS.md. Eval tests a skill change blind before you keep it. Models recommends model changes when a subagent fell short. Correct finds mistakes agents keep repeating in a repo and makes them impossible with architecture, types, lints, or tests. Nothing changes without approval. Manual-only: `/bob-improve [reflect|eval|models|correct] [session, change, or repo]` in Claude Code, `$bob-improve ...` in Codex."
+description: "Improve Bob from real sessions. Reflect reads a finished session with three reviewers and proposes edits to the bob- skills or the repo's AGENTS.md. Eval tests a skill change blind before you keep it. Models recommends model changes when a subagent fell short. Correct finds mistakes agents keep repeating in a repo and makes them impossible with architecture, types, lints, or tests. Nothing changes without approval. Manual-only: `/bob-improve [reflect|eval|models|correct] [session, change, or repo]` in Claude threads, `$bob-improve ...` in Codex threads."
 ---
 
 # Bob Improve

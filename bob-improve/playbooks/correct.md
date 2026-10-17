@@ -10,7 +10,7 @@ This playbook edits the target repo, not the bob- skills. Work on a branch and f
    - recent commits and reverts, and PR review comments (`gh pr view <n> --comments`)
    - AGENTS.md, CLAUDE.md, and any rule table they hold
    - code comments that explain a workaround
-   - this repo's own agent sessions, for the user's corrections: Claude Code's `~/.claude/projects/<slug>/`, and Codex sessions whose `cwd` is this repo
+   - this repo's own agent sessions, for the user's corrections: Claude transcripts in `~/.claude/projects/<slug>/` for the checkout and for Synara worktrees of it (a worktree's slug doesn't name the repo, so keep only sessions whose recorded `cwd` resolves to this repo's `git remote`), and Codex sessions whose `cwd` is this repo or one of its worktrees
    - Reflect Backlog rows the user passes in
 2. **Group them into classes.** A class counts once it has happened twice. Each class names what goes wrong and cites at least two instances.
 3. **Pick a level for each class:** the highest that works, per `../bob-principle-encode-lessons-in-structure/SKILL.md`.

@@ -31,4 +31,4 @@ Without subagents, do both roles yourself in that order: gather facts first, the
 
 Hand the user the explainer's answer. Tighten wording or add context from the conversation, but keep its substance.
 
-The answer uses these sections, dropping any that don't apply: Overview, Key concepts, How it works, Where things live, Gotchas. In T3, present it as a rendered HTML page per `../bob/references/visuals.md`, never as text alone: draw How it works as a flow with `file:line` on each step, and Where things live as a map. The text keeps the overview, concepts, and gotchas short.
+The answer uses these sections, dropping any that don't apply: Overview, Key concepts, How it works, Where things live, Gotchas. In Synara, present it as a visual per `../bob/references/visuals.md`, never as text alone: draw How it works as a flow with `file:line` on each step, and Where things live as a map. The text keeps the overview, concepts, and gotchas short.

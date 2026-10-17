@@ -1,7 +1,7 @@
 ---
 name: bob-no-comments
 disable-model-invocation: true
-description: "Strip comments from a diff before review. Starts Comment Sicko, a fresh reviewer that wants every comment dead, then deletes what it condemns, fixes the code its flags blame, and turns claimed constraints into types, tests, or lint. Manual-only: `/bob-no-comments [diff, PR, or files]` in Claude Code, `$bob-no-comments ...` in Codex. `bob` runs it at Review."
+description: "Strip comments from a diff before review. Starts Comment Sicko, a fresh reviewer that wants every comment dead, then deletes what it condemns, fixes the code its flags blame, and turns claimed constraints into types, tests, or lint. Manual-only: `/bob-no-comments [diff, PR, or files]` in Claude threads, `$bob-no-comments ...` in Codex threads. `bob` runs it at Review."
 ---
 
 # No comments
@@ -38,7 +38,7 @@ The files or diff the caller names. Otherwise the current branch's diff against 
    - reruns and rejected verdicts
    - anything left open
 
-   In T3, show it per `../bob/references/visuals.md`: a file map with each file's kill count, and a before/after of the biggest fix.
+   In Synara, show it per `../bob/references/visuals.md`: a file map with each file's kill count, and a before/after of the biggest fix.
 
 ## Without subagents
 

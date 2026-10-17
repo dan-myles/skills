@@ -3,8 +3,9 @@
 Turn one session into approved edits.
 
 1. Find the transcript. Use the current session unless the user names another (a path, a session ID, "my last /bob run in crabstock").
-   - **Claude Code.** `~/.claude/projects/<slug>/<session-id>.jsonl`. The slug is the working directory's absolute path with every `/` and `.` turned into `-`. Subagent transcripts sit in `<session-id>/subagents/`.
-   - **Codex.** `~/.codex/sessions/<yyyy>/<mm>/<dd>/rollout-*.jsonl`. The first line's `payload.cwd` names the working directory.
+   - **A Synara thread.** `synara_read_thread`, paging with `cursor`, is the full conversation; `synara_read_thread_activity` adds its tool calls. Use it when the user names a thread or links `thread://<id>`.
+   - **Claude threads, raw.** `~/.claude/projects/<slug>/<session-id>.jsonl`. The slug is the working directory's absolute path with every `/` and `.` turned into `-`; a Synara worktree thread's slug looks like `-Users-<you>--synara-remote-worktrees-<id>`. Subagent transcripts sit in `<session-id>/subagents/`.
+   - **Codex threads, raw.** `~/.codex/sessions/<yyyy>/<mm>/<dd>/rollout-*.jsonl`. The first line's `payload.cwd` names the working directory.
    - Confirm the match: the transcript's first user message is the session's opening request. Check the newest few files.
    - If the current session has no work in it yet, take the newest earlier transcript for this working directory and name it at the top of the reply.
    - If nothing matches, write a tight digest instead: the task, what was done, every correction from the user, and what went wrong.

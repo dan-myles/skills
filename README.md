@@ -1,16 +1,16 @@
-# Bob & Frank
+# Bob & Frank, Synara edition
 
-Two agents that run your software work inside [T3 Code](https://github.com/pingdotgg/t3code).
+Two agents that run your software work inside Synara. This branch, `synara-edition`, is the Synara edition. The T3 Code edition stays on `main`; see [`SYNARA.md`](./SYNARA.md) for what differs and how the two stay in step.
 
 **Bob** is the engineer. Hand him a goal and he picks the right playbook, learns the code, designs the change, builds it, proves it works on the real app, gets it reviewed by a second model family, opens the PR, and babysits it until it's ready to merge. He never merges without you.
 
-**Frank** is Bob's chief of staff. He watches your T3 threads, GitHub, Linear, and Slack, triages what comes in, sends small confirmed bugs straight to Bob threads, lines up everything else for you to pick, and briefs you at 8:30 and 4:30. He never writes code, never merges, and never messages anyone on your behalf.
+**Frank** is Bob's chief of staff. He runs as a Synara Hub coordinator, watches the Hub's work, GitHub, Linear, and Slack, triages what comes in, sends small confirmed bugs straight to Bob threads, lines up everything else for you to pick, and briefs you at 8:30 and 4:30. He never writes code, never merges, and never messages anyone on your behalf.
 
 It's a remix of three things:
 
 - **[pstack](https://github.com/cursor/plugins/tree/main/pstack)** by Lauren Tan: the playbooks, the principles, and the engineering bar (one job, verified, no slop).
 - **[Matt Pocock's skills](https://github.com/mattpocock/skills)**: grilling, the round-by-round interview that settles every decision before complex work starts.
-- **Custom workflows** built for T3 Code: cross-provider subagents, worktree threads, report-backs that wake the coordinator, scheduled briefs, PR watching, and replies that are drawn, not written.
+- **Custom workflows** first built for [T3 Code](https://github.com/pingdotgg/t3code), now on Synara: cross-provider subagents, worktree threads, Hub work that wakes the coordinator, scheduled briefs, PR watching, and replies that are drawn, not written.
 
 ## What it feels like
 
@@ -40,50 +40,50 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 | `/bob-no-comments` | Comment Sicko, a reviewer who hates comments, strips the diff before review. The code a comment was excusing gets fixed instead. |
 | `/bob-blast-radius` | What a change breaks outside its diff, with the safety claim proven by running code. |
 | `/bob-verify` | Writes a repo's own `bob-verify-<app>` skill so Bob can drive the real app and prove things work. |
-| `/bob-models` | Pick the model for every role, checked against T3's live catalog. |
+| `/bob-models` | Pick the model for every role, checked against Synara's live catalog. |
 | `/bob-improve` | Bob learns from real sessions: reflect, eval a skill change, recommend models, make repeated mistakes impossible. |
 | `bob-principle-*` | 24 short engineering principles Bob reads when a step needs one. |
 
 **Bob's playbooks:** Investigation (explain or diagnose), Bug, Feature, Refactor, Perf, Prototype, Babysit, Orchestrate (a whole multi-day program), Cleanup.
 
-## Built for T3 Code
+## Built for Synara
 
-- **Every role has the right model.** Opus 5.5 runs Bob threads, GPT-6.1-Sol writes the code, Sonnet reads, and every check comes from the other model family than the work it checks. Set it all in one file.
-- **Threads, not tabs.** Frank and Orchestrate launch Bob threads in their own git worktrees, titled `bob: <what it does>`.
-- **Nobody waits on a timer.** When a Bob thread finishes it reports back to Frank and wakes him instantly. Sweeps are only the safety net.
-- **Finished work gets cleaned up.** Frank settles a worker thread once its report is final, nothing's running, and no PR is waiting on anyone.
-- **You see it, you don't read it.** Plans, decisions, file maps, proof screenshots, status boards: drawn as live T3 pages, with a few lines of text underneath.
+- **Every role has the right model.** Opus 5.5 runs Bob threads, GPT-6.1-Sol writes the code, Sonnet reads, and every check comes from the other model family than the work it checks. Set it all in one file, checked against `synara_capabilities`.
+- **Hub work, not tabs.** Frank and Orchestrate run as Hub coordinators and hand out Bob threads as Hub work in their own worktrees, titled `bob: <what it does>`. Queued work is shown as queued, and the Hub owns retries.
+- **Nobody waits on a timer.** When a Bob thread finishes, the Hub wakes Frank. Sweeps are only the safety net.
+- **Finished work gets cleaned up.** Frank settles a worker once its report is final, nothing's running, and no PR is waiting on anyone.
+- **You see it, you don't read it.** Plans, decisions, file maps, proof screenshots, and status boards are Synara visuals, with a few lines of text underneath.
 
 ## Install
 
-You need [T3 Code](https://github.com/pingdotgg/t3code) with Claude Code and Codex, plus [skills-manager](https://github.com/xingkongliang/skills-manager).
+You need Synara with its Claude and Codex providers, plus [skills-manager](https://github.com/xingkongliang/skills-manager). The installed skills are links into one checkout, so keep this edition in its own clone and point skills-manager at it only when you switch editions:
 
 ```sh
-git clone https://github.com/dan-myles/skills ~/Developer/personal/skills
-skills-manager-cli --skills-root ~/Developer/personal/skills skills sync --preset Default --tool claude_code
-skills-manager-cli --skills-root ~/Developer/personal/skills skills sync --preset Default --tool codex
+git clone -b synara-edition https://github.com/dan-myles/skills ~/Developer/personal/skills-synara
+skills-manager-cli --skills-root ~/Developer/personal/skills-synara skills sync --preset Default --tool claude_code
+skills-manager-cli --skills-root ~/Developer/personal/skills-synara skills sync --preset Default --tool codex
 ```
 
-Then, in a T3 thread you'll keep open:
+Then, in a Synara Hub's coordinator thread:
 
 ```
 /frank setup
 ```
 
-Frank finds your repos and sources, asks which ones to watch, and schedules his briefs. Set that thread's model by hand in T3 (a fast one: GPT-6.1-Sol at medium with the Fast tier works well).
+Frank finds your repos and sources, asks which ones to watch, and schedules his briefs as automations. Set the coordinator's model in the Hub's settings (a strong model at medium effort works well). If you used the T3 edition, `/frank migrate` brings its board over without touching it.
 
-Bob works with zero config. To change anything, it lives in your home folder:
+Bob works with zero config. To change anything, it lives in your home folder, apart from the T3 edition's files:
 
 ```
-~/.bob-n-frank/
+~/.bob-n-frank/synara/
 ├── models.yaml     the model for every role (run /bob-models to change it)
-├── config.yaml     Frank's repos, sources, brief times, auto-dispatch rules
-├── frank/          Frank's board, briefs, and reports
+├── config.yaml     Frank's settings when he runs outside a Hub
+├── frank/          Frank's board, briefs, and reports outside a Hub
 ├── grills/         decisions settled by /bob-grill
-└── orchestrate/    one folder per Orchestrate program
+└── orchestrate/    one folder per Orchestrate program outside a Hub
 ```
 
-A repo can override any of it in `<repo>/.bob-n-frank/`.
+Inside a Hub, Frank's and Orchestrate's state is Hub documents and Library files instead. A repo can override any of it in `<repo>/.bob-n-frank/synara/`.
 
 ## House rules
 

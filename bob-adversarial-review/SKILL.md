@@ -1,7 +1,7 @@
 ---
 name: bob-adversarial-review
 disable-model-invocation: true
-description: "Adversarial review of a change by reviewers on different models, Claude and GPT by default (set in bob-models). All get the same intent, diff, and rubric; Bob merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/bob-adversarial-review [diff or files]` in Claude Code, `$bob-adversarial-review ...` in Codex. `bob` runs it from its Review step."
+description: "Adversarial review of a change by reviewers on different models, Claude and GPT by default (set in bob-models). All get the same intent, diff, and rubric; Bob merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/bob-adversarial-review [diff or files]` in Claude threads, `$bob-adversarial-review ...` in Codex threads. `bob` runs it from its Review step."
 ---
 
 # Adversarial review

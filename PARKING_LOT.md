@@ -2,6 +2,16 @@
 
 Where the Bob work stands, for the next agent who picks it up. Read this before changing anything here.
 
+## This branch: the Synara edition
+
+`synara-edition` is a maintained edition for Synara, not a step toward merging into `main`. `main` stays the T3 Code edition. Read `SYNARA.md` for the inventory, the T3-to-Synara feature map, and the gaps; Synara mechanics live in one place, `bob/references/synara.md`.
+
+- **Catch up from `main`** by merging `main` into this branch, then re-check every new or changed line against `bob/references/synara.md`: T3 tools (`t3_*`, `delegate_task`, `html_render`, `watch_pull_request`, `schedule_task`) never survive a merge. Never merge this branch into `main`.
+- **Names:** a branch can't be called `synara`, because Synara's own temporary branches live under `synara/…` and Git can't hold both.
+- **Home:** this edition writes only `~/.bob-n-frank/synara/` (and, inside a Hub, Hub documents and the Library). It reads the T3 edition's `~/.bob-n-frank/` only for grills and for `/frank migrate`. The two editions' `models.yaml` can't be shared: Synara's Claude slugs are `opus` and `sonnet`, not `claude-opus-5-5`.
+- **Install:** keep this edition in its own clone and deploy it with skills-manager only when switching editions; the installed links point at one checkout.
+- Where the sections below name T3 tools, issues, or paths, they describe `main`; on this branch `bob/references/synara.md` supersedes them.
+
 ## What this repo is
 
 Dan's global skills library, used by every agent he runs (Claude Code, Codex, and T3 Code, which runs both). Each folder is one skill. The repo is a skills-manager library: `.skills-manager/` holds its registry, and the skills-manager CLI deploys every skill in the Default preset to Claude Code (`~/.claude/skills`) and Codex (`~/.codex/skills`) as symlinks back into this repo. Don't make or remove those links by hand.

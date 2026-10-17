@@ -1,7 +1,7 @@
 ---
 name: bob-models
 disable-model-invocation: true
-description: "Review and change the model for every role in Bob and Frank: each subagent (explorers, workers, designers, reviewers, judges, verifiers) and each thread Frank or Orchestrate launches. Shows the current setup, checks it against Synara's live catalog, recommends upgrades with reasons, and applies changes in plain words. A repo can override lines in .bob-n-frank/synara/models.yaml. Manual-only: `/bob-models [change]` in Claude Code, `$bob-models ...` in Codex."
+description: "Review and change the model for every role in Bob and Frank: each subagent (explorers, workers, designers, reviewers, judges, verifiers) and each thread Frank or Orchestrate launches. Shows the current setup, checks it against Synara's live catalog, recommends upgrades with reasons, and applies changes in plain words. A repo can override lines in .bob-n-frank/synara/models.yaml. Manual-only: `/bob-models [change]` in Claude threads, `$bob-models ...` in Codex threads."
 ---
 
 # Models

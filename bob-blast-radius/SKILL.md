@@ -1,7 +1,7 @@
 ---
 name: bob-blast-radius
 disable-model-invocation: true
-description: "Find what a change could break outside its own diff, name the one fact it's safe because of, and prove that fact by running the real code. Use for 'what could this break', 'blast radius of X', or a small diff that reaches far: shared code, a data shape, a dependency bump, a deletion. Manual-only: `/bob-blast-radius [diff, PR, or files]` in Claude Code, `$bob-blast-radius ...` in Codex. `bob` runs it at Review and before a bug fix that touches shared code."
+description: "Find what a change could break outside its own diff, name the one fact it's safe because of, and prove that fact by running the real code. Use for 'what could this break', 'blast radius of X', or a small diff that reaches far: shared code, a data shape, a dependency bump, a deletion. Manual-only: `/bob-blast-radius [diff, PR, or files]` in Claude threads, `$bob-blast-radius ...` in Codex threads. `bob` runs it at Review and before a bug fix that touches shared code."
 ---
 
 # Blast radius
