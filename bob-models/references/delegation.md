@@ -27,17 +27,17 @@ Pairing models from different providers is on purpose: Claude and GPT have diffe
 
 ### Native subagent
 
-In a Claude Agent thread, use the `Agent` tool. Set `model` to the entry's slug when it's one of the tool's aliases (`opus`, `sonnet`, `haiku`, `fable`); a pinned slug like `claude-opus-5` gets the alias of its family, named as a substitute. Set effort by `subagent_type`: `worker-low`, `worker-medium`, `worker-high`, or `worker-xhigh` for the entry's `effort`. `max` runs as `worker-xhigh`; say so. In a Codex thread, use Codex's native subagent tool when it can set the model, else route it like a different provider.
+In a Claude Agent thread, use the `Agent` tool when the entry's slug is one of the tool's aliases (`opus`, `sonnet`, `haiku`, `fable`), and set `model` to it. A pinned slug like `claude-opus-4-6` can't run natively; route it like a different provider, so the pin holds. Set effort by `subagent_type`: `worker-low`, `worker-medium`, `worker-high`, or `worker-xhigh` for the entry's `effort`. `max` runs as `worker-xhigh`; say so. In a Codex thread, use Codex's native subagent tool when it can set the model, else route it like a different provider.
 
 Start all of a step's subagents in one message so they run together. Native subagents share this worktree: tell read-only ones they are read-only, and give writers separate files or run them one at a time.
 
 ### Child thread (standalone only)
 
-One `synara_create_threads` call for every cross-family subagent in the step, since a turn gets one creation plan:
+A turn gets one creation plan. Put every cross-family subagent the step needs into one `synara_create_threads` call; when this turn already used its plan (an earlier step, or a judge that needs the designers' output), run the rest headless and say so.
 
 - `requestId`: `<skill>-<step>-<round>`, reused only to retry this exact plan.
 - per thread: `title` `bob child: <role>`, `target` `{provider, model, options}` from the entry, `projectId` this thread's project, `prompt` the whole filled task.
-- `environment`: `worktree` for a child that writes files, so it has its own checkout (`baseRef` this checkout's HEAD copies its uncommitted changes). `local` only for a read-only child, which then works in this checkout and must not edit it.
+- `environment`: `worktree` for a child that writes files, so it has its own checkout. Commit what it needs first and pass that commit's SHA as `baseRef`; Synara copies uncommitted changes only from the project's own checkout, never from a Bob worktree. `local` only for a read-only child, which then reads the project's checkout, so point it at absolute paths in yours.
 - Omit `runtimeMode`, so the child inherits this thread's approval mode.
 
 Then call `synara_wait_for_threads` with the returned thread ids, and again with its `runIds` until `allTerminal` is true. Wait summaries are capped at 2,000 characters, so tell each child to write its full result to an absolute path you name (outside the repo for read-only children) and read that file. When the step is done with a child, archive it with `synara_set_thread_archived`; it's yours. Stop one early with `synara_interrupt_thread`, then archive it.

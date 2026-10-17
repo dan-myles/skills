@@ -30,7 +30,8 @@ def snapshot(number, repo, env):
     view = gh(["pr", "view", str(number), "--json", FIELDS, *(["--repo", repo] if repo else [])], env)
     if view is None:
         return None
-    inline = gh(["api", f"repos/{{owner}}/{{repo}}/pulls/{number}/comments", "--paginate"], env) or []
+    pages = gh(["api", f"repos/{{owner}}/{{repo}}/pulls/{number}/comments?per_page=100", "--paginate", "--slurp"], env) or []
+    inline = [c for page in pages for c in (page if isinstance(page, list) else [page])]
     checks = {}
     for c in view.get("statusCheckRollup") or []:
         name = c.get("name") or c.get("context") or "?"

@@ -62,7 +62,7 @@ def convert(row, warnings):
 
 
 def write_tsv(path, header, rows):
-    with path.open("w", newline="") as f:
+    with path.open("x", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=header, delimiter="\t", lineterminator="\n", extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
@@ -75,8 +75,11 @@ def main():
     args = parser.parse_args()
 
     legacy, out = Path(args.legacy).expanduser(), Path(args.out).expanduser()
-    if out.resolve().is_relative_to(legacy.parent.resolve()) and not out.resolve().is_relative_to((legacy.parent / "synara").resolve()):
-        sys.exit("--out must not be inside the T3 edition's ~/.bob-n-frank")
+    home = (Path.home() / ".bob-n-frank").resolve()
+    target = out.resolve()
+    inside_home = target.is_relative_to(home) and not target.is_relative_to(home / "synara")
+    if inside_home or target.is_relative_to(legacy.resolve()):
+        sys.exit("--out must not be inside the T3 edition's ~/.bob-n-frank or the legacy folder")
     inputs = [legacy / "board.tsv", legacy / "seen.tsv", legacy / "decisions.tsv"]
     before = digest(inputs)
     if "board.tsv" not in before:
@@ -87,10 +90,12 @@ def main():
     rows = [convert(r, warnings) for r in board]
     seen = read_tsv(legacy / "seen.tsv") if (legacy / "seen.tsv").exists() else []
 
+    if out.is_symlink() or (out.exists() and any(out.iterdir())):
+        sys.exit(f"{out} must be a new or empty folder, not a symlink; remove the last dry run first")
     out.mkdir(parents=True, exist_ok=True)
     write_tsv(out / "board.tsv", HEADER, rows)
-    if seen:
-        write_tsv(out / "seen.tsv", list(seen[0].keys()), seen)
+    seen_header = list(seen[0].keys()) if seen else ["source", "updated", "note"]
+    write_tsv(out / "seen.tsv", seen_header, seen)
 
     after = digest(inputs)
     if after != before:
@@ -108,7 +113,8 @@ def main():
         "sweep_lock": (legacy / ".sweep.lock").exists(),
         "warnings": warnings,
     }
-    (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    with (out / "summary.json").open("x") as f:
+        f.write(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
 
 
