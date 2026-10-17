@@ -1,56 +1,57 @@
-# Starting models for every role in Bob and Frank. Each skill names its line where it starts the work.
-# This is the built-in default. It runs as is when ~/.bob-n-frank/models.yaml doesn't exist, and fills any
-# line that file lacks. Customize in ~/.bob-n-frank/models.yaml (or run /bob-models); a repo can override
-# lines in <repo>/.bob-n-frank/models.yaml.
-# Each entry: `provider` and `model` ids from T3's orchestrator_capabilities, and `options` passed as given
-# (`effort` for Claude, `reasoningEffort` and `serviceTier` for GPT). `inherit` runs on the thread's own model.
-# Frank's own thread is set in T3's composer.
-checked: "2026-10-12"
+# Starting models for every role in Bob and Frank, Synara edition. Each skill names its line where it starts the work.
+# This is the built-in default. It runs as is when ~/.bob-n-frank/synara/models.yaml doesn't exist, and fills any
+# line that file lacks. Customize in ~/.bob-n-frank/synara/models.yaml (or run /bob-models); a repo can override
+# lines in <repo>/.bob-n-frank/synara/models.yaml.
+# Each entry: `provider` and `model` slugs from synara_capabilities, and `options` passed as given (`effort` for
+# claudeAgent, `reasoningEffort` for codex). `opus` and `sonnet` are Synara's aliases for the newest of each family
+# (Opus 5.5 and Sonnet 5.5 when checked), so they move when Synara's catalog does. `inherit` runs on the thread's own model.
+# A Hub coordinator's own model and a Hub's default worker model are set in the Hub's settings.
+checked: "2026-10-17"
 
-# Threads that Frank and Orchestrate launch with t3_thread_launch.
+# Threads that Frank and Orchestrate start with synara_create_threads.
 threads:
-  bob: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}            # every Bob thread
-  orchestrate: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}  # a program's coordinator
+  bob: {provider: claudeAgent, model: opus, options: {effort: high}}            # every Bob thread
+  orchestrate: {provider: claudeAgent, model: opus, options: {effort: medium}}  # a program's coordinator
 
 bob:
   workers: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}   # build subagents inside a Bob thread
-  hard: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: xhigh}}    # cross-cutting design, tricky logic
+  hard: {provider: claudeAgent, model: opus, options: {effort: xhigh}}    # cross-cutting design, tricky logic
   verifier: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}  # Orchestrate's checks; other family from threads.bob
 
 bob-how:
-  explorers: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}
-  explainer: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+  explorers: {provider: claudeAgent, model: sonnet, options: {effort: medium}}
+  explainer: {provider: claudeAgent, model: opus, options: {effort: high}}
 
 bob-why:
-  investigators: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}
-  synthesizer: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+  investigators: {provider: claudeAgent, model: sonnet, options: {effort: medium}}
+  synthesizer: {provider: claudeAgent, model: opus, options: {effort: high}}
 
 bob-architect:
   designers:                          # exactly two, from different providers
-    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: xhigh}}
+    - {provider: claudeAgent, model: opus, options: {effort: xhigh}}
     - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: xhigh}}
   judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
 
 bob-adversarial-review:
   reviewers:                          # two or more, mixing providers
-    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+    - {provider: claudeAgent, model: opus, options: {effort: high}}
     - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
 
 bob-no-comments:
-  sicko: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}   # strips comments; other family from bob.workers, who wrote them
+  sicko: {provider: claudeAgent, model: opus, options: {effort: medium}}   # strips comments; other family from bob.workers, who wrote them
 
 bob-verify:
-  readers: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}   # maintain's source readers
+  readers: {provider: claudeAgent, model: sonnet, options: {effort: medium}}   # maintain's source readers
 
 bob-improve:
-  reflect-judgment: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
-  reflect-tooling: {provider: claudeAgent, model: claude-sonnet-5-5, options: {effort: medium}}
+  reflect-judgment: {provider: claudeAgent, model: opus, options: {effort: high}}
+  reflect-tooling: {provider: claudeAgent, model: sonnet, options: {effort: medium}}
   reflect-divergent: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}   # the other family on purpose
-  reflect-synthesizer: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+  reflect-synthesizer: {provider: claudeAgent, model: opus, options: {effort: high}}
   eval-candidates:                    # the models Bob actually runs on
-    - {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
+    - {provider: claudeAgent, model: opus, options: {effort: high}}
     - {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
   eval-judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
 
 frank:
-  validator: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}   # confirms a bug before auto-dispatch; other family from Frank's thread
+  validator: {provider: claudeAgent, model: opus, options: {effort: medium}}   # confirms a bug before auto-dispatch; other family from Frank's thread
