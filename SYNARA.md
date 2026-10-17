@@ -8,7 +8,8 @@ Branch `synara-edition` of `dan-myles/skills`, cut from `main` at `2a7d9f1` (pst
 - **One state owner per role.** Hub coordinator: the Hub (work items for anything dispatched; Hub documents for Frank's board and Orchestrate's tables; the Library for reports). Hub worker: its own work item (checklist, result, Library files). Standalone: `~/.bob-n-frank/synara/`.
 - **The T3 edition's home is read-only.** This edition writes only `~/.bob-n-frank/synara/`. The models file had to split anyway: every Claude id in the T3 file (`claude-opus-5-5`, `claude-sonnet-5-5`) is rejected by Synara, whose slugs are `opus` and `sonnet`.
 - **Queued is not running.** Dispatches from a Hub coordinator are recorded `queued` until Synara shows a working worker.
-- **Respawns need the user.** Synara forbids replacement threads without a new user request, so Orchestrate's retry-by-cause now runs only under a respawn policy the user approved; the Hub's own retries are never doubled.
+- **Respawns need the user.** Synara forbids replacement threads without a new user request, so each Orchestrate respawn waits in `gates.md` for the user's yes, and the Hub's own retries are never doubled.
+- **Programs get their own Hub.** A Hub worker can't coordinate, so Frank in a Hub proposes a big program as a new Hub instead of dispatching an Orchestrate worker.
 - **Automations are proposed, not started,** unless the user asked or approved the step that creates them (`suggested: true` otherwise).
 
 ## T3 features and their Synara equivalents
@@ -69,8 +70,32 @@ Dry run against the live board on 2026-10-17 (output deleted afterwards): 137 ro
 
 ## Validation
 
-VALIDATION_PLACEHOLDER
+All on 2026-10-17, on this branch's final tree.
+
+| Check | Result |
+|---|---|
+| skill-creator `quick_validate.py` on all 43 skills | 43 pass. It rejects `disable-model-invocation`, the repo's manual-only key, so it ran on copies with only that line removed; the key stays on purpose. |
+| Manual-only intent | 37 `SKILL.md` carry `disable-model-invocation: true` and 37 `agents/openai.yaml` carry `allow_implicit_invocation: false` (`bob-no-comments` was missing its file on `main`). Names match folders. |
+| YAML | Every `agents/openai.yaml`, `models.example.yaml`, and `config.example.yaml` parses. |
+| References | Every relative path a skill follows (157 skill links) resolves. |
+| Leftover T3 calls | No operational `t3_*`, `delegate_task`, `html_render`, `watch_pull_request`, `schedule_task`, or `request_secret` outside the docs that explain the mapping. |
+| `check_models.py` against live `synara_capabilities` | Edition default: 0 errors. `main`'s default and the live `~/.bob-n-frank/models.yaml`: 16 errors each (`claude-opus-5-5`, `claude-sonnet-5-5` aren't slugs). A bad override is caught (unknown effort, `serviceTier`, unavailable provider) with exit 1. |
+| `pr_watch.py` on real PRs | Merged PR: state and checks, exit 0. Open PR with no change: `TIMEOUT`, exit 2. Multi-page inline comments: 4 pages, 10 comments. |
+| `legacy_board.py` on the live board | 137 rows and 471 seen items converted; a hash of every file under `~/.bob-n-frank/` was identical before and after. It refuses an output inside `~/.bob-n-frank/` or the legacy folder, a reused folder, and a symlinked one, and writes a header-only seen list when there are no rows. |
+| `file-map.html` in Synara's browser, under the visual sandbox's exact CSP and theme variables | Renders with no script errors: tree, badges, module boxes, cross-module and in-module edges, the red boundary edge. |
+| Forward-test: Frank as a Hub coordinator, two approved items (Opus, blind) | One `synara_create_threads` with the user's message attached, `opus` from the default, `runtimeMode` inherited, rows `queued` with no thread id, reply says "queued, not running". Its 11 notes led to fixes in report paths, `projectId`, context ids, and approval order. |
+| Forward-test: Bob as a headless Hub worker on an auth bug (Opus, blind) | Checklist through `synara_hub_update_progress`; the Claude reviewer as a native `Agent`, the GPT reviewer headless `codex exec` read-only; `Monitor` on `pr_watch.py`; `synara_set_thread_pull_request`; report to the Library; no messages to other threads. Its notes led to fixes in interim reports, the TIMEBOX, writer folders, and automations. |
+| Cross-family adversarial review of the diff (GPT-6.1-Sol, headless, read-only: the edition's own Hub-worker route) | 11 findings. Fixed: Frank sending Orchestrate to a Hub worker, setup resetting state, standing respawn approval, one creation plan per turn, pinned models swapped for aliases, writer children assuming dirty-tree copies, migration output via symlinks or stale files, `--slurp` pagination. Already fixed: interim reports, report paths. Dismissed: `requestId` on `synara_project_library_add` (the live schema has it). |
 
 ## Known gaps and limits
 
-GAPS_PLACEHOLDER
+- **No PR wake.** Babysit polls with `pr_watch.py` under `Monitor` (Claude threads) or as a background job (Codex threads), at 60-second intervals and 30-minute arms. Longer waits need an automation the user accepts. A Hub worker never creates one; it stops at its TIMEBOX and Frank tracks the PR.
+- **No in-thread cross-provider child.** Standalone threads start child threads, which show up in Synara's thread list; Hub roles run headless `codex exec` / `claude -p`, which doesn't get Synara's progress view.
+- **No webhooks or secrets.** `/frank event` is gone; fires wait for the next sweep.
+- **No idempotency key on `synara_send_message`.** Coordinators treat repeat report-backs as no-ops.
+- **Visual pages can't load anything.** No Mermaid or CDN libraries, no file images. The file map's built-in graph is simple: modules as boxes in a row, no automatic layering beyond the order given.
+- **Hub semantics not exercised end to end.** No Hub dispatch, automation, document write, archive, or Hub slot release was run; this worker can't create work, and the brief forbade starting automations. Those paths follow the live tool schemas and were checked by forward-tests, not by real runs. In particular, whether the Hub ends a worker's work item on its first turn end, and what `settledAt` waits for, are unverified.
+- **Codex threads in Synara.** The skills name Codex's native subagent and question tools generically; nothing was run in a Codex-provider thread.
+- **`personal-takeone`'s MCP setup** registers with the Claude and Codex CLIs; whether Synara threads see that server is unverified.
+- **The live Hub coordinator still follows `main`'s Frank.** Hub memory points it at `frank/SKILL.md` in `~/Developer/personal/skills`, the T3 edition, whose `t3_*` tools don't exist in Synara. The T3 board's `.sweep.lock` suggests a T3 Frank may also be live. Nothing was changed; switching is the user's call.
+- **Not installed.** Installed skills still link to the `main` checkout. Activating this edition means cloning the branch separately and running skills-manager against it (`README.md`).
