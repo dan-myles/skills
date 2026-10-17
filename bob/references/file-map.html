@@ -82,7 +82,7 @@ const GRAPH = {
       const px = p.left - o.left, py = p.top - o.top, qx = q.left - o.left, qy = q.top - o.top;
       let d;
       if (group[a] === group[b]) {
-        const x = Math.max(px + p.width, qx + q.width), y1 = py + p.height / 2, y2 = qy + q.height / 2, bend = x + 18;
+        const x = Math.max(px + p.width, qx + q.width), y1 = py + p.height / 2, y2 = qy + q.height / 2, bend = x + 10 + Math.abs(y2 - y1) * 0.35;
         d = `M${px + p.width} ${y1}C${bend} ${y1} ${bend} ${y2} ${qx + q.width + 2} ${y2}`;
       } else if (Math.abs(qx - px) >= Math.abs(qy - py)) {
         const fwd = qx > px, x1 = fwd ? px + p.width : px, x2 = fwd ? qx - 2 : qx + q.width + 2;
