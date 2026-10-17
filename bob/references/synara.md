@@ -22,7 +22,7 @@ Say which in the plan line. When a step needs something this role can't do, use 
 
 Every role reads the user's settings in `~/.bob-n-frank/synara/models.yaml`; that file is configuration, not state. Write documents with `synara_project_write_document` and the `expectedRevision` you last read; on a conflict, reread and merge, never overwrite. A row for dispatched work keeps its work item id and takes its state from the Hub on every run; never hand-edit a state the Hub owns.
 
-`~/.bob-n-frank/` outside `synara/` belongs to the T3 edition. This edition only reads it: the user's grills, and the legacy Frank board for a migration they asked for (`../../frank/references/migration.md`). Its `models.yaml` uses T3 model ids that Synara rejects, so this edition keeps its own at `~/.bob-n-frank/synara/models.yaml`.
+`~/.bob-n-frank/` outside `synara/` is legacy state from an older setup. This edition only reads it: the user's grills, and the legacy Frank board for a migration they asked for (`../../frank/references/migration.md`). Its `models.yaml` uses model ids that Synara rejects, so this edition keeps its own at `~/.bob-n-frank/synara/models.yaml`.
 
 ## Queued is not running
 
@@ -38,14 +38,14 @@ Every dispatch from a conversation passes `contextMessageIds`: the ids of the us
 
 ## Tool map
 
-What the T3 edition used, and what this edition uses instead. **Gap** means Synara advertises nothing equivalent.
+The Synara tool for each need. **Gap** means Synara has no direct tool for it.
 
 | Need | Synara | Notes |
 |---|---|---|
 | Model catalog | `synara_capabilities` | The only source of slugs and option keys. See `../../bob-models/references/delegation.md`. |
 | Start a Bob thread | `synara_create_threads` (`synara_create_thread` for one) | `projectId` is the repo's own Synara project (a Hub lists its linked repositories in `synara_project_get_overview`). From a Hub coordinator these are queued work items. |
 | Same-family subagent | The native subagent tool | Claude Agent: `Agent` with `model` and a `worker-<tier>` type for effort. |
-| Cross-family subagent | Standalone: a child thread through `synara_create_threads`. Hub worker: headless CLI | **Gap:** no in-thread cross-provider child task like T3's `delegate_task`. |
+| Cross-family subagent | Standalone: a child thread through `synara_create_threads`. Hub worker: headless CLI | **Gap:** no in-thread cross-provider child task. |
 | Wait for a child | `synara_wait_for_threads` with the returned `runIds`, repeated until `allTerminal` | A timeout is progress, not failure. |
 | Stop a child | `synara_interrupt_thread`, then archive it | Hub work: `synara_hub_cancel_work`. |
 | Message a thread | `synara_send_message`, `mode: "queue"` | **Gap:** no idempotency key, so receivers must treat repeats as no-ops. |

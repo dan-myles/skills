@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert the T3 edition's Frank board into the Synara edition's board, without touching the original.
+"""Convert the legacy Frank board into the Synara store's board, without touching the original.
 
 usage: legacy_board.py [--legacy ~/.bob-n-frank/frank] [--out /tmp/frank-migrate]
 
@@ -17,7 +17,7 @@ from pathlib import Path
 
 HEADER = ["id", "source", "kind", "repo", "state", "work_item", "thread", "pr", "rank", "updated", "note"]
 KEEP = {"new", "triaged", "proposed", "done", "dropped"}
-T3_BOUND = {"dispatched", "merge-ready"}
+LEGACY_BOUND = {"dispatched", "merge-ready"}
 
 
 def digest(paths):
@@ -31,18 +31,18 @@ def read_tsv(path):
 
 def convert(row, warnings):
     state = (row.get("state") or "").strip()
-    t3_thread = (row.get("thread_id") or "").strip()
+    old_thread = (row.get("thread_id") or "").strip()
     note = (row.get("note") or "").strip()
-    if t3_thread:
-        note = f"t3 thread {t3_thread}; {note}" if note else f"t3 thread {t3_thread}"
+    if old_thread:
+        note = f"legacy thread {old_thread}; {note}" if note else f"legacy thread {old_thread}"
     if state in KEEP:
         new_state = state
     elif state == "approved":
         new_state = "proposed"
-        note = f"approved in T3 {row.get('updated', '')}; reconfirm before dispatch; {note}"
-    elif state in T3_BOUND:
-        new_state = "legacy-t3"
-        note = f"t3 {state}; {note}"
+        note = f"approved before migration {row.get('updated', '')}; reconfirm before dispatch; {note}"
+    elif state in LEGACY_BOUND:
+        new_state = "legacy"
+        note = f"legacy {state}; {note}"
     else:
         new_state = state
         warnings.append(f"{row.get('id')}: unknown state {state!r} kept as is")
@@ -79,7 +79,7 @@ def main():
     target = out.resolve()
     inside_home = target.is_relative_to(home) and not target.is_relative_to(home / "synara")
     if inside_home or target.is_relative_to(legacy.resolve()):
-        sys.exit("--out must not be inside the T3 edition's ~/.bob-n-frank or the legacy folder")
+        sys.exit("--out must not be inside the legacy ~/.bob-n-frank or the legacy folder")
     inputs = [legacy / "board.tsv", legacy / "seen.tsv", legacy / "decisions.tsv"]
     before = digest(inputs)
     if "board.tsv" not in before:
@@ -99,7 +99,7 @@ def main():
 
     after = digest(inputs)
     if after != before:
-        sys.exit("legacy files changed during the run; a T3 Frank may still be writing them. Nothing was imported.")
+        sys.exit("legacy files changed during the run; an older Frank may still be writing them. Nothing was imported.")
 
     summary = {
         "legacy": str(legacy),
@@ -109,7 +109,7 @@ def main():
         "seen": len(seen),
         "states_before": dict(Counter(r.get("state", "") for r in board)),
         "states_after": dict(Counter(r["state"] for r in rows)),
-        "legacy_t3_prs": sorted({r["pr"] for r in rows if r["state"] == "legacy-t3" and r["pr"]}),
+        "legacy_prs": sorted({r["pr"] for r in rows if r["state"] == "legacy" and r["pr"]}),
         "sweep_lock": (legacy / ".sweep.lock").exists(),
         "warnings": warnings,
     }

@@ -11,7 +11,7 @@ Pairing models from different providers is on purpose: Claude and GPT have diffe
    2. `~/.bob-n-frank/synara/models.yaml`, if it exists.
    3. `../models.example.yaml`, the built-in default. It always has every line.
 
-   Never create the user's file here; only `/bob-models` and `/frank setup` write it. Never read model ids from the T3 edition's `~/.bob-n-frank/models.yaml`: its Claude ids (`claude-opus-5-5`) aren't Synara slugs. When a line came from the default, say so once per session and mention `/bob-models`. A list starts one subagent per entry, in order. `inherit` runs on this thread's own model.
+   Never create the user's file here; only `/bob-models` and `/frank setup` write it. Never read model ids from the legacy `~/.bob-n-frank/models.yaml`: its Claude ids (`claude-opus-5-5`) aren't Synara slugs. When a line came from the default, say so once per session and mention `/bob-models`. A list starts one subagent per entry, in order. `inherit` runs on this thread's own model.
 2. Call `synara_capabilities` once per session. Its `providers[].models[].slug` are the only valid model ids, and `targetConstruction[provider].optionsByModel[model]` (else `providerOptions`) gives the option keys and allowed values.
 3. Check each entry: its provider is `available`, its `model` is a listed slug, each option key and value is offered. `../scripts/check_models.py` does this for a whole file.
 4. If an entry fails, use the closest slug the catalog lists from the same provider, name the substitute in the output, and suggest `/bob-models`. Don't block the step on it.

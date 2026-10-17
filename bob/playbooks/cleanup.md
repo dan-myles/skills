@@ -6,7 +6,7 @@ Free disk by pruning worktrees and other leftovers. Deleting is the one thing he
    - size (`du -sh`) and the age of its last commit
    - its branch, whether that's merged into the base, and its PR state (`gh pr list --head <branch> --state all`)
    - tracked edits not committed (`git -C <path> status --porcelain`): these are **wip**; untracked files are **scratch**
-   - the Synara thread bound to it: `synara_read_kanban_board` lists each card's branch and worktree, and `synara_read_thread` shows when it last ran and whether it's working; plus whether an Orchestrate program lists it as running (`~/.bob-n-frank/synara/orchestrate/*/units.tsv`, or a Hub's `orchestrate/*/units.tsv` document). Worktrees of the T3 edition are audited the same way, but their threads live in T3, so mark them **Check**.
+   - the Synara thread bound to it: `synara_read_kanban_board` lists each card's branch and worktree, and `synara_read_thread` shows when it last ran and whether it's working; plus whether an Orchestrate program lists it as running (`~/.bob-n-frank/synara/orchestrate/*/units.tsv`, or a Hub's `orchestrate/*/units.tsv` document). A worktree no Synara thread claims is marked **Check**.
 
    "The base" is the branch PRs target: resolve it from `git symbolic-ref refs/remotes/origin/HEAD` (falling back to `origin/main`, then `origin/master`), never a literal `origin/main`, and use the PRs' target instead when it differs. Fetch it first, and name the base in the audit's header.
 
