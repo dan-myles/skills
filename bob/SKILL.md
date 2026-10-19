@@ -116,6 +116,22 @@ Use subagents when the harness supports them.
 - Start a new subagent, with the complete brief, for each new piece of work. Go back to an old one only when the work depends on something it holds, like uncommitted edits or a running server.
 - Without subagents, do the work directly and then read the diff cold, as a reviewer would.
 
+## Long-running commands
+
+When `tmux` is on the PATH, run anything that takes more than about 30 seconds (deploys, `task ci`, builds, test suites, harnesses, dev servers) in tmux, so the user can watch it live from a T3 terminal. Short reads, edits, and quick checks stay in the normal shell.
+
+1. Use one session per thread or worktree, named after its branch (no `.` or `:`). Create it if it's missing: `tmux has-session -t <s> 2>/dev/null || tmux new-session -d -s <s>`.
+2. Run each command in its own window, logging to a file outside the repo, so the window stays open after the command ends:
+
+   ```sh
+   tmux new-window -t <s> -n <job> '{ <cmd>; echo "exit $?"; } 2>&1 | tee /tmp/bob-<s>-<job>.log; tmux wait-for -S <s>-<job>; exec $SHELL'
+   ```
+
+3. The first time, tell the user `tmux attach -t <s>`. Say it once per thread.
+4. Wait with `tmux wait-for <s>-<job>`, in the background where the harness allows it. The signal is held, so it returns even if the job already finished. Read the result from the log, never from the pane. Its last line is `exit <code>`.
+
+Nothing secret goes into the pane. The rules for logs apply here too: no tokens, keys, or env dumps on the command line or in the output.
+
 ## Review
 
 Before the PR, run **`bob-no-comments`** over the diff whenever it adds or changes comments or lint and type suppressions, at any size. It goes first, since its fixes change the code the others review.
