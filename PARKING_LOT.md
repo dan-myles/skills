@@ -101,6 +101,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - **Principles are separate skills,** like pstack, so Bob loads only the one a step needs. A single combined file was rejected.
 - **Verify skills live in each repo.** Only the generator is global.
 - **Auto-babysit, with review replies.** Dan wants PRs handed back merge-ready. Merging still needs his say-so.
+- **Decided stays decided (2026-10-19).** In the CrabStock payment stack (#84–#94), workers redesigned around blockers without asking: Kafka swapped for Postgres polling when librdkafka wouldn't build, a provider fallback Dan had dropped, a split ledger, production's outflow cap set to 0, another service's infra edited during a restack. `bob/SKILL.md` now names the calls that stay Dan's (stored data shape, transport, providers, money values, other teams' infra, shared contracts, anything he already decided). Briefs carry DECIDED, Review runs a decision check on every diff, PRs list **Decisions made here**, and Orchestrate holds a departure as `needs-decision` with a gate. Everything outside that list stays Bob's to decide, per the 2026-10-13 complaint that Bob asked too much.
 - **"Adversarial review", not "interrogate".** It reviews code; it doesn't question the user.
 
 ## Where we stopped
@@ -114,6 +115,7 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 - `figure-it-out` (a playbook for jobs no other playbook fits) and `show-me-your-work` (an auditable decision log). Refactor and Perf currently stop and propose a split when a job is too big.
 - Run (pstack's Autonomous run), Shipping, Autopilot-stack, and Autopilot-full. Run and Shipping were ported, then removed on 2026-10-12 until needed; Orchestrate keeps its own Land step. Hold until Bob has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Bob's never-merge rule.
 - Pause safely and Session pickup. T3 threads already hold much of that context.
+- Formal verification (pstack's `create-formal-verification-skill` and `maintain-formal-verification-skill`, added in 0.15.26 to 0.15.28). They prove one property of a risky piece of code (races, retries, leases, state machines) in every case within a bound, TLA+ by default, and leave a skill in the repo with a sync commit for upkeep. If ported, they'd become two more `bob-verify` playbooks. Parked 2026-10-19: not needed yet.
 
 **Skipped on purpose:** `automate-me` (one-time use), `swarm` (T3 delegation covers it), `tdd` (the Bug playbook and `bob-principle-test-behavior-not-implementation` cover it), `teach` and `recall` (`bob-how`, `bob-why`, and T3 history cover them), `bro`, `poteto-help`, `technical-writing`, `typescript-best-practices`, `make-bot-ui`, Visual parity, Worktree cleanup, and Multi-phase plan.
 

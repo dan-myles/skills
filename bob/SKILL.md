@@ -95,7 +95,18 @@ Go ahead without asking on anything you can undo (`never-block-on-the-human`): r
 
 Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Replying on a PR's review threads while babysitting it is the exception; go ahead. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
 
-Default to deciding. Before any question, check that the request, the issue, and the code don't already answer it; a detail they leave open that's small and easy to change later is yours to pick, so pick the obvious option and name it in the reply. If running something would answer a question, run it instead of asking. Before asking "which approach" or "how should this behave", check whether a quick sketch would settle it (behavior, timing, layout, output); if so, build it per `playbooks/prototype.md` and let the result decide. Bring the user only product or taste decisions no experiment settles, drawn as option cards with the one you'd pick marked. When several such decisions are open on complex work, run `bob-grill` instead of asking one at a time.
+**Decided stays decided.** A decision the user already made binds you, wherever it was made: in this thread, in the brief's DECIDED, in a saved grill under `~/.bob-n-frank/grills/`, or in the repo's design docs (ARCHITECTURE, ADRs). Some calls belong to the user even before anyone makes them, because code piles up on them fast:
+
+- the shape of stored data: which tables, what a record means, whether it can change
+- how services talk: queue or polling, sync or async, who publishes what
+- external providers, and any fallback between them
+- money values: caps, limits, fees, deadlines, in every environment
+- other teams' services, credentials, and infra
+- contracts that other code or other teams call
+
+A branch you could revert doesn't make these yours. A blocker is a problem to solve inside the design: install the missing tool, fix the image, get the access. When nothing inside the design works, stop and bring the options with your pick, and don't build the alternative meanwhile. Never write a departure into a doc, a comment, or a PR as planned before the user approves it. When the user changes a decision, update the doc that states it in the same change. Everything else, like names, layout inside your scope, and how a decided thing gets built, stays yours under the next paragraph.
+
+Default to deciding. Before any question, check that the request, the issue, and the code don't already answer it; a detail they leave open that's small and easy to change later is yours to pick, so pick the obvious option and name it in the reply. If running something would answer a question, run it instead of asking. Before asking "which approach" or "how should this behave", check whether a quick sketch would settle it (behavior, timing, layout, output); if so, build it per `playbooks/prototype.md` and let the result decide. Bring the user only product or taste decisions no experiment settles, and the calls under **Decided stays decided**, drawn as option cards with the one you'd pick marked. When several such decisions are open on complex work, run `bob-grill` instead of asking one at a time.
 
 **How to ask.** Every checkpoint and every question goes through the harness's question tool (`AskUserQuestion` in Claude Code and T3), right after the visual that shows what's being decided.
 
@@ -109,10 +120,10 @@ Default to deciding. Before any question, check that the request, the issue, and
 
 Use subagents when the harness supports them.
 
-- Give each one a tight brief: which files, the data shape, what done looks like, and which repo rules matter. Link to files rather than pasting them.
+- Give each one a tight brief: which files, the data shape, what done looks like, which repo rules matter, and the decided calls it must keep. Link to files rather than pasting them.
 - Build work runs on `bob.workers`. Cross-cutting design and tricky logic run on `bob.hard`.
 - Push wide searches and noisy output into subagents so the main thread holds only conclusions (`guard-the-context-window`).
-- Their work is yours. Read the diff and summarize it in your own words.
+- Their work is yours. Read the diff and summarize it in your own words. A subagent that swapped out a decided or reserved call gets reverted, not reported as done.
 - Start a new subagent, with the complete brief, for each new piece of work. Go back to an old one only when the work depends on something it holds, like uncommitted edits or a running server.
 - Without subagents, do the work directly and then read the diff cold, as a reviewer would.
 
@@ -134,7 +145,9 @@ Nothing secret goes into the pane. The rules for logs apply here too: no tokens,
 
 ## Review
 
-Before the PR, run **`bob-no-comments`** over the diff whenever it adds or changes comments or lint and type suppressions, at any size. It goes first, since its fixes change the code the others review.
+Before the PR, on every diff at any size, run the **decision check**: list each choice the diff makes that the request, the brief, or the design didn't settle, and check each one against **Decided stays decided**. Revert a departure, or stop and raise it with your pick; never open the PR on it. The choices that pass go in the PR body under **Decisions made here**.
+
+Then run **`bob-no-comments`** over the diff whenever it adds or changes comments or lint and type suppressions, at any size. It goes before the reviewers below, since its fixes change the code they review.
 
 Then pick by what the change risks. Run both when both apply.
 
@@ -155,6 +168,7 @@ Feature, Bug, Refactor, and Perf finish here.
    - **What changed:** one to three bullets, then the file map as a text tree, per **File maps** in `references/visuals.md`.
    - **Scope:** what it covers and what it deliberately leaves out.
    - **Tradeoffs:** only alternatives a reviewer would ask about.
+   - **Decisions made here:** each choice the request or design didn't settle, with why. One that touches a decided or reserved call names where the user approved it.
    - **Blast radius:** who or what it touches, and why that's safe. `bob-blast-radius`'s safety fact goes here.
    - **Verification:** one to three real runs and their results. For perf, one number as before → after.
 

@@ -24,7 +24,8 @@ Keep it two levels deep: coordinator and workers. Split a program into tracks (b
 One folder per program, outside every repo: `~/.bob-n-frank/orchestrate/<program-slug>/`. Every file has one writer: you, except `reports/`, where each worker writes only its own file.
 
 - `standing-orders.md`: numbered lines, one constraint each (merge policy, verification bar, forbidden paths, in-flight cap, models, escalation). When you catch yourself restating an instruction, add a line first, per `encode-lessons-in-structure`. A stop line at the top halts new spawns.
-- `units.tsv`: one row per unit: id, track, state (`planned`, `running`, `needs-verify`, `verified`, `merge-ready`, `landed`, `failed`, `abandoned`), thread id, branch, PR, head SHA, brief path. Update rows in place.
+- `decided.md`: the user's design decisions, one numbered line each with its source (a message, a doc, a grill). Write it only from the user's words. When the user decides or reverses something, update this first, and when a repo doc states the old call, brief a unit to fix the doc.
+- `units.tsv`: one row per unit: id, track, state (`planned`, `running`, `needs-decision`, `needs-verify`, `verified`, `merge-ready`, `landed`, `failed`, `abandoned`), thread id, branch, PR, head SHA, brief path. Update rows in place.
 - `briefs/<unit>.md`: the exact brief each unit got.
 - `reports/<unit>.md`: each worker's final report.
 - `ledger.tsv`: one verdict per PR and head SHA: `live-verified`, `test-verified`, `type-check-only`, `verifier-blocked`, `verifier-failed`. A new head SHA voids the row.
@@ -34,18 +35,19 @@ One folder per program, outside every repo: `~/.bob-n-frank/orchestrate/<program
 
 ## The brief
 
-Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.bob-n-frank/orchestrate/<program>/reports/<unit>.md`, STANDING set to `standing-orders.md` word for word, and REPORT-BACK set to this thread's id with the message `/bob orchestrate drain <program>`. Save it to `briefs/<unit>.md`.
+Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.bob-n-frank/orchestrate/<program>/reports/<unit>.md`, DECIDED set to `decided.md` word for word, STANDING set to `standing-orders.md` word for word, and REPORT-BACK set to this thread's id with the message `/bob orchestrate drain <program>`. Save it to `briefs/<unit>.md`.
 
 ## Steps
 
 1. **Frame.** Write the done condition as something countable ("all 40 call sites migrated, every PR `test-verified` or better and merge-ready"). Size it: units, rough effort, tracks, and the wall-clock budget. Set the merge policy: by default workers stop at merge-ready and the user lands; the coordinator merges only if the user says so in the standing orders. A contested split or a one-way door goes through `bob-architect` first. **Checkpoint:** show the plan per `references/visuals.md` (tracks, units, file map of what changes, budget) and ask per **How to ask** in the skill.
-2. **Set up.** Create the store, record this thread's id in `coordinator.txt` (find it with `t3_thread_list`: the running thread with this title), write the standing orders, and schedule a heartbeat with `schedule_task` (`{type: "interval", everyMs: 900000}`, bound to this thread) whose prompt is "/bob orchestrate drain <program>: store at ~/.bob-n-frank/orchestrate/<program>/". The store path in the prompt is what lets a coordinator with no memory find its way back. Seed `frontier.md` from existing PRs.
+2. **Set up.** Create the store, record this thread's id in `coordinator.txt` (find it with `t3_thread_list`: the running thread with this title), write the standing orders and `decided.md` (from the design, the repo's design docs, and the user's words), and schedule a heartbeat with `schedule_task` (`{type: "interval", everyMs: 900000}`, bound to this thread) whose prompt is "/bob orchestrate drain <program>: store at ~/.bob-n-frank/orchestrate/<program>/". The store path in the prompt is what lets a coordinator with no memory find its way back. Seed `frontier.md` from existing PRs.
 3. **Pilot.** Push one unit all the way through: brief, worker, verifier, ledger row, merge-ready PR. Fix the brief template, the check, or the unit size from what the pilot shows before fanning out. For many near-identical cheap units, the first unit is the pilot and fan-out starts when it lands.
 4. **Scale.** Keep a rolling window of workers up to the in-flight cap (default 4, since worktree threads run on this machine; raise it in the standing orders) and refill as units finish. Don't wait for a whole batch. Pass upstream reports into downstream briefs.
 5. **Drain** on every wake: the heartbeat, a verifier finishing, a watched PR changing, or a user message.
    - Workers report back the moment they finish, so most drains start from a report-back message; the heartbeat is the backstop. A report file whose unit is still `running` means the report-back never came: drain it and note the defect.
    - Read each running worker without disturbing it: `t3_thread_read`, its report file, `gh pr view`. Never message a worker to check on it.
    - Classify each: landed, merge-ready, needs-verify, failed, stuck, or noise. Update `units.tsv`, `ledger.tsv`, and `frontier.md`.
+   - Read each report's decisions. One that touches `decided.md` or a reserved call isn't done, however well it works: mark the unit `needs-decision`, write a gate with the options and your pick, and hold its PR until the user answers.
    - A finished unit that needs judgment gets a verifier unit. Don't review diffs inline.
    - Settle each worker whose unit reached a final state (landed, abandoned, or a closed PR) per `references/settling.md`. A merge-ready PR waiting on the user keeps its worker active. The coordinator never settles itself.
    - Spawn the next units in one turn, then end the turn with a status board: counts by state, what changed, open gates.
@@ -54,7 +56,7 @@ Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.
 
 ## Verification
 
-Scale it to the unit. When VERIFY is one cheap command, the worker runs it and reports the output, and you spot-check. A verifier unit is for checks that are expensive, need judgment, or reach far (`bob-blast-radius` territory). CI green feeds a verdict; it isn't one. Behavior changes need better than `type-check-only`. `verifier-failed` gets a fix unit. `verifier-blocked` gets a respawn once the environment is fixed.
+Scale it to the unit. When VERIFY is one cheap command, the worker runs it and reports the output, and you spot-check. A verifier unit is for checks that are expensive, need judgment, or reach far (`bob-blast-radius` territory). CI green feeds a verdict; it isn't one. Every verifier also checks the diff against `decided.md` and the reserved calls in the skill, and fails a departure even when the code is right. Behavior changes need better than `type-check-only`. `verifier-failed` gets a fix unit. `verifier-blocked` gets a respawn once the environment is fixed.
 
 ## Resume
 
@@ -82,7 +84,7 @@ Show the **Activity board** per `references/visuals.md`, built from `units.tsv` 
 
 ## What reaches the user
 
-Only, and batched into the status board: irreversible actions, product calls no experiment settles, a standing order that contradicts what you're seeing, and a dead end that survived a replan. Write each into `gates.md` first and keep other work moving around it. Ask per **How to ask** in the skill.
+Only, and batched into the status board: irreversible actions, every departure from `decided.md` or a reserved call (as a recommendation to approve, never as news), product calls no experiment settles, a standing order that contradicts what you're seeing, and a dead end that survived a replan. Write each into `gates.md` first and keep other work moving around it. Ask per **How to ask** in the skill.
 
 Never: retries, CI flakes, review-thread triage, restack mechanics, or "should I keep going".
 

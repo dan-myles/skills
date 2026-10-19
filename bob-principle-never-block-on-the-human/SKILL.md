@@ -13,4 +13,4 @@ Every pause for permission makes the user the bottleneck. Code is reversible and
 - **Do it, then show it,** with why.
 - **Fix what you notice.** Note a problem and fix it next round.
 
-**Limits:** irreversible or outward actions still need a yes: force-pushing shared branches, deleting real data, deploying, messaging people. Product direction comes from the user; execution shouldn't wait on them.
+**Limits:** irreversible or outward actions still need a yes: force-pushing shared branches, deleting real data, deploying, messaging people. Product direction comes from the user; execution shouldn't wait on them. Reversing a decision the user made, or making a reserved call (`bob/SKILL.md`, **Decided stays decided**), isn't reversible work even on a branch: other work builds on it before anyone notices.

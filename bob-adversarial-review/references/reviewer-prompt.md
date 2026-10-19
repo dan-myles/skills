@@ -16,6 +16,12 @@ What the change is meant to do:
 
 Judge how well the code does this. Don't argue with the goal.
 
+## Decisions to keep
+
+> {DECIDED}
+
+A change that departs from one of these is a `critical` finding, even when the code is correct. So is a change that quietly makes one of these calls on its own: the shape of stored data, how services talk, providers and fallbacks, money values, other teams' infra, or a contract others call.
+
 ## The change
 
 Diff: {DIFF_PATH}

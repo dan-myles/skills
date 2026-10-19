@@ -22,6 +22,8 @@ Write the diff to a file. Reviewers get its path, plus the paths of anything the
 
 Write one paragraph: what the change is for and what it must do. When Bob approved a design earlier in the session, take the intent from it. Otherwise build it from the user's words, commit messages, the PR body, and the code. If you can't state it with confidence, ask before going on.
 
+Under it, list the decisions the change must keep: the brief's DECIDED, the user's calls, and the repo's design docs. With none, write "none recorded".
+
 Reviewers judge the code against this paragraph. They don't question it.
 
 ## 3. Run the reviewers
@@ -29,9 +31,10 @@ Reviewers judge the code against this paragraph. They don't question it.
 Fill `references/reviewer-prompt.md` with:
 
 1. the intent
-2. the diff path and context paths
-3. `references/rubric.md`
-4. `references/code-quality.md`
+2. the decisions to keep
+3. the diff path and context paths
+4. `references/rubric.md`
+5. `references/code-quality.md`
 
 Start one reviewer per entry of `bob-adversarial-review.reviewers` in `~/.bob-n-frank/models.yaml`, labeled A, B, C in order, per `../bob-models/references/delegation.md`. All get the same filled prompt and stay read-only.
 
@@ -49,7 +52,7 @@ Use absolute paths in the prompt, since reviewers start with none of this sessio
 
 You're the lead reviewer: a practical senior engineer who has the full session, not a neutral counter of votes. Apply `references/lead-judgment.md`, then put each finding in one bucket:
 
-- **Act on.** A real problem with correctness, security, data, or maintainability, given what the change is for. It would block a real PR.
+- **Act on.** A real problem with correctness, security, data, or maintainability, given what the change is for. It would block a real PR. A departure from a decision to keep always lands here: undo it or take it to the user.
 - **Consider.** A fair point, but it may not be worth its cost right now. The user should see it.
 - **Noted.** True, but not worth acting on at this stage.
 - **Dismissed.** Wrong, a nitpick, or missing context. Say why in one line.
