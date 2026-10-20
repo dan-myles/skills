@@ -8,7 +8,7 @@ Three rules carry the rest:
 
 - **The brief is the product.** A worker can't ask you anything, so a vague brief fails quietly.
 - **Every spawn carries the standing orders word for word.** Instructions that aren't repeated decay.
-- **Completions are queue events.** Handle them in batches at drains, never inline mid-thought.
+- **Completions are drain events.** A report-back steers into this thread even mid-turn: finish the step in hand, then drain. Handle reports in batches at drains, never inline mid-thought.
 
 ## Roles
 
