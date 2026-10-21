@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "afb01419-95cd-4027-ab70-4099e410e3b0",
+  "path": "bob-sharpen",
+  "path_key": "bob-sharpen",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

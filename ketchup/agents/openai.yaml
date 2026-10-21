@@ -1,0 +1,7 @@
+interface:
+  display_name: "ketchup"
+  short_description: "Catch up on what changed since your last message and what waits on you"
+  default_prompt: "Use $ketchup to catch me up on what changed since my last message and list every call waiting on me."
+
+policy:
+  allow_implicit_invocation: false

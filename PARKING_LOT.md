@@ -11,6 +11,7 @@ Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `
 Also here, outside Bob:
 
 - `unslop`: cuts AI tells from writing. Global and unprefixed on purpose.
+- `ketchup`: catches Dan up on a chat since his last message and lists every call waiting on him. Unprefixed like `unslop`, but manual-only. Ported from pstack's `ketchup` (2026-10-20).
 - `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT; `personal-taste`, Leon Lin's taste-skill v2 from github.com/Leonxlnx/taste-skill at f624f37, MIT). Third-party skills are copied as is with only `name` changed, keep their LICENSE, and stay model-invocable when upstream meant them to.
 
 ## Status
@@ -79,6 +80,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - `bob-blast-radius`: what a change breaks outside its diff, with its safety fact proven by running code.
 - `bob-grill`: settles every open decision with the user before complex, risky, or unclear work. It maps the decisions as a tree, asks each round's ready questions with recommendations through the question tool, looks facts up instead of asking, and saves the result to `~/.bob-n-frank/grills/<slug>.md`. Bob runs it in Feature (before design), Bug, and Refactor when unsure; Frank runs it before dispatching an item with open decisions. Not in Orchestrate for now. Adapted from Matt Pocock's grilling skill.
 - `bob-no-comments`: Comment Sicko, a read-only subagent on the other family, lists every comment to kill; Bob deletes them, fixes the code each `MUST KILL` flag blames, and encodes claimed constraints as types, tests, or lint without asking. Runs first at Review whenever a diff touches comments or suppressions. Ported from pstack's `no-comments` and its Comment Sicko agent, with the Sicko read-only so a child never edits Bob's worktree.
+- `bob-sharpen`: rewrites a prompt so it asks for a deeper version of the task, not a bigger one, and hands back only the rewrite. Ported from pstack's `sharpen` as of 0.15.29, where it stopped doing the task itself.
 - `bob-verify`: writes and maintains a repo's own `bob-verify-<app>` skill (committed in that repo at `.claude/skills/bob-verify-<app>/`, symlinked from `.agents/skills/`). Bob uses it when driving an app and only offers to create one.
 
 **Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
@@ -106,7 +108,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 
 ## Where we stopped
 
-Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf (with hillclimb and benchmark checklist), Prototype, Babysit, runtime and trace forensics (as Diagnose); `how`, `why`, `architect` (with `arena` folded in), `interrogate`, `blast-radius`, `reflect`, eval, `correct`, `setup-pstack` (as `bob-models`), `create-verification-skill` and `maintain-verification-skill` (as `bob-verify`), all 24 principles, `no-comments` with Comment Sicko (as `bob-no-comments`), and `unslop`.
+Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf (with hillclimb and benchmark checklist), Prototype, Babysit, runtime and trace forensics (as Diagnose); `how`, `why`, `architect` (with `arena` folded in), `interrogate`, `blast-radius`, `reflect`, eval, `correct`, `setup-pstack` (as `bob-models`), `create-verification-skill` and `maintain-verification-skill` (as `bob-verify`), all 24 principles, `no-comments` with Comment Sicko (as `bob-no-comments`), `sharpen` (as `bob-sharpen`), `ketchup`, and `unslop`.
 
 **Next:** dry-run `/bob` on a small task in a throwaway repo, and fix what that turns up through `/bob-improve`.
 
@@ -114,10 +116,11 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 
 - `figure-it-out` (a playbook for jobs no other playbook fits) and `show-me-your-work` (an auditable decision log). Refactor and Perf currently stop and propose a split when a job is too big.
 - Run (pstack's Autonomous run), Shipping, Autopilot-stack, and Autopilot-full. Run and Shipping were ported, then removed on 2026-10-12 until needed; Orchestrate keeps its own Land step. Hold until Bob has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Bob's never-merge rule.
+- `in-your-own-words`: restates the user's goal and problem before any work, with no playbook. Bob's playbooks already restate; undecided since 2026-10-15.
 - Pause safely and Session pickup. T3 threads already hold much of that context.
 - Formal verification (pstack's `create-formal-verification-skill` and `maintain-formal-verification-skill`, added in 0.15.26 to 0.15.28). They prove one property of a risky piece of code (races, retries, leases, state machines) in every case within a bound, TLA+ by default, and leave a skill in the repo with a sync commit for upkeep. If ported, they'd become two more `bob-verify` playbooks. Parked 2026-10-19: not needed yet.
 
-**Skipped on purpose:** `automate-me` (one-time use), `swarm` (T3 delegation covers it), `tdd` (the Bug playbook and `bob-principle-test-behavior-not-implementation` cover it), `teach` and `recall` (`bob-how`, `bob-why`, and T3 history cover them), `bro`, `poteto-help`, `technical-writing`, `typescript-best-practices`, `make-bot-ui`, Visual parity, Worktree cleanup, and Multi-phase plan.
+**Skipped on purpose:** `automate-me` (one-time use), `swarm` (T3 delegation covers it), `tdd` (the Bug playbook and `bob-principle-test-behavior-not-implementation` cover it), `teach` and `recall` (`bob-how`, `bob-why`, and T3 history cover them), `bro` (its one line is inlined in `ketchup`), `poteto-help`, `technical-writing`, `typescript-best-practices`, `make-bot-ui`, Visual parity, Worktree cleanup, and Multi-phase plan.
 
 ## PostHog's lessons, parked (2026-10-14)
 
@@ -147,4 +150,4 @@ PostHog posted 38 lessons from building their AI products ([thread](https://x.co
 
 ## Porting source
 
-pstack lives in `github.com/cursor/plugins` under `pstack/`. A clone was at `/tmp/cursor-plugins` and may be gone; clone it again to keep porting. Ported from `d73344b` (2026-10-09); updates to the skills we ported were brought over through `99743e9` on 2026-10-15 (four principles restated as reasoning, `correct`'s test step, `bob-verify` readiness, Cleanup's base branch, Orchestrate's one-stacker rule). To catch up again, diff from `99743e9` and take only changes to skills we already have. Its main skill is `skills/poteto-mode/` and its playbooks are under `skills/poteto-mode/playbooks/`. Prior art for running pstack inside T3: `github.com/uzairansaruzi/p3-stack`.
+pstack lives in `github.com/cursor/plugins` under `pstack/`. A clone was at `/tmp/cursor-plugins` and may be gone; clone it again to keep porting. Ported from `d73344b` (2026-10-09); updates to the skills we ported were brought over through `99743e9` on 2026-10-15 (four principles restated as reasoning, `correct`'s test step, `bob-verify` readiness, Cleanup's base branch, Orchestrate's one-stacker rule). Reviewed through `88d4751` (0.15.29) on 2026-10-20, which brought `sharpen` and `ketchup` over. To catch up again, diff from `88d4751` and take only changes to skills we already have. Its main skill is `skills/poteto-mode/` and its playbooks are under `skills/poteto-mode/playbooks/`. Prior art for running pstack inside T3: `github.com/uzairansaruzi/p3-stack`.
