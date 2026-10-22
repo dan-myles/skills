@@ -45,7 +45,7 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 | `/bob-improve` | Bob learns from real sessions: reflect, eval a skill change, recommend models, make repeated mistakes impossible. |
 | `bob-principle-*` | 24 short engineering principles Bob reads when a step needs one. |
 
-**Bob's playbooks:** Investigation (explain or diagnose), Bug, Feature, Refactor, Perf, Prototype, Babysit, Orchestrate (a whole multi-day program), Cleanup.
+**Bob's playbooks:** Investigation (explain or diagnose), Bug, Feature, Refactor, Perf, Prototype, Open PR, Babysit, Orchestrate (a whole multi-day program), Cleanup.
 
 ## Built for T3 Code
 

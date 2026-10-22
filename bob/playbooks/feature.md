@@ -13,6 +13,6 @@ The design is yours. Hand off the typing, keep the decisions.
 5. Build it. Brief subagents from the plan with files, data shape, and what done looks like. Finish the "goes first" work, then run the parallel pieces together. Commit each piece once it works (`sequence-verifiable-units`). Repetitive edits get a script, per `build-the-lever`. A `bob-architect` sketch is the contract: follow its **Building against the sketch** and **Scrapping it** sections.
 6. Check it, and show it as a **Proof gallery** per `references/visuals.md`. Check it where the user will meet it: the page, the screen, the endpoint, the command, through the repo's verify skill when it has one. Run the repo's checks. A check that's unclear or on the wrong surface hasn't passed. Report it that way.
 7. Review per **Review** in the skill.
-8. Run **Opening the PR**. Features end at a merge-ready PR, unmerged.
+8. Stop with the work committed on its branch, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
-**Reply:** what you built and for whom, the choices you made and why (a table when you weighed options), the evidence that it works, the PR link, and anything still undecided. **Show:** the file map of what changed, badged, plus a table when you weighed options.
+**Reply:** what you built and for whom, the choices you made and why (a table when you weighed options), the evidence that it works, the branch it's committed on, and anything still undecided. **Show:** the file map of what changed, badged, plus a table when you weighed options.

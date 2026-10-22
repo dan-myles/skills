@@ -9,6 +9,6 @@ The fix is yours. Work from evidence: each line you ship should answer something
 5. Run the step 1 reproduction again on the same surface and show that it passes now, as a **Proof gallery** per `references/visuals.md`: the failure from step 1 next to the pass. Passing unit tests cover the branches they hit; they don't show the bug is gone. Run the repo's checks.
 6. Commit the failing test or reproduction first, then the fix on top.
 7. Review per **Review** in the skill.
-8. Run **Opening the PR**. Bug fixes follow the repo's merge flow.
+8. Stop with the work committed on its branch, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
-**Reply:** what went wrong, the cause and the evidence for it, the fix, how you checked it, the reproduction output from before and after copied exactly, and the PR link. **Show:** the failure path with the point it broke, the reproduction before and after, and the file map of what changed.
+**Reply:** what went wrong, the cause and the evidence for it, the fix, how you checked it, the reproduction output from before and after copied exactly, and the branch it's committed on. **Show:** the failure path with the point it broke, the reproduction before and after, and the file map of what changed.

@@ -24,9 +24,9 @@ Vet every number, the baseline included, with `references/benchmark-checklist.md
 4. Compare with the same harness and case, before and after. Commit the harness first when it's worth keeping. A result that's inconclusive or on the wrong surface isn't a win; report it that way.
 5. Run the repo's checks. Behavior must not change.
 6. Review per **Review** in the skill.
-7. Run **Opening the PR**. The PR body gets one headline number. The runs, range, and limiter go in the details or a linked artifact.
+7. Stop with the work committed on its branch, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
-**Reply:** the verdict, baseline and after with units, run count, range, the limiter, the fix, the artifact path, and the PR link. **Show:** a before-and-after chart with units, range, and the limiter, and the file map of what changed.
+**Reply:** the verdict, baseline and after with units, run count, range, the limiter, the fix, the artifact path, and the branch it's committed on. **Show:** a before-and-after chart with units, range, and the limiter, and the file map of what changed.
 
 ## Climb
 
@@ -43,6 +43,6 @@ One change, one measurement, keep or revert. Never stack untested changes. Never
    - Commit each kept change on its own, staging only its files. Log the row either way.
 6. Push past the first plateau. After several rejects in a row, switch category, combine near-misses, reread the source, or try something bolder. Correctness and simplicity outrank the number: revert a win that breaks behavior, and keep a simplification that holds the number.
 7. Stop when the rule is met, or when the ideas left aren't worth their cost. Don't loosen the rule to meet it, and don't quit with cheap ideas untried. If you're stuck, say so.
-8. Review per **Review** in the skill, then run **Opening the PR** with the kept commits in the order they landed.
+8. Review per **Review** in the skill. Stop with the kept commits on the branch in the order they landed, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
 **Reply:** the metric and target, baseline to final with the percent change, tries kept and reverted, each kept change in one line, the `decision.tsv` path, and the next idea you'd try. **Show:** the metric across tries, kept and reverted marked, against the target.
