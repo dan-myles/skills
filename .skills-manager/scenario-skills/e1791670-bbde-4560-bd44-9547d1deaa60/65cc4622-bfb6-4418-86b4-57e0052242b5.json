@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "scenario_id": "e1791670-bbde-4560-bd44-9547d1deaa60",
+  "skill_id": "65cc4622-bfb6-4418-86b4-57e0052242b5",
+  "sort_order": 45,
+  "tools": {
+    "claude_code": true,
+    "cline": true,
+    "codex": true,
+    "cursor": true,
+    "droid": true,
+    "gemini_cli": true,
+    "grok": true,
+    "hermes": true,
+    "kimi": true,
+    "mistral_vibe": true,
+    "omp_agent": true,
+    "opencode": true,
+    "pi": true,
+    "qwen_code": true
+  }
+}

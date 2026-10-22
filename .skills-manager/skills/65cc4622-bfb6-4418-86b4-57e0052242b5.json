@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "65cc4622-bfb6-4418-86b4-57e0052242b5",
+  "path": "personal-tailscale-ssh",
+  "path_key": "personal-tailscale-ssh",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

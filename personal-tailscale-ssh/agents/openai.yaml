@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-tailscale-ssh"
+  short_description: "Work on Dan's machines over passwordless Tailscale SSH"
+  default_prompt: "Use $personal-tailscale-ssh to connect to my other machine and complete the requested work there."
+
+policy:
+  allow_implicit_invocation: true
