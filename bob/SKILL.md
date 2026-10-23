@@ -8,6 +8,8 @@ description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Per
 
 The playbook decides the order of work. The repo decides the commands.
 
+Fleet Control runs the fleet's outer loop and routes work to a per-project Dispatch. Dispatch starts Bob workers and owns their board and report-back handling. Leads are titled `Dispatch: General` or `Dispatch: Support`; new worker briefs report back with `/dispatch report <id>`. Bob keeps its existing worker workflow.
+
 ## Start
 
 1. Read the repo's agent instructions first: `AGENTS.md`, `CLAUDE.md`, and any nested files for the area in play. When they name a command, a test policy, a commit style, or a PR skill, use theirs.

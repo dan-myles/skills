@@ -1,6 +1,6 @@
 # The brief
 
-How a coordinator (Orchestrate, or Frank) hands work to a Bob thread. The worker starts with none of the coordinator's conversation and can't ask it anything, so a vague brief fails quietly. The brief is the product.
+How a coordinator (Orchestrate, or Dispatch) hands work to a Bob thread. The worker starts with none of the coordinator's conversation and can't ask it anything, so a vague brief fails quietly. The brief is the product.
 
 Every field filled, or the work isn't scoped yet and doesn't go out. Size it to the work: a one-command unit gets a paragraph that still names the goal, scope, check, and report.
 

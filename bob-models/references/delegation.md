@@ -11,7 +11,9 @@ Pairing models from different providers is on purpose: Claude and GPT have diffe
    2. `~/.bob-n-frank/models.yaml`, if it exists.
    3. `../models.example.yaml`, the built-in default. It always has every line, so a user with no config files still gets a full setup.
 
-   Never create the user's file here; only `/bob-models` and `/frank setup` write it. When a line came from the default because the user has no file, say so once per session and mention `/bob-models` to customize. A line is one entry or a list of them; a list starts one subagent per entry, in order. A line set to `inherit` runs on this thread's own model: start it with the harness's native subagent tool and leave the model unset.
+   For `dispatch.validator`, prefer that key in each override layer and fall back to legacy `frank.validator` in the same layer before consulting the next layer. New model edits use `dispatch.validator`.
+
+   Never create the user's file here; only `/bob-models` and `/dispatch setup` write it. When a line came from the default because the user has no file, say so once per session and mention `/bob-models` to customize. A line is one entry or a list of them; a list starts one subagent per entry, in order. A line set to `inherit` runs on this thread's own model: start it with the harness's native subagent tool and leave the model unset.
 2. Call T3's `orchestrator_capabilities` once per session. The T3 tools can load late, so call it once before deciding they're missing.
 3. Check each entry against the catalog: its `model` is listed under its `provider`, that provider's `canRunCrossProviderChildTask` is true, and each option value is offered.
 4. If an entry fails, use the closest model the catalog lists from the same provider, name the substitute in the output, and suggest running `/bob-models`. Don't block the step on it.

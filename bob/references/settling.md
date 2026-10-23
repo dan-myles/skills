@@ -1,6 +1,6 @@
 # Settling worker threads
 
-The coordinator (Frank or Orchestrate) settles a worker thread after it processes the worker's final report. Workers report back and never settle themselves. The coordinator's own thread stays active.
+The coordinator (Dispatch or Orchestrate) settles a worker thread after it processes the worker's final report. Workers report back and never settle themselves. The coordinator's own thread stays active.
 
 ## When a worker can be settled
 
@@ -24,4 +24,4 @@ Settle only when every check passes. Otherwise leave the thread active and write
 ## Repeats and misses
 
 - Process reports idempotently. A repeat report for a settled row changes nothing unless it reports new work; then `unsettle` the thread and handle the work.
-- A report file with no report-back is still a defect for the sweep or heartbeat to catch. Settle that thread only after the same checks.
+- A report file with no report-back is still a defect for Fleet Control to route to Dispatch, or for an Orchestrate heartbeat to catch. Settle that thread only after the same checks.

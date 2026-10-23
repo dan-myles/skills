@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "skill_id": "2e4960b9-abe8-4bff-8e92-ae6ade5fa6ff",
-  "path": "frank",
-  "path_key": "frank",
+  "path": "dispatch",
+  "path_key": "dispatch",
   "enabled": true,
   "tags": [],
   "source": {

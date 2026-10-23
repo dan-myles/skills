@@ -29,6 +29,10 @@ Bob is still being designed. **Nothing in it has run on real work yet.** Don't u
 - Commit messages are short and lowercase (`add bob-verify`, `bob: add perf playbook`). Commit and push only when Dan asks.
 - Never print or copy secrets. The 1Password master password lives in `~/.config/agents/1password.txt`; leave it there.
 
+## Fleet layers
+
+The three lead skills are `fleet-control`, `dispatch`, and `bob`. Fleet Control is the outer Grok Bot loop. Dispatch is the per-project lead, formerly Frank. Bobs are workers. The supporting Bob helpers and personal skills remain separate library entries. Dispatch owns no sweeps or automations; Fleet Control requires Dan's approval to change live schedules. The shared `.bob-n-frank` settings root is retained for compatibility, with new lead boards under `dispatch/` and an explicit migration path for legacy stores.
+
 ## Adding or renaming a skill
 
 Do all of these together:
@@ -41,16 +45,16 @@ Do all of these together:
 6. Add it to the skills list in `bob-improve/SKILL.md`, and to `bob/SKILL.md` if Bob uses it.
 7. Run `unslop` on new prose.
 
-## Bob and Frank's home
+## Bob and Dispatch's home
 
-Each user customizes Bob and Frank in `~/.bob-n-frank/`, outside every repo:
+Each user customizes Bob and Dispatch in `~/.bob-n-frank/`, outside every repo:
 
 - `models.yaml`: the model for every role. Every agent on the machine reads it.
-- `config.yaml`: Frank's settings (repos, sources, brief times, auto-dispatch rules).
-- `frank/`: Frank's board, briefs, reports, and decision log.
+- `config.yaml`: Dispatch's settings (scopes, stores, evidence sources, auto-dispatch rules).
+- `dispatch/`: Dispatch's board, briefs, reports, and decision log.
 - `orchestrate/<program>/`: each Orchestrate program's store.
 
-A repo can override `models.yaml` and Frank's per-repo settings in `<repo>/.bob-n-frank/`.
+A repo can override `models.yaml` and Dispatch's per-repo settings in `<repo>/.bob-n-frank/`.
 
 ## Map
 
@@ -79,14 +83,14 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - `bob-architect`: two designers on different model families, a judge, a merged sketch.
 - `bob-adversarial-review`: reviewers on different models attack a diff. Renamed from `bob-interrogate`.
 - `bob-blast-radius`: what a change breaks outside its diff, with its safety fact proven by running code.
-- `bob-grill`: settles every open decision with the user before complex, risky, or unclear work. It maps the decisions as a tree, asks each round's ready questions with recommendations through the question tool, looks facts up instead of asking, and saves the result to `~/.bob-n-frank/grills/<slug>.md`. Bob runs it in Feature (before design), Bug, and Refactor when unsure; Frank runs it before dispatching an item with open decisions. Not in Orchestrate for now. Adapted from Matt Pocock's grilling skill.
+- `bob-grill`: settles every open decision with the user before complex, risky, or unclear work. It maps the decisions as a tree, asks each round's ready questions with recommendations through the question tool, looks facts up instead of asking, and saves the result to `~/.bob-n-frank/grills/<slug>.md`. Bob runs it in Feature (before design), Bug, and Refactor when unsure; Dispatch runs it before dispatching an item with open decisions. Not in Orchestrate for now. Adapted from Matt Pocock's grilling skill.
 - `bob-no-comments`: Comment Sicko, a read-only subagent on the other family, lists every comment to kill; Bob deletes them, fixes the code each `MUST KILL` flag blames, and encodes claimed constraints as types, tests, or lint without asking. Runs first at Review whenever a diff touches comments or suppressions. Ported from pstack's `no-comments` and its Comment Sicko agent, with the Sicko read-only so a child never edits Bob's worktree.
 - `bob-sharpen`: rewrites a prompt so it asks for a deeper version of the task, not a bigger one, and hands back only the rewrite. Ported from pstack's `sharpen` as of 0.15.29, where it stopped doing the task itself.
 - `bob-verify`: writes and maintains a repo's own `bob-verify-<app>` skill (committed in that repo at `.claude/skills/bob-verify-<app>/`, symlinked from `.agents/skills/`). Bob uses it when driving an app and only offers to create one.
 
 **Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
 
-**`bob-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `bob-models/models.example.yaml` in this repo is the built-in default: it has every line, runs when a user has no models file, and fills lines their file lacks. Frank likewise runs on `frank/references/config.example.yaml` when `config.yaml` is missing. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Frank's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/bob-models` edits the home file and recommends upgrades. `bob-models/references/delegation.md` says how to start each one.
+**`bob-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `bob-models/models.example.yaml` in this repo is the built-in default: it has every line, runs when a user has no models file, and fills lines their file lacks. Dispatch likewise runs on `dispatch/references/config.example.yaml` when `config.yaml` is missing. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Dispatch's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/bob-models` edits the home file and recommends upgrades. `bob-models/references/delegation.md` says how to start each one.
 
 **`bob-improve`**, its own front door because it changes skills or repos, not product code:
 
@@ -95,7 +99,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - Models: recommends model changes from session evidence. Never edits `models.yaml` itself.
 - Correct: makes a repo's repeated agent mistakes impossible (architecture, then types, then lint, then tests), proven against a real past mistake.
 
-**`frank`**, Bob's chief of staff, its own front door: `/frank`. One standing T3 thread that reads every connected source (T3 threads always; GitHub, Linear, Slack when connected), triages benny-style, auto-dispatches small bugs once a validator on the other model family confirms them (`frank.validator` in `models.yaml`), proposes the rest for Dan to pick, tracks everything on a board, sweeps for blockers every two hours, and briefs at 8:30 and 4:30. Never writes code, merges, or messages people. Settings and state live in `~/.bob-n-frank/` (`config.yaml`, `frank/board.tsv`); a repo can override in `<repo>/.bob-n-frank/config.yaml`. Modeled on Lauren Tan's Grok Bot chief of staff, which isn't part of pstack. Workers report back (`REPORT-BACK` in `bob/references/brief.md`) and never settle themselves; Frank and Orchestrate settle finished workers per `bob/references/settling.md` (owned, scope done, recorded, nothing running or waiting, no PR waiting, work safe, settle actions safe) and keep their own thread active.
+**`dispatch`**, Bob's chief of staff: `Dispatch: General` and `Dispatch: Support` handle items Fleet Control routes through `/dispatch event ...`. Fleet Control owns sweeps, scheduled intake, routing, and all automations. Dispatch triages delivered items, dispatches confirmed small bugs under existing rules, proposes the rest, and tracks its own workers. Setup records scope, thread id, and a distinct store per repo and role; it creates no timers or webhooks. Existing brief timers, failed-payments checks, and webhooks are migration items for the outer loop, not Dispatch-owned work. Workers still report directly to their owning Dispatch; Dispatch and Orchestrate settle workers per `bob/references/settling.md` and keep their own threads active.
 
 ## Decisions and why
 
@@ -131,12 +135,12 @@ PostHog posted 38 lessons from building their AI products ([thread](https://x.co
 2. **Turn failures into evals.** `bob-improve reflect` saves each bad session as a case, and `bob-improve eval` replays the cases before a skill change ships.
 3. **Count lookups as missing skills.** Add a line to REPORT in `bob/references/brief.md` for what the thread had to look up or wished it had.
 4. **Cut subagents back to where they pay.** PostHog keeps readers on the parent model to share its cache. Dan doesn't mind either way, so the read-only roles stay on Sonnet in `models.yaml`.
-5. **Cost per thread.** Report tokens and dollars per thread so Frank can show spend.
+5. **Cost per thread.** Report tokens and dollars per thread so Dispatch can show spend.
 6. **Keep the harness thin.** Fewer rules in prompts, more of the model's own judgment. (Habit.)
-7. **Drift check after merges.** Frank's sweep flags skills that name files, flags, or tools that no longer exist.
+7. **Drift check after merges.** Fleet Control flags skills that name files, flags, or tools that no longer exist.
 8. **Worked examples.** Add one short real run to each playbook.
 
-#3 and #5 are the cheapest to build, as two new REPORT lines plus a Frank roll-up.
+#3 and #5 are the cheapest to build, as two new REPORT lines plus a Dispatch roll-up.
 
 ## Known gaps
 

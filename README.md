@@ -1,16 +1,18 @@
-# Bob & Frank
+# Fleet Control, Dispatch & Bob
 
-Two agents that run your software work inside [T3 Code](https://github.com/pingdotgg/t3code).
+Three layers that run your software work inside [T3 Code](https://github.com/pingdotgg/t3code).
+
+**Fleet Control** is the outer Grok Bot loop. It monitors the fleet across machines, routes fresh context to each project's Dispatch, and gives Dan one digest. It does not implement work or manage Dispatch's board.
 
 **Bob** is the engineer. Hand him a goal and he picks the right playbook, learns the code, designs the change, builds it, proves it works on the real app, gets it reviewed by a second model family, opens the PR, and babysits it until it's ready to merge. He never merges without you.
 
-**Frank** is Bob's chief of staff. He watches your T3 threads, GitHub, Linear, and Slack, triages what comes in, sends small confirmed bugs straight to Bob threads, lines up everything else for you to pick, and briefs you at 8:30 and 4:30. He never writes code, never merges, and never messages anyone on your behalf.
+**Dispatch** is Bob's chief of staff. He handles items Fleet Control routes through `/dispatch event ...`, triages within his assigned scope, sends small confirmed bugs straight to Bob threads, lines up everything else for you to pick, and briefs you on request. Fleet Control owns sweeps, scheduled intake, routing, and automations. He never writes code, never merges, and never messages anyone on your behalf.
 
 It's a remix of three things:
 
 - **[pstack](https://github.com/cursor/plugins/tree/main/pstack)** by Lauren Tan: the playbooks, the principles, and the engineering bar (one job, verified, no slop).
 - **[Matt Pocock's skills](https://github.com/mattpocock/skills)**: grilling, the round-by-round interview that settles every decision before complex work starts.
-- **Custom workflows** built for T3 Code: cross-provider subagents, worktree threads, report-backs that wake the coordinator, scheduled briefs, PR watching, and replies that are drawn, not written.
+- **Custom workflows** built for T3 Code: cross-provider subagents, worktree threads, report-backs that wake the coordinator, outer-loop events, PR watching, and replies that are drawn, not written.
 
 ## What it feels like
 
@@ -31,8 +33,9 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 
 | Skill | What it's for |
 |---|---|
+| `fleet-control` | The outer loop. Cross-machine intake, routing, stalls, and a digest for Dan. |
 | `/bob <goal>` | The front door. Sorts the task into a playbook and runs it to a merge-ready PR. |
-| `/frank` | The chief of staff. `setup`, `brief`, `sweep`, `status` ("what are my bobs doing"), or just talk to him. |
+| `/dispatch` | The chief of staff. `setup`, `event`, `brief`, `status` ("what are my bobs doing"), or just talk to him. |
 | `/bob-grill` | Settles every open decision on complex work, round by round, with a recommended answer for each. |
 | `/bob-how`, `/bob-why` | How code works, and why it ended up that way. Answers come back as interactive pages. |
 | `/bob-architect` | Two designers on two model families, a judge, one merged design. |
@@ -50,9 +53,9 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 ## Built for T3 Code
 
 - **Every role has the right model.** Opus 5.5 runs Bob threads, GPT-6.1-Sol writes the code, Sonnet reads, and every check comes from the other model family than the work it checks. Set it all in one file.
-- **Threads, not tabs.** Frank and Orchestrate launch Bob threads in their own git worktrees, titled `bob: <what it does>`.
-- **Nobody waits on a timer.** When a Bob thread finishes it reports back to Frank and wakes him instantly. Sweeps are only the safety net.
-- **Finished work gets cleaned up.** Frank settles a worker thread once its report is final, nothing's running, and no PR is waiting on anyone.
+- **Threads, not tabs.** Dispatch and Orchestrate launch Bob threads in their own git worktrees, titled `bob: <what it does>`.
+- **Nobody waits on a timer.** When a Bob thread finishes it reports back to Dispatch and wakes him instantly. Fleet Control handles outer-loop intake and missed-event recovery.
+- **Finished work gets cleaned up.** Dispatch settles a worker thread once its report is final, nothing's running, and no PR is waiting on anyone.
 - **You see it, you don't read it.** Plans, decisions, file maps, proof screenshots, status boards: drawn as live T3 pages, with a few lines of text underneath.
 
 ## Install
@@ -68,18 +71,18 @@ skills-manager-cli --skills-root ~/Developer/personal/skills skills sync --prese
 Then, in a T3 thread you'll keep open:
 
 ```
-/frank setup
+/dispatch setup
 ```
 
-Frank finds your repos and sources, asks which ones to watch, and schedules his briefs. Set that thread's model by hand in T3 (a fast one: GPT-6.1-Sol at medium with the Fast tier works well).
+Dispatch records his assigned repo and role as `Dispatch: General` or `Dispatch: Support` and gives Fleet Control the event destination. Setup creates no automations. Set that thread's model by hand in T3 (a fast one: GPT-6.1-Sol at medium with the Fast tier works well).
 
 Bob works with zero config. To change anything, it lives in your home folder:
 
 ```
 ~/.bob-n-frank/
 ├── models.yaml     the model for every role (run /bob-models to change it)
-├── config.yaml     Frank's repos, sources, brief times, auto-dispatch rules
-├── frank/          Frank's board, briefs, and reports
+├── config.yaml     Dispatch scopes, stores, evidence sources, auto-dispatch rules
+├── dispatch/       Dispatch's board, briefs, and reports
 ├── grills/         decisions settled by /bob-grill
 └── orchestrate/    one folder per Orchestrate program
 ```

@@ -1,7 +1,7 @@
 ---
 name: bob-grill
 disable-model-invocation: true
-description: "Settle every open decision in a complex or risky piece of work before anyone designs, builds, or dispatches it. Maps the decisions as a tree, asks the user each round's ready questions with a recommended answer, looks facts up instead of asking, and saves the agreed decisions. Use when a feature is complex, something could easily go wrong, the right behavior is unclear, or the user says 'grill me'. Manual-only: `/bob-grill <plan>` in Claude Code, `$bob-grill ...` in Codex. `bob` and `frank` run it when unsure."
+description: "Settle every open decision in a complex or risky piece of work before anyone designs, builds, or dispatches it. Maps the decisions as a tree, asks the user each round's ready questions with a recommended answer, looks facts up instead of asking, and saves the agreed decisions. Use when a feature is complex, something could easily go wrong, the right behavior is unclear, or the user says 'grill me'. Manual-only: `/bob-grill <plan>` in Claude Code, `$bob-grill ...` in Codex. `bob` and `dispatch` run it when unsure."
 ---
 
 # Grill

@@ -1,0 +1,7 @@
+interface:
+  display_name: "fleet-control"
+  short_description: "Route fleet context to Dispatch and report what changed"
+  default_prompt: "Use $fleet-control to check the T3 fleet, route new context to the owning Dispatch, and report what needs Dan."
+
+policy:
+  allow_implicit_invocation: true

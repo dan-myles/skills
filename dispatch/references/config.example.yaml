@@ -1,0 +1,42 @@
+# Dispatch's settings. Dispatch copies this to ~/.bob-n-frank/config.yaml on first run and reads it every run.
+# A repo can override its own entries in <repo>/.bob-n-frank/config.yaml (tracker, slack channels, never_paths).
+
+timezone: America/Chicago
+
+# Fleet Control owns cadence, source intake, webhooks, and automation ids.
+# Legacy briefs/sweep/schedules entries are migration context, not Dispatch instructions.
+# Keyed by T3 thread id. Setup updates only the current thread's entry.
+instances: {}
+#  "<thread-id>":
+#    role: support                  # general or support
+#    repos: []                      # this Dispatch's subset of the repos below
+#    state_dir: /absolute/path/to/dispatch/repo/support
+
+# Repos within this Dispatch's assigned scope.
+repos: []
+#  - path: ~/Developer/acme/app
+#    github: acme/app
+
+# auto: use when this session can reach it. on: expected, say so when it's missing. off: never read.
+sources:
+  t3_threads: on
+  github: auto
+  linear: auto
+  slack: auto
+  email: off
+  calendar: off
+
+tracker: auto                       # linear when connected, else github issues
+
+slack:
+  channels: []                      # channels allowed as evidence for delivered items
+
+auto_dispatch:
+  small_bugs: true                  # confirmed, contained bugs go straight to a Bob thread
+  per_run: 3                        # at most this many per delivered event or explicit run
+  never_paths: []                   # globs never auto-dispatched, on top of auth, money, data, migrations
+
+in_flight_cap: 4                    # Bob threads Dispatch keeps running at once
+stalled_after_hours: 24             # a dispatched thread with no new commit or PR change this long gets flagged
+
+# Legacy single-Dispatch configs may retain thread_id; setup preserves existing destinations.

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "40461b2f-e5e8-465d-bb21-f3a27bc89916",
+  "path": "fleet-control",
+  "path_key": "fleet-control",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
