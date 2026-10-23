@@ -46,7 +46,7 @@ Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.
 5. **Drain** on every wake: the heartbeat, a verifier finishing, a watched PR changing, or a user message.
    - Workers report back the moment they finish, so most drains start from a report-back message; the heartbeat is the backstop. A report file whose unit is still `running` means the report-back never came: drain it and note the defect.
    - Read each running worker without disturbing it: `t3_thread_read`, its report file, `gh pr view`. Never message a worker to check on it.
-   - Classify each: landed, merge-ready, needs-verify, failed, stuck, or noise. Update `units.tsv`, `ledger.tsv`, and `frontier.md`.
+   - Classify each: landed, merge-ready, needs-verify, failed, stuck, or noise. Update `units.tsv`, `ledger.tsv`, and `frontier.md`. Preserve each report's owning worker identity; recover missing ids or titles from the unit row and live T3 metadata. Every review-ready status board or handoff links the owning worker beside its PRs per **Review handoffs** in the skill, never only the coordinator or GitHub PR.
    - Read each report's decisions. One that touches `decided.md` or a reserved call isn't done, however well it works: mark the unit `needs-decision`, write a gate with the options and your pick, and hold its PR until the user answers.
    - A finished unit that needs judgment gets a verifier unit. Don't review diffs inline.
    - Settle each worker whose unit reached a final state (landed, abandoned, or a closed PR) per `references/settling.md`. A merge-ready PR waiting on the user keeps its worker active. The coordinator never settles itself.
@@ -90,4 +90,4 @@ Never: retries, CI flakes, review-thread triage, restack mechanics, or "should I
 
 Mid-program discoveries get fixed only when they block the frontier. Everything else goes to follow-ups.
 
-**Reply** at checkpoints, drains the user asked about, and close: the done condition and the count against it from `units.tsv` and `ledger.tsv`, each track and what it landed, the frontier, verdicts, what was abandoned and why, open gates, and the store path. Numbers from the tables, not narrative. **Show:** a board of units by state per track, the frontier with its verdicts, and gates on top; at close, the file map of everything that changed.
+**Reply** at checkpoints, drains the user asked about, and close: the done condition and the count against it from `units.tsv` and `ledger.tsv`, each track and what it landed, the frontier, verdicts, what was abandoned and why, open gates, and the store path. Every review-ready PR or stack includes the owning worker's clickable thread link alongside its PR links, with each owner mapped to its part of a stack. Numbers from the tables, not narrative. **Show:** a board of units by state per track, the frontier with its verdicts, and gates on top; at close, the file map of everything that changed.

@@ -137,5 +137,5 @@ Use Mermaid blocks or small ASCII diagrams in the reply, and markdown tables for
 - Open with the result in one line.
 - Then only what the picture doesn't carry: the decision you need, a caveat, the next step. Aim for five short lines or fewer.
 - Don't announce or describe the picture.
-- Keep clickable things in text: PR links, `file:line`, paths.
+- Keep clickable things in text: owning worker thread links, PR links, `file:line`, paths. Every review-ready PR or stack must have `[thread title](t3-thread://v1/<exact-threadId>)` beside its PR links, per **Review handoffs** in `../SKILL.md`; a label drawn inside a diagram is not a substitute for a clickable worker link.
 - Ask with the question tool right after the picture, per **How to ask** in `../SKILL.md`: your pick first as "(Recommended)", and **Send it** for a go-ahead.

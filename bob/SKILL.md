@@ -161,6 +161,8 @@ Small, contained diffs mark these two `skip: <why>`.
 
 ## The reply
 
+**Review handoffs.** Whenever a PR or stack is ready for user review, include a clickable link to the owning Bob/T3 worker conversation: `[thread title](t3-thread://v1/<exact-threadId>)`. Use its actual title and exact thread id, preserving prefixes such as `mcp:` without URL encoding. Include the GitHub PR link alongside it; a PR link never substitutes for the owning thread link. This applies to review-ready status updates, reports, briefs, and final handoffs. For a stack with multiple owners, link each owning worker beside its PRs. Use the worker, not its Dispatch, coordinator, or reviewer. Resolve missing ownership from T3 metadata, launch results, or the board before handing off; never invent a title or id. If ownership cannot be resolved, flag the missing thread link explicitly instead of treating the handoff as complete.
+
 Show, then tell. The user is a visual learner. Draw per `references/visuals.md` (in T3, `html_preview` then `html_render`, before the text) whenever there's anything to show: the plan, every checkpoint, every question, progress worth seeing, explanations, and the final reply. Only a yes or no, one fact, or a one-line confirmation goes without. Keep the text to what the picture doesn't carry, five short lines or fewer.
 
 - Open with the result in one line.

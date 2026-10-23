@@ -16,7 +16,8 @@ ACCEPTANCE   checkable criteria, one per line
 VERIFY       exact commands or the bob-verify-<app> recipe, plus known gotchas
 TIMEBOX      rough cap; on expiry, report what you have and stop
 RULES        <headless or attended, below>
-REPORT       write <report path> and end with the same text: status, final (yes or no), branch, head SHA,
+REPORT       write <report path> and end with the same text: status, final (yes or no), owning worker's
+             exact thread id and title, [thread title](t3-thread://v1/<exact-threadId>), branch, head SHA,
              PR, what you ran and its output, each decision you made that the brief didn't (marked when it touches
              DECIDED or a reserved call), gates, follow-ups, and what this thread still
              owns (an open PR, running children, a question to the user), or "nothing"
@@ -29,6 +30,8 @@ REPORT-BACK  <coordinator thread id>: <message>, sent the moment the report is w
 **RULES, attended** (the user approved the work and will answer in the thread): You were started by <coordinator> for work the user approved. Run the playbook as usual. It stops for the user only where a playbook's own conditions call for a checkpoint, or before changing anything in DECIDED or a reserved call, and never to confirm what CONTEXT already says; then ask in this thread. When the work is done, open its PR per `playbooks/open-pr.md` and babysit it to merge-ready, then stop. Never merge. Don't settle or archive this thread; the coordinator settles it after your final report. No fixes outside SCOPE; note them as follow-ups.
 
 **Report back, both RULES.** Each time you write the report (when the PR opens, again when it's merge-ready, or when you stop on a gate): call `t3_thread_send` with `threadId` from REPORT-BACK, `mode: "auto"`, the message exactly as given, and `clientRequestId` `<id>-report-<n>` where `n` counts your reports. Auto steers the report into the coordinator's running turn, or starts a turn if it's idle, so it never waits in a queue behind other work. This is what wakes the coordinator; without it, nobody hears you finished until its next check.
+
+Resolve the worker's own identity from T3 context or metadata; REPORT-BACK names the coordinator, not the worker. Preserve the exact id without URL encoding. Every review-ready report and final handoff includes the owning worker link alongside its PR links, per **Review handoffs** in `bob/SKILL.md`. The coordinator preserves that ownership when processing or relaying the report.
 
 Bound every judgment call. "Use your judgment" or "do it smartly" with no DECIDED tells the worker a blocker is permission to redesign. A conflict fix or restack keeps both sides' design and touches only what the conflict needs.
 

@@ -60,13 +60,17 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 
 ## Install
 
-You need [T3 Code](https://github.com/pingdotgg/t3code) with Claude Code and Codex, plus [skills-manager](https://github.com/xingkongliang/skills-manager).
+You need [T3 Code](https://github.com/pingdotgg/t3code) with Claude Code and Codex, plus [Skills Manager](https://github.com/xingkongliang/skills-manager). Restore this backup into the manager's default library on a new machine with an empty library:
 
 ```sh
-git clone https://github.com/dan-myles/skills ~/Developer/personal/skills
-skills-manager-cli --skills-root ~/Developer/personal/skills skills sync --preset Default --tool claude_code
-skills-manager-cli --skills-root ~/Developer/personal/skills skills sync --preset Default --tool codex
+~/.skills-manager/bin/skills-manager-cli git clone https://github.com/dan-myles/skills.git
+~/.skills-manager/bin/skills-manager-cli presets deploy Default --agent claude_code --agent codex
+~/.skills-manager/bin/skills-manager-cli presets status Default
 ```
+
+The app publishes that CLI when it starts. A CLI-only installation can use `skills-manager-cli` from PATH instead.
+
+Installed skills live in `~/.skills-manager/skills/`. Keep your development checkout separate, such as `~/Developer/personal/skills`. Switching its branches will not change Claude or Codex skills. Updates reach the agents only when deliberately imported into the stable library through Skills Manager and deployed. Do not deploy directly from a development checkout with `--skills-root`, or manually replace agent skill links.
 
 Then, in a T3 thread you'll keep open:
 
