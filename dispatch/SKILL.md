@@ -45,6 +45,8 @@ Orchestrate programs keep their own stores in `~/.bob-n-frank/orchestrate/`.
 
 Every run starts by reading `config.yaml` and the board, and ends with the board written back. When `config.yaml` is missing, run on the defaults in `references/config.example.yaml` (no repos or intake scanning), start an empty board, and put "Run `/dispatch setup` to set this Dispatch's repo and role" at the top of the brief.
 
+**Review handoffs.** Every PR or stack ready for user review must include the owning Bob/T3 worker link as `[thread title](t3-thread://v1/<exact-threadId>)`, alongside its GitHub PR links. Preserve the actual title and exact id, including prefixes such as `mcp:`, without URL encoding. A PR link or this Dispatch's own link never substitutes for the worker link. Apply this when processing reports, announcing review-ready status, writing briefs, and making final handoffs. For multiple owners, link each worker beside its PRs. Resolve missing ownership from the board, saved launch result, report, and live T3 metadata; never invent it. Flag an unresolved owner explicitly instead of presenting the handoff as complete.
+
 ## Evidence for delivered work
 
 Read the delivered item, its linked context, and relevant tracker records to triage and dedupe it. Read known worker threads and PRs for tracking. Connected GitHub, Linear, Slack, email, or calendar tools provide evidence for that work; connection alone does not authorize a source-wide intake pass. Honor disabled sources in `config.yaml`.
@@ -86,13 +88,13 @@ When an item's goal, right behavior, or scope is unclear, it isn't auto-dispatch
 - Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `~/.bob-n-frank/models.yaml`, a new worktree off the repo's default branch, title `bob: <what it does>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`, titled the same way.
 - Thread titles start with `bob: ` and then say what the work does in a few plain words, like `bob: add retry to market data fetch`. No ticket or issue IDs (`ENG-2919`, `#123`) in the title; they go in the brief's CONTEXT.
 - Fill REPORT-BACK with this thread's id from its instance entry, or legacy `thread_id`, and the message `/dispatch report <id>`.
-- Save the brief, set the row to `dispatched` with the thread id, and link the thread in the brief as `[title](t3-thread://v1/<threadId>)`.
+- Save the brief, set the row to `dispatched` with the exact worker thread id, and link the worker in the saved brief as `[thread title](t3-thread://v1/<exact-threadId>)`. Keep the id and actual title available for report processing and review handoffs.
 
 ## Track
 
 On every run, for each `dispatched` row: read its thread and PR without disturbing the thread. Never message a Bob thread to check on it.
 
-- A merge-ready PR moves the row to `merge-ready` and goes on the user's review list.
+- A merge-ready PR moves the row to `merge-ready` and goes on the user's review list with its owning worker link and PR link, per **Review handoffs**. Preserve the report's worker identity when processing `/dispatch report`; recover missing identity from the board and live thread metadata.
 - A thread waiting on the user goes under Fires.
 - No new commit or PR change for `stalled_after_hours` gets flagged as stalled, with what it last did.
 - A `done` row whose thread is still active gets settled once it passes the checks in `../bob/references/settling.md`; a merge-ready PR waiting on the user keeps it active until the PR merges or closes.
@@ -103,8 +105,8 @@ On every run, for each `dispatched` row: read its thread and PR without disturbi
 Show it per `../bob/references/visuals.md`: a board in four bands, fires on top.
 
 - **Fires:** red CI on a default branch, a Bob thread waiting on the user, anything urgent from a source.
-- **Today:** proposals to pick from, merge-ready PRs to review.
-- **Waiting:** what's in flight, with its thread and PR.
+- **Today:** proposals to pick from, merge-ready PRs to review, each with the owning worker's clickable thread link alongside its PR links.
+- **Waiting:** what's in flight, with its clickable owning worker link and PR.
 - **FYI:** what was filed, deduped, or dropped, and the sources read.
 
 When nothing changed since the last brief, say "Nothing new since <time>." and stop. On Fridays, add one line suggesting `/bob-improve` if any session that week hit a correction.
