@@ -1,0 +1,6 @@
+# Setup
+
+1. Create `~/.bob-n-frank/` and copy `../references/config.example.yaml` only if `config.yaml` is missing. Preserve existing settings. If `models.yaml` is missing, copy `../../bob-models/models.example.yaml` there.
+2. Identify the assigned repo, role, and current thread id from the request and T3 project context. Ask only for missing scope. Title the thread `Dispatch: General` or `Dispatch: Support`. Add or update only this thread's `instances` entry with its role, repos, and distinct absolute `state_dir`. Preserve an existing store until its migration is approved and keep active workers' report-back destinations working.
+3. Report the thread id, repo, role, and event entrypoint to the caller so Fleet Control can route `/dispatch event ...` items here. Configure no schedules, webhook endpoints, timers, or other automations.
+4. Flag legacy `briefs`, `sweep`, or `schedules` settings as outer-loop migration items. Existing brief timers, domain checks, and GitHub webhooks may still exist; their existence does not give Dispatch ownership. Do not create, edit, delete, or recreate them. Hand their ownership review to Fleet Control. Run `brief.md` for the first board brief without an intake scan.

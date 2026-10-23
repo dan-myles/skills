@@ -11,7 +11,7 @@ Three layers that run your software work inside [T3 Code](https://github.com/pin
 It's a remix of three things:
 
 - **[pstack](https://github.com/cursor/plugins/tree/main/pstack)** by Lauren Tan: the playbooks, the principles, and the engineering bar (one job, verified, no slop).
-- **[Matt Pocock's skills](https://github.com/mattpocock/skills)**: grilling, the round-by-round interview that settles every decision before complex work starts.
+- **[Matt Pocock's skills](https://github.com/mattpocock/skills)**: grilling, the round-by-round interview before complex work, and Wayfinder's durable maps for planning across sessions.
 - **Custom workflows** built for T3 Code: cross-provider subagents, worktree threads, report-backs that wake the coordinator, outer-loop events, PR watching, and replies that are drawn, not written.
 
 ## What it feels like
@@ -35,7 +35,7 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 |---|---|
 | `fleet-control` | The outer loop. Cross-machine intake, routing, stalls, and a digest for Dan. |
 | `/bob <goal>` | The front door. Sorts the task into a playbook and runs it to a merge-ready PR. |
-| `/dispatch` | The chief of staff. `setup`, `event`, `brief`, `status` ("what are my bobs doing"), or just talk to him. |
+| `/dispatch` | The chief of staff. `setup`, `event`, `brief`, `report`, `status`, or just talk to him. User-invoked `wayfinder` coordinates planning toward a larger goal. |
 | `/bob-grill` | Settles every open decision on complex work, round by round, with a recommended answer for each. |
 | `/bob-how`, `/bob-why` | How code works, and why it ended up that way. Answers come back as interactive pages. |
 | `/bob-architect` | Two designers on two model families, a judge, one merged design. |
@@ -47,6 +47,8 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 | `/bob-models` | Pick the model for every role, checked against T3's live catalog. |
 | `/bob-improve` | Bob learns from real sessions: reflect, eval a skill change, recommend models, make repeated mistakes impossible. |
 | `bob-principle-*` | 24 short engineering principles Bob reads when a step needs one. |
+
+**Dispatch's playbooks:** Setup, Event, Brief, Report, Status, and Wayfinder. `/dispatch wayfinder <goal or map>` runs in your Dispatch thread only when you ask for it. Dispatch keeps a decision map and coordinates Bob research and prototype workers; your choices return to Dispatch. A finished map becomes a spec and implementation briefs, with build approval kept separate from planning. Fleet Control events never start Wayfinder.
 
 **Bob's playbooks:** Investigation (explain or diagnose), Bug, Feature, Refactor, Perf, Prototype, Open PR, Babysit, Orchestrate (a whole multi-day program), Cleanup.
 
