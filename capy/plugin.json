@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.1.0/plugin.schema.json",
+  "name": "bob",
+  "version": "0.1.0",
+  "description": "Bob coding workflows for Capy: build, investigate, verify, and review with evidence.",
+  "repository": "https://github.com/dan-myles/skills",
+  "extensions": {
+    "ai.capy": {
+      "displayName": "Bob",
+      "recipes": {}
+    }
+  }
+}

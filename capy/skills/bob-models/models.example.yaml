@@ -1,0 +1,71 @@
+bob:
+  thread:
+    modelId: claude-code/claude-opus-5-5
+    reasoningMode: high
+  workers:
+    modelId: openai/gpt-6.1-sol
+    reasoningMode: high
+  hard:
+    modelId: claude-code/claude-opus-5-5
+    reasoningMode: xhigh
+  verifier:
+    modelId: openai/gpt-6.1-sol
+    reasoningMode: high
+bob-how:
+  explorers:
+    modelId: claude-code/claude-sonnet-5-5
+    reasoningMode: medium
+  explainer:
+    modelId: claude-code/claude-opus-5-5
+    reasoningMode: high
+bob-why:
+  investigators:
+    modelId: claude-code/claude-sonnet-5-5
+    reasoningMode: medium
+  synthesizer:
+    modelId: claude-code/claude-opus-5-5
+    reasoningMode: high
+bob-architect:
+  designers:
+  - modelId: claude-code/claude-opus-5-5
+    reasoningMode: xhigh
+  - modelId: openai/gpt-6.1-sol
+    reasoningMode: xhigh
+  judge:
+    modelId: openai/gpt-6.1-sol
+    reasoningMode: high
+bob-adversarial-review:
+  reviewers:
+  - modelId: claude-code/claude-opus-5-5
+    reasoningMode: high
+  - modelId: openai/gpt-6.1-sol
+    reasoningMode: high
+bob-no-comments:
+  sicko:
+    modelId: claude-code/claude-opus-5-5
+    reasoningMode: medium
+bob-verify:
+  readers:
+    modelId: claude-code/claude-sonnet-5-5
+    reasoningMode: medium
+bob-improve:
+  reflect-judgment:
+    modelId: claude-code/claude-opus-5-5
+    reasoningMode: high
+  reflect-tooling:
+    modelId: claude-code/claude-sonnet-5-5
+    reasoningMode: medium
+  reflect-divergent:
+    modelId: openai/gpt-6.1-sol
+    reasoningMode: high
+  reflect-synthesizer:
+    modelId: claude-code/claude-opus-5-5
+    reasoningMode: high
+  eval-candidates:
+  - modelId: claude-code/claude-opus-5-5
+    reasoningMode: high
+  - modelId: openai/gpt-6.1-sol
+    reasoningMode: high
+  eval-judge:
+    modelId: openai/gpt-6.1-sol
+    reasoningMode: high

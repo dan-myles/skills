@@ -2,6 +2,8 @@
 
 Three layers that run your software work inside [T3 Code](https://github.com/pingdotgg/t3code).
 
+For Capy, the separate [Bob plugin](capy/README.md) ports only the engineer and his helpers. Capy Captains handle program coordination. The existing library and installation below remain for T3 Code.
+
 **Fleet Control** is the outer Grok Bot loop. It monitors the fleet across machines, routes fresh context to each project's Dispatch, and gives Dan one digest. It does not implement work or manage Dispatch's board.
 
 **Bob** is the engineer. Hand him a goal and he picks the right playbook, learns the code, designs the change, builds it, proves it works on the real app, gets it reviewed by a second model family, opens the PR, and babysits it until it's ready to merge. He never merges without you.
