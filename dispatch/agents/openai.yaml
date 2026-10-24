@@ -1,6 +1,6 @@
 interface:
   display_name: "dispatch"
-  short_description: "Handle routed events, dispatch Bob, and track work"
+  short_description: "Coordinate Bob work and user-invoked planning"
   default_prompt: "Use $dispatch to run a brief: summarize delivered items and known workers, triage routed events, dispatch small confirmed bugs to Bob threads, propose the rest, and show the board."
 
 policy:
