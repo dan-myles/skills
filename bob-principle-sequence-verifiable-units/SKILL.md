@@ -11,4 +11,4 @@ Do work as small units that each end in a state you can check. Don't start the n
 A break caught at the unit that caused it is cheap to find. One caught after a batch is buried under work built on it.
 
 - **Doing it.** Known-good state, one change, run the check, move on. Rebase onto a clean base first so each check measures against the real thing. When a script does the edits, the check is nearly free; run it anyway.
-- **Delivering it.** Order commits and PRs as an argument: the failing test, then the fix. Deletions, then the reshape. A baseline, then the change. Scaffold, then the feature. Each commit stands on its own.
+- **Delivering it.** Order commits and PRs as an argument: the failing test, then the fix. Deletions, then the reshape. A baseline, then the change. Scaffold, then the feature. Each commit stands on its own. In a stack, every PR has to pass CI, so the test layer goes above the fix and the fix's PR points to it.

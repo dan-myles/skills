@@ -7,6 +7,14 @@ Turn finished work in this checkout into a reviewable PR, then babysit it to mer
 3. **Check.** Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
 4. **Commit.** On the base branch, branch first; keep a branch the harness or brief already named. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
 
+   When the diff holds more than one of these kinds of change, put each kind in its own stack layer, bottom to top, skipping any that would be empty:
+   1. **Prep:** renames, moves, and deletions that change no behavior.
+   2. **Generated:** codegen, dependency bumps, migrations, shared types.
+   3. **The change:** one layer per component (data, backend, frontend). A risky piece gets its own layer, so reverting it leaves the rest.
+   4. **Tests:** the integration, end-to-end, and regression tests that prove the change.
+   5. **Docs:** READMEs, guides, the changelog, agent instructions.
+
+   Each layer passes the repo's checks and reads without the layers above it. A doc that records a decision (an ADR, ARCHITECTURE) stays in the layer that carries the decision out. A fix of a few dozen lines with its test stays one PR.
 5. **Open it** with the repo's PR skill if there is one, letting it own what it covers (tickets, titles, stack linking). If not, use `gh pr create`. Open it ready for review, never as a draft. Prefer several narrow PRs to one large one; when they depend on each other, open them as a GitHub stack with `gh stack`, not as branches based on each other by hand:
    - `gh stack init <bottom> ... <top>` adopts the branches bottom to top, and `gh stack add <branch>` adds a layer on top. Pass `--base` when the base isn't the default branch.
    - `gh stack submit --auto --open` pushes every layer, opens one PR per layer based on the layer below, and links them as a stack. Without `--open`, `--auto` opens drafts. Then write each PR's title and body with `gh pr edit`.
