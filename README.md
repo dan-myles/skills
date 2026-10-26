@@ -6,7 +6,7 @@ Three layers that run your software work inside [T3 Code](https://github.com/pin
 
 **Bob** is the engineer. Hand him a goal and he picks the right playbook, learns the code, designs the change, builds it, proves it works on the real app, gets it reviewed by a second model family, opens the PR, and babysits it until it's ready to merge. He never merges without you.
 
-**Dispatch** is Bob's chief of staff. He handles items Fleet Control routes through `/dispatch event ...`, triages within his assigned scope, sends small confirmed bugs straight to Bob threads, lines up everything else for you to pick, and briefs you on request. Fleet Control owns sweeps, scheduled intake, routing, and automations. He never writes code, never merges, and never messages anyone on your behalf.
+**Dispatch** is Bob's chief of staff. He handles items Fleet Control routes through `/dispatch event ...`, triages within his assigned scope, sends small confirmed bugs straight to Bob threads, lines up everything else for you to pick, and briefs you on request. Fleet Control owns sweeps, scheduled intake, routing, and automations. He never writes code, never merges, never messages anyone on your behalf, and never starts subagents: every bit of work, even a quick validation or code read, goes to a Bob thread. Bobs can use subagents.
 
 It's a remix of three things:
 

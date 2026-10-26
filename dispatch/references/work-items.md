@@ -7,7 +7,7 @@ Shared procedures for delivered work. Read the sections named by the active play
 For each item not in `seen.tsv`:
 
 1. **Read all of it:** the thread or issue, its replies, screenshots, logs, and links.
-2. **Trace the cause enough to route it.** A bounded pass of `../../bob-how/SKILL.md` over the likely code path, and `../../bob-why/SKILL.md` when it looks like a regression. A visible symptom alone isn't enough to pick a repo or area when the trace points elsewhere. If the code can't be read, say so and route conservatively.
+2. **Trace the cause enough to route it.** A bounded pass of `../../bob-how/SKILL.md` over the likely code path, and `../../bob-why/SKILL.md` when it looks like a regression, both on their "without subagents" path in this thread. A visible symptom alone isn't enough to pick a repo or area when the trace points elsewhere. If the code can't be read, or the trace needs more than a bounded read, say so, route conservatively, and propose a Bob Investigation thread.
 3. **Classify:** bug, perf, feature, question, or noise. When bug versus feature is unclear, it's a question for the user, not a ticket.
 4. **Dedupe** against the board, `seen.tsv`, and the tracker, by error signature, area, and source link. Prefer no ticket over a guessed or duplicate one.
 5. **File** a clear, new bug in the tracker, linked back to its source. Don't set priority or assign anyone.
@@ -21,7 +21,7 @@ For each item not in `seen.tsv`:
 - it's in a repo in `config.yaml`
 - the trace points to one area, a few files
 - it doesn't touch auth, money, stored data, migrations, a public API, or `never_paths`
-- **a second model confirmed it.** Start a read-only validator with `delegate_task` on `dispatch.validator` in `~/.bob-n-frank/models.yaml`, per `../../bob-models/references/delegation.md`. Give it the source, your triage, and the repo path. It checks the claim against the code, reproduces it when that's cheap, and answers CONFIRMED or REJECTED with one sentence and its evidence. Only CONFIRMED dispatches; REJECTED becomes a proposal with the validator's reason. Its completion wakes this thread.
+- **a second model confirmed it.** Launch a read-only validator Bob thread with `t3_thread_launch`: `modelSelection` from `dispatch.validator` in `~/.bob-n-frank/models.yaml`, the repo's project root with no worktree, title `bob: validate <the bug>`. Never use `delegate_task` or a subagent for this. Its brief gives the source, your triage, and the repo path. RULES: read-only, change no files, open no PR, ask no one. It checks the claim against the code, reproduces it when that's cheap, and writes CONFIRMED or REJECTED with one sentence and its evidence to `<state_dir>/reports/<id>-validate.md`. REPORT-BACK is this thread with `/dispatch report <id>-validate`. Record the validator's exact thread id in the row's note and leave the row `triaged` until it reports. Only CONFIRMED dispatches; REJECTED becomes a proposal with the validator's reason.
 
 When an item's goal, right behavior, or scope is unclear, it isn't auto-dispatched.
 
@@ -41,11 +41,11 @@ Wayfinder is never selected by triage or task size. Only the user can invoke `/d
 
 ## Track
 
-For each `dispatched` row in the current scope: read its thread and its PR when it has one without disturbing the thread. For delegated planning workers, use `task_status` with the saved task id; their backing thread is not an independent worker to settle. Never message a Bob thread to check on it.
+For each `dispatched` row and each pending validator in the current scope: read its thread and its PR when it has one without disturbing the thread. Never message a Bob thread to check on it.
 
 - A Wayfinder report follows `../playbooks/report.md` before any PR logic. Research completion is evidence, not a product decision or permission to build.
 - A merge-ready PR moves the row to `merge-ready` and goes on the user's review list with its owning worker link and PR link, per **Review handoffs**. Preserve the report's worker identity when processing `/dispatch report`; recover missing identity from the board and live thread metadata.
 - A thread waiting on the user goes under Fires.
 - No new commit or PR change for `stalled_after_hours` gets flagged as stalled, with what it last did. For planning workers without a PR, use their last task, thread, or report update instead.
-- A `done` ordinary-worker row whose thread is still active gets settled once it passes the checks in `../../bob/references/settling.md`; a merge-ready PR waiting on the user keeps it active until the PR merges or closes.
+- A `done` worker row whose thread is still active gets settled once it passes the checks in `../../bob/references/settling.md`; a merge-ready PR waiting on the user keeps it active until the PR merges or closes.
 - A report file with no report-back (its row still `dispatched`) is a defect: process the report now, and note in the brief which thread didn't report back.
