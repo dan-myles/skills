@@ -72,7 +72,7 @@ You need [T3 Code](https://github.com/pingdotgg/t3code) with Claude Code and Cod
 
 The app publishes that CLI when it starts. A CLI-only installation can use `skills-manager-cli` from PATH instead.
 
-Installed skills live in `~/.skills-manager/skills/`. Keep your development checkout separate, such as `~/Developer/personal/skills`. Switching its branches will not change Claude or Codex skills. Updates reach the agents only when deliberately imported into the stable library through Skills Manager and deployed. Do not deploy directly from a development checkout with `--skills-root`, or manually replace agent skill links.
+Installed skills live in `~/.skills-manager/skills/`. Keep your development checkout separate, such as `~/Developer/personal/skills`. Switching its branches will not change Claude or Codex skills. Updates reach the agents only when deliberately imported into the stable library through Skills Manager and deployed (see [Sync changes to a machine](#sync-changes-to-a-machine)). Do not deploy directly from a development checkout with `--skills-root`, or manually replace agent skill links.
 
 Then, in a T3 thread you'll keep open:
 
@@ -94,6 +94,41 @@ Bob works with zero config. To change anything, it lives in your home folder:
 ```
 
 A repo can override any of it in `<repo>/.bob-n-frank/`.
+
+## Sync changes to a machine
+
+Pushing to this repo doesn't change what Claude and Codex see. Each machine's live library has to pull it:
+
+```sh
+CLI=~/.skills-manager/bin/skills-manager-cli
+$CLI git pull                  # bring in the pushed commits
+$CLI skills list               # every skill folder should be listed
+$CLI presets status Default    # claude_code and codex should read N/N
+```
+
+Edits to existing skills are live once pulled, because the agents' skill folders are links into the library. Start a new session to pick them up.
+
+A new skill folder arrives with the pull but isn't registered until it's installed. `skills adopt` can't do it, because it refuses to copy a folder onto itself, so move the folder aside and install it back:
+
+```sh
+L=~/.skills-manager/skills; T=$(mktemp -d)
+mv $L/<name> $T/ && $CLI skills install --local --name <name> --sync-preset Default $T/<name>
+diff -r $T/<name> $L/<name>    # prints nothing when the copy matches
+```
+
+`install` deploys to every enabled agent, so undeploy the extras to keep Default on Claude and Codex only:
+
+```sh
+for a in opencode amp pi; do $CLI skills undeploy --agent $a <name>; done
+```
+
+Then commit the registry files it wrote (`.skills-manager/skills/<uuid>.json` and the Default preset entry) and push them back to this repo:
+
+```sh
+$CLI git commit -m "register <name> in skills manager" && $CLI git push
+```
+
+On another machine, if `skills list` doesn't show the new skill after `git pull`, install it there the same way.
 
 ## House rules
 
