@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-design-to-motion"
+  short_description: "Animate a static design into a looping showcase with MP4 and GIF exports"
+  default_prompt: "Use $personal-design-to-motion to animate this design and export the MP4 and GIFs."
+
+policy:
+  allow_implicit_invocation: false

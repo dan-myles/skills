@@ -1,5 +1,6 @@
 ---
 name: personal-paper-comment-watch
+disable-model-invocation: true
 description: "Watch a Paper design file for new comments and act on each one: make the requested change through the Paper MCP, screenshot to verify, then resolve the thread. Polls the local Paper MCP every second from a background monitor and re-arms it until told to stop. Use when the user asks you to watch, monitor, or keep handling Paper comments, or to work through their Paper feedback as it comes in. A single one-off design edit without ongoing comment handling does not need this skill."
 ---
 

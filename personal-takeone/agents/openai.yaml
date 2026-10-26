@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-takeone"
+  short_description: "Record a polished demo video of a web app with takeone"
+  default_prompt: "Use $personal-takeone to record a demo video of this web app's main flow."
+
+policy:
+  allow_implicit_invocation: false

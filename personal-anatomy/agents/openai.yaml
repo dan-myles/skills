@@ -4,4 +4,4 @@ interface:
   default_prompt: "Use $personal-anatomy to explain how an LRU cache evicts entries, interactive."
 
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

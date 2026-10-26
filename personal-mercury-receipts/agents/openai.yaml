@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-mercury-receipts"
+  short_description: "Find and upload receipts for Mercury's open receipt tasks"
+  default_prompt: "Use $personal-mercury-receipts to clear my open Mercury receipt tasks: find each receipt in Gmail or the vendor portal, save the PDFs, and upload them."
+
+policy:
+  allow_implicit_invocation: false

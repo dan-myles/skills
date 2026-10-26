@@ -15,7 +15,7 @@ Also here, outside Bob:
 - `unslop`: cuts AI tells from writing. Global and unprefixed on purpose.
 - `personal-tailscale-ssh`: automatically handles work on Dan's other machines through passwordless Tailscale SSH. Dan explicitly requested automatic invocation. Records verified Studio, Archie, and Paperclip accounts and the Studio's separate userspace SSH endpoint.
 - `ketchup`: catches Dan up on a chat since his last message and lists every call waiting on him. Unprefixed like `unslop`, but manual-only. Ported from pstack's `ketchup` (2026-10-20).
-- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT; `personal-taste`, Leon Lin's taste-skill v2 from github.com/Leonxlnx/taste-skill at f624f37, MIT). Third-party skills are copied as is with only `name` changed, keep their LICENSE, and stay model-invocable when upstream meant them to.
+- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT; `personal-taste`, Leon Lin's taste-skill v2 from github.com/Leonxlnx/taste-skill at f624f37, MIT; `personal-landing-page-design` and `personal-design-to-motion`, Elaya's ai-design-skills from github.com/elayadesign/ai-design-skills at a2735a3, MIT). Third-party skills are copied as is with only `name` changed (plus the manual-only flags) and keep their LICENSE. Every `personal-*` skill is manual-only except `personal-tailscale-ssh` (Dan's call, 2026-10-26).
 
 ## Status
 

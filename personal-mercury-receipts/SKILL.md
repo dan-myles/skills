@@ -1,5 +1,6 @@
 ---
 name: personal-mercury-receipts
+disable-model-invocation: true
 description: "Clear Mercury's \"Upload receipt\" tasks end to end: catalog the open tasks at app.mercury.com/tasks, find each receipt in Gmail (work and personal inboxes) or in the vendor's billing portal (ChatGPT, Alpaca, Crisp, claude.ai, any Stripe portal), save PDFs and a found/missing CSV in ~/Miscellaneous/mercury-receipts, then upload each PDF to its Mercury transaction. Use when the user mentions Mercury tasks, missing receipts, receipt uploads, or expense documentation for the company card."
 ---
 

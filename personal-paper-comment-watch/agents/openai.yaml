@@ -4,4 +4,4 @@ interface:
   default_prompt: "Use $personal-paper-comment-watch on the open Paper file: watch for new comments, make each requested change, verify it with a screenshot, and resolve the thread."
 
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

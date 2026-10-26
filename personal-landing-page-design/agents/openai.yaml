@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-landing-page-design"
+  short_description: "Build a high-converting landing page with a strict visual system"
+  default_prompt: "Use $personal-landing-page-design to build a landing page for this product."
+
+policy:
+  allow_implicit_invocation: false

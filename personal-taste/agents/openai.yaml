@@ -4,4 +4,4 @@ interface:
   default_prompt: "Use $personal-taste to design this page: deal directions from the library, pick one that carries the subject's idea, build it, and run the screenshot look-and-fix loop."
 
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false
