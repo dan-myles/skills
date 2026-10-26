@@ -6,7 +6,13 @@ Turn finished work in this checkout into a reviewable PR, then babysit it to mer
 2. **Review.** Run **Review** in the skill on the whole diff, unless it already ran in this thread on this same diff. Work the user or another session wrote gets the full Review too.
 3. **Check.** Run the repo's fix and check commands (format, lint, types, tests, generated files) until they're clean.
 4. **Commit.** On the base branch, branch first; keep a branch the harness or brief already named. Split the work into small commits that each stand on their own, in an order that tells the story. Use conventional commit titles unless the repo says otherwise. Do this even when the repo squash-merges, because it helps the reviewer.
-5. **Open it** with the repo's PR skill if there is one, letting it own what it covers (tickets, titles, stack linking). If not, use `gh pr create`. Open it ready for review, never as a draft. Prefer several narrow PRs to one large one; when they depend on each other, stack them, each based on its parent's branch. In T3, link every PR to the thread.
+
+5. **Open it** with the repo's PR skill if there is one, letting it own what it covers (tickets, titles, stack linking). If not, use `gh pr create`. Open it ready for review, never as a draft. Prefer several narrow PRs to one large one; when they depend on each other, open them as a GitHub stack with `gh stack`, not as branches based on each other by hand:
+   - `gh stack init <bottom> ... <top>` adopts the branches bottom to top, and `gh stack add <branch>` adds a layer on top. Pass `--base` when the base isn't the default branch.
+   - `gh stack submit --auto --open` pushes every layer, opens one PR per layer based on the layer below, and links them as a stack. Without `--open`, `--auto` opens drafts. Then write each PR's title and body with `gh pr edit`.
+   - Check it with `gh stack view`: every layer has its PR, in order.
+
+   In T3, link every PR to the thread.
 6. **Write the body** as a briefing a reviewer reads in under a minute, under `##` headings, leaving out any with nothing to say. When the repo's PR skill has its own body format, use that and fold these in where they fit.
    - **Why:** the problem and the approach, one to three sentences.
    - **What changed:** one to three bullets, then the file map as a text tree, per **File maps** in `references/visuals.md`.
