@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "dc1162e7-530b-4021-85c2-98562e4043fc",
+  "path": "personal-landing-page-design",
+  "path_key": "personal-landing-page-design",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "skill_id": "530b66a6-10e6-47e8-9935-caf9cdda2660",
+  "path": "personal-design-to-motion",
+  "path_key": "personal-design-to-motion",
+  "enabled": true,
+  "tags": [],
+  "source": {
+    "type": "local",
+    "ref": null,
+    "subpath": null,
+    "branch": null
+  }
+}
