@@ -6,7 +6,7 @@ Where the Bob work stands, for the next agent who picks it up. Read this before 
 
 Dan's loadout, applied by the loadout CLI from this repository's `loadout` branch. `loadout.toml` is the deployment contract. `tags/coding.toml` adds Bob on the MacBook Pro, Studio, and Paperclip; `machines/grokbot.toml` enables only the Grok Bot destination and the global non-coding skills. Capy on the Studio is pending a documented user-level skills path; it cannot be declared validly without one. See `README.md` for machine names, rollout questions, ownership limits, and branch-specific setup.
 
-All skill folders remain at the root with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits before switching ownership. This conversion did not apply any machine or change `main`.
+All skill folders remain at the root with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits, then undeploy the manager-created links before switching ownership. Loadout follows top-level skill links and can otherwise adopt the library targets. See the README migration steps. This conversion did not apply any machine or change `main`.
 
 Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `bob-` skills. Bob is a port of pstack, a Cursor plugin, rewritten in our own words and rebuilt for T3 Code.
 
