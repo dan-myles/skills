@@ -1,0 +1,56 @@
+[loadout]
+version = 1
+
+[agents]
+enabled = ["claude", "codex", "cursor", "grok"]
+
+[machines.dans-macbook-pro]
+tags = ["coding"]
+
+[machines.dans-mac-studio]
+tags = ["coding"]
+
+[machines.paperclip]
+tags = ["coding"]
+
+[machines.grokbot]
+tags = []
+
+[skills.dispatch]
+source = "dispatch"
+
+[skills.fleet-control]
+source = "fleet-control"
+
+[skills.ketchup]
+source = "ketchup"
+
+[skills.personal-anatomy]
+source = "personal-anatomy"
+
+[skills.personal-dan-review]
+source = "personal-dan-review"
+
+[skills.personal-design-to-motion]
+source = "personal-design-to-motion"
+
+[skills.personal-landing-page-design]
+source = "personal-landing-page-design"
+
+[skills.personal-mercury-receipts]
+source = "personal-mercury-receipts"
+
+[skills.personal-paper-comment-watch]
+source = "personal-paper-comment-watch"
+
+[skills.personal-tailscale-ssh]
+source = "personal-tailscale-ssh"
+
+[skills.personal-takeone]
+source = "personal-takeone"
+
+[skills.personal-taste]
+source = "personal-taste"
+
+[skills.unslop]
+source = "unslop"

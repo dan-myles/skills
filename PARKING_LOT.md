@@ -4,9 +4,9 @@ Where the Bob work stands, for the next agent who picks it up. Read this before 
 
 ## What this repo is
 
-Dan's global skills library, used by every agent he runs (Claude Code, Codex, and T3 Code, which runs both). Each folder is one skill. This checkout is the authoring and backup repository; `.skills-manager/` holds its registry. The live Skills Manager library is a separate copy at `~/.skills-manager/skills/`, restored from this repository. Claude Code (`~/.claude/skills`) and Codex (`~/.codex/skills`) use the Default preset deployed from that stable library. Manager-created links point there, never into this branch-switching checkout. Don't make or remove those links by hand.
+Dan's loadout, applied by the loadout CLI from this repository's `loadout` branch. `loadout.toml` is the deployment contract. `tags/coding.toml` adds Bob on the MacBook Pro, Studio, and Paperclip; `machines/grokbot.toml` enables only the Grok Bot destination and the global non-coding skills. Capy on the Studio is pending a documented user-level skills path; it cannot be declared validly without one. See `README.md` for machine names, rollout questions, ownership limits, and branch-specific setup.
 
-Use the app-published CLI at `~/.skills-manager/bin/skills-manager-cli` when its `.version` stamp is present; the PATH copy can be older. Normal deployment is `~/.skills-manager/bin/skills-manager-cli presets deploy Default --agent claude_code --agent codex`, without `--skills-root` pointing here. Branch switches and edits in this checkout do not update installed skills. Import approved changes into the stable library deliberately through the CLI, then deploy and verify. Do not switch the live library's branch. Keep uncommitted edits in both copies until the user authorizes publishing them.
+All skill folders remain at the root with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits before switching ownership. This conversion did not apply any machine or change `main`.
 
 Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `bob-` skills. Bob is a port of pstack, a Cursor plugin, rewritten in our own words and rebuilt for T3 Code.
 
@@ -42,8 +42,8 @@ Do all of these together:
 1. The folder name, and `name:` in `SKILL.md` frontmatter, match.
 2. `disable-model-invocation: true` in the frontmatter.
 3. `agents/openai.yaml` with the same name and `allow_implicit_invocation: false`.
-4. Commit and push it, then register and deploy it on the machine by following **Sync changes to a machine** in `README.md`. `skills install` writes the registry files (`.skills-manager/skills/<uuid>.json` and `.skills-manager/scenario-skills/e1791670-bbde-4560-bd44-9547d1deaa60/<uuid>.json`); commit them from the library with the CLI's `git commit` and `git push` rather than writing UUIDs by hand.
-5. Deploy from the default library: `~/.skills-manager/bin/skills-manager-cli presets deploy Default --agent claude_code --agent codex`. Never deploy from this checkout with `--skills-root`. `skills status <name>` shows where a skill is deployed. For an existing skill, the CLI's `skills export` can copy an approved checkout version to its stable-library folder; compare and preserve any library-only edits before replacing it. Published backup updates can also be pulled through the manager's `git pull`, preserving local changes and resolving conflicts first.
+4. Add `[skills.<name>] source = "<name>"` to `tags/coding.toml` for `bob` and `bob-*`, or `loadout.toml` for the requested non-coding set. The box gets global skills only. Keep machine-specific destinations in machine layers.
+5. Run `loadout validate .` and `loadout plan --loadout .`, then commit and push only when Dan asks. Apply approved changes per `README.md`; do not hand-edit agent links or reintroduce Skills Manager as a second deployment source.
 6. Add it to the skills list in `bob-improve/SKILL.md`, and to `bob/SKILL.md` if Bob uses it.
 7. Run `unslop` on new prose.
 

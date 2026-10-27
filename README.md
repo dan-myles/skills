@@ -1,4 +1,109 @@
-# Fleet Control, Dispatch & Bob
+# Dan's loadout
+
+This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. It declares skills and enabled agents only. It does not install programs, configure MCP servers, or manage other user files.
+
+The deployment branch is `loadout`. `main` stays unchanged until Dan reviews. All 49 skill folders and their contents stay intact at the root, including scripts, references, assets, and licenses. Loadout allows sources in any layout, so moving them would add work without changing deployment.
+
+## Layout and machines
+
+```text
+loadout.toml                     global agents, 13 non-coding skills, machine tags
+tags/coding.toml                 bob and all bob-* skills, 36 total
+machines/grokbot.toml                replaces enabled agents with the custom grok-bot
+bob/, bob-*/, personal-*/, ...   unchanged skill sources
+.skills-manager/                 historical registry, ignored by the loadout CLI
+PARKING_LOT.md                   repo rules and history
+```
+
+| Machine name | OS / account | Tags | Enabled agents | Skills |
+| --- | --- | --- | --- | --- |
+| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 49 |
+| `dans-mac-studio` | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 49; Capy pending |
+| `paperclip` | Linux / `paperclip` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 49 |
+| `grokbot` | Linux / `box` | none | `grok-bot` only | 13 non-coding skills |
+
+Machine names follow the tailnet names, checked on 2026-10-27. The MacBook's OS hostname is `Daniels-MacBook-Pro.local`, and Paperclip's is `Ubuntu-2204-jammy-amd64-base`, so save the table's names explicitly instead of relying on hostname detection. SSH confirmed user `dan` with home `/Users/dan` on the MacBook and user `paperclip` with home `/home/paperclip` on Paperclip. The Grok Bot machine is `grokbot`, not the account name `box`. It was offline and its tailnet DNS name did not resolve, so its account and workflow copies could not be checked remotely. The Studio is the current machine, user `dan`, home `/Users/dan`. Its machine name is `dans-mac-studio`, not its separate SSH endpoint `dans-mac-studio-ssh`.
+
+The global layer enables the four native agents. An unlisted machine gets those agents and the 13 non-coding skills, but no Bob skills. The `coding` tag adds Bob only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `bob` or `bob-*` skills.
+
+## Agent destinations and limits
+
+| Loadout agent | Skill destination | T3 driver |
+| --- | --- | --- |
+| `claude` | `~/.claude/skills` or `$CLAUDE_CONFIG_DIR/skills` | `claudeAgent` |
+| `codex` | `~/.agents/skills` | `codex` |
+| `cursor` | `~/.cursor/skills` | `cursor` |
+| `grok` | `~/.grok/skills` or `$GROK_HOME/skills` | `grok` |
+| `grok-bot` | `~/agent-data/workflows`, Linux only | separate Grok Bots, not the T3 Grok driver |
+| Capy, pending | no verified user-level path | separate Capy app on Studio |
+
+T3 Code uses the native adapters; it needs no separate `t3` agent. Loadout's adapter evidence confirms native pickup for Claude, Codex, and Grok with the documented homes. Cursor pickup is inferred. T3 provider instances with custom homes need a separate pickup check; this loadout does not write into T3's private settings or profiles. Cursor also reads shared skill directories, so `doctor` may warn about duplicate skill names when several native agents receive copies.
+
+Capy is pending on the Studio. [Its official skills documentation](https://docs.capy.ai/skills), also checked in the installed app's local docs, describes repository `.agents/skills` and `.claude/skills`, Drive, and plugins. It does not document a user-level destination. Its app-owned `~/.capy/system/skills` is not a documented user destination. Loadout rejects a custom agent with no concrete destination, so Capy is not declared or enabled yet. Dan must confirm a supported path or choose a repository/Drive/plugin workflow before Capy can receive these skills through Loadout.
+
+## Grok Bot ownership
+
+Dan verified that every Grok Bot reads one folder per skill, each containing `SKILL.md`, under `/home/box/agent-data/workflows`. The custom agent uses `~/agent-data/workflows` because the manifest rejects absolute destinations. Run as user `box` with home `/home/box` to reach the verified path.
+
+The box receives `dispatch`, `fleet-control`, `ketchup`, `unslop`, and every `personal-*` skill. This is the requested allowlist, even where a personal skill contains coding or macOS instructions. The folder already contains bot-created `fleet-control` and `gs-crisp-support`.
+
+Loadout owns each `<destination>/<skill-id>` separately, not the workflows parent. It plans only declared targets and targets in its local ownership state. An undeclared, unowned sibling such as `gs-crisp-support` is never copied, adopted, or removed by this loadout. Do not declare the workflows parent as a user file or skill source.
+
+**A foreground apply will replace the box's existing `fleet-control` if it differs.** Loadout backs up the entire old skill folder, then copies this repository's folder. There is no confirmation prompt. Review or reconcile that copy before applying. A matching copy is adopted without a content write. Background sync skips a differing unowned target and reports it instead.
+
+Ownership means recorded by Loadout, not necessarily created by Loadout. Adopted or replaced folders become owned. If later undeclared, an unchanged owned folder is backed up and removed; a changed folder is released and left in place. There is no manifest option to prohibit adopting matching folders. Thus the guarantee is that unrelated unowned folders survive, not that every folder originally made by a bot remains forever. Keep the local state and backups; `loadout rollback` can undo a run when later changes do not block restoration.
+
+## Apply on a machine
+
+Install the CLI from [dan-myles/loadout](https://github.com/dan-myles/loadout). Use a version compatible with manifest version 1. This conversion was checked against CLI commit `bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4`. See [validation results](docs/loadout-validation.md) for command output, machine resolution, skill preservation, and ownership proof.
+
+Until this branch is reviewed, do not run plain `loadout init` on the GitHub URL. It clones the default branch and immediately applies it; the CLI currently has no branch flag. Use a branch-tracking clone and the documented local identity file instead.
+
+On a fresh machine with no existing Loadout state, choose `machine_name` from the table above. On Paperclip, run as `paperclip`; on the bot server, run as `box`. On either Mac, run as Dan. These commands prepare the clone and identity only, then show a read-only plan:
+
+```sh
+machine_name=dans-mac-studio
+case "$(uname -s)" in
+  Darwin) loadout_state="$HOME/Library/Application Support/loadout" ;;
+  Linux) loadout_state="${XDG_STATE_HOME:-$HOME/.local/state}/loadout" ;;
+  *) return 1 2>/dev/null || exit 1 ;;
+esac
+if test -n "${LOADOUT_HOME:-}${LOADOUT_STATE_DIR:-}"; then
+  echo 'Unset Loadout isolation/state overrides before this fresh-machine setup.'
+  return 1 2>/dev/null || exit 1
+fi
+if test -e "$loadout_state"; then
+  echo 'Existing Loadout state: inspect it instead of overwriting it.'
+  return 1 2>/dev/null || exit 1
+fi
+(umask 077; mkdir -p "$loadout_state") &&
+git clone --branch loadout --single-branch git@github.com:dan-myles/skills.git "$loadout_state/loadout" &&
+(umask 077; printf 'name = "%s"\nremote = "git@github.com:dan-myles/skills.git"\n' "$machine_name" > "$loadout_state/machine.toml") &&
+loadout validate "$loadout_state/loadout" &&
+loadout plan --loadout "$loadout_state/loadout"
+```
+
+Run the following only after reviewing the plan, especially every `replace`, `adopt`, `remove`, `drifted`, `blocked`, and `unsupported` action. On the box, reconcile the existing `fleet-control` before this step. Stop using Skills Manager to deploy these same skills first. Preserve any live-library-only edits and resolve existing symlinks deliberately; Loadout may report symlinked skill targets as blocked.
+
+```sh
+loadout apply --loadout "$loadout_state/loadout"
+loadout doctor
+loadout status
+```
+
+For an existing Loadout installation, preserve its identity and state. Inspect its managed clone's current branch and local changes, then switch its tracked branch to `loadout` only after resolving any local work. `loadout plan --loadout <clone>` previews the result before applying. Never discard changes or overwrite `machine.toml` to make setup pass.
+
+Subsequent `loadout sync` fetches and fast-forwards the managed clone's tracked `origin/loadout` branch, then applies it. `loadout update` updates the CLI itself. It does not sync skills. A background service is optional setup after review via `loadout service install`; no service is installed by the commands above. Start a new agent session after applying to refresh discovered skills. The old `.skills-manager/` registry remains for migration reference and is not an input to Loadout.
+
+## Confirm before rollout
+
+- Verify the offline `grokbot` machine as user `box` once reachable. Save the tailnet machine names explicitly; MacBook and Paperclip OS hostnames differ from them.
+- `/home/box` is the bot account's home, and which version of `fleet-control` to keep before its first foreground apply.
+- Which agents are used on each coding machine. All four native agents are enabled there for the stated Claude/Codex/Cursor/Grok driver setup.
+- Capy's supported destination or alternate skill distribution method, and pickup by T3 instances with custom homes and by Cursor.
+- Which Skills Manager links or live edits need migration before Loadout takes ownership. No machine was applied as part of this conversion.
+
+## Fleet Control, Dispatch and Bob
 
 Three layers that run your software work inside [T3 Code](https://github.com/pingdotgg/t3code).
 
@@ -60,21 +165,9 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 - **Finished work gets cleaned up.** Dispatch settles a worker thread once its report is final, nothing's running, and no PR is waiting on anyone.
 - **You see it, you don't read it.** Plans, decisions, file maps, proof screenshots, status boards: drawn as live T3 pages, with a few lines of text underneath.
 
-## Install
+## After applying
 
-You need [T3 Code](https://github.com/pingdotgg/t3code) with Claude Code and Codex, plus [Skills Manager](https://github.com/xingkongliang/skills-manager). Restore this backup into the manager's default library on a new machine with an empty library:
-
-```sh
-~/.skills-manager/bin/skills-manager-cli git clone https://github.com/dan-myles/skills.git
-~/.skills-manager/bin/skills-manager-cli presets deploy Default --agent claude_code --agent codex
-~/.skills-manager/bin/skills-manager-cli presets status Default
-```
-
-The app publishes that CLI when it starts. A CLI-only installation can use `skills-manager-cli` from PATH instead.
-
-Installed skills live in `~/.skills-manager/skills/`. Keep your development checkout separate, such as `~/Developer/personal/skills`. Switching its branches will not change Claude or Codex skills. Updates reach the agents only when deliberately imported into the stable library through Skills Manager and deployed (see [Sync changes to a machine](#sync-changes-to-a-machine)). Do not deploy directly from a development checkout with `--skills-root`, or manually replace agent skill links.
-
-Then, in a T3 thread you'll keep open:
+In a T3 thread you'll keep open:
 
 ```
 /dispatch setup
@@ -94,41 +187,6 @@ Bob works with zero config. To change anything, it lives in your home folder:
 ```
 
 A repo can override any of it in `<repo>/.bob-n-frank/`.
-
-## Sync changes to a machine
-
-Pushing to this repo doesn't change what Claude and Codex see. Each machine's live library has to pull it:
-
-```sh
-CLI=~/.skills-manager/bin/skills-manager-cli
-$CLI git pull                  # bring in the pushed commits
-$CLI skills list               # every skill folder should be listed
-$CLI presets status Default    # claude_code and codex should read N/N
-```
-
-Edits to existing skills are live once pulled, because the agents' skill folders are links into the library. Start a new session to pick them up.
-
-A new skill folder arrives with the pull but isn't registered until it's installed. `skills adopt` can't do it, because it refuses to copy a folder onto itself, so move the folder aside and install it back:
-
-```sh
-L=~/.skills-manager/skills; T=$(mktemp -d)
-mv $L/<name> $T/ && $CLI skills install --local --name <name> --sync-preset Default $T/<name>
-diff -r $T/<name> $L/<name>    # prints nothing when the copy matches
-```
-
-`install` deploys to every enabled agent, so undeploy the extras to keep Default on Claude and Codex only:
-
-```sh
-for a in opencode amp pi; do $CLI skills undeploy --agent $a <name>; done
-```
-
-Then commit the registry files it wrote (`.skills-manager/skills/<uuid>.json` and the Default preset entry) and push them back to this repo:
-
-```sh
-$CLI git commit -m "register <name> in skills manager" && $CLI git push
-```
-
-On another machine, if `skills list` doesn't show the new skill after `git pull`, install it there the same way.
 
 ## House rules
 
