@@ -6,9 +6,9 @@ Where the Bob work stands, for the next agent who picks it up. Read this before 
 
 Dan's loadout, applied by the loadout CLI from this repository's `loadout` branch. `loadout.toml` is the deployment contract. `tags/coding.toml` adds Bob on the MacBook Pro, Studio, and Paperclip; `machines/grokbot.toml` enables only the Grok Bot destination and the global non-coding skills. Capy on the Studio is pending a documented user-level skills path; it cannot be declared validly without one. See `README.md` for machine names, rollout questions, ownership limits, and branch-specific setup.
 
-All skill folders remain at the root with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits, then undeploy the manager-created links before switching ownership. Loadout follows top-level skill links and can otherwise adopt the library targets. See the README migration steps. This conversion did not apply any machine or change `main`.
+All skill folders live under `skills/`, matching the Loadout starter, with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits, then undeploy the manager-created links before switching ownership. Loadout follows top-level skill links and can otherwise adopt the library targets. See the README migration steps. This conversion did not apply any machine or change `main`.
 
-Pending skill-content follow-up: `bob-improve/SKILL.md` still instructs agents to import into Skills Manager and deploy Default. Its body was preserved at Dan's request. Do not run those old deployment steps after migrating; follow `README.md` and update the skill only when Dan authorizes changing its contents.
+Pending skill-content follow-up: `skills/bob-improve/SKILL.md` still instructs agents to import into Skills Manager and deploy Default. Its body was preserved at Dan's request. Do not run those old deployment steps after migrating; follow `README.md` and update the skill only when Dan authorizes changing its contents.
 
 Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `bob-` skills. Bob is a port of pstack, a Cursor plugin, rewritten in our own words and rebuilt for T3 Code.
 
@@ -29,7 +29,7 @@ Bob is still being designed. **Nothing in it has run on real work yet.** Don't u
 - Bob is built for T3 Code. Headless CLIs (`claude -p`, `codex exec`) are only a fallback.
 - Every bob- skill is manual-only. Bob reads helpers and principles by path when a step names them.
 - Explain to Dan with rendered visuals, and keep the text to what the visual doesn't say.
-- Ask Dan with the question tool (`AskUserQuestion` in Claude Code and T3), the recommended option first. The confirm option is labeled **Send it**, and Dan types "send it" to approve. Bob's rule is **How to ask** in `bob/SKILL.md`.
+- Ask Dan with the question tool (`AskUserQuestion` in Claude Code and T3), the recommended option first. The confirm option is labeled **Send it**, and Dan types "send it" to approve. Bob's rule is **How to ask** in `skills/bob/SKILL.md`.
 - Commit messages are short and lowercase (`add bob-verify`, `bob: add perf playbook`). Commit and push only when Dan asks.
 - Never print or copy secrets. The 1Password master password lives in `~/.config/agents/1password.txt`; leave it there.
 
@@ -41,12 +41,12 @@ The three lead skills are `fleet-control`, `dispatch`, and `bob`. Fleet Control 
 
 Do all of these together:
 
-1. The folder name, and `name:` in `SKILL.md` frontmatter, match.
+1. Create the folder under `skills/`. Its folder name and `name:` in `SKILL.md` frontmatter match.
 2. `disable-model-invocation: true` in the frontmatter.
 3. `agents/openai.yaml` with the same name and `allow_implicit_invocation: false`.
-4. Add `[skills.<name>] source = "<name>"` to `tags/coding.toml` for `bob` and `bob-*`, or `loadout.toml` for the requested non-coding set. The box gets global skills only. Keep machine-specific destinations in machine layers.
+4. Add `[skills.<name>] source = "skills/<name>"` to `tags/coding.toml` for `bob` and `bob-*`, or `loadout.toml` for the requested non-coding set. The box gets global skills only. Keep machine-specific destinations in machine layers.
 5. Run `loadout validate .` and `loadout plan --loadout .`, then commit and push only when Dan asks. Apply approved changes per `README.md`; do not hand-edit agent links or reintroduce Skills Manager as a second deployment source.
-6. Add it to the skills list in `bob-improve/SKILL.md`, and to `bob/SKILL.md` if Bob uses it.
+6. Add it to the skills list in `skills/bob-improve/SKILL.md`, and to `skills/bob/SKILL.md` if Bob uses it.
 7. Run `unslop` on new prose.
 
 ## Bob and Dispatch's home
@@ -62,7 +62,7 @@ A repo can override `models.yaml` and Dispatch's per-repo settings in `<repo>/.b
 
 ## Map
 
-**`bob`**, the front door: `/bob <goal>`. It sorts the task into one playbook in `bob/playbooks/`:
+**`bob`**, the front door: `/bob <goal>`. It sorts the task into one playbook in `skills/bob/playbooks/`:
 
 | Playbook | For | Ends at |
 |---|---|---|
@@ -78,7 +78,7 @@ A repo can override `models.yaml` and Dispatch's per-repo settings in `<repo>/.b
 
 Bob babysits every PR he opens unless told not to, and replies to human reviewers and bots without asking. Dan chose both.
 
-`bob/references/benchmark-checklist.md` vets every performance number. `bob/references/visuals.md` makes replies visual-first: in T3 Bob draws most replies and every checkpoint as an HTML page (`html_preview`, then `html_render`) and keeps the text to what the picture doesn't say. Every playbook's Reply names what to **Show**.
+`skills/bob/references/benchmark-checklist.md` vets every performance number. `skills/bob/references/visuals.md` makes replies visual-first: in T3 Bob draws most replies and every checkpoint as an HTML page (`html_preview`, then `html_render`) and keeps the text to what the picture doesn't say. Every playbook's Reply names what to **Show**.
 
 **Helpers** Bob runs from playbook steps:
 
@@ -92,9 +92,9 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - `bob-sharpen`: rewrites a prompt so it asks for a deeper version of the task, not a bigger one, and hands back only the rewrite. Ported from pstack's `sharpen` as of 0.15.29, where it stopped doing the task itself.
 - `bob-verify`: writes and maintains a repo's own `bob-verify-<app>` skill (committed in that repo at `.claude/skills/bob-verify-<app>/`, symlinked from `.agents/skills/`). Bob uses it when driving an app and only offers to create one.
 
-**Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
+**Principles**: 24 `bob-principle-*` skills, one folder each so only the needed one loads. `skills/bob/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
 
-**`bob-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `bob-models/models.example.yaml` in this repo is the built-in default: it has every line, runs when a user has no models file, and fills lines their file lacks. Dispatch likewise runs on `dispatch/references/config.example.yaml` when `config.yaml` is missing. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Dispatch's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/bob-models` edits the home file and recommends upgrades. `bob-models/references/delegation.md` says how to start each one.
+**`bob-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `skills/bob-models/models.example.yaml` in this repo is the built-in default: it has every line, runs when a user has no models file, and fills lines their file lacks. Dispatch likewise runs on `skills/dispatch/references/config.example.yaml` when `config.yaml` is missing. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Dispatch's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/bob-models` edits the home file and recommends upgrades. `skills/bob-models/references/delegation.md` says how to start each one.
 
 **`bob-improve`**, its own front door because it changes skills or repos, not product code:
 
@@ -103,7 +103,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - Models: recommends model changes from session evidence. Never edits `models.yaml` itself.
 - Correct: makes a repo's repeated agent mistakes impossible (architecture, then types, then lint, then tests), proven against a real past mistake.
 
-**`dispatch`**, Bob's chief of staff: `Dispatch: General` and `Dispatch: Support` handle items Fleet Control routes through `/dispatch event ...`. Fleet Control owns sweeps, scheduled intake, routing, and all automations. Dispatch triages delivered items, dispatches confirmed small bugs under existing rules, proposes the rest, and tracks its own workers. Setup records scope, thread id, and a distinct store per repo and role; it creates no timers or webhooks. Existing brief timers, failed-payments checks, and webhooks are migration items for the outer loop, not Dispatch-owned work. Workers still report directly to their owning Dispatch; Dispatch and Orchestrate settle workers per `bob/references/settling.md` and keep their own threads active. Dispatch now routes `setup`, `event`, `brief`, `report`, `status`, and the manual-only `wayfinder` command into `dispatch/playbooks/`. Shared triage, launch, and tracking live in `dispatch/references/work-items.md`. Wayfinder stays in the Dispatch thread, maps decisions across sessions, coordinates Bob research and throwaway prototypes, and hands an approved spec to implementation. It never auto-starts or creates automations. Its `planning` and `plan-ready` board states keep decision work separate from implementation; existing boards need no migration.
+**`dispatch`**, Bob's chief of staff: `Dispatch: General` and `Dispatch: Support` handle items Fleet Control routes through `/dispatch event ...`. Fleet Control owns sweeps, scheduled intake, routing, and all automations. Dispatch triages delivered items, dispatches confirmed small bugs under existing rules, proposes the rest, and tracks its own workers. Setup records scope, thread id, and a distinct store per repo and role; it creates no timers or webhooks. Existing brief timers, failed-payments checks, and webhooks are migration items for the outer loop, not Dispatch-owned work. Workers still report directly to their owning Dispatch; Dispatch and Orchestrate settle workers per `skills/bob/references/settling.md` and keep their own threads active. Dispatch now routes `setup`, `event`, `brief`, `report`, `status`, and the manual-only `wayfinder` command into `skills/dispatch/playbooks/`. Shared triage, launch, and tracking live in `skills/dispatch/references/work-items.md`. Wayfinder stays in the Dispatch thread, maps decisions across sessions, coordinates Bob research and throwaway prototypes, and hands an approved spec to implementation. It never auto-starts or creates automations. Its `planning` and `plan-ready` board states keep decision work separate from implementation; existing boards need no migration.
 
 ## Decisions and why
 
@@ -112,7 +112,7 @@ Bob babysits every PR he opens unless told not to, and replies to human reviewer
 - **Principles are separate skills,** like pstack, so Bob loads only the one a step needs. A single combined file was rejected.
 - **Verify skills live in each repo.** Only the generator is global.
 - **Auto-babysit, with review replies.** Dan wants PRs handed back merge-ready. Merging still needs his say-so.
-- **Decided stays decided (2026-10-19).** In the CrabStock payment stack (#84–#94), workers redesigned around blockers without asking: Kafka swapped for Postgres polling when librdkafka wouldn't build, a provider fallback Dan had dropped, a split ledger, production's outflow cap set to 0, another service's infra edited during a restack. `bob/SKILL.md` now names the calls that stay Dan's (stored data shape, transport, providers, money values, other teams' infra, shared contracts, anything he already decided). Briefs carry DECIDED, Review runs a decision check on every diff, PRs list **Decisions made here**, and Orchestrate holds a departure as `needs-decision` with a gate. Everything outside that list stays Bob's to decide, per the 2026-10-13 complaint that Bob asked too much.
+- **Decided stays decided (2026-10-19).** In the CrabStock payment stack (#84–#94), workers redesigned around blockers without asking: Kafka swapped for Postgres polling when librdkafka wouldn't build, a provider fallback Dan had dropped, a split ledger, production's outflow cap set to 0, another service's infra edited during a restack. `skills/bob/SKILL.md` now names the calls that stay Dan's (stored data shape, transport, providers, money values, other teams' infra, shared contracts, anything he already decided). Briefs carry DECIDED, Review runs a decision check on every diff, PRs list **Decisions made here**, and Orchestrate holds a departure as `needs-decision` with a gate. Everything outside that list stays Bob's to decide, per the 2026-10-13 complaint that Bob asked too much.
 - **"Adversarial review", not "interrogate".** It reviews code; it doesn't question the user.
 
 ## Where we stopped
@@ -137,7 +137,7 @@ PostHog posted 38 lessons from building their AI products ([thread](https://x.co
 
 1. **Freeze features and run Bob on real work.** Watch a few real runs end to end before adding more skills. (Habit; matches **Next** above.)
 2. **Turn failures into evals.** `bob-improve reflect` saves each bad session as a case, and `bob-improve eval` replays the cases before a skill change ships.
-3. **Count lookups as missing skills.** Add a line to REPORT in `bob/references/brief.md` for what the thread had to look up or wished it had.
+3. **Count lookups as missing skills.** Add a line to REPORT in `skills/bob/references/brief.md` for what the thread had to look up or wished it had.
 4. **Cut subagents back to where they pay.** PostHog keeps readers on the parent model to share its cache. Dan doesn't mind either way, so the read-only roles stay on Sonnet in `models.yaml`.
 5. **Cost per thread.** Report tokens and dollars per thread so Dispatch can show spend.
 6. **Keep the harness thin.** Fewer rules in prompts, more of the model's own judgment. (Habit.)

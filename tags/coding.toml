@@ -1,107 +1,107 @@
 [skills.bob]
-source = "bob"
+source = "skills/bob"
 
 [skills.bob-adversarial-review]
-source = "bob-adversarial-review"
+source = "skills/bob-adversarial-review"
 
 [skills.bob-architect]
-source = "bob-architect"
+source = "skills/bob-architect"
 
 [skills.bob-blast-radius]
-source = "bob-blast-radius"
+source = "skills/bob-blast-radius"
 
 [skills.bob-grill]
-source = "bob-grill"
+source = "skills/bob-grill"
 
 [skills.bob-how]
-source = "bob-how"
+source = "skills/bob-how"
 
 [skills.bob-improve]
-source = "bob-improve"
+source = "skills/bob-improve"
 
 [skills.bob-models]
-source = "bob-models"
+source = "skills/bob-models"
 
 [skills.bob-no-comments]
-source = "bob-no-comments"
+source = "skills/bob-no-comments"
 
 [skills.bob-principle-attack-the-premise]
-source = "bob-principle-attack-the-premise"
+source = "skills/bob-principle-attack-the-premise"
 
 [skills.bob-principle-boundary-discipline]
-source = "bob-principle-boundary-discipline"
+source = "skills/bob-principle-boundary-discipline"
 
 [skills.bob-principle-build-the-lever]
-source = "bob-principle-build-the-lever"
+source = "skills/bob-principle-build-the-lever"
 
 [skills.bob-principle-encode-lessons-in-structure]
-source = "bob-principle-encode-lessons-in-structure"
+source = "skills/bob-principle-encode-lessons-in-structure"
 
 [skills.bob-principle-exhaust-the-design-space]
-source = "bob-principle-exhaust-the-design-space"
+source = "skills/bob-principle-exhaust-the-design-space"
 
 [skills.bob-principle-experience-first]
-source = "bob-principle-experience-first"
+source = "skills/bob-principle-experience-first"
 
 [skills.bob-principle-explain-the-number]
-source = "bob-principle-explain-the-number"
+source = "skills/bob-principle-explain-the-number"
 
 [skills.bob-principle-fix-root-causes]
-source = "bob-principle-fix-root-causes"
+source = "skills/bob-principle-fix-root-causes"
 
 [skills.bob-principle-foundational-thinking]
-source = "bob-principle-foundational-thinking"
+source = "skills/bob-principle-foundational-thinking"
 
 [skills.bob-principle-guard-the-context-window]
-source = "bob-principle-guard-the-context-window"
+source = "skills/bob-principle-guard-the-context-window"
 
 [skills.bob-principle-laziness-protocol]
-source = "bob-principle-laziness-protocol"
+source = "skills/bob-principle-laziness-protocol"
 
 [skills.bob-principle-make-operations-idempotent]
-source = "bob-principle-make-operations-idempotent"
+source = "skills/bob-principle-make-operations-idempotent"
 
 [skills.bob-principle-migrate-callers-then-delete-legacy-apis]
-source = "bob-principle-migrate-callers-then-delete-legacy-apis"
+source = "skills/bob-principle-migrate-callers-then-delete-legacy-apis"
 
 [skills.bob-principle-minimize-reader-load]
-source = "bob-principle-minimize-reader-load"
+source = "skills/bob-principle-minimize-reader-load"
 
 [skills.bob-principle-model-the-domain]
-source = "bob-principle-model-the-domain"
+source = "skills/bob-principle-model-the-domain"
 
 [skills.bob-principle-never-block-on-the-human]
-source = "bob-principle-never-block-on-the-human"
+source = "skills/bob-principle-never-block-on-the-human"
 
 [skills.bob-principle-outcome-oriented-execution]
-source = "bob-principle-outcome-oriented-execution"
+source = "skills/bob-principle-outcome-oriented-execution"
 
 [skills.bob-principle-prove-it-works]
-source = "bob-principle-prove-it-works"
+source = "skills/bob-principle-prove-it-works"
 
 [skills.bob-principle-redesign-from-first-principles]
-source = "bob-principle-redesign-from-first-principles"
+source = "skills/bob-principle-redesign-from-first-principles"
 
 [skills.bob-principle-separate-before-serializing-shared-state]
-source = "bob-principle-separate-before-serializing-shared-state"
+source = "skills/bob-principle-separate-before-serializing-shared-state"
 
 [skills.bob-principle-sequence-verifiable-units]
-source = "bob-principle-sequence-verifiable-units"
+source = "skills/bob-principle-sequence-verifiable-units"
 
 [skills.bob-principle-subtract-before-you-add]
-source = "bob-principle-subtract-before-you-add"
+source = "skills/bob-principle-subtract-before-you-add"
 
 [skills.bob-principle-test-behavior-not-implementation]
-source = "bob-principle-test-behavior-not-implementation"
+source = "skills/bob-principle-test-behavior-not-implementation"
 
 [skills.bob-principle-type-system-discipline]
-source = "bob-principle-type-system-discipline"
+source = "skills/bob-principle-type-system-discipline"
 
 [skills.bob-sharpen]
-source = "bob-sharpen"
+source = "skills/bob-sharpen"
 
 [skills.bob-verify]
-source = "bob-verify"
+source = "skills/bob-verify"
 
 [skills.bob-why]
-source = "bob-why"
+source = "skills/bob-why"

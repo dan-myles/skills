@@ -17,40 +17,40 @@ tags = ["coding"]
 tags = []
 
 [skills.dispatch]
-source = "dispatch"
+source = "skills/dispatch"
 
 [skills.fleet-control]
-source = "fleet-control"
+source = "skills/fleet-control"
 
 [skills.ketchup]
-source = "ketchup"
+source = "skills/ketchup"
 
 [skills.personal-anatomy]
-source = "personal-anatomy"
+source = "skills/personal-anatomy"
 
 [skills.personal-dan-review]
-source = "personal-dan-review"
+source = "skills/personal-dan-review"
 
 [skills.personal-design-to-motion]
-source = "personal-design-to-motion"
+source = "skills/personal-design-to-motion"
 
 [skills.personal-landing-page-design]
-source = "personal-landing-page-design"
+source = "skills/personal-landing-page-design"
 
 [skills.personal-mercury-receipts]
-source = "personal-mercury-receipts"
+source = "skills/personal-mercury-receipts"
 
 [skills.personal-paper-comment-watch]
-source = "personal-paper-comment-watch"
+source = "skills/personal-paper-comment-watch"
 
 [skills.personal-tailscale-ssh]
-source = "personal-tailscale-ssh"
+source = "skills/personal-tailscale-ssh"
 
 [skills.personal-takeone]
-source = "personal-takeone"
+source = "skills/personal-takeone"
 
 [skills.personal-taste]
-source = "personal-taste"
+source = "skills/personal-taste"
 
 [skills.unslop]
-source = "unslop"
+source = "skills/unslop"

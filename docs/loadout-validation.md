@@ -25,7 +25,7 @@ Plan and doctor were read-only on the Studio. No live apply, service install, or
 
 ## Skill preservation and machine resolution
 
-SHA-256 comparison against the starting checkout at `c6341db082c7d56ad679772d820ebf6381147ae1` confirmed all 283 files across 49 skill folders unchanged. Catalog coverage is exact, with 13 global skills and 36 Bob skills in `tags/coding.toml`. Every source remains its original folder name. The historical `.skills-manager/` registry is unchanged and is not used by Loadout.
+SHA-256 comparison against the starting checkout at `c6341db082c7d56ad679772d820ebf6381147ae1` confirmed all 283 files across 49 skill folders unchanged. Catalog coverage is exact, with 13 global skills and 36 Bob skills in `tags/coding.toml`. Every source is now `skills/<original-folder-name>`, matching `examples/starter`. The move preserves the original relative file paths within each skill and the sibling relationships between skills. The historical `.skills-manager/` registry is unchanged and is not used by Loadout.
 
 A scratch integration test imported the checked CLI's actual library and resolved and materialized this loadout with synthetic machine facts and disposable homes:
 
@@ -74,3 +74,9 @@ Claude and GPT reviewed the manifests and rollout instructions. GPT returned no 
 - Fresh-machine clones and the saved remote use public HTTPS, so background reads need no GitHub SSH key on `paperclip` or `box`.
 
 No findings were dismissed. The CLI manifest stayed unchanged during these documentation fixes. No comments or suppressions were added, so the comment-removal helper did not apply.
+
+## Starter layout follow-up
+
+Dan requested the starter's directory organization. Checked [examples/starter](https://github.com/dan-myles/loadout/tree/b38dc0949ceb7421819ef497c3d7485b8437f1dc/examples/starter) and its README and manifest, then moved all 49 skill folders into `skills/`. The root manifest, tag layer, and machine layer retain their jobs; only skill source paths change. No sample programs, files, instructions, or MCP declarations were added.
+
+Compared every moved file against the pre-move checkout at `0d8c269dceb27dd34c13392df0c4bdd35087f1c3`: all 283 file contents and modes match exactly after stripping the new `skills/` prefix. The complete live Studio plan before and after the move is identical. Validation still reports 3 layers, 49 items, and 0 warnings. The real-library materialization check still resolves 196 destinations on each coding machine and only 13 Grok Bot destinations on Linux. Skill bodies were not edited.

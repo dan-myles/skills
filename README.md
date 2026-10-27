@@ -2,7 +2,7 @@
 
 This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. It declares skills and enabled agents only. It does not install programs, configure MCP servers, or manage other user files.
 
-The deployment branch is `loadout`. `main` stays unchanged until Dan reviews. All 49 skill folders and their contents stay intact at the root, including scripts, references, assets, and licenses. Loadout allows sources in any layout, so moving them would add work without changing deployment.
+The deployment branch is `loadout`. `main` stays unchanged until Dan reviews. All 49 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Their contents stay intact, including scripts, references, assets, and licenses. Manifest sources use `skills/<name>`.
 
 ## Layout and machines
 
@@ -10,7 +10,8 @@ The deployment branch is `loadout`. `main` stays unchanged until Dan reviews. Al
 loadout.toml                     global agents, 13 non-coding skills, machine tags
 tags/coding.toml                 bob and all bob-* skills, 36 total
 machines/grokbot.toml            replaces enabled agents with the custom grok-bot
-bob/, bob-*/, personal-*/, ...   unchanged skill sources
+skills/                         skill sources, matching the starter
+  bob/, bob-*/, personal-*/, ... unchanged skill folders
 .skills-manager/                 historical registry, ignored by the loadout CLI
 PARKING_LOT.md                   repo rules and history
 ```
