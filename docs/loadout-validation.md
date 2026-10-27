@@ -40,7 +40,7 @@ The bot assertions require the exact global allowlist, no `bob` or `bob-*`, only
 
 ## Ownership proof
 
-Two additional scratch tests ran the real apply and state code in disposable homes. The custom destination was `~/agent-data/workflows` on the test OS, with a preexisting `fleet-control` and an undeclared bot-created `gs-crisp-support`.
+Four additional scratch tests ran the real apply and state code in disposable homes. The custom destination was `~/agent-data/workflows` on the test OS, with a preexisting `fleet-control` and an undeclared bot-created `gs-crisp-support`.
 
 ```text
 PASS background apply skips a differing unowned fleet-control
@@ -49,10 +49,12 @@ PASS old bot fleet-control content exists in the run's backups
 PASS removing the declaration deletes only the unchanged owned fleet-control
 PASS gs-crisp-support content survives every step and has no ownership record
 PASS matching preexisting fleet-control is adopted, then removed if undeclared
-3 integration tests passed; 0 failed
+PASS adopting a top-level symlink can later remove its library target
+PASS undeploying the symlink before first apply preserves the old library
+5 integration tests passed; 0 failed
 ```
 
-The final assertion is a limit, not a promise of permanent preservation. Loadout can adopt folders it did not create. A manifest cannot enforce "never delete anything originally created by someone else" once adopted or replaced. Undeclared, unowned siblings remain outside its removal set. Relevant CLI sources are [plan/compare.rs](https://github.com/dan-myles/loadout/blob/bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4/src/plan/compare.rs), [apply/mod.rs](https://github.com/dan-myles/loadout/blob/bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4/src/apply/mod.rs), and [state/run.rs](https://github.com/dan-myles/loadout/blob/bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4/src/state/run.rs).
+The adoption assertions expose a limit, not a promise of permanent preservation. Loadout can adopt folders it did not create. A manifest cannot enforce "never delete anything originally created by someone else" once adopted or replaced. Undeclared, unowned siblings remain outside its removal set. Relevant CLI sources are [plan/compare.rs](https://github.com/dan-myles/loadout/blob/bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4/src/plan/compare.rs), [apply/mod.rs](https://github.com/dan-myles/loadout/blob/bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4/src/apply/mod.rs), and [state/run.rs](https://github.com/dan-myles/loadout/blob/bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4/src/state/run.rs).
 
 ## Machine discovery and remaining limits
 
@@ -61,3 +63,14 @@ Tailnet discovery found `dans-macbook-pro`, `dans-mac-studio`, `paperclip`, and 
 `grokbot` was offline and its DNS name failed to resolve. Its `/home/box` home and existing workflow content rely on Dan's supplied verification. No attempt was made to replace its fleet-control. Capy's current official and installed docs describe repository, Drive, and plugin skills, with no user-global path. Loadout rejects pathless custom agents, so Capy needs a verified destination or a separate distribution decision.
 
 The README's fresh-machine setup explicitly clones and tracks `loadout`; `init` has no branch option and would clone the default branch. Git whitespace checks passed.
+
+## Review corrections
+
+Claude and GPT reviewed the manifests and rollout instructions. GPT returned no findings. Claude found four rollout issues, each corrected in its own commit:
+
+- Loadout follows top-level symlinks, so manager-created Claude and legacy Codex links must be undeployed before the first apply. The README now gives concrete dry-run, undeploy, and replan steps. The two new lifecycle tests prove the hazard and the independent-copy migration. Local inspection confirmed the Studio's existing `bob` links point into the Skills Manager library. The manager's documented undeploy dry-runs succeeded for `bob` on both agents; no links were removed.
+- The pasted fresh-machine setup now runs in a subshell with `set -eu`, uses `exit` for guards, and refuses to overwrite an identity file. Guard execution passed on zsh, bash, and sh for both existing-state and state-override cases. All six cases stopped before setup effects, preserved the identity, and left the parent shell alive.
+- `bob-improve` still contains Skills Manager deployment instructions. README and PARKING_LOT explicitly flag that follow-up, while the skill body remains unchanged as requested.
+- Fresh-machine clones and the saved remote use public HTTPS, so background reads need no GitHub SSH key on `paperclip` or `box`.
+
+No findings were dismissed. The CLI manifest stayed unchanged during these documentation fixes. No comments or suppressions were added, so the comment-removal helper did not apply.

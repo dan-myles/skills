@@ -9,7 +9,7 @@ The deployment branch is `loadout`. `main` stays unchanged until Dan reviews. Al
 ```text
 loadout.toml                     global agents, 13 non-coding skills, machine tags
 tags/coding.toml                 bob and all bob-* skills, 36 total
-machines/grokbot.toml                replaces enabled agents with the custom grok-bot
+machines/grokbot.toml            replaces enabled agents with the custom grok-bot
 bob/, bob-*/, personal-*/, ...   unchanged skill sources
 .skills-manager/                 historical registry, ignored by the loadout CLI
 PARKING_LOT.md                   repo rules and history
