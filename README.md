@@ -68,7 +68,7 @@ Loadout follows top-level skill symlinks. Applying while a link still points int
 
 Install the CLI from [dan-myles/loadout](https://github.com/dan-myles/loadout). Use a version compatible with manifest version 1. This conversion was checked against CLI commit `bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4`. See [validation results](docs/loadout-validation.md) for command output, machine resolution, skill preservation, and ownership proof.
 
-Until this branch is reviewed, do not run plain `loadout init` on the GitHub URL. It clones the default branch and immediately applies it; the CLI currently has no branch flag. Use a branch-tracking clone and the documented local identity file instead.
+Until this branch is reviewed, do not run plain `loadout init` on the GitHub URL. It clones the default branch and immediately applies it; the CLI currently has no branch flag. Use a branch-tracking clone and the documented local identity file instead. The repository is public, so the HTTPS read-only remote needs no GitHub SSH key on the machine account.
 
 On a fresh machine with no existing Loadout state, choose `machine_name` from the table above. On Paperclip, run as `paperclip`; on the bot server, run as `box`. On either Mac, run as Dan. These commands run in a subshell, prepare the clone and identity only, then show a read-only plan. A failed guard stops the block without closing the parent shell:
 
@@ -90,8 +90,8 @@ On a fresh machine with no existing Loadout state, choose `machine_name` from th
     exit 1
   fi
   (umask 077; mkdir -p "$loadout_state")
-  git clone --branch loadout --single-branch git@github.com:dan-myles/skills.git "$loadout_state/loadout"
-  (umask 077; set -C; printf 'name = "%s"\nremote = "git@github.com:dan-myles/skills.git"\n' "$machine_name" > "$loadout_state/machine.toml")
+  git clone --branch loadout --single-branch https://github.com/dan-myles/skills.git "$loadout_state/loadout"
+  (umask 077; set -C; printf 'name = "%s"\nremote = "https://github.com/dan-myles/skills.git"\n' "$machine_name" > "$loadout_state/machine.toml")
   loadout validate "$loadout_state/loadout"
   loadout plan --loadout "$loadout_state/loadout"
 )
