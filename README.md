@@ -70,34 +70,37 @@ Install the CLI from [dan-myles/loadout](https://github.com/dan-myles/loadout). 
 
 Until this branch is reviewed, do not run plain `loadout init` on the GitHub URL. It clones the default branch and immediately applies it; the CLI currently has no branch flag. Use a branch-tracking clone and the documented local identity file instead.
 
-On a fresh machine with no existing Loadout state, choose `machine_name` from the table above. On Paperclip, run as `paperclip`; on the bot server, run as `box`. On either Mac, run as Dan. These commands prepare the clone and identity only, then show a read-only plan:
+On a fresh machine with no existing Loadout state, choose `machine_name` from the table above. On Paperclip, run as `paperclip`; on the bot server, run as `box`. On either Mac, run as Dan. These commands run in a subshell, prepare the clone and identity only, then show a read-only plan. A failed guard stops the block without closing the parent shell:
 
 ```sh
-machine_name=dans-mac-studio
-case "$(uname -s)" in
-  Darwin) loadout_state="$HOME/Library/Application Support/loadout" ;;
-  Linux) loadout_state="${XDG_STATE_HOME:-$HOME/.local/state}/loadout" ;;
-  *) return 1 2>/dev/null || exit 1 ;;
-esac
-if test -n "${LOADOUT_HOME:-}${LOADOUT_STATE_DIR:-}"; then
-  echo 'Unset Loadout isolation/state overrides before this fresh-machine setup.'
-  return 1 2>/dev/null || exit 1
-fi
-if test -e "$loadout_state"; then
-  echo 'Existing Loadout state: inspect it instead of overwriting it.'
-  return 1 2>/dev/null || exit 1
-fi
-(umask 077; mkdir -p "$loadout_state") &&
-git clone --branch loadout --single-branch git@github.com:dan-myles/skills.git "$loadout_state/loadout" &&
-(umask 077; printf 'name = "%s"\nremote = "git@github.com:dan-myles/skills.git"\n' "$machine_name" > "$loadout_state/machine.toml") &&
-loadout validate "$loadout_state/loadout" &&
-loadout plan --loadout "$loadout_state/loadout"
+(
+  set -eu
+  machine_name=dans-mac-studio
+  case "$(uname -s)" in
+    Darwin) loadout_state="$HOME/Library/Application Support/loadout" ;;
+    Linux) loadout_state="${XDG_STATE_HOME:-$HOME/.local/state}/loadout" ;;
+    *) exit 1 ;;
+  esac
+  if test -n "${LOADOUT_HOME:-}${LOADOUT_STATE_DIR:-}"; then
+    echo 'Unset Loadout isolation/state overrides before this fresh-machine setup.' >&2
+    exit 1
+  fi
+  if test -e "$loadout_state" || test -L "$loadout_state"; then
+    echo 'Existing Loadout state: inspect it instead of overwriting it.' >&2
+    exit 1
+  fi
+  (umask 077; mkdir -p "$loadout_state")
+  git clone --branch loadout --single-branch git@github.com:dan-myles/skills.git "$loadout_state/loadout"
+  (umask 077; set -C; printf 'name = "%s"\nremote = "git@github.com:dan-myles/skills.git"\n' "$machine_name" > "$loadout_state/machine.toml")
+  loadout validate "$loadout_state/loadout"
+  loadout plan --loadout "$loadout_state/loadout"
+)
 ```
 
 Run the following only after reviewing the plan, especially every `replace`, `adopt`, `remove`, `drifted`, `blocked`, and `unsupported` action. On the box, reconcile the existing `fleet-control` before this step. Complete the Skills Manager migration above first. Loadout follows existing top-level symlinks, so leaving a library link in place can transfer ownership of its target.
 
 ```sh
-loadout apply --loadout "$loadout_state/loadout"
+loadout apply
 loadout doctor
 loadout status
 ```
