@@ -8,6 +8,8 @@ Dan's loadout, applied by the loadout CLI from this repository's `loadout` branc
 
 All skill folders remain at the root with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits, then undeploy the manager-created links before switching ownership. Loadout follows top-level skill links and can otherwise adopt the library targets. See the README migration steps. This conversion did not apply any machine or change `main`.
 
+Pending skill-content follow-up: `bob-improve/SKILL.md` still instructs agents to import into Skills Manager and deploy Default. Its body was preserved at Dan's request. Do not run those old deployment steps after migrating; follow `README.md` and update the skill only when Dan authorizes changing its contents.
+
 Most of it is **Bob**: Dan's agent persona and his software workflow, a set of `bob-` skills. Bob is a port of pstack, a Cursor plugin, rewritten in our own words and rebuilt for T3 Code.
 
 Also here, outside Bob:

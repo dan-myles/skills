@@ -116,6 +116,7 @@ Subsequent `loadout sync` fetches and fast-forwards the managed clone's tracked 
 - Which agents are used on each coding machine. All four native agents are enabled there for the stated Claude/Codex/Cursor/Grok driver setup.
 - Capy's supported destination or alternate skill distribution method, and pickup by T3 instances with custom homes and by Cursor.
 - Which Skills Manager links or live edits need migration before Loadout takes ownership. No machine was applied as part of this conversion.
+- `bob-improve` still contains the old Skills Manager import and deploy instructions. Skill bodies were frozen for this conversion. Before using it to publish skill changes after migration, approve a separate skill-content update; use this README as the deployment procedure in the meantime.
 
 ## Fleet Control, Dispatch and Bob
 
