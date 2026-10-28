@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-why"
+  short_description: "Find out why code is the way it is, with cited evidence and confidence levels"
+  default_prompt: "Use $cooper-why on this code: search git, PRs, tickets, docs, chat, telemetry, and error tracking in parallel, then give a cited answer that separates facts from inferences."
+
+policy:
+  allow_implicit_invocation: false

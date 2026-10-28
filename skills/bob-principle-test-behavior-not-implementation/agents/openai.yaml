@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-principle-test-behavior-not-implementation"
-  short_description: "A test calls the code the way its users do and checks what they'd see against a literal expected value."
-  default_prompt: "Use $bob-principle-test-behavior-not-implementation on this work: say where it applies and what it changes."
-
-policy:
-  allow_implicit_invocation: false

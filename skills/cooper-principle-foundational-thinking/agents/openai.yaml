@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-foundational-thinking"
+  short_description: "Get the data shape right before the logic."
+  default_prompt: "Use $cooper-principle-foundational-thinking on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-redesign-from-first-principles"
+  short_description: "Don't bolt a new requirement onto the old design."
+  default_prompt: "Use $cooper-principle-redesign-from-first-principles on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

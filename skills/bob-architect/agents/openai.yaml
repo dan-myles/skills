@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-architect"
-  short_description: "Two designers from different model families sketch a change, then one design is merged from both"
-  default_prompt: "Use $bob-architect to design this before code: sketch it twice across model families, screen both for red flags, and merge them into one rationale and type sketch."
-
-policy:
-  allow_implicit_invocation: false

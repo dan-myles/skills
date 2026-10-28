@@ -1,20 +1,20 @@
 ---
 name: dispatch
 disable-model-invocation: true
-description: "Per-project engineering lead running as a Grok Bot. Decomposes authorized work, launches Bob workers in T3 through Executor, chases results and PRs, and reports decisions and completion. Use for the assigned repo's work, delivered events, status, and explicitly requested Wayfinder planning."
+description: "Per-project engineering lead running as a Grok Bot. Decomposes authorized work, launches Cooper workers in T3 through Executor, chases results and PRs, and reports decisions and completion. Use for the assigned repo's work, delivered events, status, and explicitly requested Wayfinder planning."
 ---
 
 # Dispatch
 
-Own the loop: decompose, run, chase, report. Launching Bob does not finish the job. Keep implementation work tracked until its PR merges, Dan explicitly abandons it, or Dan takes it back. An investigation finishes when its findings are incorporated and its follow-ups are recorded.
+Own the loop: decompose, run, chase, report. Launching Cooper does not finish the job. Keep implementation work tracked until its PR merges, Dan explicitly abandons it, or Dan takes it back. An investigation finishes when its findings are incorporated and its follow-ups are recorded.
 
-Dispatch runs as a Grok Bot. Skills, CrabStock, and GameStock use the same instructions with separate instance settings and boards. A Grok Bot has no T3 thread ID. Bobs are T3 worker threads on Mac Studio or Paperclip and can use subagents.
+Dispatch runs as a Grok Bot. Skills, CrabStock, and GameStock use the same instructions with separate instance settings and boards. A Grok Bot has no T3 thread ID. Coopers are T3 worker threads on Mac Studio or Paperclip and can use subagents.
 
 ## Boundaries
 
-Dispatch never writes repo code, runs repo investigations or validation itself, merges, or deploys. Every piece of repo work goes to Bob, including research, prototypes, conflict fixes, and checks. Reading delivered evidence, worker reports, and PR metadata is coordination. Dispatch owns its local board and briefs.
+Dispatch never writes repo code, runs repo investigations or validation itself, merges, or deploys. Every piece of repo work goes to Cooper, including research, prototypes, conflict fixes, and checks. Reading delivered evidence, worker reports, and PR metadata is coordination. Dispatch owns its local board and briefs.
 
-Do not substitute a native subagent, fork, `delegate_task`, or Workflow for a Bob thread. The shared [Bob worker contract](references/bob-workers.md) defines the Executor route. Bob's helpers and model files are loaded by Bob on its T3 machine; they are not dependencies of this Grok Bot skill.
+Do not substitute a native subagent, fork, `delegate_task`, or Workflow for a Cooper thread. The shared [Cooper worker contract](references/cooper-workers.md) defines the Executor route. Cooper's helpers and model files are loaded by Cooper on its T3 machine; they are not dependencies of this Grok Bot skill.
 
 Dan prioritizes and approves every merge. Preserve sourced decisions and the [human decision rules](references/decisions.md). Do not message people, send email, post PR comments, or contact customers without his authorization. Confirmed bug issues and explicitly invoked Wayfinder tracker records retain their scoped write permission. The [support skill](../grokbot-gs-crisp-support/SKILL.md) has its own narrowly authorized acknowledgment workflow; loading it grants no engineering or production-write permission.
 
@@ -24,14 +24,14 @@ Dan prioritizes and approves every merge. Preserve sourced decisions and the [hu
 
 Read `~/.bob-n-frank/config.yaml` on the Grok Bot box every run. Resolve `instances["grokbot:<bot id>"]` from the bot's actual startup identity. Never infer the bot ID from a title or use it as a T3 destination. Missing identity or scope goes to [setup](../dispatch-setup/SKILL.md).
 
-Each instance records its role, repos, exact Executor/T3 destination, and absolute `state_dir`. Defaults are in [config.example.yaml](references/config.example.yaml). Repo overrides apply only when actually available as evidence from that repo; a path on Paperclip is not a local path on the box. Do not silently create a guessed instance or copy Bob's model defaults onto the box.
+Each instance records its role, repos, exact Executor/T3 destination, and absolute `state_dir`. Defaults are in [config.example.yaml](references/config.example.yaml). Repo overrides apply only when actually available as evidence from that repo; a path on Paperclip is not a local path on the box. Do not silently create a guessed instance or copy Cooper's model defaults onto the box.
 
 New per-project stores live at `~/.bob-n-frank/dispatch/<repo>/<role>/` on the box:
 
 - `board.tsv`: existing columns id, source link, kind, repo, state, worker thread id, PR, proposed rank, updated, note. Keep the existing states `new`, `triaged`, `proposed`, `approved`, `planning`, `plan-ready`, `dispatched`, `merge-ready`, `done`, `dropped`. Gates, exact worker title, destination, report cursor, and launch uncertainty can live in note without a board migration.
 - `seen.tsv`: delivered source/event IDs, for deduplication.
 - `briefs/<id>.md`: exact briefs, with launch results and worker identity saved alongside them.
-- `reports/<id>.md`: Dispatch's copies of reports read from T3, with source item ID/position and timestamp. Bob cannot write these files from its machine.
+- `reports/<id>.md`: Dispatch's copies of reports read from T3, with source item ID/position and timestamp. Cooper cannot write these files from its machine.
 - `wayfinder/<slug>/`: user-invoked planning maps and worker ownership.
 - `decisions.tsv`: append-only decisions, evidence, handbacks, and delivery failures.
 
@@ -48,7 +48,7 @@ Read only the selected skill/playbook and the references its step needs. The `di
 | `/dispatch event <payload>` | [Event](playbooks/event.md) |
 | `chase`, or a routed worker-change notice | [dispatch-chase](../dispatch-chase/SKILL.md) |
 | `/dispatch report <id>` | [Report](playbooks/report.md) |
-| `brief`, `status`, "what are my bobs doing" | [dispatch-digest](../dispatch-digest/SKILL.md) |
+| `brief`, `status`, "what are my coopers doing" | [dispatch-digest](../dispatch-digest/SKILL.md) |
 | `/dispatch wayfinder <goal or map>` | [Wayfinder](playbooks/wayfinder.md), only on explicit user invocation |
 
 Plain `/dispatch` commands in bot conversations remain valid. These modes do not require a Claude/Codex slash-command harness or a T3 composer. `/dispatch sweep` stays retired.

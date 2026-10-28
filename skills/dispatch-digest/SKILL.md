@@ -11,7 +11,7 @@ Read the [Dispatch role](../dispatch/SKILL.md). Reconcile known workers through 
 Build the response from the saved board and current thread/PR state, never conversation memory. Put four bands on the board:
 
 - Fires: a pending Dan decision, urgent failure, missing access, or stalled work, with evidence and the owning worker link.
-- Today: decisions, proposals, completed findings, and merge-ready PRs. Keep the actual owning Bob link beside each PR.
+- Today: decisions, proposals, completed findings, and merge-ready PRs. Keep the actual owning Cooper link beside each PR.
 - Waiting: active workers and dependencies; group Wayfinder maps separately with their current question, owners, and gates.
 - FYI: deduped/dropped items, routine progress, and source/destination failures.
 

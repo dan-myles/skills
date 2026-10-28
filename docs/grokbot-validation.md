@@ -1,5 +1,7 @@
 # Grok Bot Dispatch checks
 
+This is a historical validation record. Bob was subsequently renamed to Cooper; see [the rename checks](cooper-rename.md) for current skill names and preserved settings.
+
 Checked on 2026-10-28 from `origin/main` at `c41aa2b381e3d1d01e8f48fae9c2cbd15c85ef7b`. This is a documentation and skill-packaging change. No live bot, routine, sync, rollback, or production operation was run.
 
 ## Dependency closure

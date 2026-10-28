@@ -1,107 +1,107 @@
-[skills.bob]
-source = "skills/bob"
+[skills.cooper]
+source = "skills/cooper"
 
-[skills.bob-adversarial-review]
-source = "skills/bob-adversarial-review"
+[skills.cooper-adversarial-review]
+source = "skills/cooper-adversarial-review"
 
-[skills.bob-architect]
-source = "skills/bob-architect"
+[skills.cooper-architect]
+source = "skills/cooper-architect"
 
-[skills.bob-blast-radius]
-source = "skills/bob-blast-radius"
+[skills.cooper-blast-radius]
+source = "skills/cooper-blast-radius"
 
-[skills.bob-grill]
-source = "skills/bob-grill"
+[skills.cooper-grill]
+source = "skills/cooper-grill"
 
-[skills.bob-how]
-source = "skills/bob-how"
+[skills.cooper-how]
+source = "skills/cooper-how"
 
-[skills.bob-improve]
-source = "skills/bob-improve"
+[skills.cooper-improve]
+source = "skills/cooper-improve"
 
-[skills.bob-models]
-source = "skills/bob-models"
+[skills.cooper-models]
+source = "skills/cooper-models"
 
-[skills.bob-no-comments]
-source = "skills/bob-no-comments"
+[skills.cooper-no-comments]
+source = "skills/cooper-no-comments"
 
-[skills.bob-principle-attack-the-premise]
-source = "skills/bob-principle-attack-the-premise"
+[skills.cooper-principle-attack-the-premise]
+source = "skills/cooper-principle-attack-the-premise"
 
-[skills.bob-principle-boundary-discipline]
-source = "skills/bob-principle-boundary-discipline"
+[skills.cooper-principle-boundary-discipline]
+source = "skills/cooper-principle-boundary-discipline"
 
-[skills.bob-principle-build-the-lever]
-source = "skills/bob-principle-build-the-lever"
+[skills.cooper-principle-build-the-lever]
+source = "skills/cooper-principle-build-the-lever"
 
-[skills.bob-principle-encode-lessons-in-structure]
-source = "skills/bob-principle-encode-lessons-in-structure"
+[skills.cooper-principle-encode-lessons-in-structure]
+source = "skills/cooper-principle-encode-lessons-in-structure"
 
-[skills.bob-principle-exhaust-the-design-space]
-source = "skills/bob-principle-exhaust-the-design-space"
+[skills.cooper-principle-exhaust-the-design-space]
+source = "skills/cooper-principle-exhaust-the-design-space"
 
-[skills.bob-principle-experience-first]
-source = "skills/bob-principle-experience-first"
+[skills.cooper-principle-experience-first]
+source = "skills/cooper-principle-experience-first"
 
-[skills.bob-principle-explain-the-number]
-source = "skills/bob-principle-explain-the-number"
+[skills.cooper-principle-explain-the-number]
+source = "skills/cooper-principle-explain-the-number"
 
-[skills.bob-principle-fix-root-causes]
-source = "skills/bob-principle-fix-root-causes"
+[skills.cooper-principle-fix-root-causes]
+source = "skills/cooper-principle-fix-root-causes"
 
-[skills.bob-principle-foundational-thinking]
-source = "skills/bob-principle-foundational-thinking"
+[skills.cooper-principle-foundational-thinking]
+source = "skills/cooper-principle-foundational-thinking"
 
-[skills.bob-principle-guard-the-context-window]
-source = "skills/bob-principle-guard-the-context-window"
+[skills.cooper-principle-guard-the-context-window]
+source = "skills/cooper-principle-guard-the-context-window"
 
-[skills.bob-principle-laziness-protocol]
-source = "skills/bob-principle-laziness-protocol"
+[skills.cooper-principle-laziness-protocol]
+source = "skills/cooper-principle-laziness-protocol"
 
-[skills.bob-principle-make-operations-idempotent]
-source = "skills/bob-principle-make-operations-idempotent"
+[skills.cooper-principle-make-operations-idempotent]
+source = "skills/cooper-principle-make-operations-idempotent"
 
-[skills.bob-principle-migrate-callers-then-delete-legacy-apis]
-source = "skills/bob-principle-migrate-callers-then-delete-legacy-apis"
+[skills.cooper-principle-migrate-callers-then-delete-legacy-apis]
+source = "skills/cooper-principle-migrate-callers-then-delete-legacy-apis"
 
-[skills.bob-principle-minimize-reader-load]
-source = "skills/bob-principle-minimize-reader-load"
+[skills.cooper-principle-minimize-reader-load]
+source = "skills/cooper-principle-minimize-reader-load"
 
-[skills.bob-principle-model-the-domain]
-source = "skills/bob-principle-model-the-domain"
+[skills.cooper-principle-model-the-domain]
+source = "skills/cooper-principle-model-the-domain"
 
-[skills.bob-principle-never-block-on-the-human]
-source = "skills/bob-principle-never-block-on-the-human"
+[skills.cooper-principle-never-block-on-the-human]
+source = "skills/cooper-principle-never-block-on-the-human"
 
-[skills.bob-principle-outcome-oriented-execution]
-source = "skills/bob-principle-outcome-oriented-execution"
+[skills.cooper-principle-outcome-oriented-execution]
+source = "skills/cooper-principle-outcome-oriented-execution"
 
-[skills.bob-principle-prove-it-works]
-source = "skills/bob-principle-prove-it-works"
+[skills.cooper-principle-prove-it-works]
+source = "skills/cooper-principle-prove-it-works"
 
-[skills.bob-principle-redesign-from-first-principles]
-source = "skills/bob-principle-redesign-from-first-principles"
+[skills.cooper-principle-redesign-from-first-principles]
+source = "skills/cooper-principle-redesign-from-first-principles"
 
-[skills.bob-principle-separate-before-serializing-shared-state]
-source = "skills/bob-principle-separate-before-serializing-shared-state"
+[skills.cooper-principle-separate-before-serializing-shared-state]
+source = "skills/cooper-principle-separate-before-serializing-shared-state"
 
-[skills.bob-principle-sequence-verifiable-units]
-source = "skills/bob-principle-sequence-verifiable-units"
+[skills.cooper-principle-sequence-verifiable-units]
+source = "skills/cooper-principle-sequence-verifiable-units"
 
-[skills.bob-principle-subtract-before-you-add]
-source = "skills/bob-principle-subtract-before-you-add"
+[skills.cooper-principle-subtract-before-you-add]
+source = "skills/cooper-principle-subtract-before-you-add"
 
-[skills.bob-principle-test-behavior-not-implementation]
-source = "skills/bob-principle-test-behavior-not-implementation"
+[skills.cooper-principle-test-behavior-not-implementation]
+source = "skills/cooper-principle-test-behavior-not-implementation"
 
-[skills.bob-principle-type-system-discipline]
-source = "skills/bob-principle-type-system-discipline"
+[skills.cooper-principle-type-system-discipline]
+source = "skills/cooper-principle-type-system-discipline"
 
-[skills.bob-sharpen]
-source = "skills/bob-sharpen"
+[skills.cooper-sharpen]
+source = "skills/cooper-sharpen"
 
-[skills.bob-verify]
-source = "skills/bob-verify"
+[skills.cooper-verify]
+source = "skills/cooper-verify"
 
-[skills.bob-why]
-source = "skills/bob-why"
+[skills.cooper-why]
+source = "skills/cooper-why"

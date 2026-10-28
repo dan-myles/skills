@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-principle-experience-first"
-  short_description: "When what's easy to build conflicts with what's good to use, pick what's good to use."
-  default_prompt: "Use $bob-principle-experience-first on this work: say where it applies and what it changes."
-
-policy:
-  allow_implicit_invocation: false

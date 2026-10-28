@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-make-operations-idempotent"
+  short_description: "An operation should reach the same correct end state no matter how many times it runs or where a previous run died."
+  default_prompt: "Use $cooper-principle-make-operations-idempotent on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

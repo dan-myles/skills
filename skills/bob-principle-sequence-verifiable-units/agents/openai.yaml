@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-principle-sequence-verifiable-units"
-  short_description: "Do work as small units that each end in a state you can check."
-  default_prompt: "Use $bob-principle-sequence-verifiable-units on this work: say where it applies and what it changes."
-
-policy:
-  allow_implicit_invocation: false

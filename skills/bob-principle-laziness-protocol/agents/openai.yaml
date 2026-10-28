@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-principle-laziness-protocol"
-  short_description: "Get the most result from the least code and complexity."
-  default_prompt: "Use $bob-principle-laziness-protocol on this work: say where it applies and what it changes."
-
-policy:
-  allow_implicit_invocation: false

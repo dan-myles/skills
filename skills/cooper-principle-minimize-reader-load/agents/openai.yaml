@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-minimize-reader-load"
+  short_description: "Code is maintainable when a reader can understand it with little effort."
+  default_prompt: "Use $cooper-principle-minimize-reader-load on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-boundary-discipline"
+  short_description: "Validate and handle errors at the system's edges."
+  default_prompt: "Use $cooper-principle-boundary-discipline on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

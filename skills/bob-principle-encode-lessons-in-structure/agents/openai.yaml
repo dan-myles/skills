@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-principle-encode-lessons-in-structure"
-  short_description: "When a correction keeps coming back, enforce it with a mechanism (a type, a lint, a check, a script), not another instruction."
-  default_prompt: "Use $bob-principle-encode-lessons-in-structure on this work: say where it applies and what it changes."
-
-policy:
-  allow_implicit_invocation: false

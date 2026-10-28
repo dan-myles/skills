@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-sharpen"
+  short_description: "Rewrite a prompt deeper, not bigger, before sending it"
+  default_prompt: "Use $cooper-sharpen to rewrite this prompt deeper, not bigger: "
+
+policy:
+  allow_implicit_invocation: false

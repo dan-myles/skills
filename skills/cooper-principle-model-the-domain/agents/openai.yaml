@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-model-the-domain"
+  short_description: "Put the domain's rules in a data structure, not in conditionals spread across files."
+  default_prompt: "Use $cooper-principle-model-the-domain on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

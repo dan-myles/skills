@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-verify"
+  short_description: "Write or maintain a repo's verify-<app> skill that drives the real app and proves behavior"
+  default_prompt: "Use $cooper-verify to give this repo a verify skill: launch the app, drive it like a user, capture evidence, and map its features. Prove it once before opening the PR."
+
+policy:
+  allow_implicit_invocation: false

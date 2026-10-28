@@ -1,6 +1,6 @@
 interface:
   display_name: "dispatch-chase"
-  short_description: "Chase known Bob workers, PRs, blockers, and missed reports"
+  short_description: "Chase known Cooper workers, PRs, blockers, and missed reports"
   default_prompt: "Use $dispatch-chase for the configured Dispatch instance within its approved scope."
 
 policy:

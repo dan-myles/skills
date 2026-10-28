@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-principle-build-the-lever"
-  short_description: "For any work that isn't trivial, build the tool that does it or proves it: a codemod, a script, a generator, a check."
-  default_prompt: "Use $bob-principle-build-the-lever on this work: say where it applies and what it changes."
-
-policy:
-  allow_implicit_invocation: false

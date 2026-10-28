@@ -1,7 +1,7 @@
 interface:
   display_name: "dispatch"
-  short_description: "Own the engineering loop with T3 Bob workers"
-  default_prompt: "Use $dispatch for this Grok Bot instance to decompose authorized work, chase Bob workers and PRs, and report decisions or completion."
+  short_description: "Own the engineering loop with T3 Cooper workers"
+  default_prompt: "Use $dispatch for this Grok Bot instance to decompose authorized work, chase Cooper workers and PRs, and report decisions or completion."
 
 policy:
   allow_implicit_invocation: false

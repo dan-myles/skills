@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-separate-before-serializing-shared-state"
+  short_description: "When several actors might write the same thing, first remove the sharing."
+  default_prompt: "Use $cooper-principle-separate-before-serializing-shared-state on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

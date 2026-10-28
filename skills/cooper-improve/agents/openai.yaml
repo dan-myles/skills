@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-improve"
+  short_description: "Improve skills and model choices from real sessions"
+  default_prompt: "Use $cooper-improve to reflect on this session: run the three reviewers, synthesize, and show me the Accepted, Rejected, and Backlog lists before changing anything."
+
+policy:
+  allow_implicit_invocation: false

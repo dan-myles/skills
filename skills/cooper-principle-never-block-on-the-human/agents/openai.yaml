@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-never-block-on-the-human"
+  short_description: "The user checks in when they can."
+  default_prompt: "Use $cooper-principle-never-block-on-the-human on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

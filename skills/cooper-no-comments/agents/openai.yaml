@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-no-comments"
+  short_description: "Review diff comments and fix the code they excuse"
+  default_prompt: "Use $cooper-no-comments to review comments in this diff and fix the code they excuse."
+
+policy:
+  allow_implicit_invocation: false

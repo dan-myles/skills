@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-subtract-before-you-add"
+  short_description: "Remove complexity first, then build on what's left."
+  default_prompt: "Use $cooper-principle-subtract-before-you-add on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

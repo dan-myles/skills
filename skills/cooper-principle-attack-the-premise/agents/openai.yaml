@@ -1,0 +1,7 @@
+interface:
+  display_name: "cooper-principle-attack-the-premise"
+  short_description: "When two or more fixes built on the same assumption fail the same check, suspect the assumption, not the fixes."
+  default_prompt: "Use $cooper-principle-attack-the-premise on this work: say where it applies and what it changes."
+
+policy:
+  allow_implicit_invocation: false

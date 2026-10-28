@@ -1,7 +1,0 @@
-interface:
-  display_name: "bob-why"
-  short_description: "Find out why code is the way it is, with cited evidence and confidence levels"
-  default_prompt: "Use $bob-why on this code: search git, PRs, tickets, docs, chat, telemetry, and error tracking in parallel, then give a cited answer that separates facts from inferences."
-
-policy:
-  allow_implicit_invocation: false
