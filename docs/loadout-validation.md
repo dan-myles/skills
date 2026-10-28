@@ -1,5 +1,7 @@
 # Loadout conversion checks
 
+This records the 2026-10-27 conversion. For the current Dispatch skill set and Grok Bot dependency check, see [Grok Bot validation](grokbot-validation.md).
+
 Checked on 2026-10-27 against [loadout CLI commit bf2e2f4](https://github.com/dan-myles/loadout/tree/bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4). Its README, GLOSSARY.md, docs/architecture.md, and src/manifest schema were read before choosing the layout. Built with Rust 1.98.1 using `cargo build --locked --bin loadout`.
 
 ## CLI results

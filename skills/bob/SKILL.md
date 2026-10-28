@@ -8,7 +8,7 @@ description: "Bob, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Per
 
 The playbook decides the order of work. The repo decides the commands.
 
-Fleet Control runs the fleet's outer loop and routes work to a per-project Dispatch. Dispatch starts Bob workers and owns their board and report-back handling. Leads are titled `Dispatch: General` or `Dispatch: Support`; new worker briefs report back with `/dispatch report <id>`. Bob keeps its existing worker workflow.
+Fleet Control and per-project Dispatches run as Grok Bots, using grokbot-fleet-control and the dispatch skills. Dispatch launches Bob workers in T3 through Executor and owns its board on the Grok Bot box. A Grok Bot has no T3 thread ID: put the complete report in the worker reply for Dispatch to read, and never send to a bot ID or write its box-local store. T3 coordinators such as Orchestrate retain t3_thread_send report-back. Follow the brief's transport per [The brief](references/brief.md). Bob keeps its worker playbooks and subagents.
 
 ## Start
 

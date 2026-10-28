@@ -1,0 +1,7 @@
+interface:
+  display_name: "dispatch-digest"
+  short_description: "Summarize Dispatch work and the decisions Dan needs"
+  default_prompt: "Use $dispatch-digest for the configured Dispatch instance within its approved scope."
+
+policy:
+  allow_implicit_invocation: false

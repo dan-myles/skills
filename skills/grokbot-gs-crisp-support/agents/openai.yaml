@@ -1,0 +1,7 @@
+interface:
+  display_name: "grokbot-gs-crisp-support"
+  short_description: "Triage GameStock Crisp cases with scoped Bob investigations"
+  default_prompt: "Use $grokbot-gs-crisp-support to review the current Crisp queue and present one investigated case at a time."
+
+policy:
+  allow_implicit_invocation: false

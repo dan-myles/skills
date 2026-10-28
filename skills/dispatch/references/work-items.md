@@ -1,51 +1,42 @@
 # Work items
 
-Shared procedures for delivered work. Read the sections named by the active playbook. These procedures do not start Wayfinder.
+Shared coordination for delivered work. This procedure never starts Wayfinder automatically.
 
 ## Triage
 
-For each item not in `seen.tsv`:
-
-1. **Read all of it:** the thread or issue, its replies, screenshots, logs, and links.
-2. **Trace the cause enough to route it.** A bounded pass of `../../bob-how/SKILL.md` over the likely code path, and `../../bob-why/SKILL.md` when it looks like a regression, both on their "without subagents" path in this thread. A visible symptom alone isn't enough to pick a repo or area when the trace points elsewhere. If the code can't be read, or the trace needs more than a bounded read, say so, route conservatively, and propose a Bob Investigation thread.
-3. **Classify:** bug, perf, feature, question, or noise. When bug versus feature is unclear, it's a question for the user, not a ticket.
-4. **Dedupe** against the board, `seen.tsv`, and the tracker, by error signature, area, and source link. Prefer no ticket over a guessed or duplicate one.
-5. **File** a clear, new bug in the tracker, linked back to its source. Don't set priority or assign anyone.
-6. **Record** the row on the board and the item in `seen.tsv`.
+1. Read the delivered item, replies, material attachments, linked context, and relevant tracker records within this instance's scope. Honor disabled sources. Flag a routing mismatch instead of adopting another repo's work.
+2. Trace only from available evidence. Repo code/history reading, reproduction, and validation go to a read-only Bob Investigation via the [worker contract](bob-workers.md). Bob can use its own how/why helpers on T3. Do not treat a visible symptom or inaccessible code as proof of cause.
+3. Classify bug, perf, feature, question, or noise. Dedupe against board, seen IDs, and tracker by source link, signature, and area. An unclear bug-versus-feature call stays a question for Dan.
+4. File only a clear new bug in the configured tracker, with evidence and source link. Do not set priority or assign people. Record its board row and seen ID; preserve a proposal when evidence is insufficient.
 
 ## Decide
 
-**Auto-dispatch** a bug when all of these hold, up to `auto_dispatch.per_run` per run and within `in_flight_cap`:
+Auto-dispatch only when the configured contained-bug policy allows it, within `auto_dispatch.per_run` and execution capacity:
 
-- it's confirmed: clear reproduction steps or an exact error signature
-- it's in a repo in `config.yaml`
-- the trace points to one area, a few files
-- it doesn't touch auth, money, stored data, migrations, a public API, or `never_paths`
-- **a second model confirmed it.** Launch a read-only validator Bob thread with `t3_thread_launch`: `modelSelection` from `dispatch.validator` in `~/.bob-n-frank/models.yaml`, the repo's project root with no worktree, title `bob: validate <the bug>`. Never use `delegate_task` or a subagent for this. Its brief gives the source, your triage, and the repo path. RULES: read-only, change no files, open no PR, ask no one. It checks the claim against the code, reproduces it when that's cheap, and writes CONFIRMED or REJECTED with one sentence and its evidence to `<state_dir>/reports/<id>-validate.md`. REPORT-BACK is this thread with `/dispatch report <id>-validate`. Record the validator's exact thread id in the row's note and leave the row `triaged` until it reports. Only CONFIRMED dispatches; REJECTED becomes a proposal with the validator's reason.
+- Clear reproduction or exact error signature confirms a bug in this configured repo and a bounded area.
+- No auth, money, stored data, migrations, public API, or configured `never_paths` work is involved.
+- A second model validates it. Use a separate read-only Bob validator with evidence, scope, no PR or writes, and a CONFIRMED/REJECTED report in its T3 reply. Record its exact worker identity and model, and keep the item `triaged` until its report is processed. The Grok Bot's model is not inferred from T3. If model diversity cannot be verified, leave the item proposed for Dan rather than claiming the condition passed.
 
-When an item's goal, right behavior, or scope is unclear, it isn't auto-dispatched.
+Use the [shared launch setting](bob-workers.md) for Bobs. If its model does not meet the second-model requirement, an explicitly configured, catalog-verified validator override is required before auto-dispatch. Do not change Bob's global model defaults to satisfy it.
 
-**Grill before dispatching.** When the user picks a complex item that leaves several decisions only they can make, run `../../bob-grill/SKILL.md` with them in this thread before writing its brief, so the Bob thread starts from settled decisions. Paste the saved grill into the brief's CONTEXT.
-
-Wayfinder is never selected by triage or task size. Only the user can invoke `/dispatch wayfinder`. An unresolved Wayfinder item cannot pass through auto-dispatch or ordinary approval as implementation work.
-
-**Propose** everything else, ranked by impact against effort, each with a one-line reason. Ask once per brief per **How to ask** in `../../bob/SKILL.md`: a multi-select of the proposals, "Send it" for Dispatch's picks.
+An ambiguous goal, scope, desired behavior, or reserved choice is not auto-dispatched. Follow the [human decision rules](decisions.md). Propose other work with impact, effort, evidence, and a recommendation. Approval applies only to the chosen scope. Unresolved Wayfinder items never enter this implementation path.
 
 ## Dispatch
 
-- Write the brief per `../../bob/references/brief.md`, with REPORT at `<state_dir>/reports/<id>.md`. An auto-dispatched bug gets the headless RULES; an item the user approved gets the attended RULES, so its Bob thread asks the user at its own checkpoints.
-- Launch a Bob thread with `t3_thread_launch`: `modelSelection` from `threads.bob` in `~/.bob-n-frank/models.yaml`, a new worktree off the repo's default branch, title `bob: <what it does>`, message `/bob <brief>`. A program too big for one thread gets an Orchestrate thread instead, on `threads.orchestrate`: `/bob orchestrate <program brief>`, titled the same way.
-- Thread titles start with `bob: ` and then say what the work does in a few plain words, like `bob: add retry to market data fetch`. No ticket or issue IDs (`ENG-2919`, `#123`) in the title; they go in the brief's CONTEXT.
-- Fill REPORT-BACK with this thread's id from its instance entry, or legacy `thread_id`, and the message `/dispatch report <id>`.
-- Save the brief, set the row to `dispatched` with the exact worker thread id, and link the worker in the saved brief as `[thread title](t3-thread://v1/<exact-threadId>)`. Keep the id and actual title available for report processing and review handoffs.
+Write and launch the brief through [dispatch-decompose](../../dispatch-decompose/SKILL.md) and the [worker contract](bob-workers.md). Save exact worker ID/title/link, destination, and launch result. Titles are `bob: <plain job description>`; ticket IDs belong in the brief. Do not use the bot identity as REPORT-BACK's T3 address or ask workers to write box-local reports.
+
+An authorized unit's dependency must have accepted evidence before launch. Count executing workers and uncertain launches against capacity. Keep open-PR ownership distinct from execution capacity. No coding, verification, prototype, or restack is performed by Dispatch itself.
 
 ## Track
 
-For each `dispatched` row and each pending validator in the current scope: read its thread and its PR when it has one without disturbing the thread. Never message a Bob thread to check on it.
+Read every known active worker and pending validator without disturbing them, through the saved Executor app. Also reconcile `done` rows whose worker has not been settled yet. Use the shared report source markers to avoid duplicate processing.
 
-- A Wayfinder report follows `../playbooks/report.md` before any PR logic. Research completion is evidence, not a product decision or permission to build.
-- A merge-ready PR moves the row to `merge-ready` and goes on the user's review list with its owning worker link and PR link, per **Review handoffs**. Preserve the report's worker identity when processing `/dispatch report`; recover missing identity from the board and live thread metadata.
-- A thread waiting on the user goes under Fires.
-- No new commit or PR change for `stalled_after_hours` gets flagged as stalled, with what it last did. For planning workers without a PR, use their last task, thread, or report update instead.
-- A `done` worker row whose thread is still active gets settled once it passes the checks in `../../bob/references/settling.md`; a merge-ready PR waiting on the user keeps it active until the PR merges or closes.
-- A report file with no report-back (its row still `dispatched`) is a defect: process the report now, and note in the brief which thread didn't report back.
+- Process unread reports through [Report](../playbooks/report.md). A T3 reply without a bot notification is normal for this transport, not a report-back defect.
+- Show human questions and approvals first, with the owning worker link. Never answer them on Dan's behalf.
+- For implementation, verify current PR/head/check/review state. A merge-ready PR becomes `merge-ready` and remains owned until merged, closed, abandoned, or explicitly handed back. Missing evidence is not a passing check.
+- A no-PR investigation can finish when its evidence and follow-ups are accepted. Record inaccessible artifacts and leave dependent work blocked.
+- A meaningful update older than `stalled_after_hours` gets flagged with its last observed action. Read the latest run before reporting a failure; a previously failed run may already have recovered.
+- Reuse a Bob for concrete follow-up on the same active job. Never message just to ask for status. Settled threads and separate jobs get fresh briefs. Reconcile uncertain launches before retries.
+- Settle only through the shared checks after the item is final. An open PR or pending Dan input keeps the worker active.
+
+Status/digest runs only read, copy reports, update evidence, and surface gates. They skip launches, refills, work-starting follow-ups, and settlement. An event can attach evidence to a Wayfinder ticket but cannot refill planning workers. Chase/report processing may refill only its already-approved scope.

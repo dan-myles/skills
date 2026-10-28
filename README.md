@@ -2,30 +2,30 @@
 
 This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. It declares skills and enabled agents only. It does not install programs, configure MCP servers, or manage other user files.
 
-The deployment branch is `loadout`. `main` stays unchanged until Dan reviews. All 49 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Their contents stay intact, including scripts, references, assets, and licenses. Manifest sources use `skills/<name>`.
+The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 54 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
 
 ## Layout and machines
 
 ```text
-loadout.toml                     global agents, 13 non-coding skills, machine tags
+loadout.toml                     global agents, 18 shared skills, machine tags
 tags/coding.toml                 bob and all bob-* skills, 36 total
 machines/grokbot.toml            replaces enabled agents with the custom grok-bot
 skills/                         skill sources, matching the starter
-  bob/, bob-*/, personal-*/, ... unchanged skill folders
+  bob/, bob-*/, personal-*/, ... skill folders, with dispatch-* and grokbot-* roles
 .skills-manager/                 historical registry, ignored by the loadout CLI
 PARKING_LOT.md                   repo rules and history
 ```
 
 | Machine name | OS / account | Tags | Enabled agents | Skills |
 | --- | --- | --- | --- | --- |
-| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 49 |
-| `dans-mac-studio` | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 49; Capy pending |
-| `paperclip` | Linux / `paperclip` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 49 |
-| `grokbot` | Linux / `box` | none | `grok-bot` only | 13 non-coding skills |
+| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 54 |
+| `dans-mac-studio` | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 54; Capy pending |
+| `paperclip` | Linux / `paperclip` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 54 |
+| `grokbot` | Linux / `box` | none | `grok-bot` only | 18 shared skills |
 
 Machine names follow the tailnet names, checked on 2026-10-27. The MacBook's OS hostname is `Daniels-MacBook-Pro.local`, and Paperclip's is `Ubuntu-2204-jammy-amd64-base`, so save the table's names explicitly instead of relying on hostname detection. SSH confirmed user `dan` with home `/Users/dan` on the MacBook and user `paperclip` with home `/home/paperclip` on Paperclip. The Grok Bot machine is `grokbot`, not the account name `box`. It was offline and its tailnet DNS name did not resolve, so its account and workflow copies could not be checked remotely. The Studio is the current machine, user `dan`, home `/Users/dan`. Its machine name is `dans-mac-studio`, not its separate SSH endpoint `dans-mac-studio-ssh`.
 
-The global layer enables the four native agents. An unlisted machine gets those agents and the 13 non-coding skills, but no Bob skills. The `coding` tag adds Bob only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `bob` or `bob-*` skills.
+The global layer enables the four native agents. An unlisted machine gets those agents and the 18 shared skills, but no Bob skills. The `coding` tag adds Bob only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `bob` or `bob-*` skills.
 
 ## Agent destinations and limits
 
@@ -46,11 +46,11 @@ Capy is pending on the Studio. [Its official skills documentation](https://docs.
 
 Dan verified that every Grok Bot reads one folder per skill, each containing `SKILL.md`, under `/home/box/agent-data/workflows`. The custom agent uses `~/agent-data/workflows` because the manifest rejects absolute destinations. Run as user `box` with home `/home/box` to reach the verified path.
 
-The box receives `dispatch`, `fleet-control`, `ketchup`, `unslop`, and every `personal-*` skill. This is the requested allowlist, even where a personal skill contains coding or macOS instructions. The folder already contains bot-created `fleet-control` and `gs-crisp-support`.
+The box receives `dispatch`, its four `dispatch-*` modes, the two `grokbot-*` skills, `ketchup`, `unslop`, and every `personal-*` skill. It receives no `bob` or `bob-*` folders. The Dispatch role and its mode skills contain the coordination rules needed on the box; Bob loads its own coding helpers on its T3 machine. See [the current Grok Bot checks](docs/grokbot-validation.md).
 
-Loadout owns each `<destination>/<skill-id>` separately, not the workflows parent. It plans only declared targets and targets in its local ownership state. An undeclared, unowned sibling such as `gs-crisp-support` is never copied, adopted, or removed by this loadout. Do not declare the workflows parent as a user file or skill source.
+Loadout owns each `<destination>/<skill-id>` separately, not the workflows parent. Bot-created legacy `fleet-control` and `gs-crisp-support` folders may still exist there. The new names are `grokbot-fleet-control` and `grokbot-gs-crisp-support`. This repository change does not rename live bots, update their prompts, or migrate live stores. Reconcile existing contents and update selected skill names with Dan before a live rollout. An undeclared, unowned old folder is left alone; an unchanged owned old target can be removed when undeclared, while a changed one can be released. Keep ownership records and backups.
 
-**A foreground apply will replace the box's existing `fleet-control` if it differs.** Loadout backs up the entire old skill folder, then copies this repository's folder. There is no confirmation prompt. Review or reconcile that copy before applying. A matching copy is adopted without a content write. Background sync skips a differing unowned target and reports it instead.
+A foreground apply can replace a differing destination without a confirmation prompt. Background sync skips a differing unowned target and reports it. A matching folder may be adopted. Review the actual plan, including the legacy names, before applying. Do not declare the workflows parent as a user file or skill source.
 
 Ownership means recorded by Loadout, not necessarily created by Loadout. Adopted or replaced folders become owned. If later undeclared, an unchanged owned folder is backed up and removed; a changed folder is released and left in place. There is no manifest option to prohibit adopting matching folders. Thus the guarantee is that unrelated unowned folders survive, not that every folder originally made by a bot remains forever. Keep the local state and backups; `loadout rollback` can undo a run when later changes do not block restoration.
 
@@ -69,7 +69,7 @@ Loadout follows top-level skill symlinks. Applying while a link still points int
 
 Install the CLI from [dan-myles/loadout](https://github.com/dan-myles/loadout). Use a version compatible with manifest version 1. This conversion was checked against CLI commit `bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4`. See [validation results](docs/loadout-validation.md) for command output, machine resolution, skill preservation, and ownership proof.
 
-Until this branch is reviewed, do not run plain `loadout init` on the GitHub URL. It clones the default branch and immediately applies it; the CLI currently has no branch flag. Use a branch-tracking clone and the documented local identity file instead. The repository is public, so the HTTPS read-only remote needs no GitHub SSH key on the machine account.
+For a read-only rollout review, use a branch-tracking clone and the documented local identity file below. Plain `loadout init` on the GitHub URL clones the default branch and immediately applies it; the CLI currently has no branch flag. The repository is public, so the HTTPS read-only remote needs no GitHub SSH key on the machine account.
 
 On a fresh machine with no existing Loadout state, choose `machine_name` from the table above. On Paperclip, run as `paperclip`; on the bot server, run as `box`. On either Mac, run as Dan. These commands run in a subshell, prepare the clone and identity only, then show a read-only plan. A failed guard stops the block without closing the parent shell:
 
@@ -91,14 +91,14 @@ On a fresh machine with no existing Loadout state, choose `machine_name` from th
     exit 1
   fi
   (umask 077; mkdir -p "$loadout_state")
-  git clone --branch loadout --single-branch https://github.com/dan-myles/skills.git "$loadout_state/loadout"
+  git clone --branch main --single-branch https://github.com/dan-myles/skills.git "$loadout_state/loadout"
   (umask 077; set -C; printf 'name = "%s"\nremote = "https://github.com/dan-myles/skills.git"\n' "$machine_name" > "$loadout_state/machine.toml")
   loadout validate "$loadout_state/loadout"
   loadout plan --loadout "$loadout_state/loadout"
 )
 ```
 
-Run the following only after reviewing the plan, especially every `replace`, `adopt`, `remove`, `drifted`, `blocked`, and `unsupported` action. On the box, reconcile the existing `fleet-control` before this step. Complete the Skills Manager migration above first. Loadout follows existing top-level symlinks, so leaving a library link in place can transfer ownership of its target.
+Run the following only after reviewing the plan, especially every `replace`, `adopt`, `remove`, `drifted`, `blocked`, and `unsupported` action. On the box, reconcile legacy coordinator skill names and existing contents before this step. Complete the Skills Manager migration above first. Loadout follows existing top-level symlinks, so leaving a library link in place can transfer ownership of its target.
 
 ```sh
 loadout apply
@@ -106,14 +106,14 @@ loadout doctor
 loadout status
 ```
 
-For an existing Loadout installation, preserve its identity and state. Inspect its managed clone's current branch and local changes, then switch its tracked branch to `loadout` only after resolving any local work. `loadout plan --loadout <clone>` previews the result before applying. Never discard changes or overwrite `machine.toml` to make setup pass.
+For an existing Loadout installation, preserve its identity and state. Inspect its managed clone's current branch and local changes, then switch its tracked branch to `main` only after resolving any local work. `loadout plan --loadout <clone>` previews the result before applying. Never discard changes or overwrite `machine.toml` to make setup pass.
 
-Subsequent `loadout sync` fetches and fast-forwards the managed clone's tracked `origin/loadout` branch, then applies it. `loadout update` updates the CLI itself. It does not sync skills. A background service is optional setup after review via `loadout service install`; no service is installed by the commands above. Start a new agent session after applying to refresh discovered skills. The old `.skills-manager/` registry remains for migration reference and is not an input to Loadout.
+Subsequent `loadout sync` fetches and fast-forwards the managed clone's tracked `origin/main` branch, then applies it. `loadout update` updates the CLI itself. It does not sync skills. A background service is optional setup after review via `loadout service install`; no service is installed by the commands above. Start a new agent session after applying to refresh discovered skills. The old `.skills-manager/` registry remains for migration reference and is not an input to Loadout.
 
 ## Confirm before rollout
 
 - Verify the offline `grokbot` machine as user `box` once reachable. Save the tailnet machine names explicitly; MacBook and Paperclip OS hostnames differ from them.
-- `/home/box` is the bot account's home, and which version of `fleet-control` to keep before its first foreground apply.
+- `/home/box` is the bot account's home, and which legacy coordinator copies and bot startup references need migration before an apply.
 - Which agents are used on each coding machine. All four native agents are enabled there for the stated Claude/Codex/Cursor/Grok driver setup.
 - Capy's supported destination or alternate skill distribution method, and pickup by T3 instances with custom homes and by Cursor.
 - Which Skills Manager links or live edits need migration before Loadout takes ownership. No machine was applied as part of this conversion.
@@ -121,19 +121,22 @@ Subsequent `loadout sync` fetches and fast-forwards the managed clone's tracked 
 
 ## Fleet Control, Dispatch and Bob
 
-Three layers that run your software work inside [T3 Code](https://github.com/pingdotgg/t3code).
+Fleet Control and Dispatch run as Grok Bots. Bob workers run inside [T3 Code](https://github.com/pingdotgg/t3code) on Mac Studio or Paperclip, reached through Executor.
 
-**Fleet Control** is the outer Grok Bot loop. It monitors the fleet across machines, routes fresh context to each project's Dispatch, and gives Dan one digest. It does not implement work or manage Dispatch's board.
+**Fleet Control** uses `grokbot-fleet-control` for scoped intake, approved cadence management, routing, missed-cycle detection, and one cross-project digest. It does not implement work or write Dispatch's board.
 
-**Bob** is the engineer. Hand him a goal and he picks the right playbook, learns the code, designs the change, builds it, proves it works on the real app, gets it reviewed by a second model family, opens the PR, and babysits it until it's ready to merge. He never merges without you.
+**Dispatch** is the per-project engineering lead. Skills, CrabStock, and GameStock use the same `dispatch` skill with separate config and state. It decomposes approved work, launches Bob, chases CI/reviews/stalls, and owns the item until completion, explicit abandonment, or handback. It never writes repo code or merges. A merge-ready PR stays owned while waiting on Dan.
 
-**Dispatch** is Bob's chief of staff. He handles items Fleet Control routes through `/dispatch event ...`, triages within his assigned scope, sends small confirmed bugs straight to Bob threads, lines up everything else for you to pick, and briefs you on request. Fleet Control owns sweeps, scheduled intake, routing, and automations. He never writes code, never merges, never messages anyone on your behalf, and never starts subagents: every bit of work, even a quick validation or code read, goes to a Bob thread. Bobs can use subagents.
+**Bob** is the engineer. Each worker runs the right playbook, performs repo work and verification, opens its authorized PR, and reports in its own T3 reply. Bobs can use subagents. Only Dan approves merges.
 
-It's a remix of three things:
+**GameStock Support** uses `grokbot-gs-crisp-support`, imported from the content Dan supplied. Its interactive Crisp queue and exact production-write approvals remain separate from engineering auto-dispatch. It shares Bob launch, tracking, report, and settlement mechanics with Dispatch.
+
+The workflows draw on these sources:
 
 - **[pstack](https://github.com/cursor/plugins/tree/main/pstack)** by Lauren Tan: the playbooks, the principles, and the engineering bar (one job, verified, no slop).
 - **[Matt Pocock's skills](https://github.com/mattpocock/skills)**: grilling, the round-by-round interview before complex work, and Wayfinder's durable maps for planning across sessions.
-- **Custom workflows** built for T3 Code: cross-provider subagents, worktree threads, report-backs that wake the coordinator, outer-loop events, PR watching, and replies that are drawn, not written.
+- **[Engineering Lead](https://x.ai/bot/marketplace/bots/engineering-lead)** by Lauren Tan: onboard, decompose, run, chase, and report; keep healthy work quiet and preserve active worker context. Its public listing exposes operating principles and skill summaries, not a complete runnable routine.
+- **Custom workflows** connect Grok Bot coordination to Executor and T3 workers, with cross-provider Bob subagents, worker PR watches, persistent ownership, and read-and-copy reports.
 
 ## What it feels like
 
@@ -154,9 +157,14 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 
 | Skill | What it's for |
 |---|---|
-| `fleet-control` | The outer loop. Cross-machine intake, routing, stalls, and a digest for Dan. |
+| `grokbot-fleet-control` | Grok Bot outer loop, routing, approved cadences, and fleet digest. |
 | `/bob <goal>` | The front door. Sorts the task into a playbook and runs it to a merge-ready PR. |
-| `/dispatch` | The chief of staff. `setup`, `event`, `brief`, `report`, `status`, or just talk to him. User-invoked `wayfinder` coordinates planning toward a larger goal. |
+| `dispatch` | Shared per-project engineering-lead role and mode routing. |
+| `dispatch-setup` | Bot identity, repo, T3 destination, standing orders, and state setup. |
+| `dispatch-decompose` | Bounded Bob briefs, dependencies, and authorized launches. |
+| `dispatch-chase` | Read known workers, drain reports, handle blockers, and continue approved work. |
+| `dispatch-digest` | Repo-level brief or read-only status; no launches. |
+| `grokbot-gs-crisp-support` | Interactive GameStock Crisp triage and direct Paperclip Bob investigations. |
 | `/bob-grill` | Settles every open decision on complex work, round by round, with a recommended answer for each. |
 | `/bob-how`, `/bob-why` | How code works, and why it ended up that way. Answers come back as interactive pages. |
 | `/bob-architect` | Two designers on two model families, a judge, one merged design. |
@@ -169,40 +177,38 @@ Small changes go straight through. Bob only stops to ask when the work is comple
 | `/bob-improve` | Bob learns from real sessions: reflect, eval a skill change, recommend models, make repeated mistakes impossible. |
 | `bob-principle-*` | 24 short engineering principles Bob reads when a step needs one. |
 
-**Dispatch's playbooks:** Setup, Event, Brief, Report, Status, and Wayfinder. `/dispatch wayfinder <goal or map>` runs in your Dispatch thread only when you ask for it. Dispatch keeps a decision map and coordinates Bob research and prototype workers; your choices return to Dispatch. A finished map becomes a spec and implementation briefs, with build approval kept separate from planning. Fleet Control events never start Wayfinder.
+**Dispatch's modes** are shared skills under `dispatch-*`, like the focused modes in pstack. Other Grok Bot roles use `grokbot-*`; these are skill namespaces, not one skill per bot instance. The entrypoint keeps `/dispatch setup`, `event`, `brief`, `report`, `status`, `chase`, and `wayfinder` inputs. Event, Report, and user-invoked Wayfinder remain local playbooks. Wayfinder runs in the bot conversation, coordinates Bob research/prototypes, and produces a spec; build approval remains separate. Fleet Control never starts Wayfinder or answers its human decisions.
 
 **Bob's playbooks:** Investigation (explain or diagnose), Bug, Feature, Refactor, Perf, Prototype, Open PR, Babysit, Orchestrate (a whole multi-day program), Cleanup.
 
-## Built for T3 Code
+## Grok Bot coordination and T3 execution
 
-- **Every role has the right model.** Opus 5.5 runs Bob threads, GPT-6.1-Sol writes the code, Sonnet reads, and every check comes from the other model family than the work it checks. Set it all in one file.
-- **Threads, not tabs.** Dispatch and Orchestrate launch Bob threads in their own git worktrees, titled `bob: <what it does>`.
-- **Nobody waits on a timer.** When a Bob thread finishes it reports back to Dispatch and wakes him instantly. Fleet Control handles outer-loop intake and missed-event recovery.
-- **Finished work gets cleaned up.** Dispatch settles a worker thread once its report is final, nothing's running, and no PR is waiting on anyone.
-- **You see it, you don't read it.** Plans, decisions, file maps, proof screenshots, status boards: drawn as live T3 pages, with a few lines of text underneath.
+Grok Bots load `/home/box/agent-data/workflows/<skill>/SKILL.md`. A shared role skill describes the job; `instances["grokbot:<actual bot id>"]` in the box's `~/.bob-n-frank/config.yaml` selects the repo, role, T3 destination, standing orders, and absolute state directory. Bot startup identifies the role and exact instance key. The shared directory is not an access-control boundary.
+
+Executor connection `user-executor-dans-team` exposes `tools["t3-code-mac-studio"]` and `tools["t3-code-paperclip"]`. Dispatch verifies the configured project and launches Bob with `codex_codex_pool_v2`, `gpt-6.1-sol`, high reasoning. Writable repo jobs get a worktree off `origin/main`; read-only investigations do not. Bob's T3 subagent defaults remain separate from this Grok Bot launch selection.
+
+Bob puts the complete report in its worker reply. Dispatch reads it through Executor, copies it into its box-local store, and records the source marker before any new launch. A T3 coordinator such as Orchestrate still uses `t3_thread_send`; a Grok Bot has no T3 thread ID and cannot receive that notification. A worker-local report path is not a shared artifact.
+
+A user request or a delivered Fleet Control chase runs the same reconciliation. Fleet Control manages only approved native bot routines and verified bot delivery routes. No instant wakeup, webhook, or default weekday timer is invented by these skills. Missing delivery remains pending and visible, with user-triggered chase available. This change configures no live sync or routine.
 
 ## After applying
 
-In a T3 thread you'll keep open:
+In the intended Grok Bot conversation, run `dispatch setup` or invoke `dispatch-setup`. Record the actual bot ID and assigned repo/role, verify the Executor destination, and give Fleet Control its configured bot route. Update live startup skill names only during an approved migration. Setup creates no schedules or bots.
 
-```
-/dispatch setup
-```
+On the Grok Bot box:
 
-Dispatch records his assigned repo and role as `Dispatch: General` or `Dispatch: Support` and gives Fleet Control the event destination. Setup creates no automations. Set that thread's model by hand in T3 (a fast one: GPT-6.1-Sol at medium with the Fast tier works well).
-
-Bob works with zero config. To change anything, it lives in your home folder:
-
-```
+```text
 ~/.bob-n-frank/
-├── models.yaml     the model for every role (run /bob-models to change it)
-├── config.yaml     Dispatch scopes, stores, evidence sources, auto-dispatch rules
-├── dispatch/       Dispatch's board, briefs, and reports
-├── grills/         decisions settled by /bob-grill
-└── orchestrate/    one folder per Orchestrate program
+├── config.yaml     instances keyed grokbot:<bot id>, destinations and standing orders
+└── dispatch/
+    └── <repo>/<role>/
+        ├── board.tsv, seen.tsv, decisions.tsv
+        ├── briefs/       exact briefs and launch ownership
+        ├── reports/      Dispatch's copies read from T3 replies
+        └── wayfinder/    explicitly invoked planning maps
 ```
 
-A repo can override any of it in `<repo>/.bob-n-frank/`.
+On each coding machine, Bob keeps its own `~/.bob-n-frank/models.yaml`, grills, and Orchestrate stores. A remote repo override applies only when actually available from that repo; the box does not treat a Mac Studio path as local. Support customer details stay in the session queue and scoped worker threads, never in tracked skill files.
 
 ## House rules
 

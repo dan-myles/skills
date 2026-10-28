@@ -1,6 +1,6 @@
 # Wayfinder
 
-Plan a larger goal with the user in this Dispatch thread. Keep a durable map of what must be learned or decided, and coordinate Bob workers for research and prototypes. Finish with a plan the user can approve for implementation.
+Plan a larger goal with the user in this Dispatch bot conversation. Keep a durable map of what must be learned or decided, and coordinate Bob workers for research and prototypes. Finish with a plan the user can approve for implementation.
 
 ## Entry and scope
 
@@ -28,13 +28,13 @@ Each ticket has a stable identity, a title phrased as a question, its type, bloc
 
 The distinction is whether a question can be stated precisely now. A precise question gets a ticket even if blocked. A vague area stays under Not yet specified. Do not create a speculative backlog for the entire product.
 
-Add one board row for the map, `kind=wayfinder`, `state=planning`, whose thread id is this Dispatch and whose source link points to the canonical map. Its state becomes `plan-ready` when planning finishes, not `merge-ready`. Add worker rows with kinds `wayfinder-research`, `wayfinder-prototype`, or `wayfinder-task`, their map/ticket pointer in note, and normal worker states. These kinds never enter auto-dispatch or implementation handling.
+Add one board row for the map, `kind=wayfinder`, `state=planning`, whose worker thread id cell is empty and whose note identifies this Grok Bot instance and whose source link points to the canonical map. Its state becomes `plan-ready` when planning finishes, not `merge-ready`. Add worker rows with kinds `wayfinder-research`, `wayfinder-prototype`, or `wayfinder-task`, their map/ticket pointer in note, and normal worker states. These kinds never enter auto-dispatch or implementation handling.
 
-Keep `<state_dir>/wayfinder/<slug>/owners.tsv` as the ownership record: ticket id, worker board id, exact T3 worker thread id, title, state, and report path. Dispatch alone writes ownership and the map; workers return evidence and write only their own report. The tracker is authoritative for questions and resolutions; the board and ownership file track execution, not duplicate decisions.
+Keep `<state_dir>/wayfinder/<slug>/owners.tsv` as the ownership record: ticket id, worker board id, exact T3 worker thread id, title, state, and report path. Dispatch alone writes ownership and the map; workers return evidence in their own T3 replies; Dispatch copies reports onto the box. The tracker is authoritative for questions and resolutions; the board and ownership file track execution, not duplicate decisions.
 
 ## Chart a new map
 
-1. Read existing decisions and relevant repo context. With the user, name the destination and boundaries. Ask for product choices, not facts the code or docs can answer. Use `../../bob-grill/SKILL.md` for this bounded framing question, not an exhaustive grill of every future decision. Include the domain's important terms, entities, and invariants so later questions mean the same thing.
+1. Read existing decisions and relevant repo context. With the user, name the destination and boundaries. Ask for product choices, not facts the code or docs can answer. Use `../references/decisions.md` for this bounded framing question, not an exhaustive grill of every future decision. Include the domain's important terms, entities, and invariants so later questions mean the same thing.
 2. Identify the questions that can be stated now, their prerequisites, and the areas still too uncertain to specify. If this fits one short conversation, say so and keep the work small; do not manufacture a map just to use the command.
 3. Create the map and its tickets. For an explicitly invoked map, tracker writes may create/update these records, add dependency links, and record resolutions; obey repo tracker rules. This grants no permission to message people, change priority, or assign people. Create real ticket identities first, then wire their blocking links. Never use placeholder ids that could link to unrelated work.
 4. Show the map and the current frontier: open questions whose blockers are resolved and which have no active owner. Record vague areas under Not yet specified and scope exclusions separately.
@@ -46,7 +46,7 @@ Keep `<state_dir>/wayfinder/<slug>/owners.tsv` as the ownership record: ticket i
 
 1. Load the map, ownership record, relevant board rows, and unanswered user questions. Fetch ticket details only where needed. Reconcile existing workers and reports before launching replacements. A restart preserves their ownership; it is not permission to duplicate them. Honor a pause or stop recorded by the user before launching anything.
 2. Continue any question already waiting on the user first. Otherwise use the named ticket or select one open, unblocked, unclaimed question that advances the destination. Record its ownership before starting. Re-read blockers before resolving it because other reports may have changed the map.
-3. Use the ticket's type below. Keep one live user decision at a time in this Dispatch thread; independent research can run alongside it. Research workers bring evidence, never a synthetic answer on the user's behalf.
+3. Use the ticket's type below. Keep one live user decision at a time in this Dispatch bot conversation; independent research can run alongside it. Research workers bring evidence, never a synthetic answer on the user's behalf.
 4. Record the answer with its evidence. For a user decision, preserve the user's actual choice and why; an unanswered question, a prototype, or a worker's preferred option is not a resolution. Write a resolution comment on the scoped tracker ticket, or a Resolution section for local tickets, and close only the resolved ticket. Add its named link and a one-line result to the map. Record user decisions in `<state_dir>/decisions.tsv` with their source.
 5. Reconsider the frontier. Create newly precise questions and their dependencies; remove the corresponding vague note. Keep blocked questions blocked. Mark superseded or out-of-scope tickets accordingly with a reason rather than presenting them as decisions made. A proposed reversal of an existing user decision waits for the user, and affected work pauses meanwhile.
 6. Finish this decision before opening another human exchange. Show what changed and the next available question; do not resolve that next question without the user's answer. Independent research can continue within the active map. A new `/dispatch wayfinder` invocation is not required for each reply or report. Pause when the user asks, and stop at the implementation handoff.
@@ -56,17 +56,17 @@ Keep `<state_dir>/wayfinder/<slug>/owners.tsv` as the ownership record: ticket i
 | Type | How it runs | What resolves it |
 | --- | --- | --- |
 | Research | A Bob Investigation worker reads code, history, docs, or existing systems. It uses `bob-how` and `bob-why` where appropriate. | Evidence answers the stated factual question. A product choice revealed by research becomes a separate user decision. |
-| Grilling | Dispatch reads `../../bob-grill/SKILL.md` and works the ticket's bounded decision with the user here. | The user's confirmed answer. Keep other tickets outside this grill's scope. |
-| Prototype | A Bob runs `../../bob/playbooks/prototype.md` and returns alternatives and observed behavior. | The user chooses in Dispatch. The worker neither chooses for them nor closes the ticket. |
+| Grilling | Dispatch reads `../references/decisions.md` and works the ticket's bounded decision with the user here. | The user's confirmed answer. Keep other tickets outside this grill's scope. |
+| Prototype | A Bob runs its Prototype playbook on T3 and returns alternatives and observed behavior. | The user chooses in Dispatch. The worker neither chooses for them nor closes the ticket. |
 | Prerequisite task | A scoped worker or a precise user checklist completes something needed to judge an option. | Evidence the authorized prerequisite is complete. A piece of the eventual implementation does not qualify. |
 
-Read `../../bob-models/references/delegation.md` for model resolution and T3 launch mechanics. Every planning worker is a Bob thread on `threads.bob`, launched with `t3_thread_launch`. Never use `delegate_task` or a subagent, per **No subagents** in the skill. Resolve the configured provider/model/options against the live catalog, honoring repo overrides and built-in defaults. Bind any writable checkout in the launch call, never by telling a worker to change directories. Prototype code stays in throwaway storage, never product source. Independent research needs no branch or worktree merely to read. Title Bob threads `bob: <what the planning work answers>` without ticket ids, and save the complete brief to `<state_dir>/briefs/<worker-id>.md` before launch.
+Read the [shared worker contract](../references/bob-workers.md) for Executor discovery, launch settings, and reports. Every planning worker is a Bob T3 thread. Dispatch never uses a native subagent or delegate_task for repo work. Bind a writable checkout in the launch call. Prototypes stay in isolated throwaway storage, never product source; independent read-only research needs no worktree. Save the complete brief and launch result on the box, then record exact worker ownership before launching another worker for that ticket.
 
-Brief workers using the fields in `../../bob/references/brief.md`: the question, map/ticket, scope, evidence needed, DECIDED, verification, timebox, report identity and destination. Replace that template's implementation RULES with these planning rules explicitly:
+Brief workers using the fields in `../references/bob-workers.md`: the question, map/ticket, scope, evidence needed, DECIDED, verification, timebox, report identity and destination. Replace that template's implementation RULES with these planning rules explicitly:
 
 > You are a planning worker for this Dispatch. Answer only the ticket's question. Do not implement the goal, open or babysit a PR, merge, deploy, edit tracker state, or decide for the user. Research changes no product files; prototypes stay throwaway. Do not push research branches. Only write your authorized artifacts and report. Return product choices and blocked prerequisites as gates to Dispatch, with evidence and your recommendation. For a prototype, show the alternatives and return them without asking the user in the worker thread. Preserve DECIDED. Never expand scope to get around a blocker.
 
-REPORT goes to `<state_dir>/reports/<worker-id>.md`; REPORT-BACK is this Dispatch's exact id and `/dispatch report <worker-id>`. Include map/ticket identity, status, facts and sources, artifacts, unanswered decisions, ownership, and the owning worker's clickable thread link.
+REPORT is the complete T3 worker reply, with REPORT-BACK identifying this `grokbot:<bot id>` and thread-message transport. Dispatch reads it through Executor and copies it to `<state_dir>/reports/<worker-id>.md` on the box. Bob never writes that path. Include map/ticket identity, status, facts and sources, accessible artifacts, unanswered decisions, ownership, and the actual worker link.
 
 ## Process planning reports
 
@@ -76,7 +76,7 @@ Match the report to its map, ticket, and saved owner. A late result from a repla
 
 A sufficient research result can resolve its factual ticket and update the map. A prototype result links the variants and leaves the choice waiting on the user. A prerequisite result proves only the prerequisite. Put questions needing the user at the top of Dispatch's next reply with the options, recommendation, map link, and owning worker thread link. Never answer them in the user's place or bury them in routine status.
 
-Mark completed worker rows and settle workers only after the checks in `../../bob/references/settling.md`. Save artifacts somewhere durable before removing temporary storage or settling work. Reports may refill independent research within an active map's approved scope and capacity. A paused or plan-ready map does not launch workers. Reports cannot resolve a user decision, start another map, or launch implementation. Status and brief calls only reconcile and display planning work; a Fleet Control delivery may supply evidence, never a planning or build approval.
+Mark completed worker rows and settle workers only after the checks in `../references/bob-workers.md`. Save artifacts somewhere durable before removing temporary storage or settling work. Reports may refill independent research within an active map's approved scope and capacity. A paused or plan-ready map does not launch workers. Reports cannot resolve a user decision, start another map, or launch implementation. Status and brief calls only reconcile and display planning work; a Fleet Control delivery may supply evidence, never a planning or build approval.
 
 ## Hand off to implementation
 

@@ -1,15 +1,13 @@
 # Report
 
-A worker reported back with `/dispatch report <id>`, or tracking found an unread report. Finish the step in hand before processing it.
+A direct `/dispatch report <id>` request or a chase found a worker report. Finish the step in hand, then process it. Read the [worker contract](../references/bob-workers.md).
 
-Preserve the calling playbook's limits. Status reconciliation skips all launches; Brief reconciliation skips planning launches. A direct worker completion may refill authorized research under Wayfinder's active-map rules.
+1. Resolve the board item, owning worker, and saved Executor destination. Read the complete T3 reply, not a file path on Mac Studio or Paperclip. Recover exact title/ID/link from saved launch data and live metadata. Copy the report to the box's `reports/<id>.md` with source item/position and timestamp before changing its board marker. A repeat source marker does not start work again.
+2. Check reported decisions against DECIDED and [reserved choices](../references/decisions.md). A departure remains a gate, even when checks pass. Report missing evidence precisely. Preserve Dan's questions and approvals with their owning worker links.
+3. For a validator, read CONFIRMED/REJECTED and the model evidence. Recheck every auto-dispatch condition and capacity; otherwise propose it. Settle only after the shared checks. Do not dispatch a duplicate implementation for a validator report processed before a crash.
+4. A Wayfinder result follows **Process planning reports** in [Wayfinder](wayfinder.md). Research evidence is not a user choice or build approval. Respect active/paused map and caller limits.
+5. For implementation, read current PR/head/check/review state and update ownership. A new head needs fresh verification. Bob owns PR watches; do not call `watch_pull_request` expecting it to wake a Grok Bot. Put merge-ready work on Dan's list with the actual owning worker link beside each PR. Never merge.
+6. A final report does not finish an open-PR job. Settle only after all shared checks, acceptance or explicit handback, and safe artifact preservation. Save follow-ups as separate items, not silent scope expansion.
+7. After the batch, recompute authorized ready work and capacity. A direct report/chase may refill existing authorization; status/digest skips all launches and settlement. Fleet-delivered Wayfinder evidence cannot start or refill planning. Write the board before ending.
 
-1. Resolve the board item and read `<state_dir>/reports/<id>.md`. Recover its owning worker's exact thread id and title from the board, launch result, and live T3 metadata. A repeat report changes nothing unless it contains new evidence.
-2. A validator report (`<id>-validate`) settles that bug's **a second model confirmed it** check in `../references/work-items.md`. CONFIRMED dispatches it through **Dispatch** when the other auto-dispatch conditions and caps still hold. On REJECTED, or when those no longer hold, the row becomes `proposed` with the reason. Settle the validator thread per `../../bob/references/settling.md`, then skip to step 7.
-3. If the item belongs to a Wayfinder map, read **Process planning reports** in `wayfinder.md` and follow that path. Do not send it through implementation or PR handling below.
-4. For an implementation item, read its PR and update the board. Call `watch_pull_request` on a new PR so checks and reviews wake this Dispatch. Preserve owning worker links in every review handoff, per the skill.
-5. Check the report's decisions against DECIDED and Bob's reserved calls. A departure keeps the item open and reaches the user as a recommendation, never as a decision already taken.
-6. Settle the worker only when its report is final and it passes `../../bob/references/settling.md`. A PR waiting on the user keeps its worker active.
-7. Dispatch the next already-authorized implementation item if there is capacity, using `../references/work-items.md`. This does not authorize a Wayfinder-to-build handoff.
-
-Write the board before ending. Reply only when the user is needed or something failed. A report that lacks a report-back is a defect; process it and note the missing delivery in the brief.
+Healthy routine changes wait for the digest. Surface newly blocked-on-Dan, merge-ready, or finished work. Missing bot notifications are expected in the read-and-copy transport; a missing report or failed native delivery is recorded as its actual failure.

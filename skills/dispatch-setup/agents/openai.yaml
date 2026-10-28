@@ -1,0 +1,7 @@
+interface:
+  display_name: "dispatch-setup"
+  short_description: "Set up a Dispatch Grok Bot instance and its repo scope"
+  default_prompt: "Use $dispatch-setup for the configured Dispatch instance within its approved scope."
+
+policy:
+  allow_implicit_invocation: false

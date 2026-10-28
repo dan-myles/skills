@@ -1,14 +1,14 @@
 ---
 name: bob-models
 disable-model-invocation: true
-description: "Review and change the model for every role in Bob and Dispatch: each subagent (explorers, workers, designers, reviewers, judges, verifiers) and each thread Dispatch or Orchestrate launches. Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes in plain words. A repo can override lines in .bob-n-frank/models.yaml. Manual-only: `/bob-models [change]` in Claude Code, `$bob-models ...` in Codex."
+description: "Review and change T3 Bob subagent and coordinator-launch models. Grok Bot Dispatch launch settings are documented separately. Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes in plain words. A repo can override lines in .bob-n-frank/models.yaml. Manual-only: `/bob-models [change]` in Claude Code, `$bob-models ...` in Codex."
 ---
 
 # Models
 
-The user's models file, `~/.bob-n-frank/models.yaml`, sets the model for every role in Bob and Dispatch: each subagent (`<skill>.<name>`) and each thread Dispatch or Orchestrate launches (`threads.<name>`). Each line gives the provider, model, and options inline; a list starts one subagent per entry; `inherit` means the thread's own model. A repo can override any line in `<repo>/.bob-n-frank/models.yaml`. `models.example.yaml` in this folder is the built-in default: it has every line, it's what runs when the user has no models file, and it fills any line the user's file lacks. The skills name their line where they start the work, and start it per `references/delegation.md`.
+On a T3 coding machine, `~/.bob-n-frank/models.yaml` sets Bob's subagent roles (`<skill>.<name>`) and T3 coordinator-launched threads (`threads.<name>`). Each line gives the provider, model, and options inline; a list starts one subagent per entry; `inherit` means the thread's own model. A repo can override any line in `<repo>/.bob-n-frank/models.yaml`. `models.example.yaml` in this folder is the built-in default: it has every line, it's what runs when the user has no models file, and it fills any line the user's file lacks. The skills name their line where they start the work, and start it per `references/delegation.md`.
 
-Two threads aren't in the file because T3's composer sets them: Dispatch's own thread, and any Bob thread the user starts by hand. If the user asks, recommend one: a fast coordinator for Dispatch (a frontier model at medium effort with its fast tier), a strong model for Bob.
+Dispatch runs as a Grok Bot, whose own model is set in Grok Bot configuration, not the T3 composer. Its Executor launches use the setting in [the Dispatch worker contract](../dispatch/references/bob-workers.md): codex_codex_pool_v2, gpt-6.1-sol, high reasoning. These box-side launches do not resolve threads.bob from this T3 machine's home. This file still controls T3 Orchestrate launches and Bob subagents; manually started Bob threads use their T3 selection. Do not change those defaults as part of a Dispatch launch fix.
 
 ## Use
 
@@ -29,7 +29,7 @@ Two threads aren't in the file because T3's composer sets them: Dispatch's own t
    - a model, provider, or option value the catalog doesn't list
    - a provider whose `canRunCrossProviderChildTask` is false
    - a panel that doesn't mix providers. `bob-architect.designers` must be two entries from different providers. `bob-adversarial-review.reviewers` and `bob-improve.eval-candidates` should mix them.
-   - a checker on the same family as what it checks: `bob.verifier` against `threads.bob`, `dispatch.validator` against Dispatch's thread model.
+   - a checker on the same family as what it checks: `bob.verifier` against `threads.bob`, `dispatch.validator` against the actual Grok Bot model when that legacy override is used. If the bot model is unknown, mark diversity unverified.
    - a line no skill names, or a `<skill>.<name>` a skill names that has no line. Search the bob- skills for `models.yaml` to find them.
 4. **Recommend.** On a review, or for a change the user left open ("a better reviewer"), propose what's worth changing. Each recommendation names the line, before and after, why, and the cost: more effort or a bigger model means slower and more expensive runs. Lead with the one that matters most. "No change" is a fine answer; don't churn models for their own sake.
    - **Newer models.** The catalog doesn't rank models or say what's new. Judge from names and versions (`gpt-6.1-sol` over `gpt-6-sol`), then look up the provider's release notes or model docs, when you can reach them, and cite what you found. Say when a ranking is only a guess from the name.

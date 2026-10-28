@@ -1,0 +1,7 @@
+interface:
+  display_name: "dispatch-decompose"
+  short_description: "Turn approved goals into bounded Bob worker briefs"
+  default_prompt: "Use $dispatch-decompose for the configured Dispatch instance within its approved scope."
+
+policy:
+  allow_implicit_invocation: false

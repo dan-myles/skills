@@ -4,12 +4,10 @@
 # lines in <repo>/.bob-n-frank/models.yaml.
 # Each entry: `provider` and `model` ids from T3's orchestrator_capabilities, and `options` passed as given
 # (`effort` for Claude, `reasoningEffort` and `serviceTier` for GPT). `inherit` runs on the thread's own model.
-# Dispatch's own thread is set in T3's composer.
 checked: "2026-10-12"
 
-# Threads that Dispatch and Orchestrate launch with t3_thread_launch.
 threads:
-  bob: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}            # every Bob thread
+  bob: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: high}}
   orchestrate: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}  # a program's coordinator
 
 bob:
@@ -53,4 +51,4 @@ bob-improve:
   eval-judge: {provider: codex, model: gpt-6.1-sol, options: {reasoningEffort: high}}
 
 dispatch:
-  validator: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}   # read-only Bob thread that confirms a bug before auto-dispatch; other family from Dispatch's thread
+  validator: {provider: claudeAgent, model: claude-opus-5-5, options: {effort: medium}}
