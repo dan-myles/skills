@@ -4,6 +4,9 @@ version = 1
 [agents]
 enabled = ["claude", "codex", "cursor", "grok"]
 
+[mcp.executor-personal]
+url = "https://mcp.executor.sh/mcp"
+
 [machines.dans-macbook-pro]
 tags = ["coding"]
 

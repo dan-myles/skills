@@ -1,13 +1,13 @@
 # Dan's loadout
 
-This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. The manifest declares skills and enabled agents only. It does not install programs, configure MCP servers, or manage other user files. Standalone tools live under `tools/`, which Loadout ignores; each is installed by hand from its own README.
+This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. The manifests declare skills, enabled agents, programs, and MCP servers. Standalone tools live under `tools/`, which Loadout ignores; each is installed by hand from its own README.
 
 The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 55 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
 
 ## Layout and machines
 
 ```text
-loadout.toml                     global agents, 13 shared skills, machine tags
+loadout.toml                     global agents, personal Executor MCP, 13 shared skills, machine tags
 tags/coding.toml                 cooper and all cooper-* skills, 41 total
 machines/grokbot.toml            replaces enabled agents with the custom grok-bot
 skills/                         skill sources, matching the starter
@@ -29,6 +29,8 @@ Machine names follow the tailnet names, checked on 2026-10-29. The MacBook's OS 
 The global layer enables the four native agents. An unlisted machine gets those agents and the 13 shared skills, but no Cooper or Dispatch skills. The `coding` tag adds Cooper, Dispatch, and `personal-loadout-programs` only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `cooper` or `cooper-*` skills.
 
 ## Agent destinations and limits
+
+The global `executor-personal` MCP uses `https://mcp.executor.sh/mcp` for Claude, Codex, Cursor, and Grok. Select Dan's personal team when signing in to Executor in each client on each machine. Executor binds that authorization to the selected team; the server name is a local label. Loadout distributes the server configuration, not OAuth credentials. The custom `grok-bot` agent does not receive this MCP. See [Executor's sign-in documentation](https://executor.sh/docs/mcp#signing-in-from-the-browser).
 
 | Loadout agent | Skill destination | T3 driver |
 | --- | --- | --- |
