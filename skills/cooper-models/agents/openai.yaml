@@ -1,7 +1,7 @@
 interface:
   display_name: "cooper-models"
-  short_description: "Review and change models for Cooper roles"
-  default_prompt: "Use $cooper-models to show the current models, check them against T3's live catalog, and recommend upgrades with reasons before changing anything."
+  short_description: "Upgrade models hardcoded in skill source"
+  default_prompt: "Use $cooper-models to inventory hardcoded skill launch models, check enabled T3 providers and settings, and apply only approved source upgrades across the affected skills."
 
 policy:
   allow_implicit_invocation: false

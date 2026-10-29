@@ -1,7 +1,7 @@
 ---
 name: cooper-adversarial-review
 disable-model-invocation: true
-description: "Adversarial review of a change by reviewers on different models, Claude and GPT by default (set in cooper-models). All get the same intent, diff, and rubric; Cooper merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/cooper-adversarial-review [diff or files]` in Claude Code, `$cooper-adversarial-review ...` in Codex. `cooper` runs it from its Review step."
+description: "Adversarial review of a change by reviewers on different models, Claude and GPT with explicit launch settings below. All get the same intent, diff, and rubric; Cooper merges their findings and sorts each into Act on, Consider, Noted, or Dismissed. Never applies fixes. Use for risky diffs, a contested design, or 'tear this apart'. Manual-only: `/cooper-adversarial-review [diff or files]` in Claude Code, `$cooper-adversarial-review ...` in Codex. `cooper` runs it from its Review step."
 ---
 
 # Adversarial review
@@ -36,9 +36,9 @@ Fill `references/reviewer-prompt.md` with:
 4. `references/rubric.md`
 5. `references/code-quality.md`
 
-Start one reviewer per entry of `bob-adversarial-review.reviewers` in `~/.bob-n-frank/models.yaml`, labeled A, B, C in order, per `../cooper-models/references/delegation.md`. All get the same filled prompt and stay read-only.
+Start two reviewers per [launch mechanics](../cooper/references/delegation.md). Reviewer A uses `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent`. Reviewer B uses `gpt-6.1-sol` with `{reasoningEffort: high}` on provider family `codex`. Both get the same filled prompt and stay read-only. Preserve the two-model panel unless the user explicitly changes it.
 
-Use absolute paths in the prompt, since reviewers start with none of this session. Start them all at once. If one fails, finish with the rest and say so in **Reviewers**.
+Use absolute paths in the prompt, since reviewers start with none of this session. Start them all at once. An unavailable model or options payload is a launch gate. If a reviewer starts then fails, collect the surviving evidence and report the gap in **Reviewers**. Do not claim the required two-family review is complete or substitute a model without the user's explicit override.
 
 ## 4. Merge
 

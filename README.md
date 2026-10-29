@@ -122,7 +122,7 @@ Subsequent `loadout sync` fetches and fast-forwards the managed clone's tracked 
 
 ## Fleet Control, Dispatch and Cooper
 
-Cooper was previously named Bob. Use `$cooper` or `/cooper`, with helpers under `cooper-*`. Settings and state remain in `.bob-n-frank`, and model keys retain their legacy `bob`/`bob-*` names so existing overrides keep working. Repo-local `bob-verify-*` skills remain supported. Loadout deploys the renamed folders; review ownership of old `bob*` copies and start a new agent session after sync. See [rename checks](docs/cooper-rename.md).
+Cooper was previously named Bob. Use `$cooper` or `/cooper`, with helpers under `cooper-*`. Existing grills and Orchestrate state remain in `.bob-n-frank`. Models and effort are now hardcoded at each launch step. Legacy home/repo model YAML files are ignored and left untouched. Repo-local `bob-verify-*` skills remain supported. Loadout deploys the renamed folders; review ownership of old `bob*` copies and start a new agent session after sync. See [rename checks](docs/cooper-rename.md).
 
 Dispatch and Cooper run inside [T3 Code](https://github.com/pingdotgg/t3code). Dispatch is a long-running pinned project thread scoped to one repository. Fleet Control and GameStock Support remain Grok Bots; their separate Executor transport is retained.
 
@@ -176,7 +176,7 @@ Small changes go straight through. Cooper only stops to ask when the work is com
 | `/cooper-no-comments` | Comment Sicko, a reviewer who hates comments, strips the diff before review. The code a comment was excusing gets fixed instead. |
 | `/cooper-blast-radius` | What a change breaks outside its diff, with the safety claim proven by running code. |
 | `/cooper-verify` | Writes a repo's own `cooper-verify-<app>` skill so Cooper can drive the real app and prove things work. |
-| `/cooper-models` | Pick the model for every role, checked against T3's live catalog. |
+| `/cooper-models` | Review and upgrade model/effort declarations across skill source, checked against live T3 capabilities. |
 | `/cooper-improve` | Cooper learns from real sessions: reflect, eval a skill change, recommend models, make repeated mistakes impossible. |
 | `cooper-principle-*` | 24 short engineering principles Cooper reads when a step needs one. |
 
@@ -207,11 +207,17 @@ To transfer ownership, stop the old writer, save/share its final snapshot, pull 
 
 Takeover does not make another user's worker threads accessible. Keep inaccessible workers gated with their last verified report/time/head. Recover access and confirm control before retargeting or settling; a replacement requires explicit approval and evidence the prior worker is stopped or isolated. Never silently declare it finished or discard its provenance. See [the state and takeover contract](skills/dispatch/references/project-state.md) and [worker contract](skills/dispatch/references/cooper-workers.md).
 
-Dispatch coordinates; Cooper investigates, implements and validates in T3 worker threads. Each worker reports its store/item/attempt/generation and notifies the exact current owner via `t3_thread_send`. Dispatch reads the full reply and preserves shareable evidence before advancing report markers. Lost/duplicate notifications are reconciled without duplicate launches. The current worker model choice and Cooper's existing `models.yaml` policy are unchanged.
+Dispatch coordinates; Cooper investigates, implements and validates in T3 worker threads. Each worker reports its store/item/attempt/generation and notifies the exact current owner via `t3_thread_send`. Dispatch reads the full reply and preserves shareable evidence before advancing report markers. Lost/duplicate notifications are reconciled without duplicate launches. The worker model choices are preserved. Their source declarations are now direct launch settings rather than YAML lookups.
 
 [`tools/t3-grokbot-bridge`](tools/t3-grokbot-bridge/README.md) remains a separate optional bot tool. T3 Dispatch does not require it, Fleet Control, Executor, a global instance registry, or an external Page. No actual CrabStock state, live bot configuration, or installed skill copies are migrated by this source change. Historical [Grok Bot validation](docs/grokbot-validation.md) records the previous port, not this Dispatch runtime. Current checks are recorded in [T3 Dispatch validation](docs/dispatch-t3-validation.md).
 
-Cooper's `~/.bob-n-frank/models.yaml`, grills and Orchestrate stores remain unchanged. Support customer details stay in its session queue and scoped worker threads, never tracked skill files.
+Cooper's grills and Orchestrate stores remain unchanged. Existing `~/.bob-n-frank/models.yaml` and repo model overrides remain on disk but are no longer consulted. Support customer details stay in its session queue and scoped worker threads, never tracked skill files.
+
+## Models in skill source
+
+Each launch step declares its exact model, effort and provider family. Cooper build subagents use GPT-6.1 Sol high; adversarial review uses Opus 5.5 high plus GPT-6.1 Sol high; readers use Sonnet 5.5 medium. Other roles keep their existing selections. T3 resolves a capable enabled provider instance at runtime rather than treating generic names or account-specific pool IDs as portable defaults. An unavailable model/setting is a visible gate, never an automatic substitute. Explicit user instructions can override a particular job.
+
+`cooper-models` remains the upgrade tool. It inventories actual skill source and examples, checks live capabilities, proposes scoped changes, and edits approved declarations together. It does not create a YAML configuration, change running threads, or sync installed copies. Launch mechanics live in [Cooper's delegation reference](skills/cooper/references/delegation.md). See [model migration checks](docs/hardcoded-models-validation.md).
 
 ## House rules
 

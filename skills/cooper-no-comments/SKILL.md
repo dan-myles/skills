@@ -16,7 +16,7 @@ The files or diff the caller names. Otherwise the current branch's diff against 
 
 ## Steps
 
-1. **Start the Sicko.** One read-only subagent on `bob-no-comments.sicko`, started per `../cooper-models/references/delegation.md`. Its task is `references/comment-sicko.md` in full, plus the repo's absolute path and the scope as a list of files or a diff command. Don't add rules of your own or soften its own.
+1. **Start the Sicko.** One read-only subagent using `claude-opus-5-5` with `{effort: medium}` on provider family `claudeAgent`, started per [launch mechanics](../cooper/references/delegation.md). Sicko uses the other family from the default GPT build subagents to get an independent read. If a user changes the build family, surface any diversity conflict before launch. Its task is `references/comment-sicko.md` in full, plus the repo's absolute path and the scope as a list of files or a diff command. Don't add rules of your own or soften its own.
 2. **Check the report.** Its verdicts stand unless they break its own rules. Reject:
    - entries outside the scope, or `file:line`s that don't match the code
    - kills of comments that clearly fit the leash (a license header, a public API doc, a proven vendor quirk)

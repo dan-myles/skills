@@ -26,11 +26,11 @@ Make a working folder, `/tmp/cooper-architect-<slug>/`, and write the grounding 
 
 ## 3. Sketch
 
-Two designers at the same time, from `bob-architect.designers` in `~/.bob-n-frank/models.yaml`: Designer A on its first entry, Designer B on its second. Start them per `../cooper-models/references/delegation.md`.
+Two designers at the same time. Designer A uses `claude-opus-5-5` with `{effort: xhigh}` on provider family `claudeAgent`. Designer B uses `gpt-6.1-sol` with `{reasoningEffort: xhigh}` on provider family `codex`. Start them per [launch mechanics](../cooper/references/delegation.md).
 
 Each gets the task, the path to `grounding.md`, its own folder, and `references/designer-prompt.md`. Each writes a sketch and a `rationale.md` shaped by `references/rationale-template.md` into its folder.
 
-The two must be different whole shapes, not variations on one. If one designer fails, go on with the other, note the dropout, and draft a second shape yourself.
+The two must be different whole shapes, not variations on one. An unavailable model or options payload is a launch gate. If a designer starts then fails, preserve the surviving sketch and report the gap. A second sketch drafted by the parent does not complete the required two-family design pass; retry the declared selection or obtain an explicit user override before claiming completion.
 
 ## 4. Screen
 
@@ -40,7 +40,7 @@ Compare interface depth: prefer the design that hides more behind a smaller publ
 
 ## 5. Judge and pick
 
-Once both sketches are written, start one judge on `bob-architect.judge`, with `references/judge-prompt.md`. It sees the rubric and the sketches under neutral labels.
+Once both sketches are written, start one judge using `gpt-6.1-sol` with `{reasoningEffort: high}` on provider family `codex`, with `references/judge-prompt.md`. It sees the rubric and the sketches under neutral labels.
 
 While it runs, read both sketches end to end yourself and score them on the rubric one criterion at a time. Then compare with the judge. If you agree on the base, that confirms it. If you disagree, one of you is biased or the rubric was vague. Reread both rationales before deciding.
 

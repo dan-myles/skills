@@ -45,9 +45,9 @@ Some steps name a helper skill:
 
 Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
 
-Every subagent runs on its line in `~/.bob-n-frank/models.yaml`, named where the step starts it. Start it per `../cooper-models/references/delegation.md`.
+Each launching step states its model, options and provider family directly. Follow [launch mechanics](references/delegation.md). `/cooper-models` reviews and upgrades those source declarations; it is not a runtime dependency. Existing home/repo model YAML files are no longer read or modified. An explicit user instruction may override a job's selection; record its scope and source.
 
-Cooper was previously Bob. Keep existing `.bob-n-frank` settings and legacy model keys; the rename changes skill names and commands, not saved configuration. Existing repo-local `bob-verify-*` skills remain valid alongside new `cooper-verify-*` skills. Use the existing recipe rather than creating a duplicate or renaming another repo's skill as a side effect.
+Cooper was previously Bob. Existing `.bob-n-frank` grills and Orchestrate stores stay in place; legacy model files are retired from lookup, not deleted from the user's machine. Existing repo-local `bob-verify-*` skills remain valid alongside new `cooper-verify-*` skills. Use the existing recipe rather than creating a duplicate or renaming another repo's skill as a side effect.
 
 When a step drives the app, use the repo's verify skill if it has one: `cooper-verify-*` or legacy `bob-verify-*` under `.claude/skills/` or `.agents/skills/`. Follow its launch, doctor, and cleanup, and its feature map's recipe for every entry point the change touches. If the repo has none, drive the app with the harness's tools and offer `/cooper-verify` once in the reply. If a recipe turns out wrong, finish the check another way and note the drift in the reply, with a pointer to `/cooper-verify maintain`.
 
@@ -126,7 +126,7 @@ Default to deciding. Before any question, check that the request, the issue, and
 Use subagents when the harness supports them.
 
 - Give each one a tight brief: which files, the data shape, what done looks like, which repo rules matter, and the decided calls it must keep. Link to files rather than pasting them.
-- Build work runs on `bob.workers`. Cross-cutting design and tricky logic run on `bob.hard`.
+- Build subagents use `gpt-6.1-sol` with `{reasoningEffort: high}` on provider family `codex`. Cross-cutting design and tricky logic use `claude-opus-5-5` with `{effort: xhigh}` on provider family `claudeAgent`.
 - Push wide searches and noisy output into subagents so the main thread holds only conclusions (`guard-the-context-window`).
 - Their work is yours. Read the diff and summarize it in your own words. A subagent that swapped out a decided or reserved call gets reverted, not reported as done.
 - Start a new subagent, with the complete brief, for each new piece of work. Go back to an old one only when the work depends on something it holds, like uncommitted edits or a running server.

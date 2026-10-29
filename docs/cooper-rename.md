@@ -1,5 +1,7 @@
 # Cooper rename
 
+Historical snapshot of the rename. The later Dispatch T3 port and hardcoded-model migration supersede the model lookup and Dispatch transport details below. See [current model migration checks](hardcoded-models-validation.md).
+
 Dan selected Cooper as the worker's new name on 2026-10-28. This change follows `a3b38d9145f56477a3914aee2031cd83dfe6bcff`, the Grok Bot Dispatch refactor.
 
 ## Names and compatibility

@@ -23,7 +23,7 @@ List every decision the plan needs. A decision can hang off others: "retry polic
 
 ## Facts are yours
 
-A question the code, the repo, the tracker, or a quick run can answer isn't the user's. Look it up: `cooper-how` explorers (`bob-how.explorers` in `~/.bob-n-frank/models.yaml`) for code, plain commands for the rest. When a quick sketch would settle it (a layout, a timing, an output), build it per `../cooper/playbooks/prototype.md`. Don't hold the round for a lookup: only the questions that depend on it wait.
+A question the code, the repo, the tracker, or a quick run can answer isn't the user's. Look it up: `cooper-how` explorers with the explicit selection in [How](../cooper-how/SKILL.md) for code, plain commands for the rest. When a quick sketch would settle it (a layout, a timing, an output), build it per `../cooper/playbooks/prototype.md`. Don't hold the round for a lookup: only the questions that depend on it wait.
 
 ## Rounds
 

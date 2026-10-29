@@ -47,7 +47,7 @@ Use local item/attempt/report names such as `I001-a1-r1`, not raw thread or sour
 - Standing orders: <verbatim sourced instructions, or none>
 ```
 
-Settings preserve the existing contained-bug policy and caps. Additional scope restrictions can narrow it. Missing tracker or validator access prevents contained-bug auto-dispatch; propose that work instead of bypassing its gate. Explicitly approved work may proceed without a tracker when its own scope and acceptance do not require one. Do not use this format to change model policy; Cooper's existing model files and worker launch selection remain separate.
+Settings preserve the existing contained-bug policy and caps. Additional scope restrictions can narrow it. Missing tracker or validator access prevents contained-bug auto-dispatch; propose that work instead of bypassing its gate. Explicitly approved work may proceed without a tracker when its own scope and acceptance do not require one. Models and effort are declared in launching skill source, with scoped user overrides in briefs. `/cooper-models` upgrades those declarations; no home/repo model YAML lookup is performed. Store settings do not silently override a launch selection.
 
 ## Board, journal and decisions
 

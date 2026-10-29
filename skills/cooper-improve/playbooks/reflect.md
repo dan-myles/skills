@@ -10,7 +10,7 @@ Turn one session into approved edits.
    - If nothing matches, write a tight digest instead: the task, what was done, every correction from the user, and what went wrong.
 2. Decide whether there's anything to learn. A trivial session, or one that followed the skills without friction, has no lessons. Say so and stop.
 3. List the skills the session used: `Skill` tool calls, slash commands like `/cooper`, reads of any `SKILL.md` or `playbooks/*.md`, and `$cooper` mentions in Codex. Reviewers get this list.
-4. Run three reviewers in parallel, each on its line under the legacy `bob-improve` key in `~/.bob-n-frank/models.yaml` (`reflect-judgment`, `reflect-tooling`, `reflect-divergent`). Pass each its prompt verbatim, with the transcript path (or the digest) and the skills list filled in.
+4. Run three reviewers in parallel per [launch mechanics](../../cooper/references/delegation.md). Judgment uses `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent`. Tooling uses `claude-sonnet-5-5` with `{effort: medium}` on provider family `claudeAgent`. Divergent uses `gpt-6.1-sol` with `{reasoningEffort: high}` on provider family `codex`. The divergent lens deliberately uses the other family from judgment and tooling. Pass each its prompt verbatim, with the transcript path (or the digest) and the skills list filled in.
 
    | Lens | Looks for | Prompt |
    |---|---|---|
@@ -18,7 +18,7 @@ Turn one session into approved edits.
    | Tooling | Commands, flags, and quirks, and context the user had to hand over | `references/tooling-reviewer.md` |
    | Divergent | The lesson under the obvious one, second-order misses, skipped checks | `references/divergent-reviewer.md` |
 
-5. Synthesize. One subagent on `bob-improve.reflect-synthesizer` gets `references/synthesizer.md` with all three reviewers' output pasted in full.
+5. Synthesize. One subagent using `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent` gets `references/synthesizer.md` with all three reviewers' output pasted in full.
 6. Check the Accepted rows yourself. Read each target before keeping its row. Move a row to Backlog when a mechanism would enforce it better. Move a row to the repo's AGENTS.md when it's about one codebase.
 7. **Checkpoint:** show the full Accepted, Rejected, and Backlog lists and wait. The user picks rows.
 8. Apply the picked rows per **Editing a skill**. Commit and push each one in the skills repo. For AGENTS.md rows, make the edit in that repo's working tree and leave it for the user's next change, unless they ask for a PR. When a row changes behavior you can't judge by reading it, offer Eval before committing.

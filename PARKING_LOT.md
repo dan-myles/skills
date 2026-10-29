@@ -52,7 +52,7 @@ Do all of these together:
 
 ## Cooper and Dispatch's home
 
-Cooper's existing `~/.bob-n-frank/models.yaml`, grills and Orchestrate stores remain compatible. Repo-local model overrides still apply; no model-policy migration is part of the Dispatch port.
+Cooper's grills and Orchestrate stores remain in place. Home/repo model YAML files are no longer read, written or deleted. Launch settings live directly at each launching step; scoped explicit user instructions may override a job. `cooper-models` upgrades those skill source declarations.
 
 Dispatch owns `.dispatch/<id>/` inside one repository, never a global instance lookup. The store ID derives from the initial thread's exact ID; metadata separates that immutable identity from the current owner and generation. Markdown board, journal, decisions, briefs, reports and explicit Wayfinder maps are Git-shareable. Read `skills/dispatch/references/project-state.md` for the format, save/share and explicit takeover protocol, privacy exclusions, and inaccessible-worker recovery. Git is not a distributed lock. No silent adoption or concurrent writing to another owner's store is allowed.
 
@@ -90,21 +90,21 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 
 **Principles**: 24 `cooper-principle-*` skills, one folder each so only the needed one loads. `skills/cooper/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
 
-**`cooper-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `skills/cooper-models/models.example.yaml` in this repo is the built-in default: it has every line, runs when a user has no models file, and fills lines their file lacks. Dispatch settings live in its repository store; it has no global config default. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Dispatch's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/cooper-models` edits the home file and recommends upgrades. `skills/cooper-models/references/delegation.md` says how to start each one.
+**`cooper-models`** inventories hardcoded model/options/provider-family declarations in the actual launching skills, checks enabled T3 instances, and upgrades approved source sites and examples together. There is no runtime model registry or YAML override layer. `skills/cooper/references/delegation.md` owns transport and live provider-instance resolution. Preserve existing model choices until the user approves an upgrade; a disabled generic provider instance is not evidence its whole family is unavailable. See `docs/hardcoded-models-validation.md`.
 
 **`cooper-improve`**, its own front door because it changes skills or repos, not product code:
 
 - Reflect: three reviewers read a session and propose skill edits.
 - Eval: tests a skill change blind.
-- Models: recommends model changes from session evidence. Never edits `models.yaml` itself.
+- Models: recommends source-declaration upgrades from session evidence. It does not apply them; cooper-models handles approved edits.
 - Correct: makes a repo's repeated agent mistakes impossible (architecture, then types, then lint, then tests), proven against a real past mistake.
 
 **`dispatch`** is the long-running project coordinator. Its existing `dispatch-*` setup/decompose/chase/digest structure and local event/report/explicit Wayfinder playbooks remain. The canonical board and running journal live in `.dispatch/<id>/`; the optional inline T3 board derives from Markdown, with Now, Backlog, What landed, Watch and links. New Wayfinder maps and decision resolutions live in the store, with optional tracker mirrors. Cooper workers notify the current exact Dispatch owner via T3 and never edit its store. See `docs/dispatch-t3-validation.md` for checks and limitations.
 
 ## Decisions and why
 
-- **Every role has a model line (since 2026-10-12).** Dan first kept lines to panels and judges, then asked to set every model up for success after comparing with pstack-t3, which resolves every role from a roles file. Still no named-model indirection and no single effort knob.
-- **`models.yaml` is data, not markdown.**
+- **Historical, superseded 2026-10-29: every role had a model line since 2026-10-12.** Dan first kept lines to panels and judges, then asked to set every model up for success after comparing with pstack-t3, which resolves every role from a roles file. Still no named-model indirection and no single effort knob.
+- **Superseded 2026-10-29: `models.yaml` was data, not Markdown.** Dan approved hardcoding each role's model/effort in its launching skill and retaining cooper-models to upgrade those source declarations. Existing user files stay untouched.
 - **Principles are separate skills,** like pstack, so Cooper loads only the one a step needs. A single combined file was rejected.
 - **Verify skills live in each repo.** Only the generator is global.
 - **Auto-babysit, with review replies.** Dan wants PRs handed back merge-ready. Merging still needs his say-so.
@@ -134,7 +134,7 @@ PostHog posted 38 lessons from building their AI products ([thread](https://x.co
 1. **Freeze features and run Cooper on real work.** Watch a few real runs end to end before adding more skills. (Habit; matches **Next** above.)
 2. **Turn failures into evals.** `cooper-improve reflect` saves each bad session as a case, and `cooper-improve eval` replays the cases before a skill change ships.
 3. **Count lookups as missing skills.** Add a line to REPORT in `skills/cooper/references/brief.md` for what the thread had to look up or wished it had.
-4. **Cut subagents back to where they pay.** PostHog keeps readers on the parent model to share its cache. Dan doesn't mind either way, so the read-only roles stay on Sonnet in `models.yaml`.
+4. **Cut subagents back to where they pay.** PostHog keeps readers on the parent model to share its cache. Dan doesn't mind either way, so the read-only roles keep Sonnet in their launch declarations.
 5. **Cost per thread.** Report tokens and dollars per thread so Dispatch can show spend.
 6. **Keep the harness thin.** Fewer rules in prompts, more of the model's own judgment. (Habit.)
 7. **Drift check after merges.** Fleet Control flags skills that name files, flags, or tools that no longer exist.
@@ -145,8 +145,8 @@ PostHog posted 38 lessons from building their AI products ([thread](https://x.co
 ## Known gaps
 
 - Nothing has been run. Expect wording that reads fine and fails in practice.
-- The model picks came from research on 2026-10-12 (benchmarks, speed, pstack-t3's defaults). Recheck them with `/cooper-models` as T3's catalog changes; Haiku 5.5 should replace Sonnet 5.5 for the read-only roles once T3 lists it.
-- Open T3 issues `delegation.md` works around:
+- The model picks came from research on 2026-10-12 (benchmarks, speed, pstack-t3's defaults). Recheck the hardcoded choices with `/cooper-models` as T3 capabilities and session evidence change; no model upgrade follows from catalog availability alone.
+- T3 issues tracked by the launch guidance; failures remain visible gates rather than reasons to switch transport:
   - #16808: `delegate_task` fails with `parent_not_active` from a background subagent.
   - #17548: a child's settle hook runs in the parent's worktree.
   - #17809: background subagents stay "Running".

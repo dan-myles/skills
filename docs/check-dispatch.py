@@ -23,7 +23,7 @@ def check(root):
     dispatch = {'dispatch', 'dispatch-setup', 'dispatch-decompose', 'dispatch-chase', 'dispatch-digest'}
     assert dispatch <= coding.keys()
     assert not dispatch & shared.keys()
-    selected = dispatch | {'cooper', 'cooper-models', 'grokbot-fleet-control', 'grokbot-gs-crisp-support'}
+    selected = dispatch | {'cooper', 'cooper-models', 'cooper-how', 'cooper-why', 'cooper-grill', 'cooper-architect', 'cooper-adversarial-review', 'cooper-no-comments', 'cooper-verify', 'cooper-improve', 'grokbot-fleet-control', 'grokbot-gs-crisp-support'}
     failures = []
     checked = set()
     with tempfile.TemporaryDirectory(prefix='dispatch-links-') as temporary:
