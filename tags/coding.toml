@@ -197,11 +197,13 @@ npm = "@anthropic-ai/claude-code"
 cask = "codex"
 npm = "@openai/codex"
 
-# The T3 Code desktop app is a cask, so macOS only.
+# T3 Code's nightly channel, from its GitHub releases on macOS and Linux. Loadout installs each
+# once; both update themselves on the nightly channel after that.
+# The desktop app: ~/Applications on macOS, an AppImage in ~/.local/bin on Linux.
 [programs.t3-code]
-cask = "t3-code"
+github = { repo = "pingdotgg/t3code", tag = "v*-nightly.*", prerelease = true, app = "T3 Code (Nightly)", asset = { macos-aarch64 = "T3-Code-*-arm64.zip", macos-x86_64 = "T3-Code-*-x64.zip", linux-x86_64 = "T3-Code-*-x86_64.AppImage", linux-aarch64 = "T3-Code-*-arm64.AppImage" } }
 
-# The T3 Code server CLI, on every coding machine. `t3 service install` and `t3 connect` are
-# one-time manual steps.
+# The T3 Code server CLI, linked into ~/.local/bin. `t3 service install` and `t3 connect` are
+# one-time manual steps. T3 publishes no Intel macOS build of it.
 [programs.t3]
-npm = "t3"
+github = { repo = "pingdotgg/t3code", tag = "v*-nightly.*", prerelease = true, bin = "t3", asset = { macos-aarch64 = "t3-*-darwin-arm64.tar.gz", linux-x86_64 = "t3-*-linux-x64.tar.gz", linux-aarch64 = "t3-*-linux-arm64.tar.gz" } }
