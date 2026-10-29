@@ -270,4 +270,3 @@ when = { os = "linux", arch = "x86_64" }
 source = "files/agent-browser/access.conf"
 target = "~/.config/systemd/user/agent-browser-dashboard.service.d/access.conf"
 when = { os = "linux", arch = "x86_64" }
-

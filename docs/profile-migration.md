@@ -1,8 +1,9 @@
 # Development profile migration
 
-This checkout is the final target, not a safe first commit to publish to the old
-fleet. Do not sync/apply it with 0.1.5 or publish the mapping removal before the
-steps below. Editing it does not migrate installed machines.
+The staged rollout on 2026-10-29 used Loadout 0.1.6 and a compatibility rename
+commit before removing mappings. Paperclip and Stapler now select development
+locally. The sequence below documents that migration and remains the procedure
+for any older installation. Do not apply this layout with 0.1.5.
 
 Dan selected development for Paperclip and Stapler. MacBook Pro is base-only;
 Grokbot retains its declared exception and must not select development. Only

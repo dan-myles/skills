@@ -19,7 +19,7 @@ as an exception with its own agent destination and no personal Executor.
 | MacBook Pro | none, base-only |
 | Grokbot | none, exceptional machine configuration |
 
-This is the target configuration, not a report of deployed selections. Read
+Paperclip and Stapler saved these local selections during the 2026-10-29 rollout. Read
 [the migration procedure](docs/profile-migration.md) before publishing or applying
 this change. Loadout 0.1.6 supports profiles; 0.1.5 cannot select them. Removing the old
 mappings before local selections are ready removes managed development files.
