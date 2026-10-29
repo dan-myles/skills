@@ -2,13 +2,13 @@
 
 This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. The manifests declare skills, enabled agents, programs, and MCP servers. Standalone tools live under `tools/`, which Loadout ignores; each is installed by hand from its own README.
 
-The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 55 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
+The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 56 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
 
 ## Layout and machines
 
 ```text
 loadout.toml                     global agents, personal Executor MCP, 13 shared skills, machine tags
-tags/coding.toml                 cooper and all cooper-* skills, 41 total
+tags/coding.toml                 Cooper, Dispatch, coding personal skills, packages, and local MCPs
 machines/grokbot.toml            replaces enabled agents with the custom grok-bot
 skills/                         skill sources, matching the starter
   cooper/, cooper-*/, personal-*/, ... skill folders, with dispatch-* and grokbot-* roles
@@ -19,16 +19,18 @@ PARKING_LOT.md                   repo rules and history
 
 | Machine name | OS / account | Tags | Enabled agents | Skills |
 | --- | --- | --- | --- | --- |
-| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 55 |
-| `stapler` (Mac Studio) | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 55; Capy pending |
-| `paperclip` | Linux / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 55 |
+| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 56 |
+| `stapler` (Mac Studio) | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 56; Capy pending |
+| `paperclip` | Linux / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 56 |
 | `grokbot` | Linux / `box` | none | `grok-bot` only | 13 shared skills |
 
 Machine names follow the tailnet names, checked on 2026-10-29. The MacBook's OS hostname is `Daniels-MacBook-Pro.local`, so save the table's names explicitly instead of relying on hostname detection. SSH confirmed user `dan` with home `/Users/dan` on the MacBook, and user `dan` with home `/home/paperclip` on Paperclip (the account was renamed from `paperclip`; its home kept the old name). The Grok Bot machine is `grokbot`, not the account name `box`. It was offline and its tailnet DNS name did not resolve, so its account and workflow copies could not be checked remotely. The Mac Studio is `stapler` on the tailnet (renamed from `dans-mac-studio` on 2026-10-29), user `dan`, home `/Users/dan`. It has one Tailscale identity; the old `dans-mac-studio-ssh` endpoint is gone.
 
-The global layer enables the four native agents. An unlisted machine gets those agents and the 13 shared skills, but no Cooper or Dispatch skills. The `coding` tag adds Cooper, Dispatch, and `personal-loadout-programs` only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `cooper` or `cooper-*` skills.
+The global layer enables the four native agents. An unlisted machine gets those agents and the 13 shared skills, but no Cooper or Dispatch skills. The `coding` tag adds Cooper, Dispatch, `personal-loadout-programs`, and `personal-vaultwarden` only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `cooper` or `cooper-*` skills.
 
 ## Agent destinations and limits
+
+The automatic [personal-vaultwarden skill](skills/personal-vaultwarden/SKILL.md) guides credential discovery, secure unlock, and approved-task-only transfer. It uses private input tools before asking for manual terminal work.
 
 The coding tag also installs Bitwarden CLI and its official local stdio MCP,
 pointed at Dan's Vaultwarden on Archie. Machines start logged out; an existing
@@ -59,7 +61,7 @@ Capy is pending on the Studio. [Its official skills documentation](https://docs.
 
 Dan verified that every Grok Bot reads one folder per skill, each containing `SKILL.md`, under `/home/box/agent-data/workflows`. The custom agent uses `~/agent-data/workflows` because the manifest rejects absolute destinations. Run as user `box` with home `/home/box` to reach the verified path.
 
-The box receives the two `grokbot-*` skills, `ketchup`, `unslop`, and every `personal-*` skill. Dispatch and its four modes now belong to the coding tag and run in T3. Review any removal of previously owned bot Dispatch skill copies before a future Loadout apply; this port does not apply machines or migrate live bots. It receives no `cooper` or `cooper-*` folders. Support retains its own Executor worker reference on the box; Cooper loads its coding helpers on its T3 machine. See [the historical Grok Bot checks](docs/grokbot-validation.md).
+The box receives the two `grokbot-*` skills, `ketchup`, `unslop`, and the globally declared `personal-*` skills. `personal-loadout-programs` and `personal-vaultwarden` are coding-only. Dispatch and its four modes now belong to the coding tag and run in T3. Review any removal of previously owned bot Dispatch skill copies before a future Loadout apply; this port does not apply machines or migrate live bots. It receives no `cooper` or `cooper-*` folders. Support retains its own Executor worker reference on the box; Cooper loads its coding helpers on its T3 machine. See [the historical Grok Bot checks](docs/grokbot-validation.md).
 
 Loadout owns each `<destination>/<skill-id>` separately, not the workflows parent. Bot-created legacy `fleet-control` and `gs-crisp-support` folders may still exist there. The new names are `grokbot-fleet-control` and `grokbot-gs-crisp-support`. This repository change does not rename live bots, update their prompts, or migrate live stores. Reconcile existing contents and update selected skill names with Dan before a live rollout. An undeclared, unowned old folder is left alone; an unchanged owned old target can be removed when undeclared, while a changed one can be released. Keep ownership records and backups.
 

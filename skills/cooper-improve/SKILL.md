@@ -21,6 +21,8 @@ Cooper gets better one approved edit at a time. Every edit traces back to someth
 
 The cooper- skills are folders next to this one: `cooper`, `cooper-how`, `cooper-why`, `cooper-architect`, `cooper-adversarial-review`, `cooper-blast-radius`, `cooper-grill`, `cooper-sharpen`, `cooper-no-comments`, `cooper-models`, `cooper-verify`, `cooper-improve`, `dispatch` (Cooper's chief of staff), and the `cooper-principle-*` skills. Resolve this folder's real path first. Installed copies live in the stable Skills Manager library, separate from the authoring checkout. Make approved edits in the authoring checkout, then deliberately import them into the stable library through Skills Manager CLI and deploy. Never point agent skill links into a checkout whose branch can change. Read the authoring repo's deployment instructions before syncing; preserve library-only edits.
 
+`personal-vaultwarden` is an automatic sibling skill for authorized password and credential access. Its source and runbooks live in Dan's Loadout; deploy it through Loadout, not Skills Manager.
+
 ## Where a lesson lands
 
 Each lesson goes to exactly one place.

@@ -15,11 +15,12 @@ Most of it is **Cooper**: Dan's agent persona and his software workflow, a set o
 Also here, outside Cooper:
 
 - `unslop`: cuts AI tells from writing. Global and unprefixed on purpose.
+- `personal-vaultwarden`: automatically discovers and uses the correct vault credential for an authorized task. Secure file input handles headless unlock; direct transfer keeps secrets out of model output. Lives with the CLI and local MCP in the coding tag.
 - `personal-loadout-programs`: automatically offers to declare a program in this loadout when one is installed and looks cross-machine, with the manager rules learned while declaring Tailscale, Claude Code, Codex, and T3 Code. Lives in the coding tag, since the box never declares programs.
 - `personal-tailscale-ssh`: automatically handles work on Dan's other machines through passwordless Tailscale SSH. Dan explicitly requested automatic invocation. Records verified stapler (the Mac Studio), Archie, and Paperclip accounts.
 - `ketchup`: catches Dan up on a chat since his last message and lists every call waiting on him. Unprefixed like `unslop`, but manual-only. Ported from pstack's `ketchup` (2026-10-20).
 - `tools/t3-grokbot-bridge/`: a standalone Node program, not a skill, that streams T3 thread updates per project to a Grok Bot webhook (Dan's call, 2026-10-29). Loadout ignores `tools/`. Its runtime state and credentials live in `~/.crabstock-dispatch/`, never in this repo. Read its README before changing it; it records what was verified against T3 and what was not (real Grok Bot delivery).
-- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT; `personal-taste`, Leon Lin's taste-skill v2 from github.com/Leonxlnx/taste-skill at f624f37, MIT; `personal-landing-page-design` and `personal-design-to-motion`, Elaya's ai-design-skills from github.com/elayadesign/ai-design-skills at a2735a3, MIT). Third-party skills are copied as is with only `name` changed (plus the manual-only flags) and keep their LICENSE. Every `personal-*` skill is manual-only except `personal-tailscale-ssh` (Dan's call, 2026-10-26) and `personal-loadout-programs` (Dan's call, 2026-10-29).
+- `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT; `personal-taste`, Leon Lin's taste-skill v2 from github.com/Leonxlnx/taste-skill at f624f37, MIT; `personal-landing-page-design` and `personal-design-to-motion`, Elaya's ai-design-skills from github.com/elayadesign/ai-design-skills at a2735a3, MIT). Third-party skills are copied as is with only `name` changed (plus the manual-only flags) and keep their LICENSE. Every `personal-*` skill is manual-only except `personal-tailscale-ssh` (Dan's call, 2026-10-26), `personal-loadout-programs` (Dan's call, 2026-10-29), and `personal-vaultwarden` (Dan's call, 2026-10-29).
 
 ## Status
 
@@ -44,9 +45,9 @@ Dispatch is a pinned long-running T3 project thread scoped to one repo, with por
 Do all of these together:
 
 1. Create the folder under `skills/`. Its folder name and `name:` in `SKILL.md` frontmatter match.
-2. `disable-model-invocation: true` in the frontmatter.
-3. `agents/openai.yaml` with the same name and `allow_implicit_invocation: false`.
-4. Add `[skills.<name>] source = "skills/<name>"` to `tags/coding.toml` for `cooper` and `cooper-*`, or `loadout.toml` for the requested non-coding set. The box gets global skills only. Keep machine-specific destinations in machine layers.
+2. `disable-model-invocation: true` in the frontmatter unless Dan explicitly requests automatic invocation, as for the three automatic personal skills above.
+3. `agents/openai.yaml` with the same name and `allow_implicit_invocation: false`, or `true` for an explicitly automatic skill.
+4. Add `[skills.<name>] source = "skills/<name>"` to `tags/coding.toml` for `cooper` and `cooper-*`, or `loadout.toml` for the requested non-coding set. Personal skills tied to coding-only tooling, such as `personal-vaultwarden`, belong in the coding tag. The box gets global skills only. Keep machine-specific destinations in machine layers.
 5. Run `loadout validate .` and `loadout plan --loadout .`, then commit and push only when Dan asks. Apply approved changes per `README.md`; do not hand-edit agent links or reintroduce Skills Manager as a second deployment source.
 6. Add it to the skills list in `skills/cooper-improve/SKILL.md`, and to `skills/cooper/SKILL.md` if Cooper uses it.
 7. Run `unslop` on new prose.

@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-vaultwarden"
+  short_description: "Use Dan's vault safely for authorized login tasks"
+  default_prompt: "Use $personal-vaultwarden to find and use the right credential for my authorized task without exposing it."
+
+policy:
+  allow_implicit_invocation: true

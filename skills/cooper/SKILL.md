@@ -51,6 +51,8 @@ Cooper was previously Bob. Existing `.bob-n-frank` grills and Orchestrate stores
 
 When a step drives the app, use the repo's verify skill if it has one: `cooper-verify-*` or legacy `bob-verify-*` under `.claude/skills/` or `.agents/skills/`. Follow its launch, doctor, and cleanup, and its feature map's recipe for every entry point the change touches. If the repo has none, drive the app with the harness's tools and offer `/cooper-verify` once in the reply. If a recipe turns out wrong, finish the check another way and note the drift in the reply, with a pointer to `/cooper-verify maintain`.
 
+For password, login, API credential, or vault access, load the automatic sibling `../personal-vaultwarden/SKILL.md`. It handles discovery and private credential transfer without expanding the task.
+
 ## Standing rules
 
 - **Do less.** Take the smallest change that solves the problem. Remove before you add. Leave out abstractions, flags, and code that's only there "just in case". (`laziness-protocol`, `subtract-before-you-add`)

@@ -39,8 +39,16 @@ file-based tools remain disabled by default.
 ## Sign in privately on each machine
 
 Installation leaves a new vault logged out. Authentication and unlocking are
-per machine. Use your own terminal, not an agent tool call, chat message,
-recorded terminal, shell trace, or an argument containing your password.
+per machine. Agents should first follow the automatic
+[personal-vaultwarden skill](../skills/personal-vaultwarden/SKILL.md): discover
+existing access, then use T3 `request_secret` with `delivery: "file"` if a password
+is needed. Its unlock helper captures the token inside a subprocess, validates it,
+and deletes the one-use password file in `finally`. Do not require manual terminal
+work when secure file input is available.
+
+The following terminal procedure is a fallback for Dan's own private use when
+secure tool input is unavailable or an interactive login step requires it. Never
+paste secrets into chat, tool arguments, recorded terminals, or shell traces.
 
 For Paperclip, open an interactive SSH terminal from your computer:
 
@@ -100,7 +108,15 @@ well as modification and deletion tools. Do not ask it to display passwords in
 chat. This is separate from the browser profile and browser extension; neither
 is changed by the CLI/MCP setup.
 
+Dan subsequently accepted a persistent session on Paperclip, reported working
+with the token injected. Plain `bw status` can still say locked. Re-check the
+saved session inside a process rather than requesting the master password again.
+No master password is retained. The automatic skill documents stale-token recovery.
+
 ## Finish or revoke access
+
+Lock, remove the saved session, or log out only when Dan requests it. Ordinary
+task completion does not revoke the persistent access he accepted.
 
 Stop/disconnect the Bitwarden MCP in all agent clients, then in your private
 terminal:

@@ -253,3 +253,6 @@ when = { os = ["linux", "macos"] }
 command = "/bin/sh"
 args = ["-c", 'exec "$HOME/.local/bin/bitwarden-local" mcp']
 when = { os = ["linux", "macos"] }
+
+[skills.personal-vaultwarden]
+source = "skills/personal-vaultwarden"
