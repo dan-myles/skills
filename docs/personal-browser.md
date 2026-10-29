@@ -76,7 +76,33 @@ Do not override the wrapper's session/profile or open the same profile elsewhere
 
 ## Dan's live view and sign-in
 
-From Dan's computer on the tailnet:
+On Paperclip, open the private tokenized dashboard URL directly in your browser,
+outside T3 Preview. Its origin is <https://paperclip.tail156535.ts.net:8443>.
+Nested dashboard input in T3 Preview did not work for Dan. The initial URL fragment
+contains the private access token; the dashboard exchanges it for a secure cookie.
+The plain origin alone does not establish access. Never commit or log the token.
+
+Loadout deploys Paperclip's `agent-browser-dashboard.service.d/access.conf`,
+which allows exactly that HTTPS origin and sets `StandardOutput=null` so the
+service's tokenized startup URL does not enter the journal. Tokens remain in
+agent-browser's private runtime state, outside Loadout ownership.
+
+The existing private Tailscale Serve route forwards HTTPS 8443 to loopback 4848.
+Tailscale owns that route's persistent state; Loadout has no Serve adapter. To
+recreate it on Paperclip after deploying and activating the service:
+
+```sh
+tailscale serve --bg --https=8443 http://127.0.0.1:4848
+```
+
+Use sudo only if the account is not a Tailscale operator. This command changes
+port 8443 only. Preserve the existing HTTPS 443 root route to T3 on port 3773;
+never run `tailscale serve reset` or replace the whole Serve configuration for
+this setup. Do not enable Funnel. A dashboard restart can rotate its access
+token, so avoid restarting it during an active sign-in and obtain the current
+private URL through a secure handoff when needed.
+
+An SSH tunnel remains an alternative from Dan's computer on the tailnet:
 
 ```sh
 ssh -N -L 4848:127.0.0.1:4848 dan@paperclip.tail156535.ts.net
@@ -87,12 +113,10 @@ sign in and complete MFA. The agent can open the desired login page first.
 Close the tunnel with Ctrl+C. If local port 4848 is in use, forward
 `14848:127.0.0.1:4848` and open <http://localhost:14848> instead.
 
-The dashboard and per-session stream ports bind loopback. Only the dashboard
-port needs forwarding; it proxies session traffic internally. This deployment
-does not enable Tailscale Serve, Funnel, a reverse proxy, or external allowed
-origins. Loopback access relies on the local account and SSH tunnel; it needs no
-dashboard token. Any future HTTPS proxy must use agent-browser's exact allowed
-origin and private token flow, not just forward an unauthenticated public port.
+The dashboard and per-session stream ports still bind loopback. Only the dashboard
+port needs proxying or forwarding; it proxies session traffic internally.
+HTTPS access requires both tailnet access and dashboard authorization. Loopback
+access relies on the local account and SSH tunnel; it needs no dashboard token.
 
 The dashboard is a web-page viewport, not a full desktop. Browser chrome,
 native OS dialogs, hardware security keys, and some anti-automation login flows
@@ -145,7 +169,12 @@ and Chrome for Testing 156.0.8078.80:
 - `ss` showed only loopback listeners for the dashboard, session stream, and CDP.
   Profile and runtime directories had mode 0700.
 
-macOS installation, a real MFA sign-in, and Bitwarden have not been tested.
+The later Paperclip access update was checked against the installed drop-in and
+Tailscale Serve state: HTTPS 8443 proxies loopback 4848 and HTTPS 443 still proxies
+T3 on 3773. Adopting the matching drop-in requires no service restart. The active
+personal sign-in session was not navigated or closed during that update.
+
+macOS installation, completed real MFA sign-in, and Bitwarden have not been tested.
 
 ## Sources
 

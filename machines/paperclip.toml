@@ -8,6 +8,11 @@ source = "files/agent-browser/agent-browser-dashboard.service"
 target = "~/.config/systemd/user/agent-browser-dashboard.service"
 when = { os = "linux" }
 
+[files.agent-browser-dashboard-access]
+source = "files/agent-browser/access.conf"
+target = "~/.config/systemd/user/agent-browser-dashboard.service.d/access.conf"
+when = { os = "linux" }
+
 # Browser libraries and fonts from agent-browser 0.41.0's Ubuntu dependency list.
 # Paperclip runs Ubuntu 22.04; revisit package names when upgrading the OS.
 
