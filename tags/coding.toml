@@ -124,11 +124,12 @@ source = "skills/dispatch-digest"
 [programs.gh]
 brew = "gh"
 
-# tailscale ships the tailscaled daemon. Each OS uses the first manager it knows, and only that
-# manager decides whether it is installed: macOS takes the brew formula, Linux takes apt, so the
-# system package is detected instead of brew adding a second copy. apt needs Tailscale's repo,
-# which the machine already has once it is reachable over the tailnet.
-[programs.tailscale]
+# The tailscaled daemon. Neither manager has a package by that name: the tailscale package ships
+# tailscaled and the CLI. Each OS uses the first manager it knows, and only that manager decides
+# whether it is installed: macOS takes the brew formula, Linux takes apt, so the system package is
+# detected instead of brew adding a second copy. apt turns on tailscaled.service itself; on a
+# fresh Mac, start the daemon once with `sudo brew services start tailscale`.
+[programs.tailscaled]
 brew = "tailscale"
 apt = "tailscale"
 
