@@ -1,22 +1,17 @@
 ---
 name: dispatch-digest
 disable-model-invocation: true
-description: "Produce a repo-level Dispatch digest or read-only status from the board and live worker evidence. Group human gates, ready PRs, active work, and routine changes; never launch work from a digest."
+description: "Show one repository's Dispatch status from its Markdown board and live worker evidence. Reconcile reports and surface gates without launching, resuming, retargeting, or settling workers."
 ---
 
 # Digest
 
-Read the [Dispatch role](../dispatch/SKILL.md). Reconcile known workers through [Chase](../dispatch-chase/SKILL.md) in reconciliation-only mode. Both status and brief calls skip launches, queue refills, work-starting follow-ups, and settlement. A request for status is not approval to acknowledge customers or to resume a paused job.
+Read the [Dispatch role](../dispatch/SKILL.md) and [project state](../dispatch/references/project-state.md). Select the store explicitly or by verified ownership. Build status from its board and current worker/PR evidence, never memory.
 
-Build the response from the saved board and current thread/PR state, never conversation memory. Keep the instance's board page current with [the board page](../dispatch/references/board-page.md) shape before writing the digest: the Now, Backlog, What landed, and Watch and links tabs, never the retired Recent activity or Waiting on you sections. What is running leads the digest too; a digest that opens with finished work buries the answer Dan asks for.
+The current owner uses [Chase](../dispatch-chase/SKILL.md) in reconciliation-only mode: read/copy shareable reports, update evidence and surface gates, but skip launches, queue refills, work-starting follow-ups, retargeting and settlement. A non-owner or stale/offline checkout only reads and displays observations, with no file/cursor writes. Status never initiates takeover or resumes a pause.
 
-Keep the chat reply to four short bands, matching the page's order:
+Follow [the board](../dispatch/references/board-page.md): Now, Backlog, What landed, Watch and links. Keep urgent user gates visible in the chat, and the actual owning Cooper link beside every review-ready PR. Group explicit Wayfinder maps with their questions and owners; status never advances human decisions or starts planning work.
 
-- Fires: a pending Dan decision, urgent failure, missing access, or stalled work, with evidence and the owning worker link.
-- Today: decisions, proposals, completed findings, and merge-ready PRs. Keep the actual owning Cooper link beside each PR.
-- Waiting: active workers and dependencies; group Wayfinder maps separately with their current question, owners, and gates.
-- FYI: deduped/dropped items, routine progress, and source/destination failures.
+State the store/owner generation, timestamp, running work, what changed, what needs the user, and what remains owned. Distinguish saved evidence from live observations. An inaccessible prior-user thread stays waiting on access with its last verified source/time/head; saved green checks are not current verification. No cross-project aggregation or Fleet Control handoff is required.
 
-State what changed since the last digest, what needs Dan, and what remains owned. Count from the board; name inaccessible evidence. If nothing changed, say "Nothing new since <time>." and stop. Show an activity board or timeline using the host's available visual tools when useful; no dependency on a T3-only rendering skill exists on the box.
-
-Fleet Control aggregates the repo summaries into one cross-machine digest. Pass only scoped status and human gates through a verified native bot route or a shared box-local summary; do not post to people or channels without authorization. Do not copy customer details into a global digest. The support skill owns its interactive case presentation.
+Save owner-authorized evidence updates and journal markers under normal Git policy. If nothing changed, say "Nothing new since <time>." An inline T3 board may be rendered from the Markdown; no external Page is required.

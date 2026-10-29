@@ -22,7 +22,7 @@ Pairing models from different providers is on purpose: Claude and GPT have diffe
 
 ## Grok Bot launches
 
-Dispatch and Support use [the shared worker contract](../../dispatch/references/cooper-workers.md) through Executor. Their Codex pool launch selection is explicit and separate from this file. A bot has no parent T3 thread and cannot use native/delegate subagents instead of Cooper threads. Model substitutions need Dan's decision; do not apply the generic fallback to a Grok Bot launch.
+Support uses [its worker contract](../../grokbot-gs-crisp-support/references/cooper-workers.md) through Executor. Its launch selection is explicit and separate from this file. T3 Dispatch uses [its direct worker contract](../../dispatch/references/cooper-workers.md); it does not require Executor. A bot has no parent T3 thread and cannot use native/delegate subagents instead of Cooper threads. Model substitutions need Dan's decision; do not apply the generic fallback to a Grok Bot launch.
 
 ## Threads
 

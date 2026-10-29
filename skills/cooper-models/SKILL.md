@@ -1,7 +1,7 @@
 ---
 name: cooper-models
 disable-model-invocation: true
-description: "Review and change T3 Cooper subagent and coordinator-launch models. Grok Bot Dispatch launch settings are documented separately. Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes in plain words. A repo can override lines in .bob-n-frank/models.yaml. Manual-only: `/cooper-models [change]` in Claude Code, `$cooper-models ...` in Codex."
+description: "Review and change T3 Cooper subagent and coordinator-launch models. Dispatch worker launch settings are documented separately. Shows the current setup, checks it against T3's live catalog, recommends upgrades with reasons, and applies changes in plain words. A repo can override lines in .bob-n-frank/models.yaml. Manual-only: `/cooper-models [change]` in Claude Code, `$cooper-models ...` in Codex."
 ---
 
 # Models
@@ -10,7 +10,7 @@ The skill and command are now `cooper-models`. Model keys keep their existing `b
 
 On a T3 coding machine, `~/.bob-n-frank/models.yaml` sets Cooper's subagent roles (`<skill>.<name>`) and T3 coordinator-launched threads (`threads.<name>`). Each line gives the provider, model, and options inline; a list starts one subagent per entry; `inherit` means the thread's own model. A repo can override any line in `<repo>/.bob-n-frank/models.yaml`. `models.example.yaml` in this folder is the built-in default: it has every line, it's what runs when the user has no models file, and it fills any line the user's file lacks. The skills name their line where they start the work, and start it per `references/delegation.md`.
 
-Dispatch runs as a Grok Bot, whose own model is set in Grok Bot configuration, not the T3 composer. Its Executor launches use the setting in [the Dispatch worker contract](../dispatch/references/cooper-workers.md): codex_codex_pool_v2, gpt-6.1-sol, high reasoning. These box-side launches do not resolve threads.bob from this T3 machine's home. This file still controls T3 Orchestrate launches and Cooper subagents; manually started Cooper threads use their T3 selection. Do not change those defaults as part of a Dispatch launch fix.
+Dispatch runs in a pinned T3 project thread, selected in T3. Its worker launch choice remains documented in [the Dispatch worker contract](../dispatch/references/cooper-workers.md), separate from this file's Cooper subagent and Orchestrate roles. This port changes no model values, override precedence, or legacy keys. Grok Bot support keeps its separate Executor launch contract.
 
 ## Use
 
@@ -31,7 +31,7 @@ Dispatch runs as a Grok Bot, whose own model is set in Grok Bot configuration, n
    - a model, provider, or option value the catalog doesn't list
    - a provider whose `canRunCrossProviderChildTask` is false
    - a panel that doesn't mix providers. `bob-architect.designers` must be two entries from different providers. `bob-adversarial-review.reviewers` and `bob-improve.eval-candidates` should mix them.
-   - a checker on the same family as what it checks: `bob.verifier` against `threads.bob`, `dispatch.validator` against the actual Grok Bot model when that legacy override is used. If the bot model is unknown, mark diversity unverified.
+   - a checker on the same family as what it checks: `bob.verifier` against `threads.bob`, `dispatch.validator` against the actual Dispatch thread model. If that model is unknown, mark diversity unverified.
    - a line no skill names, or a `<skill>.<name>` a skill names that has no line. Search the cooper- skills for `models.yaml` to find them.
 4. **Recommend.** On a review, or for a change the user left open ("a better reviewer"), propose what's worth changing. Each recommendation names the line, before and after, why, and the cost: more effort or a bigger model means slower and more expensive runs. Lead with the one that matters most. "No change" is a fine answer; don't churn models for their own sake.
    - **Newer models.** The catalog doesn't rank models or say what's new. Judge from names and versions (`gpt-6.1-sol` over `gpt-6-sol`), then look up the provider's release notes or model docs, when you can reach them, and cite what you found. Say when a ranking is only a guess from the name.

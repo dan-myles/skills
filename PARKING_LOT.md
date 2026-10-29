@@ -4,7 +4,7 @@ Where the Cooper work stands, for the next agent who picks it up. Read this befo
 
 ## What this repo is
 
-Dan's loadout, applied by the loadout CLI from this repository's `loadout` branch. `loadout.toml` is the deployment contract. `tags/coding.toml` adds Cooper on the MacBook Pro, Studio, and Paperclip; `machines/grokbot.toml` enables only the Grok Bot destination and the global non-coding skills. Capy on the Studio is pending a documented user-level skills path; it cannot be declared validly without one. See `README.md` for machine names, rollout questions, ownership limits, and branch-specific setup.
+Dan's loadout, applied by the loadout CLI from this repository's `main` branch. `loadout.toml` is the deployment contract. `tags/coding.toml` adds Cooper and Dispatch on the MacBook Pro, Studio, and Paperclip; `machines/grokbot.toml` enables only the Grok Bot destination and the global non-coding skills. Capy on the Studio is pending a documented user-level skills path; it cannot be declared validly without one. See `README.md` for machine names, rollout questions, ownership limits, and branch-specific setup.
 
 All skill folders live under `skills/`, matching the Loadout starter, with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits, then undeploy the manager-created links before switching ownership. Loadout follows top-level skill links and can otherwise adopt the library targets. See the README migration steps. This conversion did not apply any machine or change `main`.
 
@@ -36,7 +36,7 @@ Cooper is still being designed. **Nothing in it has run on real work yet.** Don'
 
 ## Fleet layers
 
-The three lead skills are `fleet-control`, `dispatch`, and `cooper`. Fleet Control is the outer Grok Bot loop. Dispatch is the per-project lead, formerly Frank. Coopers are workers. The supporting Cooper helpers and personal skills remain separate library entries. Dispatch owns no sweeps or automations; Fleet Control requires Dan's approval to change live schedules. The shared `.bob-n-frank` settings root is retained for compatibility, with new lead boards under `dispatch/` and an explicit migration path for legacy stores.
+Dispatch is a pinned long-running T3 project thread scoped to one repo, with portable state under `.dispatch/<id>/`. It coordinates Cooper worker threads directly with T3 tools. Fleet Control and support remain Grok Bots with their own registry and Executor transport; new Dispatches do not depend on them or participate in cross-project routing. No live stores, bots, installed skills or schedules are migrated by the T3 port.
 
 ## Adding or renaming a skill
 
@@ -52,14 +52,9 @@ Do all of these together:
 
 ## Cooper and Dispatch's home
 
-Each user customizes Cooper and Dispatch in `~/.bob-n-frank/`, outside every repo:
+Cooper's existing `~/.bob-n-frank/models.yaml`, grills and Orchestrate stores remain compatible. Repo-local model overrides still apply; no model-policy migration is part of the Dispatch port.
 
-- `models.yaml`: the model for every role. Every agent on the machine reads it.
-- `config.yaml`: Dispatch's settings (scopes, stores, evidence sources, auto-dispatch rules).
-- `dispatch/`: Dispatch's board, briefs, reports, and decision log.
-- `orchestrate/<program>/`: each Orchestrate program's store.
-
-A repo can override `models.yaml` and Dispatch's per-repo settings in `<repo>/.bob-n-frank/`.
+Dispatch owns `.dispatch/<id>/` inside one repository, never a global instance lookup. The store ID derives from the initial thread's exact ID; metadata separates that immutable identity from the current owner and generation. Markdown board, journal, decisions, briefs, reports and explicit Wayfinder maps are Git-shareable. Read `skills/dispatch/references/project-state.md` for the format, save/share and explicit takeover protocol, privacy exclusions, and inaccessible-worker recovery. Git is not a distributed lock. No silent adoption or concurrent writing to another owner's store is allowed.
 
 ## Map
 
@@ -95,7 +90,7 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 
 **Principles**: 24 `cooper-principle-*` skills, one folder each so only the needed one loads. `skills/cooper/SKILL.md` lists them with triggers; standing rules and playbook steps cite them by short name.
 
-**`cooper-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `skills/cooper-models/models.example.yaml` in this repo is the built-in default: it has every line, runs when a user has no models file, and fills lines their file lacks. Dispatch likewise runs on `skills/dispatch/references/config.example.yaml` when `config.yaml` is missing. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Dispatch's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/cooper-models` edits the home file and recommends upgrades. `skills/cooper-models/references/delegation.md` says how to start each one.
+**`cooper-models`**: the model for every role lives in the user's home, `~/.bob-n-frank/models.yaml`, which every agent on the machine reads. `skills/cooper-models/models.example.yaml` in this repo is the built-in default: it has every line, runs when a user has no models file, and fills lines their file lacks. Dispatch settings live in its repository store; it has no global config default. A repo can override lines in `<repo>/.bob-n-frank/models.yaml` (committed for the team, or in `.git/info/exclude` for one machine). Lines are `<skill>.<name>` or `threads.<name>` (`threads.bob` is Opus 5.5 high); `inherit` uses the thread's model; checkers stay on the other family. Dispatch's own thread is set by hand in T3 (recommended: gpt-6.1-sol, medium, Fast tier). `/cooper-models` edits the home file and recommends upgrades. `skills/cooper-models/references/delegation.md` says how to start each one.
 
 **`cooper-improve`**, its own front door because it changes skills or repos, not product code:
 
@@ -104,7 +99,7 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 - Models: recommends model changes from session evidence. Never edits `models.yaml` itself.
 - Correct: makes a repo's repeated agent mistakes impossible (architecture, then types, then lint, then tests), proven against a real past mistake.
 
-**`dispatch`**, Cooper's chief of staff: `Dispatch: General` and `Dispatch: Support` handle items Fleet Control routes through `/dispatch event ...`. Fleet Control owns sweeps, scheduled intake, routing, and all automations. Dispatch triages delivered items, dispatches confirmed small bugs under existing rules, proposes the rest, and tracks its own workers. Setup records scope, thread id, and a distinct store per repo and role; it creates no timers or webhooks. Existing brief timers, failed-payments checks, and webhooks are migration items for the outer loop, not Dispatch-owned work. Workers still report directly to their owning Dispatch; Dispatch and Orchestrate settle workers per `skills/cooper/references/settling.md` and keep their own threads active. Dispatch now routes `setup`, `event`, `brief`, `report`, `status`, and the manual-only `wayfinder` command into `skills/dispatch/playbooks/`. Shared triage, launch, and tracking live in `skills/dispatch/references/work-items.md`. Wayfinder stays in the Dispatch thread, maps decisions across sessions, coordinates Cooper research and throwaway prototypes, and hands an approved spec to implementation. It never auto-starts or creates automations. Its `planning` and `plan-ready` board states keep decision work separate from implementation; existing boards need no migration.
+**`dispatch`** is the long-running project coordinator. Its existing `dispatch-*` setup/decompose/chase/digest structure and local event/report/explicit Wayfinder playbooks remain. The canonical board and running journal live in `.dispatch/<id>/`; the optional inline T3 board derives from Markdown, with Now, Backlog, What landed, Watch and links. New Wayfinder maps and decision resolutions live in the store, with optional tracker mirrors. Cooper workers notify the current exact Dispatch owner via T3 and never edit its store. See `docs/dispatch-t3-validation.md` for checks and limitations.
 
 ## Decisions and why
 

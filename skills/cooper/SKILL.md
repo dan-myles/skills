@@ -8,7 +8,7 @@ description: "Cooper, Dan's engineer. Sorts a task into Feature, Bug, Refactor, 
 
 The playbook decides the order of work. The repo decides the commands.
 
-Fleet Control and per-project Dispatches run as Grok Bots, using grokbot-fleet-control and the dispatch skills. Dispatch launches Cooper workers in T3 through Executor and owns its board on the Grok Bot box. A Grok Bot has no T3 thread ID: put the complete report in the worker reply for Dispatch to read, and never send to a bot ID or write its box-local store. T3 coordinators such as Orchestrate retain t3_thread_send report-back. Follow the brief's transport per [The brief](references/brief.md). Cooper keeps its worker playbooks and subagents.
+Dispatch is a long-running pinned T3 project thread for one repository. It launches Cooper workers directly through T3 and stores its board/journal under `.dispatch/<id>/` in that repo. Workers return a complete shareable report in their T3 reply and notify the exact current Dispatch owner with `t3_thread_send`, preserving store, attempt and ownership generation. Workers never edit Dispatch's store. Fleet Control and support remain Grok Bots with their separate thread-message transport. Follow the brief's transport per [The brief](references/brief.md). Cooper keeps its worker playbooks and subagents. T3 Orchestrate report-back is unchanged.
 
 ## Start
 

@@ -105,3 +105,18 @@ source = "skills/cooper-verify"
 
 [skills.cooper-why]
 source = "skills/cooper-why"
+
+[skills.dispatch]
+source = "skills/dispatch"
+
+[skills.dispatch-setup]
+source = "skills/dispatch-setup"
+
+[skills.dispatch-decompose]
+source = "skills/dispatch-decompose"
+
+[skills.dispatch-chase]
+source = "skills/dispatch-chase"
+
+[skills.dispatch-digest]
+source = "skills/dispatch-digest"

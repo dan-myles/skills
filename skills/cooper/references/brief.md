@@ -23,7 +23,8 @@ REPORT       end with the full report; also write <report path> when reachable f
              DECIDED or a reserved call), gates, follow-ups, and what this thread still
              owns (an open PR, running children, a question to the user), or "nothing"
 STANDING     <the coordinator's standing orders pasted word for word, when it has any>
-REPORT-BACK  transport t3-thread: <coordinator thread id>, <message>; or
+REPORT-BACK  transport t3-thread: <exact current coordinator thread id>, <message>,
+             Dispatch store/item/attempt/ownership generation when applicable; or
              transport thread-message: grokbot:<bot id>, item id, coordinator reads this worker reply
 ```
 
@@ -33,7 +34,7 @@ REPORT-BACK  transport t3-thread: <coordinator thread id>, <message>; or
 
 **Report back, both RULES.** Always put the complete report in the T3 reply at PR-open, merge-ready, a gate, or completion. Follow the explicit coordinator transport:
 
-- **T3 coordinator.** Save its reachable report file when requested, then call `t3_thread_send` with the exact coordinator thread ID, `mode: "auto"`, the given message, and `clientRequestId` `<id>-report-<n>`. Auto steers into a running turn or starts an idle coordinator. Keep the existing Orchestrate report-back behavior.
+- **T3 coordinator.** Save its reachable report file when requested, then call `t3_thread_send` with the exact coordinator thread ID, `mode: "auto"`, the given message, the brief's verified return `environmentId` when required, and `clientRequestId` `<id>-report-<n>`. Auto steers into a running turn or starts an idle coordinator. Dispatch workers preserve store/item/attempt/ownership generation and never edit the coordinator's `.dispatch` store or report cursors, even when a copy is reachable. A new owner route requires an explicit reconciled handoff, not a different thread asking for status. Dispatch copies a shareable report into Git with provenance; identify restricted evidence separately and exclude secrets, private data, and machine-specific absolute paths from the shareable report. Keep the existing Orchestrate report-back behavior.
 - **Grok Bot coordinator.** `grokbot:<bot id>` is an identity, not a T3 address. Do not call `t3_thread_send` to it. The Grok Bot reads your T3 reply through Executor and writes its own copy into the box-local report store. Do not try to write that store from Mac Studio or Paperclip. A worker-local file alone is not a report. Put essential findings inline and use a genuinely shared destination for larger artifacts; report inaccessible artifacts as a gate. No instant bot wakeup is promised.
 
 Preserve transport, item ID, and ownership on every follow-up. A legacy REPORT-BACK with an actual T3 coordinator ID keeps the T3 path; never guess a bot's T3 proxy. A missing or ambiguous destination is a gate, with the report still in your reply. A final model turn does not release an open PR or other ownership; say exactly what remains.

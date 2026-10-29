@@ -1,6 +1,6 @@
 interface:
   display_name: "grokbot-fleet-control"
-  short_description: "Route context across Dispatch bots and T3 workers"
+  short_description: "Route context for registered Grok Bot scopes"
   default_prompt: "Use $grokbot-fleet-control to reconcile the registered fleet, route new context, and report what needs Dan."
 
 policy:

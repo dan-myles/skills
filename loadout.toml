@@ -16,9 +16,6 @@ tags = ["coding"]
 [machines.grokbot]
 tags = []
 
-[skills.dispatch]
-source = "skills/dispatch"
-
 [skills.grokbot-fleet-control]
 source = "skills/grokbot-fleet-control"
 
@@ -54,18 +51,6 @@ source = "skills/personal-taste"
 
 [skills.unslop]
 source = "skills/unslop"
-
-[skills.dispatch-setup]
-source = "skills/dispatch-setup"
-
-[skills.dispatch-decompose]
-source = "skills/dispatch-decompose"
-
-[skills.dispatch-chase]
-source = "skills/dispatch-chase"
-
-[skills.dispatch-digest]
-source = "skills/dispatch-digest"
 
 [skills.grokbot-gs-crisp-support]
 source = "skills/grokbot-gs-crisp-support"
