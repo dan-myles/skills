@@ -37,6 +37,13 @@ New per-project stores live at `~/.bob-n-frank/dispatch/<repo>/<role>/` on the b
 
 Discover existing stores before setup. Preserve legacy `frank/` stores and T3-keyed instance records until Dan approves migration. Do not move live state or retarget active workers as a side effect of loading this skill. Legacy `/frank event` and `/frank report` inputs can be processed as their `/dispatch` equivalents; they do not recreate retired automations.
 
+## The board page
+
+Beside `board.tsv`, keep one human-facing Page per instance: the thing Dan opens to see what this project is actually working on. Follow [the board page](references/board-page.md) for its shape, content, and update rules. The page is tabbed, and work in progress leads it: Now, Backlog, What landed, and Watch and links, with a count on each tab. There is no recent-activity tab and no "waiting on you" tab, because Dan dropped both on Oct 28, 2026. A status page that leads with finished work, or that makes him hunt for something to decide, hides the answer he wants.
+
+`board.tsv` stays the source of truth. Update the page whenever a worker launches, gates, finishes, or Dan asks for status; never let a launch change the board without the page following it. A dispatch bot with no page yet creates one during setup and records its canvas id and url in `decisions.tsv`.
+
+
 ## Modes
 
 Read only the selected skill/playbook and the references its step needs. The `dispatch-*` skills share this role's boundaries and worker contract; invoking a mode does not widen permission.

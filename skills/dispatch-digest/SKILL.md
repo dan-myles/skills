@@ -8,7 +8,9 @@ description: "Produce a repo-level Dispatch digest or read-only status from the 
 
 Read the [Dispatch role](../dispatch/SKILL.md). Reconcile known workers through [Chase](../dispatch-chase/SKILL.md) in reconciliation-only mode. Both status and brief calls skip launches, queue refills, work-starting follow-ups, and settlement. A request for status is not approval to acknowledge customers or to resume a paused job.
 
-Build the response from the saved board and current thread/PR state, never conversation memory. Put four bands on the board:
+Build the response from the saved board and current thread/PR state, never conversation memory. Keep the instance's board page current with [the board page](../dispatch/references/board-page.md) shape before writing the digest: the Now, Backlog, What landed, and Watch and links tabs, never the retired Recent activity or Waiting on you sections. What is running leads the digest too; a digest that opens with finished work buries the answer Dan asks for.
+
+Keep the chat reply to four short bands, matching the page's order:
 
 - Fires: a pending Dan decision, urgent failure, missing access, or stalled work, with evidence and the owning worker link.
 - Today: decisions, proposals, completed findings, and merge-ready PRs. Keep the actual owning Cooper link beside each PR.

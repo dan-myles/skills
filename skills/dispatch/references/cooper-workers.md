@@ -19,9 +19,9 @@ await tools["t3-code-mac-studio"].t3_thread_launch({
     branch: "<unique worker branch>"
   },
   modelSelection: {
-    instanceId: "codex_codex_pool_v2",
-    model: "gpt-6.1-sol",
-    options: { reasoningEffort: "high" }
+    instanceId: "claudeAgent_claude_pool",
+    model: "claude-opus-5-5",
+    options: { effort: "medium" }
   },
   message: "$cooper <complete brief>"
 });
@@ -29,7 +29,7 @@ await tools["t3-code-mac-studio"].t3_thread_launch({
 
 `baseRef: "main"` with `startFromOrigin: true` binds the new checkout off `origin/main`; do not supply `origin/origin/main`. Paperclip uses the same shape under its configured app. Read-only investigations use `workspaceStrategy: {type: "root"}` and explicitly forbid repo or production writes. Production operations are not repo edits; support's exact-call rules govern them. Prototypes use isolated writable storage without touching product source.
 
-Do not silently replace the configured provider, model, or reasoning setting if unavailable. Surface the failure and request a decision. This launch setting is separate from the Cooper subagent roles loaded on the worker's machine. A different validation model requires an explicit, verified instance `validator_model` override; a same-family run does not satisfy a second-model check.
+Default worker model is Claude Opus 5.5 at medium effort, set by the user. Use another model only when the user names one for that job, and then pass it explicitly for that launch only. Do not silently replace the configured provider, model, or effort setting if unavailable. Surface the failure and request a decision. This launch setting is separate from the Cooper subagent roles loaded on the worker's machine. A different validation model requires an explicit, verified instance `validator_model` override; a same-family run does not satisfy a second-model check.
 
 Before launching, save the brief and mark its item's note `launch pending`. `t3_thread_launch` has no retry key. Save the returned exact thread ID, link, title, project, app, and run ID immediately, then read the worker. After an error or lost reply, reconcile `t3_thread_list` and candidate thread briefs before any retry. An uncertain launch reserves capacity and is not permission to start another worker. If ownership cannot be established, stop that launch and report the uncertainty.
 
