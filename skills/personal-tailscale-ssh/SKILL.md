@@ -9,27 +9,25 @@ When Dan asks for work on another machine, connect and do the requested work ove
 
 ## Existing setup
 
-Verified from Dan's Mac Studio on 2026-10-22:
+Verified from Dan's MacBook Pro on 2026-10-29:
 
-- Mac Studio: `dan@dans-mac-studio-ssh.tail156535.ts.net`, macOS, home `/Users/dan`. Passwordless Tailscale SSH verified.
+- Mac Studio: `dan@stapler.tail156535.ts.net`, macOS, home `/Users/dan`. Passwordless Tailscale SSH verified. Renamed from `dans-mac-studio` on 2026-10-29; the old name and its `dans-mac-studio-ssh` endpoint no longer resolve. It runs the CLIProxyAPI hub at `https://stapler.tail156535.ts.net`.
 - Archie: `root@archie.tail156535.ts.net`, Linux, home `/root`. Passwordless Tailscale SSH verified. `dan@archie` is rejected by tailnet policy; use the verified account.
-- Paperclip: `paperclip@paperclip.tail156535.ts.net`, Linux, home `/home/paperclip`. Passwordless Tailscale SSH verified.
-- MacBook Pro: `dans-macbook-pro.tail156535.ts.net`. Offline during verification. Its SSH account and server support have not been verified.
+- Paperclip: `dan@paperclip.tail156535.ts.net`, Linux, home `/home/paperclip`. Passwordless Tailscale SSH and passwordless sudo verified. The account was renamed from `paperclip` on 2026-10-29, so `paperclip@paperclip` is rejected; the home folder kept the old name.
+- MacBook Pro: `dans-macbook-pro.tail156535.ts.net`, macOS, user `dan`. Its SSH server support has not been verified.
 
-Treat these names as discovery hints. Refresh `tailscale status --json` for current names, IPs, and online state. A device being online does not prove it accepts SSH.
+Treat these names as discovery hints. Refresh `tailscale status --json` for current names, IPs, and online state. A device being online does not prove it accepts SSH. Dan renames machines and accounts: when a verified destination is suddenly rejected, check `tailscale status` for a new name, and ask which account replaced the old one, before concluding policy changed.
 
-The Studio has two Tailscale identities. `dans-mac-studio` is the local GUI client's identity. The verified SSH destination is `dans-mac-studio-ssh`. A separate `/usr/local/bin/tailscaled` runs with `--tun=userspace-networking`, `--state=/Library/Tailscale/tailscaled.state`, `--socket=/var/run/tailscaled.socket`, and `--port=0`. Its launch daemon is `/Library/LaunchDaemons/com.tailscale.tailscaled.plist`. The daemon's state file contains credentials; do not read or copy it.
-
-Tailscale SSH authenticates with tailnet identity and authorizes the destination account through tailnet policy. It does not need a copied private key or a password. The existing `paperclip` alias in `~/.ssh/config` also names an SSH key, but the Tailscale SSH connection above was verified independently.
+Tailscale SSH authenticates with tailnet identity and authorizes the destination account through tailnet policy. It does not need a copied private key or a password. The MacBook's `paperclip` alias in `~/.ssh/config` (user `dan`) also names an SSH key, but the Tailscale SSH connection above was verified independently.
 
 ## Connect and work
 
 1. Run `hostname`, `whoami`, and `tailscale status --json` locally. Resolve the machine Dan meant and identify whether it is already the current host. If the target is ambiguous after discovery, ask which machine.
-2. Prefer the `tailscale` CLI on PATH. On this Studio it is `/opt/homebrew/bin/tailscale`. Check `tailscale ssh --help` if another client installation behaves differently.
+2. Prefer the `tailscale` CLI on PATH. On the Macs it is `/opt/homebrew/bin/tailscale`. Check `tailscale ssh --help` if another client installation behaves differently.
 3. Verify the remote identity with a bounded, noninteractive command:
 
    ```sh
-   tailscale ssh dan@dans-mac-studio-ssh.tail156535.ts.net -oBatchMode=yes -oConnectTimeout=10 'hostname; whoami; uname -s; printf "HOME=%s\n" "$HOME"'
+   tailscale ssh dan@stapler.tail156535.ts.net -oBatchMode=yes -oConnectTimeout=10 'hostname; whoami; uname -s; printf "HOME=%s\n" "$HOME"'
    ```
 
    Substitute the verified destination account and hostname. Set an overall execution timeout as well, so a policy check or unreachable host cannot leave the agent waiting indefinitely. The wrapper handles MagicDNS, userspace transport, and host-key verification through Tailscale.

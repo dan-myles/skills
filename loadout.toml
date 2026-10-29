@@ -7,7 +7,7 @@ enabled = ["claude", "codex", "cursor", "grok"]
 [machines.dans-macbook-pro]
 tags = ["coding"]
 
-[machines.dans-mac-studio]
+[machines.stapler]
 tags = ["coding"]
 
 [machines.paperclip]
