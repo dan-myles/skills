@@ -7,7 +7,7 @@ The vault is Vaultwarden on Archie at
 route forwards HTTPS to its loopback vault service on 4743. This is a vault
 endpoint; never deploy the local Bitwarden MCP there.
 
-The coding Loadout installs Homebrew `bitwarden-cli`, Node, and official npm
+The development Loadout installs Homebrew `bitwarden-cli`, Node, and official npm
 `@bitwarden/mcp-server`. It wires a `bitwarden` stdio MCP for Claude, Codex,
 Cursor, and Grok. The executable provided by that npm package is
 `mcp-server-bitwarden`. Node 22+ is required. File-based MCP tools are disabled
@@ -18,7 +18,7 @@ The maintained implementation is in Dan's `dan-myles/skills` repository:
 - `files/bitwarden/bitwarden-local`: launcher shell and Homebrew PATH handling.
 - `files/bitwarden/launcher.mjs`: endpoint checks, session-file loading, MCP start.
 - `docs/bitwarden.md`: installation and per-machine authentication.
-- `tags/coding.toml`: packages, files, and local MCP declarations.
+- `tags/development.toml`: packages, files, and local MCP declarations.
 
 Installed files are `~/.local/bin/bitwarden-local` and
 `~/.local/lib/loadout/bitwarden/launcher.mjs`. If behavior changes, inspect these
@@ -84,6 +84,6 @@ search. Item discovery is a narrow domain/account query described in transfer.md
 MacBook, Studio, and Paperclip use their own CLI login, local session, and process
 environment. Do not copy Paperclip's session to another host, assume a remote
 secret file is local, or change Archie's vault service as part of a client login.
-The coding tag distributes this skill alongside its tools. Using it from a coding
+The development profile distributes this skill alongside its tools. Using it from a coding
 machine for a task on another host does not authorize installing tools on that
 host without the relevant task scope.

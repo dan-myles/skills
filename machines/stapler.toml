@@ -1,5 +1,0 @@
-[programs.parsec]
-cask = "parsec"
-
-[programs.betterdisplay]
-cask = "betterdisplay"

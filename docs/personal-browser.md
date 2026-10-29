@@ -1,47 +1,33 @@
 # Personal browser
 
-The coding tag installs agent-browser through Homebrew. Paperclip overrides that
-entry with npm to adopt Dan's existing global installation without a second copy.
-The two `agent-browser-personal*` commands and their config are Loadout-owned
-files. Paperclip also gets Ubuntu browser libraries, fonts, and a systemd user
-service for the dashboard. Grok Bot gets none of these declarations.
-
-The browser is Chrome for Testing, agent-browser's supported Chromium-based
-distribution. `agent-browser-personal-setup` downloads it with `agent-browser
-install`, independently of npm postinstall. Loadout 0.1.5 cannot declare this
-download as a native package or run installation hooks. It also cannot enable
-user services, so a fresh machine needs the activation command below after sync.
-Browser downloads live in `~/.agent-browser/browsers`. Re-running setup selects
-the current stable browser and reuses an already downloaded version.
+The locally selected development profile installs agent-browser through Homebrew
+on macOS and npm on x86_64 Linux. It deploys the personal wrapper, setup command,
+and configuration; Linux also gets a systemd user dashboard service. Base-only
+machines and Grokbot receive none of these declarations.
 
 ## Install and activate
 
-On Paperclip, as `dan`, never as root:
+After selecting development and syncing, run as the normal user:
 
 ```sh
-loadout sync
-loadout apply --elevated
-~/.local/bin/agent-browser-personal-setup
+agent-browser-personal-setup
 ```
 
-The first sync can report blocked system packages. The elevated apply installs
-those declared libraries through sudo; it does not run the browser as root.
-Later syncs keep the installed packages and update managed files. After a service
-file change, run `systemctl --user daemon-reload` and
-`systemctl --user restart agent-browser-dashboard`.
+On Linux this uses the official `agent-browser install --with-deps` installer to
+choose browser libraries for its supported distro/version, then enables the
+systemd user service. It can request sudo for dependencies. No browser or system
+package installation runs implicitly from background sync. Unsupported Linux
+distros require checking the upstream installer support before activation.
+The managed Linux setup supports x86_64; ARM64 needs a separately verified browser
+configuration. macOS setup downloads the browser and starts the dashboard for the
+current login without installing a launchd service.
 
-On the MacBook and Studio:
-
-```sh
-loadout sync
-~/.local/bin/agent-browser-personal-setup
-```
-
-Mac setup starts the dashboard for the current login; it does not install a
-launchd service. The browser download supports Intel/Apple Silicon macOS and
-x86_64 Linux. Linux ARM64 needs a separate system Chromium configuration.
-Paperclip's library package names target its Ubuntu 22.04 installation and must
-be reviewed when upgrading its OS.
+Chrome for Testing is agent-browser's supported Chromium distribution. Downloads
+live in `~/.agent-browser/browsers`. Explicit setup is needed because Loadout has
+no installation hooks for this download or service activation. Do not run setup
+or restart services during another agent's active sign-in. Use the migration-only
+command in [profile migration](profile-migration.md) to preserve the legacy origin
+without installing anything or touching the live browser.
 
 ## Use the saved profile
 
@@ -82,10 +68,18 @@ Nested dashboard input in T3 Preview did not work for Dan. The initial URL fragm
 contains the private access token; the dashboard exchanges it for a secure cookie.
 The plain origin alone does not establish access. Never commit or log the token.
 
-Loadout deploys Paperclip's `agent-browser-dashboard.service.d/access.conf`,
-which allows exactly that HTTPS origin and sets `StandardOutput=null` so the
-service's tokenized startup URL does not enter the journal. Tokens remain in
-agent-browser's private runtime state, outside Loadout ownership.
+Loadout deploys a generic drop-in that reads the optional, unmanaged local file
+`~/.config/agent-browser-personal/dashboard.env`. Without it the dashboard stays
+loopback-only. For private HTTPS access, set the exact approved origin locally:
+
+```text
+AGENT_BROWSER_DASHBOARD_ALLOWED_ORIGINS=https://YOUR-TAILSCALE-HOST:8443
+```
+
+Keep that file mode 0600. Do not copy Paperclip's hostname to another machine.
+Configure private routing separately and restart only the dashboard at an agreed
+idle time to activate a changed origin. `StandardOutput=null` keeps the tokenized
+startup URL out of the journal. Tokens remain outside Loadout ownership.
 
 The existing private Tailscale Serve route forwards HTTPS 8443 to loopback 4848.
 Tailscale owns that route's persistent state; Loadout has no Serve adapter. To
@@ -144,7 +138,7 @@ personal browser separately. Neither action removes the saved profile.
 
 ## Bitwarden later
 
-Bitwarden is not installed or configured. agent-browser 0.41.0 supports unpacked
+The Bitwarden CLI and local MCP are declared in development; see [Bitwarden setup](bitwarden.md). The browser extension is not installed. agent-browser 0.41.0 supports unpacked
 extensions via `--extension`, but extensions make Chrome run headed. Paperclip
 would then need an `xvfb` package declaration; this agent-browser version can
 start its own authenticated private Xvfb display when no DISPLAY is present.
@@ -174,7 +168,7 @@ Tailscale Serve state: HTTPS 8443 proxies loopback 4848 and HTTPS 443 still prox
 T3 on 3773. Adopting the matching drop-in requires no service restart. The active
 personal sign-in session was not navigated or closed during that update.
 
-macOS installation, completed real MFA sign-in, and Bitwarden have not been tested.
+These are historical browser checks, not verification of the profile migration. macOS browser activation and extension autofill remain unverified.
 
 ## Sources
 

@@ -3,24 +3,54 @@ set -eu
 umask 077
 
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:$PATH"
+
+# Run from the checkout BEFORE applying the profile migration. Never restart here.
+migrate_origin() {
+  local_env="$HOME/.config/agent-browser-personal/dashboard.env"
+  legacy="$HOME/.config/systemd/user/agent-browser-dashboard.service.d/access.conf"
+  if [ -e "$local_env" ]; then
+    printf '%s\n' 'Existing local dashboard settings preserved.'
+    return
+  fi
+  [ -f "$legacy" ] || return 0
+  origin=$(sed -n 's/^Environment=AGENT_BROWSER_DASHBOARD_ALLOWED_ORIGINS=//p' "$legacy")
+  [ -n "$origin" ] || return 0
+  if ! printf '%s\n' "$origin" | LC_ALL=C grep -Eq '^https://[A-Za-z0-9.-]+(:[0-9]+)?$'; then
+    echo 'Legacy origin needs manual review; no settings changed.' >&2
+    return 1
+  fi
+  mkdir -p "$(dirname "$local_env")"
+  # noclobber also protects against another setup process creating this file.
+  (set -C; printf 'AGENT_BROWSER_DASHBOARD_ALLOWED_ORIGINS=%s\n' "$origin" > "$local_env")
+  printf '%s\n' 'Dashboard origin saved locally; no service or browser changed.'
+}
+
+case "${1:-}" in
+  --migrate-dashboard-origin-only) migrate_origin; exit 0 ;;
+  '') ;;
+  *) echo 'Usage: agent-browser-personal-setup [--migrate-dashboard-origin-only]' >&2; exit 2 ;;
+esac
+[ "$#" -le 1 ] || exit 2
+
 command -v agent-browser >/dev/null
 command -v agent-browser-personal >/dev/null
+case "$(uname -s)/$(uname -m)" in
+  Linux/x86_64)
+    unit="$HOME/.config/systemd/user/agent-browser-dashboard.service"
+    [ -f "$unit" ] || { echo 'Sync the development profile first.' >&2; exit 1; }
+    migrate_origin
+    # Let the supported installer choose distro/version-specific libraries.
+    agent-browser install --with-deps
+    systemctl --user daemon-reload
+    systemctl --user enable --now agent-browser-dashboard.service
+    ;;
+  Darwin/*)
+    agent-browser install
+    agent-browser-personal dashboard start
+    ;;
+  *) echo 'Managed browser setup supports macOS and x86_64 Linux.' >&2; exit 1 ;;
+esac
 
-# Use the supported Chromium distribution, independent of npm lifecycle scripts.
-agent-browser install
-
-if [ "$(uname -s)" = Linux ]; then
-  unit="$HOME/.config/systemd/user/agent-browser-dashboard.service"
-  if [ ! -f "$unit" ]; then
-    echo 'No dashboard user service deployed. This setup supports Paperclip on Linux.' >&2
-    exit 1
-  fi
-  systemctl --user daemon-reload
-  systemctl --user enable --now agent-browser-dashboard.service
-else
-  agent-browser-personal dashboard start
-fi
-
-# This opens a blank browser only if none is running; it preserves an active page.
+# Preserve an active page; open a browser only if one is not running.
 agent-browser-personal get url
 printf '%s\n' 'Personal browser ready. Dashboard: http://localhost:4848'

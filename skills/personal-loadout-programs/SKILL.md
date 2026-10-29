@@ -13,12 +13,12 @@ Suggest it when the program is something Dan would want wherever he codes: a dev
 
 Check first: `grep -n "programs\.<id>\|\"<package>\"" loadout.toml tags/*.toml machines/*.toml` in the loadout checkout. If it is declared but missing on this machine, the fix is `loadout sync`, not a new entry.
 
-Ask once, in one line, after doing what Dan asked: "This looks cross-machine. Add `<id>` to the loadout's coding tag?" Do the install he asked for either way. Never edit the loadout without a yes.
+Ask once, in one line, after doing what Dan asked: "This looks cross-machine. Add `<id>` to the loadout's development profile?" Do the install he asked for either way. Never edit the loadout without a yes.
 
 ## Where it goes
 
-- `tags/coding.toml`: every coding machine (MacBook, Studio, Paperclip). The default.
-- `machines/<name>.toml`: one machine only, such as the Studio's display apps.
+- `tags/development.toml`: locally selected development machines. Paperclip and Stapler opt in; MacBook Pro is base-only.
+- `machines/<name>.toml`: exceptional configuration only, currently Grokbot. Do not register normal machines; select development locally.
 - `loadout.toml`: every machine, including the Grok Bot box. Rare.
 
 ## How to declare it
@@ -34,7 +34,7 @@ Dan wants Homebrew wherever it works. Rules learned the hard way:
 
 - **Check the package exists before declaring it.** `brew info --formula <name>`: a cask-only app has no formula, and casks don't exist on Linux. A cask-only program needs a Linux route (npm, `github`), or stays macOS-only on purpose.
 - **Never pin a version.** `npm = "t3@nightly"` is refused. Follow a channel with `github`'s `tag` instead.
-- **npm, pnpm, and bun come from `node`** (`brew = "node"` in the coding tag). An npm program installs on the sync after node does.
+- **npm, pnpm, and bun come from `node`** (`brew = "node"` in the development profile). An npm program installs on the sync after node does.
 - **A system package that is already installed** (Tailscale on Linux) gets `apt` too, so dpkg sees it and brew doesn't add a second copy:
 
   ```toml
@@ -61,6 +61,6 @@ The full format is in `docs/loadout-format.md` of `dan-myles/loadout`.
 
 1. Edit the loadout checkout, then `loadout validate .` until it exits 0.
 2. A new key needs a CLI that knows it. If the entry uses a feature newer than a machine's `loadout --version`, run `loadout update` there first, or that machine's sync fails on the whole loadout.
-3. Commit (`loadout: <what and why>`) and push to `main`.
-4. On the current machine, `loadout sync`, and check the program's line says `installed` or `unchanged`. `unsupported` means no declared manager is on PATH for that OS: read its reason before shrugging it off.
+3. Commit (`loadout: <what and why>`) and push to `main` only when Dan asks. Respect edit-only requests.
+4. When rollout is authorized, on the current machine, `loadout sync`, and check the program's line says `installed` or `unchanged`. `unsupported` means no declared manager is on PATH for that OS: read its reason before shrugging it off.
 5. If Dan installed it by hand earlier with a different manager, say so: loadout never uninstalls, so the old copy stays until he removes it.

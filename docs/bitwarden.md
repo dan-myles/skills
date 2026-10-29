@@ -1,6 +1,6 @@
 # Local Bitwarden for coding agents
 
-The coding tag installs Homebrew `bitwarden-cli` and the official npm package
+The development profile installs Homebrew `bitwarden-cli` and the official npm package
 `@bitwarden/mcp-server`. It adds the `bitwarden` stdio MCP to Claude, Codex,
 Cursor, and Grok on the coding machines. Grok Bot receives none of it. The
 existing Node declaration supplies Node; the launcher requires version 22+.

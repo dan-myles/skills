@@ -4,42 +4,40 @@ This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the so
 
 The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 56 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
 
-## Layout and machines
+## Profiles and layout
 
-```text
-loadout.toml                     global agents, personal Executor MCP, 13 shared skills, machine tags
-tags/coding.toml                 Cooper, Dispatch, coding personal skills, packages, and local MCPs
-machines/grokbot.toml            replaces enabled agents with the custom grok-bot
-skills/                         skill sources, matching the starter
-  cooper/, cooper-*/, personal-*/, ... skill folders, with dispatch-* and grokbot-* roles
-tools/t3-grokbot-bridge/         T3 → Grok Bot update bridge, run per T3 environment; not deployed by Loadout
-.skills-manager/                 historical registry, ignored by the loadout CLI
-PARKING_LOT.md                   repo rules and history
-```
+`loadout.toml` declares global agents, personal Executor, and 13 shared skills.
+`tags/development.toml` adds Cooper, Dispatch, development tools, the persistent
+browser helpers, and local Bitwarden MCP. Machines choose this profile locally;
+normal machines need no name registration. Only `machines/grokbot.toml` remains
+as an exception with its own agent destination and no personal Executor.
 
-| Machine name | OS / account | Tags | Enabled agents | Skills |
-| --- | --- | --- | --- | --- |
-| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 56 |
-| `stapler` (Mac Studio) | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 56; Capy pending |
-| `paperclip` | Linux / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 56 |
-| `grokbot` | Linux / `box` | none | `grok-bot` only | 13 shared skills |
+| Machine | Intended local profile |
+| --- | --- |
+| Paperclip | development |
+| Stapler | development |
+| MacBook Pro | none, base-only |
+| Grokbot | none, exceptional machine configuration |
 
-Machine names follow the tailnet names, checked on 2026-10-29. The MacBook's OS hostname is `Daniels-MacBook-Pro.local`, so save the table's names explicitly instead of relying on hostname detection. SSH confirmed user `dan` with home `/Users/dan` on the MacBook, and user `dan` with home `/home/paperclip` on Paperclip (the account was renamed from `paperclip`; its home kept the old name). The Grok Bot machine is `grokbot`, not the account name `box`. It was offline and its tailnet DNS name did not resolve, so its account and workflow copies could not be checked remotely. The Mac Studio is `stapler` on the tailnet (renamed from `dans-mac-studio` on 2026-10-29), user `dan`, home `/Users/dan`. It has one Tailscale identity; the old `dans-mac-studio-ssh` endpoint is gone.
+This is the target configuration, not a report of deployed selections. Read
+[the migration procedure](docs/profile-migration.md) before publishing or applying
+this change. Loadout 0.1.6 supports profiles; 0.1.5 cannot select them. Removing the old
+mappings before local selections are ready removes managed development files.
 
-The global layer enables the four native agents. An unlisted machine gets those agents and the 13 shared skills, but no Cooper or Dispatch skills. The `coding` tag adds Cooper, Dispatch, `personal-loadout-programs`, and `personal-vaultwarden` only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `cooper` or `cooper-*` skills.
+All 56 skills live in `skills/`. Standalone tools in `tools/` and the historical
+`.skills-manager/` registry are not deployed by Loadout.
 
 ## Agent destinations and limits
 
 The automatic [personal-vaultwarden skill](skills/personal-vaultwarden/SKILL.md) guides credential discovery, secure unlock, and approved-task-only transfer. It uses private input tools before asking for manual terminal work.
 
-The coding tag also installs Bitwarden CLI and its official local stdio MCP,
+The development profile also installs Bitwarden CLI and its official local stdio MCP,
 pointed at Dan's Vaultwarden on Archie. Machines start logged out; an existing
 authenticated vault is preserved. See [Bitwarden setup](docs/bitwarden.md) for
 private per-machine login and headless unlocking.
 
-The coding machines also get agent-browser and a separate persistent personal
-browser profile. Paperclip has a loopback-only live dashboard for sign-in over
-an SSH tunnel. See [personal browser setup](docs/personal-browser.md) for the
+Development machines also get agent-browser and a separate persistent personal
+browser profile. Linux development machines get a loopback-only dashboard with optional local private HTTPS access. See [personal browser setup](docs/personal-browser.md) for the
 one-time activation after sync, agent commands, and optional Bitwarden limits.
 
 The global `executor-personal` MCP uses `https://mcp.executor.sh/mcp` for Claude, Codex, Cursor, and Grok. Select Dan's personal team when signing in to Executor in each client on each machine. Executor binds that authorization to the selected team; the server name is a local label. Loadout distributes the server configuration, not OAuth credentials. The custom `grok-bot` agent does not receive this MCP. See [Executor's sign-in documentation](https://executor.sh/docs/mcp#signing-in-from-the-browser).
@@ -61,7 +59,7 @@ Capy is pending on the Studio. [Its official skills documentation](https://docs.
 
 Dan verified that every Grok Bot reads one folder per skill, each containing `SKILL.md`, under `/home/box/agent-data/workflows`. The custom agent uses `~/agent-data/workflows` because the manifest rejects absolute destinations. Run as user `box` with home `/home/box` to reach the verified path.
 
-The box receives the two `grokbot-*` skills, `ketchup`, `unslop`, and the globally declared `personal-*` skills. `personal-loadout-programs` and `personal-vaultwarden` are coding-only. Dispatch and its four modes now belong to the coding tag and run in T3. Review any removal of previously owned bot Dispatch skill copies before a future Loadout apply; this port does not apply machines or migrate live bots. It receives no `cooper` or `cooper-*` folders. Support retains its own Executor worker reference on the box; Cooper loads its coding helpers on its T3 machine. See [the historical Grok Bot checks](docs/grokbot-validation.md).
+The box receives the two `grokbot-*` skills, `ketchup`, `unslop`, and the globally declared `personal-*` skills. `personal-loadout-programs` and `personal-vaultwarden` are coding-only. Dispatch and its four modes now belong to the development profile and run in T3. Review any removal of previously owned bot Dispatch skill copies before a future Loadout apply; this port does not apply machines or migrate live bots. It receives no `cooper` or `cooper-*` folders. Support retains its own Executor worker reference on the box; Cooper loads its coding helpers on its T3 machine. See [the historical Grok Bot checks](docs/grokbot-validation.md).
 
 Loadout owns each `<destination>/<skill-id>` separately, not the workflows parent. Bot-created legacy `fleet-control` and `gs-crisp-support` folders may still exist there. The new names are `grokbot-fleet-control` and `grokbot-gs-crisp-support`. This repository change does not rename live bots, update their prompts, or migrate live stores. Reconcile existing contents and update selected skill names with Dan before a live rollout. An undeclared, unowned old folder is left alone; an unchanged owned old target can be removed when undeclared, while a changed one can be released. Keep ownership records and backups.
 
@@ -82,57 +80,26 @@ Loadout follows top-level skill symlinks. Applying while a link still points int
 
 ## Apply on a machine
 
-Install the CLI from [dan-myles/loadout](https://github.com/dan-myles/loadout). Use a version compatible with manifest version 1, 0.1.5 or later (`apt-repo` and `github` in `tags/coding.toml` need it; older CLIs reject those keys). This conversion was checked against CLI commit `bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4`. See [validation results](docs/loadout-validation.md) for command output, machine resolution, skill preservation, and ownership proof.
+Use Loadout 0.1.6 or later, including the executable used by background sync.
+Check actual capabilities with `loadout profile --help` before proceeding. Run setup as the normal user,
+allowing individual package steps to request sudo.
 
-For a read-only rollout review, use a branch-tracking clone and the documented local identity file below. Plain `loadout init` on the GitHub URL clones the default branch and immediately applies it; the CLI currently has no branch flag. The repository is public, so the HTTPS read-only remote needs no GitHub SSH key on the machine account.
-
-On a fresh machine with no existing Loadout state, choose `machine_name` from the table above. On Paperclip, run as `dan`; on the bot server, run as `box`. On either Mac, run as Dan. These commands run in a subshell, prepare the clone and identity only, then show a read-only plan. A failed guard stops the block without closing the parent shell:
-
-```sh
-(
-  set -eu
-  machine_name=stapler
-  case "$(uname -s)" in
-    Darwin) loadout_state="$HOME/Library/Application Support/loadout" ;;
-    Linux) loadout_state="${XDG_STATE_HOME:-$HOME/.local/state}/loadout" ;;
-    *) exit 1 ;;
-  esac
-  if test -n "${LOADOUT_HOME:-}${LOADOUT_STATE_DIR:-}"; then
-    echo 'Unset Loadout isolation/state overrides before this fresh-machine setup.' >&2
-    exit 1
-  fi
-  if test -e "$loadout_state" || test -L "$loadout_state"; then
-    echo 'Existing Loadout state: inspect it instead of overwriting it.' >&2
-    exit 1
-  fi
-  (umask 077; mkdir -p "$loadout_state")
-  git clone --branch main --single-branch https://github.com/dan-myles/skills.git "$loadout_state/loadout"
-  (umask 077; set -C; printf 'name = "%s"\nremote = "https://github.com/dan-myles/skills.git"\n' "$machine_name" > "$loadout_state/machine.toml")
-  loadout validate "$loadout_state/loadout"
-  loadout plan --loadout "$loadout_state/loadout"
-)
-```
-
-Run the following only after reviewing the plan, especially every `replace`, `adopt`, `remove`, `drifted`, `blocked`, and `unsupported` action. On the box, reconcile legacy coordinator skill names and existing contents before this step. Complete the Skills Manager migration above first. Loadout follows existing top-level symlinks, so leaving a library link in place can transfer ownership of its target.
+On a new development machine, after this configuration is published:
 
 ```sh
-loadout apply
-loadout doctor
-loadout status
+loadout init https://github.com/dan-myles/skills --profile development
 ```
 
-For an existing Loadout installation, preserve its identity and state. Inspect its managed clone's current branch and local changes, then switch its tracked branch to `main` only after resolving any local work. `loadout plan --loadout <clone>` previews the result before applying. Never discard changes or overwrite `machine.toml` to make setup pass.
+Interactive init offers a profile choice. A fresh noninteractive init without
+`--profile` selects none and applies base/global and OS layers only. For an
+existing installation, preserve its identity/state and follow the migration
+procedure. `loadout profile set development` saves a choice but does not apply;
+`loadout profile set --none` clears it. Review `loadout plan` before applying.
+Background sync reuses that local choice without prompting.
 
-Subsequent `loadout sync` fetches and fast-forwards the managed clone's tracked `origin/main` branch, then applies it. `loadout update` updates the CLI itself. It does not sync skills. A background service is optional setup after review via `loadout service install`; no service is installed by the commands above. Start a new agent session after applying to refresh discovered skills. The old `.skills-manager/` registry remains for migration reference and is not an input to Loadout.
-
-## Confirm before rollout
-
-- Verify the offline `grokbot` machine as user `box` once reachable. Save the tailnet machine names explicitly; MacBook and Paperclip OS hostnames differ from them.
-- `/home/box` is the bot account's home, and which legacy coordinator copies and bot startup references need migration before an apply.
-- Which agents are used on each coding machine. All four native agents are enabled there for the stated Claude/Codex/Cursor/Grok driver setup.
-- Capy's supported destination or alternate skill distribution method, and pickup by T3 instances with custom homes and by Cursor.
-- Which Skills Manager links or live edits need migration before Loadout takes ownership. No machine was applied as part of this conversion.
-- `cooper-improve` still contains the old Skills Manager import and deploy instructions. Skill bodies were frozen for this conversion. Before using it to publish skill changes after migration, approve a separate skill-content update; use this README as the deployment procedure in the meantime.
+The managed clone tracks `main`. `loadout update` upgrades the CLI; `loadout sync`
+fetches and applies the loadout. Review changes before enabling background sync.
+Start a new agent session after applying to refresh discovered skills.
 
 ## Fleet Control, Dispatch and Cooper
 

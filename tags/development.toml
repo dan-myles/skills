@@ -211,10 +211,14 @@ github = { repo = "pingdotgg/t3code", tag = "v*-nightly.*", prerelease = true, a
 [programs.t3]
 github = { repo = "pingdotgg/t3code", tag = "v*-nightly.*", prerelease = true, bin = "t3", asset = { macos-aarch64 = "t3-*-darwin-arm64.tar.gz", linux-x86_64 = "t3-*-linux-x64.tar.gz", linux-aarch64 = "t3-*-linux-arm64.tar.gz" } }
 
-# Paperclip keeps its existing npm installation; other coding machines use Homebrew.
+# Use the existing npm installation on Linux; Homebrew on macOS.
 [programs.agent-browser]
 brew = "agent-browser"
-when = { os = ["linux", "macos"] }
+when = { os = "macos" }
+
+[programs.agent-browser-linux]
+npm = "agent-browser"
+when = { os = "linux", arch = "x86_64" }
 
 [files.agent-browser-personal]
 source = "files/agent-browser/agent-browser-personal"
@@ -256,3 +260,14 @@ when = { os = ["linux", "macos"] }
 
 [skills.personal-vaultwarden]
 source = "skills/personal-vaultwarden"
+
+[files.agent-browser-dashboard-service]
+source = "files/agent-browser/agent-browser-dashboard.service"
+target = "~/.config/systemd/user/agent-browser-dashboard.service"
+when = { os = "linux", arch = "x86_64" }
+
+[files.agent-browser-dashboard-access]
+source = "files/agent-browser/access.conf"
+target = "~/.config/systemd/user/agent-browser-dashboard.service.d/access.conf"
+when = { os = "linux", arch = "x86_64" }
+
