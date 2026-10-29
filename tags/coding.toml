@@ -166,6 +166,9 @@ brew = "rustup"
 [programs.uv]
 brew = "uv"
 
+[programs.mise]
+brew = "mise"
+
 [programs.bun]
 brew = "oven-sh/bun/bun"
 
