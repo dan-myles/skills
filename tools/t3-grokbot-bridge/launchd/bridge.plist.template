@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>{{LABEL}}</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>{{NODE}}</string>
+    <string>--no-warnings=ExperimentalWarning</string>
+    <string>{{SCRIPT}}</string>
+    <string>run</string>
+    <string>--config</string>
+    <string>{{CONFIG}}</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>{{WORKDIR}}</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ThrottleInterval</key>
+  <integer>30</integer>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>Umask</key>
+  <integer>63</integer>
+  <key>StandardOutPath</key>
+  <string>{{STDOUT}}</string>
+  <key>StandardErrorPath</key>
+  <string>{{STDERR}}</string>
+</dict>
+</plist>

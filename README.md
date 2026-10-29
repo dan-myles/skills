@@ -1,6 +1,6 @@
 # Dan's loadout
 
-This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. It declares skills and enabled agents only. It does not install programs, configure MCP servers, or manage other user files.
+This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. The manifest declares skills and enabled agents only. It does not install programs, configure MCP servers, or manage other user files. Standalone tools live under `tools/`, which Loadout ignores; each is installed by hand from its own README.
 
 The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 54 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
 
@@ -12,6 +12,7 @@ tags/coding.toml                 cooper and all cooper-* skills, 36 total
 machines/grokbot.toml            replaces enabled agents with the custom grok-bot
 skills/                         skill sources, matching the starter
   cooper/, cooper-*/, personal-*/, ... skill folders, with dispatch-* and grokbot-* roles
+tools/t3-grokbot-bridge/         T3 → Grok Bot update bridge, run per T3 environment; not deployed by Loadout
 .skills-manager/                 historical registry, ignored by the loadout CLI
 PARKING_LOT.md                   repo rules and history
 ```
@@ -191,7 +192,7 @@ Executor connection `user-executor-dans-team` exposes `tools["t3-code-mac-studio
 
 Cooper puts the complete report in its worker reply. Dispatch reads it through Executor, copies it into its box-local store, and records the source marker before any new launch. A T3 coordinator such as Orchestrate still uses `t3_thread_send`; a Grok Bot has no T3 thread ID and cannot receive that notification. A worker-local report path is not a shared artifact.
 
-A user request or a delivered Fleet Control chase runs the same reconciliation. Fleet Control manages only approved native bot routines and verified bot delivery routes. No instant wakeup, webhook, or default weekday timer is invented by these skills. Missing delivery remains pending and visible, with user-triggered chase available. This change configures no live sync or routine.
+[`tools/t3-grokbot-bridge`](tools/t3-grokbot-bridge/README.md) can push T3 thread updates (starts, progress, needs-input, failures, completion, settlement) per project to a Grok Bot webhook. It is a separate tool, not yet wired to a verified receiver, and no skill depends on it. A user request or a delivered Fleet Control chase runs the same reconciliation. Fleet Control manages only approved native bot routines and verified bot delivery routes. No instant wakeup, webhook, or default weekday timer is invented by these skills. Missing delivery remains pending and visible, with user-triggered chase available. This change configures no live sync or routine.
 
 ## After applying
 

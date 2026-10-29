@@ -1,0 +1,53 @@
+{
+  "environment": {
+    "key": "studio",
+    "label": "Dan's Mac Studio",
+    "httpBaseUrl": "http://127.0.0.1:3773",
+    "tokenFile": "~/.crabstock-dispatch/t3-token"
+  },
+  "stateDir": "~/.crabstock-dispatch/bridge/studio",
+  "targets": {
+    "crabstock": {
+      "envFile": "~/.crabstock-dispatch/report.env",
+      "urlVar": "CRABSTOCK_DISPATCH_WEBHOOK",
+      "authVar": "CRABSTOCK_DISPATCH_AUTH"
+    },
+    "gamestock": {
+      "envFile": "~/.crabstock-dispatch/report.env",
+      "urlVar": "GAMESTOCK_DISPATCH_WEBHOOK",
+      "authVar": "GAMESTOCK_DISPATCH_AUTH"
+    },
+    "skills": {
+      "envFile": "~/.crabstock-dispatch/report.env",
+      "urlVar": "SKILLS_DISPATCH_WEBHOOK",
+      "authVar": "SKILLS_DISPATCH_AUTH"
+    }
+  },
+  "defaults": {
+    "target": "crabstock",
+    "report": true,
+    "detail": true,
+    "subagents": "attention",
+    "userMessageText": false
+  },
+  "unmatchedProjects": "ignore",
+  "projects": [
+    { "key": "crabstock", "projectId": "mcp:6742af54-05bc-470c-9908-cf665e956bab", "target": "crabstock" },
+    { "key": "gamestock", "projectId": "mcp:c589b858-6813-4e1e-9ecd-d27720b0291a", "target": "gamestock" },
+    { "key": "skills", "projectId": "mcp:5505f1a9-d619-4fda-8eaf-97a7648b2afd", "target": "skills" }
+  ],
+  "ignoreThreadIds": [],
+  "ignoreProjectIds": [],
+  "progress": {
+    "flushAfterMs": 30000,
+    "maxFragments": 40
+  },
+  "detail": {
+    "maxThreads": 25,
+    "idleGraceMs": 20000
+  },
+  "delivery": {
+    "timeoutMs": 15000
+  },
+  "retentionDays": 14
+}
