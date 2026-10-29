@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+umask 077
+
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:$PATH"
+export AGENT_BROWSER_SOCKET_DIR="$HOME/.local/state/agent-browser-personal/run"
+profile="$HOME/.local/share/agent-browser/profiles/personal"
+mkdir -p "$AGENT_BROWSER_SOCKET_DIR" "$profile"
+chmod 700 "$AGENT_BROWSER_SOCKET_DIR" "$profile"
+
+exec agent-browser \
+  --config "$HOME/.config/agent-browser-personal/config.json" \
+  --session personal --profile "$profile" "$@"

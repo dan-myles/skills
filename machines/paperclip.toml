@@ -1,0 +1,156 @@
+[programs.agent-browser]
+replace = true
+npm = "agent-browser"
+when = { os = "linux", arch = "x86_64" }
+
+[files.agent-browser-dashboard-service]
+source = "files/agent-browser/agent-browser-dashboard.service"
+target = "~/.config/systemd/user/agent-browser-dashboard.service"
+when = { os = "linux" }
+
+# Browser libraries and fonts from agent-browser 0.41.0's Ubuntu dependency list.
+# Paperclip runs Ubuntu 22.04; revisit package names when upgrading the OS.
+
+[programs.browser-libxcb-shm0]
+apt = "libxcb-shm0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libx11-xcb1]
+apt = "libx11-xcb1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libx11-6]
+apt = "libx11-6"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxcb1]
+apt = "libxcb1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxext6]
+apt = "libxext6"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxrandr2]
+apt = "libxrandr2"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxcomposite1]
+apt = "libxcomposite1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxcursor1]
+apt = "libxcursor1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxdamage1]
+apt = "libxdamage1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxfixes3]
+apt = "libxfixes3"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxi6]
+apt = "libxi6"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libgtk-3-0]
+apt = "libgtk-3-0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libpangocairo-1-0-0]
+apt = "libpangocairo-1.0-0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libpango-1-0-0]
+apt = "libpango-1.0-0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libatk1-0-0]
+apt = "libatk1.0-0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libcairo-gobject2]
+apt = "libcairo-gobject2"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libcairo2]
+apt = "libcairo2"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libgdk-pixbuf-2-0-0]
+apt = "libgdk-pixbuf-2.0-0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxrender1]
+apt = "libxrender1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libasound2]
+apt = "libasound2"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libfreetype6]
+apt = "libfreetype6"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libfontconfig1]
+apt = "libfontconfig1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libdbus-1-3]
+apt = "libdbus-1-3"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libnss3]
+apt = "libnss3"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libnss3-tools]
+apt = "libnss3-tools"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libnspr4]
+apt = "libnspr4"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libatk-bridge2-0-0]
+apt = "libatk-bridge2.0-0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libdrm2]
+apt = "libdrm2"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxkbcommon0]
+apt = "libxkbcommon0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libatspi2-0-0]
+apt = "libatspi2.0-0"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libcups2]
+apt = "libcups2"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libxshmfence1]
+apt = "libxshmfence1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-libgbm1]
+apt = "libgbm1"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-fonts-noto-color-emoji]
+apt = "fonts-noto-color-emoji"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-fonts-noto-cjk]
+apt = "fonts-noto-cjk"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }
+
+[programs.browser-fonts-freefont-ttf]
+apt = "fonts-freefont-ttf"
+when = { os = "linux", distro = "ubuntu", arch = "x86_64" }

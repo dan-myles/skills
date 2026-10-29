@@ -30,6 +30,11 @@ The global layer enables the four native agents. An unlisted machine gets those 
 
 ## Agent destinations and limits
 
+The coding machines also get agent-browser and a separate persistent personal
+browser profile. Paperclip has a loopback-only live dashboard for sign-in over
+an SSH tunnel. See [personal browser setup](docs/personal-browser.md) for the
+one-time activation after sync, agent commands, and optional Bitwarden limits.
+
 The global `executor-personal` MCP uses `https://mcp.executor.sh/mcp` for Claude, Codex, Cursor, and Grok. Select Dan's personal team when signing in to Executor in each client on each machine. Executor binds that authorization to the selected team; the server name is a local label. Loadout distributes the server configuration, not OAuth credentials. The custom `grok-bot` agent does not receive this MCP. See [Executor's sign-in documentation](https://executor.sh/docs/mcp#signing-in-from-the-browser).
 
 | Loadout agent | Skill destination | T3 driver |

@@ -1,0 +1,26 @@
+#!/bin/sh
+set -eu
+umask 077
+
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:$PATH"
+command -v agent-browser >/dev/null
+command -v agent-browser-personal >/dev/null
+
+# Use the supported Chromium distribution, independent of npm lifecycle scripts.
+agent-browser install
+
+if [ "$(uname -s)" = Linux ]; then
+  unit="$HOME/.config/systemd/user/agent-browser-dashboard.service"
+  if [ ! -f "$unit" ]; then
+    echo 'No dashboard user service deployed. This setup supports Paperclip on Linux.' >&2
+    exit 1
+  fi
+  systemctl --user daemon-reload
+  systemctl --user enable --now agent-browser-dashboard.service
+else
+  agent-browser-personal dashboard start
+fi
+
+# This opens a blank browser only if none is running; it preserves an active page.
+agent-browser-personal get url
+printf '%s\n' 'Personal browser ready. Dashboard: http://localhost:4848'

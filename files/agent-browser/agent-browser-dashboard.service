@@ -1,0 +1,17 @@
+[Unit]
+Description=Personal agent-browser dashboard (loopback only)
+
+[Service]
+Type=forking
+WorkingDirectory=%h
+UMask=0077
+ExecStart=%h/.local/bin/agent-browser-personal dashboard start --port 4848
+ExecStop=%h/.local/bin/agent-browser-personal dashboard stop
+PIDFile=%h/.local/state/agent-browser-personal/run/dashboard.pid
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=30
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target
