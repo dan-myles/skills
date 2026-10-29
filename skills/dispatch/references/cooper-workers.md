@@ -4,7 +4,9 @@ Shared by engineering Dispatch, Fleet Control for read-only observation, and sup
 
 ## Route and launch
 
-On Grok Bot, reach Executor connection `user-executor-dans-team`, also displayed as `executor-dans-team`. Use its `search` and `describe` to confirm tool paths and signatures. The Mac Studio app is `tools["t3-code-mac-studio"]`; Paperclip is `tools["t3-code-paperclip"]`. The instance configuration supplies the exact app and `projectId`. Do not guess a project from its name, confuse the two machines, or use a Grok Bot ID as a T3 thread ID.
+On Grok Bot, reach Executor connection `user-executor-dans-team`, also displayed as `executor-dans-team`. Use its `search` and `describe` to confirm tool paths and signatures. The Mac Studio app is `tools["t3-code-mac-studio"]`. The instance configuration supplies the exact app and `projectId`.
+
+Dan keeps one T3 connection, not one per machine. That connection reaches every environment that has a link to it: call the app and pass `environmentId` to act on another machine. `t3_thread_launch` and `create_threads` accept it, as do `t3_thread_list`, `t3_thread_read`, `t3_thread_send`, `t3_project_list`, `t3_pending_request`, `t3_queue` and `t3_thread_organize`. Read the live list from `t3_environment_links` and take the id and label from there; never write a machine id, token or hostname into an instance config as though it were a credential. Links are one-way and expire, so a link that works in one direction does not work in the other, and a stale id fails as an unknown environment rather than falling back to the default machine. After Dan changes a Labs toggle, environment setting or link, the Executor connection must be restarted before the new tools or links appear; if a tool is missing, that is the cause to check before reporting the tool unavailable. Do not guess a project from its name, confuse two machines, or use a Grok Bot ID as a T3 thread ID.
 
 Call through Executor `call` or `execute`. A writable repo job has this launch shape, after filling the known destination and a unique branch:
 

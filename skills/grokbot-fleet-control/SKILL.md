@@ -15,7 +15,7 @@ Read `~/.bob-n-frank/config.yaml` on the Grok Bot box. Resolve your own `instanc
 
 Keep delivery/source dedupe in your own `seen.tsv`, pending deliveries and last observed worker/report markers in your own store, and changes/decisions in your own `decisions.tsv`. Read Dispatch boards and summaries on the shared box when available; do not write them. If another bot's state is inaccessible, use its configured native read interface or report missing access. Only registered Dispatch scopes belong to this fleet.
 
-T3 environments are reached through Executor connection `user-executor-dans-team`, with apps `tools["t3-code-mac-studio"]` and `tools["t3-code-paperclip"]`. Use the [shared worker reference](../dispatch/references/cooper-workers.md) for discovery and read mechanics. Always retain the owning app/project with each worker ID; IDs do not identify a machine by themselves.
+T3 environments are reached through Executor connection `user-executor-dans-team`, app `tools["t3-code-mac-studio"]`, passing each machine's `environmentId` from the live `t3_environment_links` list. Use the [shared worker reference](../dispatch/references/cooper-workers.md) for discovery and read mechanics. Always retain the owning app, environment id and project with each worker ID; a thread ID does not identify a machine by itself.
 
 ## Native cadence and delivery
 

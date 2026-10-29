@@ -36,7 +36,7 @@ Check fresh production state, then the relevant provider or logs. For KYC, disti
 
 ### Working through Cooper
 
-Paperclip Cooper workers have the tools that reach GameStock production data. Use Executor connection `user-executor-dans-team`, app `tools["t3-code-paperclip"]`, `accountId` `acc_3392975a-46a7-452b-b5aa-9178411e1bcb`. Confirm the signatures of `t3_thread_launch`, `t3_thread_list`, `t3_thread_read`, `t3_thread_wait`, `t3_thread_send`, and `t3_thread_organize` before calling.
+Paperclip Cooper workers have the tools that reach GameStock production data. Use Executor connection `user-executor-dans-team`, app `tools["t3-code-mac-studio"]`, and pass the Paperclip `environmentId` from the live `t3_environment_links` list on every call; there is no separate Paperclip app connection. Confirm the signatures of `t3_thread_launch`, `t3_thread_list`, `t3_thread_read`, `t3_thread_wait`, `t3_thread_send`, and `t3_thread_organize` before calling.
 
 Launch directly in the GameStock support project, `projectId` `d34754d4-b023-418a-a34c-ee7a90c98184`. Do not route through the retired Dispatch: Support T3 orchestrator `mcp:cf8b14af-547a-4b69-8801-1c3bcaf07897` or any other orchestrator. Product/engineering follow-ups go to Dan, not to another coordinator without his approval. Use this route for production data or changes involving accounts, KYC, payments, balances, transactions, logs, code, or configuration that Crisp alone cannot answer.
 
