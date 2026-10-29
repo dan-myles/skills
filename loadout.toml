@@ -8,13 +8,13 @@ enabled = ["claude", "codex", "cursor", "grok"]
 url = "https://mcp.executor.sh/mcp"
 
 [machines.dans-macbook-pro]
-tags = ["coding"]
+tags = ["development"]
 
 [machines.stapler]
-tags = ["coding"]
+tags = ["development"]
 
 [machines.paperclip]
-tags = ["coding"]
+tags = ["development"]
 
 [machines.grokbot]
 tags = []

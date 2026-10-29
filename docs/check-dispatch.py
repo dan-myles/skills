@@ -19,7 +19,7 @@ def manifest(path):
 
 def check(root):
     shared = manifest(root / 'loadout.toml')['skills']
-    coding = {**shared, **manifest(root / 'tags/coding.toml')['skills']}
+    coding = {**shared, **manifest(root / 'tags/development.toml')['skills']}
     dispatch = {'dispatch', 'dispatch-setup', 'dispatch-decompose', 'dispatch-chase', 'dispatch-digest'}
     assert dispatch <= coding.keys()
     assert not dispatch & shared.keys()
