@@ -160,9 +160,6 @@ brew = "ffmpeg"
 [programs.worktrunk]
 brew = "worktrunk"
 
-[programs.graphite]
-brew = "withgraphite/tap/graphite"
-
 [programs.rustup]
 brew = "rustup"
 
