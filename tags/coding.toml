@@ -124,9 +124,6 @@ source = "skills/dispatch-digest"
 [programs.gh]
 brew = "gh"
 
-[programs.tailscale]
-brew = "tailscale"
-
 [programs.neovim]
 brew = "neovim"
 
@@ -175,11 +172,19 @@ brew = "oven-sh/bun/bun"
 [programs.pnpm]
 brew = "pnpm"
 
+# npm comes from node, so on a fresh machine the npm programs install on the sync after the one
+# that installs node.
+[programs.node]
+brew = "node"
+
+# Homebrew ships these two as casks only, which do not exist on Linux; npm covers Linux.
 [programs.claude-code]
 cask = "claude-code"
+npm = "@anthropic-ai/claude-code"
 
 [programs.codex]
 cask = "codex"
+npm = "@openai/codex"
 
 [programs.t3-code]
 cask = "t3-code"
