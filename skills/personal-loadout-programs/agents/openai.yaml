@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-loadout-programs"
+  short_description: "Offer to declare cross-machine programs in Dan's loadout"
+  default_prompt: "Use $personal-loadout-programs to decide whether this program belongs in my loadout and declare it there."
+
+policy:
+  allow_implicit_invocation: true

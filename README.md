@@ -2,7 +2,7 @@
 
 This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. The manifest declares skills and enabled agents only. It does not install programs, configure MCP servers, or manage other user files. Standalone tools live under `tools/`, which Loadout ignores; each is installed by hand from its own README.
 
-The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 54 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
+The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 55 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
 
 ## Layout and machines
 
@@ -19,14 +19,14 @@ PARKING_LOT.md                   repo rules and history
 
 | Machine name | OS / account | Tags | Enabled agents | Skills |
 | --- | --- | --- | --- | --- |
-| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 54 |
-| `dans-mac-studio` | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 54; Capy pending |
-| `paperclip` | Linux / `paperclip` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 54 |
+| `dans-macbook-pro` | macOS / Dan | `coding` | `claude`, `codex`, `cursor`, `grok` | all 55 |
+| `dans-mac-studio` | macOS / `dan` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 55; Capy pending |
+| `paperclip` | Linux / `paperclip` | `coding` | `claude`, `codex`, `cursor`, `grok` | all 55 |
 | `grokbot` | Linux / `box` | none | `grok-bot` only | 13 shared skills |
 
 Machine names follow the tailnet names, checked on 2026-10-27. The MacBook's OS hostname is `Daniels-MacBook-Pro.local`, and Paperclip's is `Ubuntu-2204-jammy-amd64-base`, so save the table's names explicitly instead of relying on hostname detection. SSH confirmed user `dan` with home `/Users/dan` on the MacBook and user `paperclip` with home `/home/paperclip` on Paperclip. The Grok Bot machine is `grokbot`, not the account name `box`. It was offline and its tailnet DNS name did not resolve, so its account and workflow copies could not be checked remotely. The Studio is the current machine, user `dan`, home `/Users/dan`. Its machine name is `dans-mac-studio`, not its separate SSH endpoint `dans-mac-studio-ssh`.
 
-The global layer enables the four native agents. An unlisted machine gets those agents and the 13 shared skills, but no Cooper or Dispatch skills. The `coding` tag adds Cooper and Dispatch only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `cooper` or `cooper-*` skills.
+The global layer enables the four native agents. An unlisted machine gets those agents and the 13 shared skills, but no Cooper or Dispatch skills. The `coding` tag adds Cooper, Dispatch, and `personal-loadout-programs` only on the three coding machines. The box machine layer replaces the enabled list, so it receives no native-agent copies and no `cooper` or `cooper-*` skills.
 
 ## Agent destinations and limits
 

@@ -121,6 +121,9 @@ source = "skills/dispatch-chase"
 [skills.dispatch-digest]
 source = "skills/dispatch-digest"
 
+[skills.personal-loadout-programs]
+source = "skills/personal-loadout-programs"
+
 [programs.gh]
 brew = "gh"
 
