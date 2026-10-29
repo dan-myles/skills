@@ -73,7 +73,7 @@ The thread forgets; the store doesn't. Every drain writes its tables before the 
 ## When things go wrong
 
 - A worker that went quiet: check its thread, branch, and PR. If it's dead, write what you know into its unit row and replan. Don't wait for everything to settle.
-- Retry by cause: too big, respawn with a smaller scope; flaky infrastructure, retry as is; tool errors, retry on another model. Two retries, then abandon the unit and plan around it.
+- Retry by cause: too big, respawn with a smaller scope; flaky infrastructure, retry as is; tool errors, diagnose and retry with the approved model/provider/options. Changing that selection requires an explicit user override and a fresh worker/verifier diversity check. An unavailable selection is a gate, not a reason to substitute. Two retries, then abandon the unit and plan around it.
 - A worker that comes back late: check its work against the current frontier and ledger before accepting anything.
 - When spawning more would produce garbage (bad upstream output, broken checks, dead infrastructure), write a stop line at the top of the standing orders, let running units finish, fix the cause, then clear it.
 - Your own tools keep failing: stop retrying, write what's done and how to resume into `decisions.tsv`, and hand back.
@@ -86,7 +86,7 @@ Show the **Activity board** per `references/visuals.md`, built from `units.tsv` 
 
 Only, and batched into the status board: irreversible actions, every departure from `decided.md` or a reserved call (as a recommendation to approve, never as news), product calls no experiment settles, a standing order that contradicts what you're seeing, and a dead end that survived a replan. Write each into `gates.md` first and keep other work moving around it. Ask per **How to ask** in the skill.
 
-Never: retries, CI flakes, review-thread triage, restack mechanics, or "should I keep going".
+Never: routine retries with the approved selection, CI flakes, review-thread triage, restack mechanics, or "should I keep going". A model/provider/options change still requires the explicit override above.
 
 Mid-program discoveries get fixed only when they block the frontier. Everything else goes to follow-ups.
 
