@@ -197,5 +197,11 @@ npm = "@anthropic-ai/claude-code"
 cask = "codex"
 npm = "@openai/codex"
 
+# The T3 Code desktop app is a cask, so macOS only.
 [programs.t3-code]
 cask = "t3-code"
+
+# The T3 Code server CLI, on every coding machine. `t3 service install` and `t3 connect` are
+# one-time manual steps.
+[programs.t3]
+npm = "t3"
