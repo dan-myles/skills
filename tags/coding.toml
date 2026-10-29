@@ -125,13 +125,15 @@ source = "skills/dispatch-digest"
 brew = "gh"
 
 # The tailscaled daemon. Neither manager has a package by that name: the tailscale package ships
-# tailscaled and the CLI. Each OS uses the first manager it knows, and only that manager decides
-# whether it is installed: macOS takes the brew formula, Linux takes apt, so the system package is
-# detected instead of brew adding a second copy. apt turns on tailscaled.service itself; on a
-# fresh Mac, start the daemon once with `sudo brew services start tailscale`.
+# tailscaled and the CLI. macOS takes the brew formula; Linux takes apt from Tailscale's own
+# repository, which loadout adds on a machine that lacks the package (needs apply --elevated).
+# A machine that already has it, or already has the repo, is left alone. apt turns on
+# tailscaled.service itself; on a fresh Mac, start the daemon once with
+# `sudo brew services start tailscale`.
 [programs.tailscaled]
 brew = "tailscale"
 apt = "tailscale"
+apt-repo = { url = "https://pkgs.tailscale.com/stable/ubuntu", key = "https://pkgs.tailscale.com/stable/ubuntu/{codename}.noarmor.gpg" }
 
 [programs.neovim]
 brew = "neovim"

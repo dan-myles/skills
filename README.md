@@ -68,7 +68,7 @@ Loadout follows top-level skill symlinks. Applying while a link still points int
 
 ## Apply on a machine
 
-Install the CLI from [dan-myles/loadout](https://github.com/dan-myles/loadout). Use a version compatible with manifest version 1. This conversion was checked against CLI commit `bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4`. See [validation results](docs/loadout-validation.md) for command output, machine resolution, skill preservation, and ownership proof.
+Install the CLI from [dan-myles/loadout](https://github.com/dan-myles/loadout). Use a version compatible with manifest version 1, 0.1.3 or later (`apt-repo` in `tags/coding.toml` needs it; older CLIs reject the key). This conversion was checked against CLI commit `bf2e2f4e746c6039ef27c2e3b5cef0db36ef53c4`. See [validation results](docs/loadout-validation.md) for command output, machine resolution, skill preservation, and ownership proof.
 
 For a read-only rollout review, use a branch-tracking clone and the documented local identity file below. Plain `loadout init` on the GitHub URL clones the default branch and immediately applies it; the CLI currently has no branch flag. The repository is public, so the HTTPS read-only remote needs no GitHub SSH key on the machine account.
 
