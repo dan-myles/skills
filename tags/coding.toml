@@ -230,3 +230,26 @@ when = { os = ["linux", "macos"] }
 source = "files/agent-browser/config.json"
 target = "~/.config/agent-browser-personal/config.json"
 when = { os = ["linux", "macos"] }
+
+[programs.bitwarden-cli]
+brew = "bitwarden-cli"
+when = { os = ["linux", "macos"] }
+
+[programs.bitwarden-mcp]
+npm = "@bitwarden/mcp-server"
+when = { os = ["linux", "macos"] }
+
+[files.bitwarden-local]
+source = "files/bitwarden/bitwarden-local"
+target = "~/.local/bin/bitwarden-local"
+when = { os = ["linux", "macos"] }
+
+[files.bitwarden-local-launcher]
+source = "files/bitwarden/launcher.mjs"
+target = "~/.local/lib/loadout/bitwarden/launcher.mjs"
+when = { os = ["linux", "macos"] }
+
+[mcp.bitwarden]
+command = "/bin/sh"
+args = ["-c", 'exec "$HOME/.local/bin/bitwarden-local" mcp']
+when = { os = ["linux", "macos"] }

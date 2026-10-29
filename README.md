@@ -30,6 +30,11 @@ The global layer enables the four native agents. An unlisted machine gets those 
 
 ## Agent destinations and limits
 
+The coding tag also installs Bitwarden CLI and its official local stdio MCP,
+pointed at Dan's Vaultwarden on Archie. Machines start logged out; an existing
+authenticated vault is preserved. See [Bitwarden setup](docs/bitwarden.md) for
+private per-machine login and headless unlocking.
+
 The coding machines also get agent-browser and a separate persistent personal
 browser profile. Paperclip has a loopback-only live dashboard for sign-in over
 an SSH tunnel. See [personal browser setup](docs/personal-browser.md) for the

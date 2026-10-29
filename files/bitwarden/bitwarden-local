@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+umask 077
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:$PATH"
+export BW_CLI_PATH="$(command -v bw)"
+exec node "$HOME/.local/lib/loadout/bitwarden/launcher.mjs" "$@"
