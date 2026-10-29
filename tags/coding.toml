@@ -120,3 +120,66 @@ source = "skills/dispatch-chase"
 
 [skills.dispatch-digest]
 source = "skills/dispatch-digest"
+
+[programs.gh]
+brew = "gh"
+
+[programs.tailscale]
+brew = "tailscale"
+
+[programs.neovim]
+brew = "neovim"
+
+[programs.tmux]
+brew = "tmux"
+
+[programs.fzf]
+brew = "fzf"
+
+[programs.jq]
+brew = "jq"
+
+[programs.ripgrep]
+brew = "ripgrep"
+
+[programs.coreutils]
+brew = "coreutils"
+
+[programs.procs]
+brew = "procs"
+
+[programs.go-task]
+brew = "go-task"
+
+[programs.tlrc]
+brew = "tlrc"
+
+[programs.ffmpeg]
+brew = "ffmpeg"
+
+[programs.worktrunk]
+brew = "worktrunk"
+
+[programs.graphite]
+brew = "withgraphite/tap/graphite"
+
+[programs.rustup]
+brew = "rustup"
+
+[programs.uv]
+brew = "uv"
+
+[programs.bun]
+brew = "oven-sh/bun/bun"
+
+[programs.pnpm]
+brew = "pnpm"
+
+[programs.claude-code]
+cask = "claude-code"
+
+[programs.codex]
+cask = "codex"
+
+[programs.t3-code]
+cask = "t3-code"
