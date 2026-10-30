@@ -19,3 +19,5 @@ Feature adds behavior and Bug corrects it; a refactor does neither. When the cle
 9. Order the commits as pin, deletions, reshape, then follow-on cleanup. Stop with the work committed on its branch, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
 **Reply:** the structure that changed, the pin and the proof behavior held, what got easier to read (layers or state removed), what you reverted, any bug or feature you split out, and the branch it's committed on. No new behavior. **Show:** before-and-after file maps, with what was deleted, moved, and added badged.
+
+**End-of-work reply:** follow the [required interactive recap](../references/visuals.md#required-end-of-work-recap), with the built-work recap in the visual, `html_preview` then `html_render` before concise caveats and handoff links. This also applies when this playbook ends in a PR or babysit handoff.

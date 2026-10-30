@@ -26,3 +26,5 @@ Babysitting never merges. Merge only when the user explicitly says to merge or l
 6. **Stop at merge-ready:** checks green, every AI reviewer has reviewed the head commit or timed out, GitHub reports it mergeable with no blockers, and no unresolved threads except dismissed human ones waiting on their reviewer, which you report. A required approval is a wait, not a blocker to fix; report it. In T3, call `unwatch_pull_request` before handing back.
 
 **Reply:** the mode, the PR's state, what you fixed and what you dismissed with reasons, what's pending, and what needs the user. Every review-ready update and final handoff includes the owning Cooper/T3 worker link alongside the PR link, per **Review handoffs** in the skill. **Show:** a status grid of checks and threads (fixed, dismissed, open), with what needs the user on top.
+
+**End-of-work reply:** follow the [required interactive recap](../references/visuals.md#required-end-of-work-recap), with the built-work recap in the visual, `html_preview` then `html_render` before concise caveats and handoff links. This also applies when this playbook ends in a PR or babysit handoff.

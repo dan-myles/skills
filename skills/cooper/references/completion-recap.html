@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Work recap template</title><style>
+  body{margin:0;font-family:var(--font-sans);color:var(--foreground)}
+  .wrap{display:flex;flex-direction:column;gap:20px}
+  h3{margin:0 0 6px;font-size:15px;font-weight:600}
+  .sub{color:var(--muted-foreground);font-size:12.5px;margin:0}
+  .tabs{display:inline-flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .tabs button{background:none;border:0;color:var(--muted-foreground);padding:6px 14px;font:inherit;font-size:13px;cursor:pointer}
+  .tabs button.on{background:var(--secondary);color:var(--foreground);font-weight:600}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  svg text{font-family:var(--font-sans);fill:var(--muted-foreground);font-size:11px}
+  .stats{display:flex;gap:10px;flex-wrap:wrap}
+  .stat{flex:1;min-width:140px;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px}
+  .stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+  .stat span{font-size:12px;color:var(--muted-foreground)}
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:stretch}
+  .node{border:1px solid var(--border);border-radius:var(--radius);padding:10px;font-size:12.5px;cursor:pointer;background:var(--card);transition:border-color .15s}
+  .node:hover{border-color:var(--ring)}
+  .node.on{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}
+  .node .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted-foreground)}
+  .node .t{font-weight:600;margin-top:2px}
+  .node.changed .k{color:var(--chart-2)}
+  .detail{font-size:13px;line-height:1.5;min-height:92px}
+  .detail code{font-family:var(--font-mono);font-size:12px;background:var(--code-background);padding:1px 5px;border-radius:4px}
+  .pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;margin-right:6px;border:1px solid var(--border)}
+  .pill.new{color:var(--success);border-color:var(--success)}
+  .pill.old{color:var(--destructive);border-color:var(--destructive)}
+  @media (max-width:560px){.flow{grid-template-columns:1fr 1fr}}
+
+button{font:inherit;color:inherit}button:focus-visible{outline:2px solid var(--ring);outline-offset:3px}.node{text-align:left}.timeline{height:180px;width:100%;display:block}.detail p{margin:8px 0}.detail{overflow-wrap:anywhere}.node.changed{border-top:3px solid var(--chart-2)}.stats{gap:8px}.stat{min-width:0;overflow-wrap:anywhere}.flow{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}button.pause{background:transparent;border:1px solid var(--border);border-radius:var(--radius);padding:6px 10px}h3{overflow-wrap:anywhere}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><div class="wrap">
+<div><h3 id="title"></h3><p class="sub" id="recap"></p></div>
+<div class="row"><div class="tabs" aria-label="Compare behavior"><button data-mode="before" aria-pressed="true">Before</button><button data-mode="after" aria-pressed="false">After</button></div><button class="pause" id="pause">Pause animation</button></div>
+<p class="sub" id="source"></p>
+<svg class="timeline" id="timeline" viewBox="0 0 700 180" role="img" aria-label="Illustrative behavior timeline"></svg>
+<div class="stats" id="stats" aria-live="polite"></div>
+<div><h3>Touched steps</h3><p class="sub">Choose a step for its before and after. Highlighted steps changed.</p></div>
+<div class="flow" id="flow"></div><div class="box detail" id="detail" aria-live="polite"></div>
+</div><script>
+// Replace all fictional data with the current job's evidence. Event times are
+// relative positions for the illustration, never measurements by implication.
+const DATA={
+ title:'Example only: make configuration explicit',
+ recap:'Built an explicit setting and a validation step. Fictional template data, not a shipped change.',
+ source:'Illustrative sequence, not measured timing. Replace this with evidence or a credited estimate.',
+ lanes:['Read setting','Validate','Use setting'],
+ modes:{
+  before:{events:[[100],[450],[750]],stats:[['implicit','setting source'],['unchecked','validation']]},
+  after:{events:[[100],[300],[600]],stats:[['explicit','setting source'],['validated','validation']]}
+ },
+ steps:[
+  {title:'Read',changed:true,before:'exampleConfig used an implicit fallback.',after:'exampleConfig reads EXAMPLE_SETTING explicitly.'},
+  {title:'Validate',changed:true,before:'validateExample did not check the setting.',after:'validateExample rejects unsupported values before use.'},
+  {title:'Use',changed:false,before:'runExample consumes the resolved setting.',after:'runExample still consumes the resolved setting; its contract is unchanged.'}
+ ]
+};
+const $=id=>document.getElementById(id);
+const text=(tag,value,parent)=>{const e=document.createElement(tag);e.textContent=value;parent.appendChild(e);return e;};
+$('title').textContent=DATA.title;$('recap').textContent=DATA.recap;$('source').textContent=DATA.source;
+let mode='before',paused=matchMedia('(prefers-reduced-motion: reduce)').matches,elapsed=0,last=0;
+function update(){
+ document.querySelectorAll('[data-mode]').forEach(b=>{const on=b.dataset.mode===mode;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+ $('stats').replaceChildren();DATA.modes[mode].stats.forEach(([value,label])=>{const e=text('div','',$('stats'));e.className='stat';text('b',value,e);text('span',label,e);});
+ draw();
+}
+const NS='http://www.w3.org/2000/svg';
+function svg(tag,attrs,content){const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(content)e.textContent=content;$('timeline').appendChild(e);}
+function draw(){
+ $('timeline').replaceChildren();
+ const width=matchMedia('(max-width:560px)').matches?380:700, x0=100, x1=width-20;
+ $('timeline').setAttribute('viewBox',`0 0 ${width} 180`);
+ const x=t=>x0+t*(x1-x0)/1000;
+ const color=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+ DATA.lanes.forEach((label,i)=>{const y=30+i*55;svg('text',{x:0,y:y+4},label);svg('line',{x1:x0,x2:x1,y1:y,y2:y,stroke:color('--border')});
+ DATA.modes[mode].events[i].forEach(t=>svg('circle',{cx:x(t),cy:y,r:6,fill:color('--chart-'+(i+1)),opacity:paused||t<=elapsed?1:.2}));});
+ if(!paused)svg('line',{x1:x(elapsed),x2:x(elapsed),y1:10,y2:160,stroke:color('--primary')});
+}
+function tick(now){if(last&&!paused)elapsed=(elapsed+Math.min(now-last,100))%1000;last=now;draw();requestAnimationFrame(tick);}
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;elapsed=0;update();});
+function pauseLabel(){$('pause').textContent=paused?'Play animation':'Pause animation';$('pause').setAttribute('aria-pressed',String(paused));}
+$('pause').onclick=()=>{paused=!paused;pauseLabel();draw();};pauseLabel();
+DATA.steps.forEach((step,i)=>{const b=text('button','',$('flow'));b.className='node'+(step.changed?' changed':'');text('span',step.changed?'CHANGED':'UNCHANGED',b).className='k';text('div',step.title,b).className='t';b.setAttribute('aria-pressed','false');b.onclick=()=>{document.querySelectorAll('.node').forEach(n=>{n.classList.remove('on');n.setAttribute('aria-pressed','false');});b.classList.add('on');b.setAttribute('aria-pressed','true');$('detail').replaceChildren();text('b',step.title,$('detail'));text('p','Before: '+step.before,$('detail'));text('p','After: '+step.after,$('detail'));};if(i===0)b.click();});
+update();requestAnimationFrame(tick);
+</script></body></html>

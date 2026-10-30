@@ -12,3 +12,5 @@ The fix is yours. Work from evidence: each line you ship should answer something
 8. Stop with the work committed on its branch, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
 **Reply:** what went wrong, the cause and the evidence for it, the fix, how you checked it, the reproduction output from before and after copied exactly, and the branch it's committed on. **Show:** the failure path with the point it broke, the reproduction before and after, and the file map of what changed.
+
+**End-of-work reply:** follow the [required interactive recap](../references/visuals.md#required-end-of-work-recap), with the built-work recap in the visual, `html_preview` then `html_render` before concise caveats and handoff links. This also applies when this playbook ends in a PR or babysit handoff.

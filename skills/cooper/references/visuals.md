@@ -1,6 +1,6 @@
 # Visuals
 
-The user is a visual learner. Show it first, every time there's something to show, then say only what the picture doesn't. Text around a picture is a few short lines, never paragraphs that retell it.
+The user is a visual learner. Show it first, including every end-of-work reply, then say only what the picture doesn't. Text around a picture is a few short lines, never paragraphs that retell it.
 
 ## When to draw
 
@@ -13,9 +13,24 @@ Draw at each of these moments, not just at the end:
 - **Every question to the user.** Show the options as cards side by side, the one you'd pick marked, each with its cost.
 - **Progress on long work.** When a step finishes something the user should see (a reproduction, a profile, a design comparison, a review), show it then, not only at the end. Mark where you are in the plan.
 - **Explanations.** Any "how", "why", or "what is" answer: draw the mental model first, then zoom into the part that matters.
-- **The final reply.** The result, with the evidence in the picture.
+- **The final reply.** Always show an interactive diagram and a built-work recap under the required contract below. A completed job or handoff is never exempt because the change is small.
 
 More than one page in a reply is fine when they show different things, such as the result and the evidence.
+
+## Required end-of-work recap
+
+Every end-of-work reply includes an interactive diagram and a recap of what was built. This covers feature, bug, performance and refactor completion, opening a PR, and babysit handoffs. One-line acknowledgments and confirmations remain text-only; a work-result handoff is not a confirmation. Do not apply a "when useful" or "something to show" exception.
+
+Start from [completion-recap.html](completion-recap.html), a durable generic template based on Dan's approved cadence diagram. Replace its explicitly fictional data with this job's evidence. Preserve:
+
+- A before/after toggle controlling an animated timeline of the behavior changed. For a structural change, use the execution path or build sequence; for a babysit handoff, show the actual check/review sequence and remaining gates. Do not invent a behavior change or completed work.
+- Headline stat tiles that update with the toggle. Use measured numbers with units and sources when available. Otherwise use truthful categorical facts such as "unchecked" / "verified" or "implicit" / "explicit". Label illustrative event timing as illustrative. Credit estimates to their source, never as measurements.
+- A clickable pipeline of touched steps, highlighting changed steps. Clicking a step reveals its before and after explanations with the exact configuration, symbol or file names. Make controls keyboard-accessible, and provide pause/reduced-motion support. The first view must already explain the outcome.
+- A concise recap of the actual built change and its scope inside the visual. Retain the required file map and verification evidence, as additional panels or visuals when needed. Keep merged, deployed, verified and pending distinct.
+
+Use only theme variables for colors, fluid layouts and no outer card or page background. Keep the HTML self-contained. Preview the populated final page with `html_preview`, then show it with `html_render` above the reply text. Text below contains only what the visual does not say: real caveats, verification still needed, PR link and owning worker link. Keep it to a few short lines.
+
+If rendering tools fail or are unavailable, say so and provide a compact diagram plus the built-work recap as fallback. Do not claim an interactive render succeeded. Outside T3, attach the self-contained interactive HTML when supported and include a compact fallback; the result and recap are still required.
 
 ## What to draw
 
@@ -91,7 +106,7 @@ When the user asks what Cooper threads are doing ("what are my coopers doing", "
 
 Build it from `t3_thread_list` and `t3_thread_read` (status and recent activity), the coordinator's board or `units.tsv`, and `gh pr view` for each PR.
 
-## Make it interactive when that helps
+## Other interactive visuals
 
 Pages can run script, so use it to keep a page small and explorable:
 
@@ -130,7 +145,7 @@ Keep it working without interaction too: the first view should already answer th
 
 ## Outside T3
 
-Use Mermaid blocks or small ASCII diagrams in the reply, and markdown tables for comparisons.
+Use Mermaid blocks or small ASCII diagrams and Markdown tables for comparisons. For end-of-work replies, also follow the interactive HTML and recap fallback above.
 
 ## The text around it
 

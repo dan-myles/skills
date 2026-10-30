@@ -46,3 +46,5 @@ One change, one measurement, keep or revert. Never stack untested changes. Never
 8. Review per **Review** in the skill. Stop with the kept commits on the branch in the order they landed, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
 **Reply:** the metric and target, baseline to final with the percent change, tries kept and reverted, each kept change in one line, the `decision.tsv` path, and the next idea you'd try. **Show:** the metric across tries, kept and reverted marked, against the target.
+
+**End-of-work reply:** follow the [required interactive recap](../references/visuals.md#required-end-of-work-recap), with the built-work recap in the visual, `html_preview` then `html_render` before concise caveats and handoff links. This also applies when this playbook ends in a PR or babysit handoff.

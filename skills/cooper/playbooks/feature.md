@@ -16,3 +16,5 @@ The design is yours. Hand off the typing, keep the decisions.
 8. Stop with the work committed on its branch, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
 
 **Reply:** what you built and for whom, the choices you made and why (a table when you weighed options), the evidence that it works, the branch it's committed on, and anything still undecided. **Show:** the file map of what changed, badged, plus a table when you weighed options.
+
+**End-of-work reply:** follow the [required interactive recap](../references/visuals.md#required-end-of-work-recap), with the built-work recap in the visual, `html_preview` then `html_render` before concise caveats and handoff links. This also applies when this playbook ends in a PR or babysit handoff.
