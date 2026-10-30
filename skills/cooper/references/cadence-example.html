@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Work recap template</title><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Optional cadence diagram example</title><style>
   body{margin:0;font-family:var(--font-sans);color:var(--foreground)}
   .wrap{display:flex;flex-direction:column;gap:20px}
   h3{margin:0 0 6px;font-size:15px;font-weight:600}
@@ -38,6 +38,8 @@ button{font:inherit;color:inherit}button:focus-visible{outline:2px solid var(--r
 <div><h3>Touched steps</h3><p class="sub">Choose a step for its before and after. Highlighted steps changed.</p></div>
 <div class="flow" id="flow"></div><div class="box detail" id="detail" aria-live="polite"></div>
 </div><script>
+// Optional timing example, not a required completion layout.
+// Choose another visual model when the job is not about cadence or sequences.
 // Replace all fictional data with the current job's evidence. Event times are
 // relative positions for the illustration, never measurements by implication.
 const DATA={

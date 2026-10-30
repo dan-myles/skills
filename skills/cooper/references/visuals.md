@@ -21,12 +21,24 @@ More than one page in a reply is fine when they show different things, such as t
 
 Every end-of-work reply includes an interactive diagram and a recap of what was built. This covers feature, bug, performance and refactor completion, opening a PR, and babysit handoffs. One-line acknowledgments and confirmations remain text-only; a work-result handoff is not a confirmation. Do not apply a "when useful" or "something to show" exception.
 
-Start from [completion-recap.html](completion-recap.html), a durable generic template based on Dan's approved cadence diagram. Replace its explicitly fictional data with this job's evidence. Preserve:
+Design the diagram around the mechanism of this particular job. Begin with the high-level overview: what the system does, where the change acts, and why that changes the outcome. Make changed parts visually clear. Let the reader explore details using the actual configuration, symbol or file names. Include a concise recap of what was built and its scope in the visual.
 
-- A before/after toggle controlling an animated timeline of the behavior changed. For a structural change, use the execution path or build sequence; for a babysit handoff, show the actual check/review sequence and remaining gates. Do not invent a behavior change or completed work.
-- Headline stat tiles that update with the toggle. Use measured numbers with units and sources when available. Otherwise use truthful categorical facts such as "unchecked" / "verified" or "implicit" / "explicit". Label illustrative event timing as illustrative. Credit estimates to their source, never as measurements.
-- A clickable pipeline of touched steps, highlighting changed steps. Clicking a step reveals its before and after explanations with the exact configuration, symbol or file names. Make controls keyboard-accessible, and provide pause/reduced-motion support. The first view must already explain the outcome.
-- A concise recap of the actual built change and its scope inside the visual. Retain the required file map and verification evidence, as additional panels or visuals when needed. Keep merged, deployed, verified and pending distinct.
+**Choose the visual grammar, not a stock layout.** The approved Sentinel batching diagram worked because the investigation concerned slowdown and price-write cadence: moving events made commit frequency and downstream query reruns visible. Its lesson is to find an equally direct representation for each new problem. It does not prescribe timelines, before/after toggles, stat tiles or pipelines for all work.
+
+| Mechanism being explained | Possible visual and interaction |
+| --- | --- |
+| Cadence, batching or contention | Animate events, queues or resource occupancy; explore timing only when timing matters. |
+| Data flow or invalidation | Follow a payload through the touched components; click to reveal transformations or invalidated dependents. |
+| State or lifecycle bug | Step through transitions and show the guard or recovery path that changed. |
+| Architecture or refactor | Explore ownership and dependency boundaries; highlight moved responsibilities and preserved contracts. |
+| User interaction | Walk through the relevant screens, gesture or decision and its resulting state. |
+| PR or babysit handoff | Explore actual checks, review findings and remaining gates without inventing a runtime behavior change. |
+
+These are prompts, not required layouts. Invent a clearer representation when the job calls for it. Animation must explain causality, movement or transitions; interaction should reveal useful detail or let the reader test a relevant scenario. Avoid decorative motion and generic boxes that could describe any PR. A reader should understand the change from the first view without clicking everything. Support keyboard input and reduced motion, with pause controls for continuous animation.
+
+Keep evidence honest. Use measured numbers with units and sources when available. Credit estimates to their source and label illustrative data or timing as illustrative. Omit metrics when numbers do not help. Never manufacture statistics to fill tiles or imply measured performance from an animation. Keep merged, deployed, verified and pending distinct. Retain the required file map and verification evidence in supporting panels or visuals as needed.
+
+[cadence-example.html](cadence-example.html) is an optional, fictional example for timing-related work, not the default completion template. Reuse its controls or styling only when they fit; build a different diagram for a different mechanism.
 
 Use only theme variables for colors, fluid layouts and no outer card or page background. Keep the HTML self-contained. Preview the populated final page with `html_preview`, then show it with `html_render` above the reply text. Text below contains only what the visual does not say: real caveats, verification still needed, PR link and owning worker link. Keep it to a few short lines.
 
