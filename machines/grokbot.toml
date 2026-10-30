@@ -7,3 +7,6 @@ remove = true
 [agents.custom.grok-bot]
 evidence = "Dan verified that every Grok Bot reads /home/box/agent-data/workflows/<skill>/SKILL.md; see README.md, Grok Bot ownership."
 skills = { linux = "~/agent-data/workflows" }
+
+[instructions.claude]
+remove = true

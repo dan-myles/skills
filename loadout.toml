@@ -51,3 +51,7 @@ source = "skills/grokbot-gs-crisp-support"
 
 [skills.personal-messaging]
 source = "skills/personal-messaging"
+
+[instructions.claude]
+source = "instructions/CLAUDE.md"
+agents = ["claude"]
