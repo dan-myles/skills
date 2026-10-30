@@ -32,7 +32,7 @@ Pin with the real `t3_thread_organize` action `pin` when available. If unavailab
 
 ## Board and journal
 
-[Board presentation](references/board-page.md) defines the saved Markdown board and required inline T3 view after every update. `board.md` is authoritative, not a chat attachment or external Page. Update it and append journal evidence whenever work launches, gates, finishes, or changes owner. Show the current board after each coherent state update in that turn, with only one to three short lines underneath; do not wait for a digest request. Automatically commit and push coherent updates to the owned state documents with `[skip ci]`, without asking for per-save approval. Leave unrelated changes untouched. Store only shareable material. Read [project state](references/project-state.md) for save/share, takeover, concurrency, provenance, and privacy rules.
+[Board presentation](references/board-page.md) defines the saved Markdown board and required inline T3 view after every update. `board.md` is authoritative, not a chat attachment or external Page. Update it and append journal evidence whenever work launches, gates, finishes, or changes owner. Show the current board after each coherent state update in that turn, with only one to three short lines underneath; do not wait for a digest request. Automatically commit and push coherent updates to the owned state documents directly to `main` with `[skip ci]`, without asking for per-save approval. Leave unrelated changes untouched. Store only shareable material. Read [project state](references/project-state.md) for save/share, takeover, concurrency, provenance, and privacy rules.
 
 ## Modes
 
