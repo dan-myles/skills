@@ -6,7 +6,7 @@ description: "Show one repository's Dispatch status from its Markdown board and 
 
 # Digest
 
-Read the [Dispatch role](../dispatch/SKILL.md) and [project state](../dispatch/references/project-state.md). Select the store explicitly or by verified ownership. Build status from its board and current worker/PR evidence, never memory.
+Read the [Dispatch role](../dispatch/SKILL.md) and [project state](../dispatch/references/project-state.md). Select the store explicitly or by verified ownership. Build status from its board and current worker/PR evidence, never memory. Perform [freshness reconciliation](../dispatch/references/board-page.md#reconcile-before-presenting) for every known owner, including resumed runs and follow-ups after final reports. Show per-owner last-verified times and separate local active workers, issue cards and external coordination. Missing evidence leaves counts incomplete.
 
 The current owner uses [Chase](../dispatch-chase/SKILL.md) in reconciliation-only mode: read/copy shareable reports, update evidence and surface gates, but skip launches, queue refills, work-starting follow-ups, retargeting and settlement. A non-owner or stale/offline checkout only reads and displays observations, with no file/cursor writes. Status never initiates takeover or resumes a pause.
 
