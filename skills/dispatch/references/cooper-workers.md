@@ -1,8 +1,10 @@
 # Cooper workers in T3
 
-Dispatch launches long-lived Cooper worker threads with actual T3 tools. Read the calling mode's authority first. This contract grants no implementation, production-write, merge, external messaging, or scheduling permission beyond its brief. Grok Bot support retains its separate [Executor contract](../../grokbot-gs-crisp-support/references/cooper-workers.md).
+Dispatch launches long-lived Cooper worker threads with actual T3 tools. Read the calling mode's authority first. This contract grants no implementation, production-write, merge, or scheduling permission beyond its brief. Grok Bot support retains its separate [Executor contract](../../grokbot-gs-crisp-support/references/cooper-workers.md).
 
 ## Route and launch
+
+If work came from Slack or another messaging conversation, carry its source destination and update sender in the brief. Dispatch posts by default; assign the worker instead when appropriate and include the last posted milestone to avoid duplicates. Routine task-related messages need no separate approval. Missing access is a reported gap, not a reason to guess a destination.
 
 Use the current verified T3 project for this repository. For another machine, discover live `t3_environment_links`, then verify the same repository with `t3_project_list`/`t3_project_read` on that environment. Pass its `environmentId` consistently. IDs saved by a prior user are provenance, not proof that a destination is accessible now. Do not guess routes from titles or silently fall back to the local machine.
 
@@ -47,7 +49,7 @@ DECIDED      binding user decisions and sources, verbatim
 ACCEPTANCE   checkable outcome and dependency evidence
 VERIFY       checks, expected evidence, environment limits
 TIMEBOX      cap; stop with findings and gates on expiry
-RULES        attended/headless; no merge, deploy, external messaging, or scope expansion
+RULES        attended/headless; no merge, deploy, or scope expansion; source-thread update sender and destination
 REPORT       complete shareable report in T3 reply: store/item/attempt/generation,
              status, final yes/no, exact worker ID/title/link, branch, head SHA,
              full PR URLs, checks/output, decisions, gates, follow-ups, artifacts,

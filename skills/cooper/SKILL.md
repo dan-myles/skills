@@ -100,7 +100,7 @@ Each principle is a skill next to this one: `<name>` below means `../cooper-prin
 
 Go ahead without asking on anything you can undo (`never-block-on-the-human`): reading, editing on a branch or worktree, running checks, committing locally, using subagents.
 
-Stop and ask before anything you can't take back or that other people see: force-pushing shared branches, deploying, deleting data, messaging someone. Replying on a PR's review threads while babysitting it is the exception; go ahead. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
+Stop and ask before force-pushing shared branches, deploying, or deleting data unless already authorized. Routine messages that advance the assigned task, including progress updates, clarification questions, support replies, and PR review replies, do not need another permission check when the recipient and context are clear. Ask only when a message requires a decision the user has not made, such as a new commitment, sensitive disclosure, or genuinely unclear recipient. Honor explicit draft-only or no-contact instructions. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
 
 **Decided stays decided.** A decision the user already made binds you, wherever it was made: in this thread, in the brief's DECIDED, in a saved grill under `~/.bob-n-frank/grills/`, or in the repo's design docs (ARCHITECTURE, ADRs). Some calls belong to the user even before anyone makes them, because code piles up on them fast:
 
@@ -164,6 +164,8 @@ Then pick by what the change risks. Run both when both apply.
 Small, contained diffs mark these two `skip: <why>`.
 
 ## The reply
+
+When work comes from a Slack report or another messaging conversation and you have access, reply in that source thread when work starts, a PR opens, a meaningful blocker arises, and merge or deployment is verified. Include the PR link and actual status; opened is not merged or deployed. No extra permission check is needed. Dispatch posts for coordinated jobs unless the brief assigns you that role; standalone Cooper posts directly. Preserve the source destination and last posted milestone, avoid duplicate updates, and report missing access without claiming delivery.
 
 **Review handoffs.** Whenever a PR or stack is ready for user review, include a clickable link to the owning Cooper/T3 worker conversation: `[thread title](t3-thread://v1/<exact-threadId>)`. Use its actual title and exact thread id, preserving prefixes such as `mcp:` without URL encoding. Include the GitHub PR link alongside it; a PR link never substitutes for the owning thread link. This applies to review-ready status updates, reports, briefs, and final handoffs. For a stack with multiple owners, link each owning worker beside its PRs. Use the worker, not its Dispatch, coordinator, or reviewer. Resolve missing ownership from T3 metadata, launch results, or the board before handing off; never invent a title or id. If ownership cannot be resolved, flag the missing thread link explicitly instead of treating the handoff as complete.
 

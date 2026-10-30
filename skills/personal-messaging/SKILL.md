@@ -7,7 +7,7 @@ description: "Automatically apply when drafting or sending a message to another 
 
 ## Draft or send
 
-- Send only when Dan asked you to send to that recipient or thread. This skill grants no sending permission. Otherwise, draft.
+- This skill controls writing style, not workflow or sending permissions. Follow the task and standing instructions for whether to send or draft; do not add a permission checkpoint merely because a message is outward-facing.
 - When sending yourself, speak as Dan's agent, never impersonate Dan. End the message with its own line: `// dan's agent`.
 - When drafting for Dan to send, use Dan's voice, omit the signature, and put the draft inside a triple-backtick code block.
 - Leave customer names and identifiers out unless the recipient needs them for the task. Include only the necessary details.
