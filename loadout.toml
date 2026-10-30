@@ -48,3 +48,6 @@ source = "skills/unslop"
 
 [skills.grokbot-gs-crisp-support]
 source = "skills/grokbot-gs-crisp-support"
+
+[skills.personal-messaging]
+source = "skills/personal-messaging"

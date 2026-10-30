@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-messaging"
+  short_description: "Write concise messages to other people for Dan"
+  default_prompt: "Use $personal-messaging to draft a short message on my behalf."
+
+policy:
+  allow_implicit_invocation: true

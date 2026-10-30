@@ -2,11 +2,11 @@
 
 This repository is Dan's [loadout](https://github.com/dan-myles/loadout), the source his machines apply with the loadout CLI. The manifests declare skills, enabled agents, programs, and MCP servers. Standalone tools live under `tools/`, which Loadout ignores; each is installed by hand from its own README.
 
-The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 56 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
+The deployment source is `main`. Dan reports that Loadout machine `grokbot` syncs it nightly around 3 AM America/Chicago. All 57 skill folders live under `skills/`, following [the starter loadout](https://github.com/dan-myles/loadout/tree/main/examples/starter). Manifest sources use `skills/<name>`. Changes still require Dan's merge approval; editing this checkout does not apply a machine.
 
 ## Profiles and layout
 
-`loadout.toml` declares global agents, personal Executor, and 13 shared skills.
+`loadout.toml` declares global agents, personal Executor, and 14 shared skills.
 `tags/development.toml` adds Cooper, Dispatch, development tools, the persistent
 browser helpers, and local Bitwarden MCP. Machines choose this profile locally;
 normal machines need no name registration. Only `machines/grokbot.toml` remains
@@ -24,10 +24,12 @@ Paperclip and Stapler saved these local selections during the 2026-10-29 rollout
 this change. Loadout 0.1.6 supports profiles; 0.1.5 cannot select them. Removing the old
 mappings before local selections are ready removes managed development files.
 
-All 56 skills live in `skills/`. Standalone tools in `tools/` and the historical
+All 57 skills live in `skills/`. Standalone tools in `tools/` and the historical
 `.skills-manager/` registry are not deployed by Loadout.
 
 ## Agent destinations and limits
+
+The automatic [personal-messaging skill](skills/personal-messaging/SKILL.md) keeps messages to other people concise, distinguishes agent-sent messages from drafts for Dan, and requires Dan's instruction before sending. It is shared across profiles.
 
 The automatic [personal-vaultwarden skill](skills/personal-vaultwarden/SKILL.md) guides credential discovery, secure unlock, and approved-task-only transfer. It uses private input tools before asking for manual terminal work.
 
