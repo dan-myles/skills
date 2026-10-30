@@ -13,4 +13,8 @@ Do not add Recent activity or Waiting on you sections. The running history belon
 
 Update the saved board when workers launch, gate, finish, or status reconciliation changes evidence. It must not disagree with its saved reports or journal. A non-owner's status leaves files unchanged and labels live observations separately.
 
-For an inline T3 view, render the saved sections as tabs with counts, Now selected by default, through `html_preview` then `html_render` when available. Keep this view disposable and derived from the Markdown. It requires no external canvas ID, Page service, or additional source of truth. A rendered view is not the Git checkpoint.
+After every state-changing update, show the freshly saved board in the same T3 turn, including updates from setup, intake, launches, reports, chase, gates, decisions, and completion. Render after each coherent update batch before handing back; do not wait for a status request or the next digest. Status/digest also shows the board when nothing changed.
+
+Render the saved sections as tabs with counts, Now selected by default, through `html_preview` then `html_render`. Keep the view derived from the current Markdown with its timestamp, worker/PR links, and gates. Do not substitute an old render or only link to board.md. If rendering tools are unavailable or fail, show a compact Markdown board and state the rendering gap. This view needs no external canvas ID, Page service, or additional source of truth. A rendered view is not the Git checkpoint.
+
+Keep text below the board to one to three short lines: the material change, any decision needed, or the next action. Put item detail, counts, status, evidence, and links in the board instead of repeating them below. If the board is sufficient, omit extra prose. A required failure or approval explanation may take the space it needs.

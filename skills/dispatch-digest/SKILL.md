@@ -14,4 +14,4 @@ Follow [the board](../dispatch/references/board-page.md): Now, Backlog, What lan
 
 State the store/owner generation, timestamp, running work, what changed, what needs the user, and what remains owned. Distinguish saved evidence from live observations. An inaccessible prior-user thread stays waiting on access with its last verified source/time/head; saved green checks are not current verification. No cross-project aggregation or Fleet Control handoff is required.
 
-For the current owner, automatically commit and push changed evidence documents and journal markers with `[skip ci]` under the project-state contract. If nothing changed, say "Nothing new since <time>." An inline T3 board may be rendered from the Markdown; no external Page is required.
+For the current owner, automatically commit and push changed evidence documents and journal markers with `[skip ci]` under the project-state contract. Always show the current board using the board presentation contract, even when nothing changed. Put at most one to three short lines beneath it; if unchanged, one line such as "Nothing new since <time>" is enough. No external Page is required.
