@@ -127,6 +127,11 @@ source = "skills/personal-loadout-programs"
 [programs.gh]
 brew = "gh"
 
+# Shared work-graph client. Dolt server provisioning is separate from loadout.
+[programs.beads]
+brew = "beads"
+when = { os = ["linux", "macos"] }
+
 # The tailscaled daemon. Neither manager has a package by that name: the tailscale package ships
 # tailscaled and the CLI. macOS takes the brew formula; Linux takes apt from Tailscale's own
 # repository, which loadout adds on a machine that lacks the package (needs apply --elevated).
@@ -270,3 +275,13 @@ when = { os = "linux", arch = "x86_64" }
 source = "files/agent-browser/access.conf"
 target = "~/.config/systemd/user/agent-browser-dashboard.service.d/access.conf"
 when = { os = "linux", arch = "x86_64" }
+
+# Compile iOS simulator development apps on Mac build hosts.
+[programs.cocoapods]
+brew = "cocoapods"
+when = { os = "macos" }
+
+# Let remote development simulators reach a worktree's Metro server.
+[programs.cloudflared]
+brew = "cloudflared"
+when = { os = ["linux", "macos"] }
