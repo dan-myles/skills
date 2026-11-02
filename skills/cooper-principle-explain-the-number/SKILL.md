@@ -1,7 +1,7 @@
 ---
 name: cooper-principle-explain-the-number
 disable-model-invocation: true
-description: "Apply when you have a speedup, a regression, a throughput, a latency, or an eval result. Before you trust, report, or act on a measured number, find what limits it and rule out that it measured something else. Manual-only: `cooper` reads it when a step names it or its trigger fits."
+description: "Apply before you measure, and when you have a speedup, a regression, a throughput, a latency, or an eval result. Before you trust, report, or act on a measured number, find what limits it and rule out that it measured something else. Manual-only: `cooper` reads it when a step names it or its trigger fits."
 ---
 
 # Explain the number
@@ -10,9 +10,12 @@ Before you trust, report, or act on a measured number, find what limits it and r
 
 A broken run still prints a plausible number. Failed requests, a cache that skipped the work, code that never ran, an untuned side, and noise all look fine.
 
+- **Write the decision down before you run.** Name the result that would change a decision, and the noise floor. Stop when the run-to-run spread is bigger than the effect.
 - **Ask why it isn't twice as good.** Name what bounds it: a core, a lock, the disk, the network, the load generator. Get it from a profile or system counters during the run and map it to code. A guess from reading code isn't a limiter.
 - **List what else it could be measuring** and rule each out with evidence: errors, skipped or cached work, an untuned side, noise, a piece too small to matter end to end.
 - **Keep the evidence with the number:** run count, spread, and limiter.
+
+You skipped this when a run started without the result that would change a decision, or a number has no run count, spread, or named limiter.
 
 For a performance number, run the full procedure in `../cooper/references/benchmark-checklist.md`.
 

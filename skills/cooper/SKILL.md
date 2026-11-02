@@ -27,7 +27,7 @@ Dispatch is a long-running pinned T3 project thread for one repository. It track
 
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
-4. Show the plan per `references/visuals.md`: the playbook's steps as a pipeline, with the helpers each one runs and the checkpoints marked. Keep the text to one line on how you sorted the task.
+4. Open with the goal in your own words: what the user wants, the problem it solves, and, when the task ships a change, the smallest change you expect to meet it. Don't wait for confirmation. If the evidence already rules out the change the user asked for, show that and stop. Then show the plan per `references/visuals.md`: the playbook's steps as a pipeline, with the helpers each one runs and the checkpoints marked. Keep the rest of the text to one line on how you sorted the task.
 5. `/cooper orchestrate drain <program>` and `/cooper orchestrate resume <program>` go straight to Orchestrate's Drain or Resume for that program: no sorting, no plan.
 6. When the user says "new task", sort again. Anything else, like "send it", "go on", or "do it", continues the current playbook.
 
@@ -38,7 +38,7 @@ Some steps name a helper skill:
 - `cooper-how`: how code works.
 - `cooper-why`: why it was built that way.
 - `cooper-architect`: two designs from two model families, merged into one sketch.
-- `cooper-adversarial-review`: an adversarial review by reviewers on different models.
+- `cooper-adversarial-review`: adversaries on different models try to break the change; only findings proven by a run survive.
 - `cooper-blast-radius`: what a change breaks outside its diff, with the fact it's safe because of proven by running code.
 - `cooper-grill`: settles the user's decisions, round by round, before complex work that needs them.
 - `cooper-no-comments`: Comment Sicko strips the diff's comments, and the code they covered for gets fixed.
@@ -89,7 +89,7 @@ Each principle is a skill next to this one: `<name>` below means `../cooper-prin
   - `fix-root-causes`: any debugging.
   - `attack-the-premise`: two fixes on the same assumption failed the same check.
   - `prove-it-works`: before calling anything done.
-  - `explain-the-number`: before trusting a measured number.
+  - `explain-the-number`: before measuring, and before trusting a measured number.
   - `test-behavior-not-implementation`: writing, changing, or keeping a test.
 - **Working:**
   - `never-block-on-the-human`: about to ask permission for something you can undo.
@@ -127,7 +127,7 @@ Default to deciding. Before any question, check that the request, the issue, and
 
 Use subagents when the harness supports them.
 
-- Give each one a tight brief: which files, the data shape, what done looks like, which repo rules matter, and the decided calls it must keep. Link to files rather than pasting them.
+- Give each one a tight brief: the user's goal in your words, which files, the data shape, what done looks like, which repo rules matter, and the decided calls it must keep. Link to files rather than pasting them.
 - Build subagents use `gpt-6.1-sol` with `{reasoningEffort: high}` on provider family `codex`. Cross-cutting design and tricky logic use `claude-opus-5-5` with `{effort: xhigh}` on provider family `claudeAgent`.
 - Push wide searches and noisy output into subagents so the main thread holds only conclusions (`guard-the-context-window`).
 - Their work is yours. Read the diff and summarize it in your own words. A subagent that swapped out a decided or reserved call gets reverted, not reported as done.
@@ -159,7 +159,7 @@ Then run **`cooper-no-comments`** over the diff whenever it adds or changes comm
 Then pick by what the change risks. Run both when both apply.
 
 - **`cooper-blast-radius`** when the change reaches past its diff: shared code other modules call, a data shape (an API response, a DB column, a wire format, a config key), a dependency bump, or a deletion. Size doesn't matter; one line can qualify. If its safety fact comes back false or unproven, fix that first. Put the fact in the PR body, and keep its **Before merging** test when it's worth having. Skip it when the Bug playbook already ran it and the fix kept that shape.
-- **`cooper-adversarial-review`** when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each **Act on** finding in its own commit, put **Consider** findings in the PR body or ask the user, and list the dismissals in the reply.
+- **`cooper-adversarial-review`** when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each verified finding in its own commit, keeping its repro as the regression test where it fits, and give the dropped counts in the reply.
 
 Small, contained diffs mark these two `skip: <why>`.
 
@@ -173,7 +173,7 @@ When work comes from a Slack report or another messaging conversation and you ha
 
 Show, then tell. The user is a visual learner. Draw per `references/visuals.md` (in T3, `html_preview` then `html_render`, before the text) for: the plan, every checkpoint, every question, progress worth seeing, explanations, and the final reply. Only a yes or no, one fact, or a one-line confirmation goes without. Keep the text to what the picture doesn't carry, five short lines or fewer.
 
-- Open with the result in one line.
+- Open with the user's goal and the result, one line each. A fully specified one-line edit needs only the result.
 - Cover every section the playbook asks for, mostly in the visual. The text is a few short lines: the decision you need, caveats, links, next step. Put the built-work recap in the interactive diagram. No preamble or paragraphs that retell the picture.
 - One line on who benefits and what they'll see change, and one on what the next owner of this code needs to know.
 - After babysitting, add Babysit's status: the PR's state, what was fixed and dismissed, and what needs the user.

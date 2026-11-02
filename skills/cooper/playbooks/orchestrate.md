@@ -28,7 +28,7 @@ One folder per program, outside every repo: `~/.bob-n-frank/orchestrate/<program
 - `units.tsv`: one row per unit: id, track, state (`planned`, `running`, `needs-decision`, `needs-verify`, `verified`, `merge-ready`, `landed`, `failed`, `abandoned`), thread id, branch, PR, head SHA, brief path. Update rows in place.
 - `briefs/<unit>.md`: the exact brief each unit got.
 - `reports/<unit>.md`: each worker's final report.
-- `ledger.tsv`: one verdict per PR and head SHA: `live-verified`, `test-verified`, `type-check-only`, `verifier-blocked`, `verifier-failed`. A new head SHA voids the row.
+- `ledger.tsv`: one verdict per PR and head SHA: `live-verified`, `test-verified`, `type-check-only`, `verifier-blocked`, `verifier-failed`. A new head SHA voids the row, except a head whose only change from the verified one is wording (docs, comments, PR text; user-visible strings are behavior), which carries the row forward with a note.
 - `frontier.md`: for stacked work, the PRs bottom to top with head SHAs, and the lowest unmerged one.
 - `gates.md`: decisions only the user can make: the question, the options, your pick, and what happens with no answer.
 - `decisions.tsv`: one row per decision: time, phase, decision, why, evidence, result. Append only.
@@ -45,14 +45,15 @@ Write every brief per `references/brief.md`, headless RULES, with REPORT at `~/.
 4. **Scale.** Keep a rolling window of workers up to the in-flight cap (default 4, since worktree threads run on this machine; raise it in the standing orders) and refill as units finish. Don't wait for a whole batch. Pass upstream reports into downstream briefs.
 5. **Drain** on every wake: the heartbeat, a verifier finishing, a watched PR changing, or a user message.
    - Workers report back the moment they finish, so most drains start from a report-back message; the heartbeat is the backstop. A report file whose unit is still `running` means the report-back never came: drain it and note the defect.
-   - Read each running worker without disturbing it: `t3_thread_read`, its report file, `gh pr view`. Never message a worker to check on it.
+   - Read each running worker without disturbing it: `t3_thread_read`, its report file, `gh pr view`. Judge progress by its pushes and PR activity, not its status text. Never message a worker to check on it.
    - Classify each: landed, merge-ready, needs-verify, failed, stuck, or noise. Update `units.tsv`, `ledger.tsv`, and `frontier.md`. Preserve each report's owning worker identity; recover missing ids or titles from the unit row and live T3 metadata. Every review-ready status board or handoff links the owning worker beside its PRs per **Review handoffs** in the skill, never only the coordinator or GitHub PR.
    - Read each report's decisions. One that touches `decided.md` or a reserved call isn't done, however well it works: mark the unit `needs-decision`, write a gate with the options and your pick, and hold its PR until the user answers.
+   - Send back work that drifted from its scope or grew past what the brief asked. Keep only fixes that block the frontier; the rest become follow-ups.
    - A finished unit that needs judgment gets a verifier unit. Don't review diffs inline.
    - Settle each worker whose unit reached a final state (landed, abandoned, or a closed PR) per `references/settling.md`. A merge-ready PR waiting on the user keeps its worker active. The coordinator never settles itself.
    - Spawn the next units in one turn, then end the turn with a status board: counts by state, what changed, open gates.
 6. **Land, continuously.** Keep the lowest unmerged PR green before work above it. Workers never rebase; a conflict or restack is a unit with its own brief. Only one unit per stack may change its shape (rebase, force-push, retarget a base, merge) at a time, so two of them never fight over the same branches. Record which unit holds a stack in `standing-orders.md`, and clear it when that unit finishes. Stacks are GitHub stacks opened with `gh stack` per `open-pr.md`; no Graphite. The unit holding a stack restacks it with `gh stack rebase` and `gh stack push`, never by merging the base into a layer. Merge only under the merge policy, and only PRs whose current head SHA has a passing ledger row.
-7. **Close.** Drain one last time. Every spawned unit ends in a final state (landed, merge-ready, abandoned with a reason). Settle every worker that passes `references/settling.md`; list the ones left active and why. Check the done condition on the real product. Delete the heartbeat with `delete_scheduled_task`. Turn recurring corrections into standing orders or brief changes. Leave the store as the record.
+7. **Close.** Drain one last time. Every spawned unit ends in a final state (landed, merge-ready, abandoned with a reason, or absorbed into another unit's scope). Settle every worker that passes `references/settling.md`; list the ones left active and why. Check the done condition on the real product. Delete the heartbeat with `delete_scheduled_task`. Turn recurring corrections into standing orders or brief changes. Leave the store as the record.
 
 ## Verification
 
@@ -73,8 +74,8 @@ The thread forgets; the store doesn't. Every drain writes its tables before the 
 ## When things go wrong
 
 - A worker that went quiet: check its thread, branch, and PR. If it's dead, write what you know into its unit row and replan. Don't wait for everything to settle.
-- Retry by cause: too big, respawn with a smaller scope; flaky infrastructure, retry as is; tool errors, diagnose and retry with the approved model/provider/options. Changing that selection requires an explicit user override and a fresh worker/verifier diversity check. An unavailable selection is a gate, not a reason to substitute. Two retries, then abandon the unit and plan around it.
-- A worker that comes back late: check its work against the current frontier and ledger before accepting anything.
+- Retry by cause: too big or out of context, respawn with a smaller scope; a dropped connection or flaky infrastructure, retry the same brief; tool errors, diagnose and retry with the approved model/provider/options. Changing that selection requires an explicit user override and a fresh worker/verifier diversity check. An unavailable selection is a gate, not a reason to substitute. Two retries, then abandon the unit and plan around it.
+- A worker that comes back late: check its work against the current frontier and ledger before accepting anything, and hand any findings no one else has to a fresh worker.
 - When spawning more would produce garbage (bad upstream output, broken checks, dead infrastructure), write a stop line at the top of the standing orders, let running units finish, fix the cause, then clear it.
 - Your own tools keep failing: stop retrying, write what's done and how to resume into `decisions.tsv`, and hand back.
 

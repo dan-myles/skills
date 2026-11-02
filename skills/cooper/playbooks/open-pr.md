@@ -22,7 +22,7 @@ Turn finished work in this checkout into a reviewable PR, then babysit it to mer
 
    In T3, link every PR to the thread.
 6. **Write the body** as a briefing a reviewer reads in under a minute, under `##` headings, leaving out any with nothing to say. When the repo's PR skill has its own body format, use that and fold these in where they fit.
-   - **Why:** the problem and the approach, one to three sentences.
+   - **Why:** the user's goal, then the problem and the approach, one to three sentences.
    - **What changed:** one to three bullets, then the file map as a text tree, per **File maps** in `references/visuals.md`.
    - **Scope:** what it covers and what it deliberately leaves out.
    - **Tradeoffs:** only alternatives a reviewer would ask about.

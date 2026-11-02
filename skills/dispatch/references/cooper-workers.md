@@ -71,7 +71,7 @@ A send uses `t3_thread_send` with the exact coordinator ID, `mode: "auto"`, and 
 
 Dispatch sets `MERGE` per brief, and the matching label, before launch.
 
-`human` applies when the change touches auth, money, stored data or migrations, a public API or shared contract, another team's services or infra, or the root's never paths; when `cooper-blast-radius` leaves its safety fact unproven; when `cooper-adversarial-review` leaves an unresolved **Act on** finding; or when branch protection requires a person's approval. When unsure, choose `human`. Everything else is `auto`.
+`human` applies when the change touches auth, money, stored data or migrations, a public API or shared contract, another team's services or infra, or the root's never paths; when `cooper-blast-radius` leaves its safety fact unproven; when `cooper-adversarial-review` leaves a verified finding unfixed; or when branch protection requires a person's approval. When unsure, choose `human`. Everything else is `auto`.
 
 With `auto`, the worker merges once GitHub reports its exact verified head mergeable with every required check and review satisfied, using the repo's normal merge method. It never uses admin bypass, never overrides a required review, and merges a stack lowest layer first. It then closes its issue with the PR and merge SHA, comments, and notifies Dispatch. With `human`, it stops at merge-ready, labels the issue `merge-ready`, opens a `human` decision for the merge linked `related` to its issue, adds a `gh:pr` gate blocking its issue, and notifies Dispatch. Whoever merges, the worker then resolves its own gate and closes its issue; Dispatch closes the merge decision, recording who merged when Dan merged directly.
 
