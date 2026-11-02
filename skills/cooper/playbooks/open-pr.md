@@ -32,7 +32,7 @@ Turn finished work in this checkout into a reviewable PR, then babysit it to mer
 
    Add screenshots or video when they prove a claim. No SHAs, no file-by-file lists, no walls of text. Run `unslop` on it.
 7. **Babysit it.** Put `playbooks/babysit.md`'s Drive steps on the todo list and run them until the PR is merge-ready. Skip this only when the user said not to ("don't babysit", "just open the PR").
-8. **Stop at merge-ready.** Merge only when the user says to, or the brief's MERGE line is `auto` per `references/beads.md`, even if the repo's PR skill would merge; stop before that step otherwise. The one exception is a bug fix in a repo whose normal flow merges fixes once they're ready: follow that flow. In a Beads repo, record the PR on your issue, and close it when the PR merges.
+8. **Stop at merge-ready.** Merge only when the user says to, even if the repo's PR skill would merge; stop before that step. The one exception is a bug fix in a repo whose normal flow merges fixes once they're ready: follow that flow.
 
 **Reply:** the owning worker's clickable thread link per **Review handoffs** in the skill, the PR link, its base, what Review found and what changed because of it, and Babysit's status: the PR's state, what was fixed and dismissed, and what needs the user. Include the owning thread in review-ready status updates too. **Show:** the file map of what the PR changes, and for a stack, the PRs bottom to top with each one's state and owning worker link.
 

@@ -2,7 +2,7 @@
 
 Get an open PR to merge-ready and stop where the user's call begins. Cooper babysits every PR he opens, in Drive mode, unless the user said not to. For any other PR it starts when the user asks ("babysit this", "get it green", "check on #123", "answer the review comments").
 
-Babysitting merges only when the user explicitly says to merge or land it, or the brief's MERGE line is `auto` per `references/beads.md`, and then through the repo's normal flow.
+Babysitting never merges. Merge only when the user explicitly says to merge or land it, and then through the repo's normal flow.
 
 1. **Pick the mode** and say which.
    - **Drive.** The default: loop until the PR is merge-ready.
@@ -23,7 +23,7 @@ Babysitting merges only when the user explicitly says to merge or land it, or th
      Resolve each thread once it's answered, with the GraphQL `resolveReviewThread` mutation on the thread's id: a bot's thread after the fix or the dismissal, a human's after a fix. Leave a dismissed human thread open for the reviewer to accept or push back on.
    - **CI.** Classify before rerunning. A flaky or infrastructure failure gets one rerun of the whole run. The same failure twice is real: read the logs. A failure in code the diff doesn't touch usually means a stale base; check with `git merge-base --is-ancestor` and treat it as a conflict. Only a failure in the diff's own code gets a commit.
 5. **Wait without polling.** In T3, call `watch_pull_request` and end the turn; T3 wakes this thread when checks finish, someone comments, or the branch conflicts. After each wake, go back to step 3. Outside T3, use `gh pr checks <n> --watch`. When the only thing left is a silent AI reviewer, nothing wakes you if it never posts: wait with a bounded loop instead, checking its reviews every minute and giving up 10 minutes after the push. One that reviewed earlier commits and skipped this one is done; one that never reviewed the PR goes in the reply as missing. Answer user questions mid-loop and keep going until they say stop.
-6. **Stop at merge-ready:** checks green, every AI reviewer has reviewed the head commit or timed out, GitHub reports it mergeable with no blockers, and no unresolved threads except dismissed human ones waiting on their reviewer, which you report. A required approval is a wait, not a blocker to fix; report it. Under MERGE `auto`, merge now per `references/beads.md`. Under `human`, record the gate and keep the watch so the merge wakes this thread to close its issue. Otherwise, in T3, call `unwatch_pull_request` before handing back.
+6. **Stop at merge-ready:** checks green, every AI reviewer has reviewed the head commit or timed out, GitHub reports it mergeable with no blockers, and no unresolved threads except dismissed human ones waiting on their reviewer, which you report. A required approval is a wait, not a blocker to fix; report it. In T3, call `unwatch_pull_request` before handing back.
 
 **Reply:** the mode, the PR's state, what you fixed and what you dismissed with reasons, what's pending, and what needs the user. Every review-ready update and final handoff includes the owning Cooper/T3 worker link alongside the PR link, per **Review handoffs** in the skill. **Show:** a status grid of checks and threads (fixed, dismissed, open), with what needs the user on top.
 

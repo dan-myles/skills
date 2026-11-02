@@ -40,7 +40,7 @@ Cooper is still being designed. **Nothing in it has run on real work yet.** Don'
 
 ## Fleet layers
 
-Dispatch is a pinned long-running T3 project thread scoped to one repo, with its state in that repo's Beads graph under one Dispatch root issue. It coordinates Cooper worker threads directly with T3 tools. Fleet Control and support remain Grok Bots with their own registry and Executor transport; new Dispatches do not depend on them or participate in cross-project routing. No live stores, bots, installed skills or schedules are migrated by the T3 port.
+Dispatch is a pinned long-running T3 project thread scoped to one repo, with portable state under `.dispatch/<id>/`. It coordinates Cooper worker threads directly with T3 tools. Fleet Control and support remain Grok Bots with their own registry and Executor transport; new Dispatches do not depend on them or participate in cross-project routing. No live stores, bots, installed skills or schedules are migrated by the T3 port.
 
 ## Adding or renaming a skill
 
@@ -58,7 +58,7 @@ Do all of these together:
 
 Cooper's grills and Orchestrate stores remain in place. Home/repo model YAML files are no longer read, written or deleted. Launch settings live directly at each launching step; scoped explicit user instructions may override a job. `cooper-models` upgrades those skill source declarations.
 
-Dispatch owns one root issue in its repository's Beads graph, never a global instance lookup. The root records the initial thread's exact ID separately from the current owner, which is the root's assignee. Items, briefs, worker notes, reports, decisions and explicit Wayfinder maps live under it. Read `skills/dispatch/references/project-state.md` for the graph shape, who writes what, guarded takeover, privacy exclusions, and inaccessible-worker recovery. Legacy `.dispatch/<id>/` Git stores stay read-only until an explicit migration. No silent adoption or writing under another owner's root is allowed.
+Dispatch owns `.dispatch/<id>/` inside one repository, never a global instance lookup. The store ID derives from the initial thread's exact ID; metadata separates that immutable identity from the current owner and generation. Markdown board, journal, decisions, briefs, reports and explicit Wayfinder maps are Git-shareable. Read `skills/dispatch/references/project-state.md` for the format, save/share and explicit takeover protocol, privacy exclusions, and inaccessible-worker recovery. Git is not a distributed lock. No silent adoption or concurrent writing to another owner's store is allowed.
 
 ## Map
 
@@ -72,7 +72,7 @@ Dispatch owns one root issue in its repository's Beads graph, never a global ins
 | Refactor | Same behavior, better structure. Pins behavior first. | A merge-ready PR, unmerged. |
 | Perf | Fix mode for one slowdown, Climb mode to push a metric over many kept-or-reverted tries. | A merge-ready PR, unmerged. |
 | Prototype | Throwaway sketches to settle a design call. | A pick. No PR. |
-| Babysit | Getting a PR merge-ready: conflicts, review threads, CI. Waits with T3's `watch_pull_request`. | Merge-ready. Merges only when told, or under a Dispatch `MERGE auto` brief. |
+| Babysit | Getting a PR merge-ready: conflicts, review threads, CI. Waits with T3's `watch_pull_request`. | Merge-ready. Never merges unless told. |
 | Orchestrate | A whole program handed to one T3 thread that never writes code: briefs, standing orders, a store of tables in `~/.bob-n-frank/orchestrate/<program>/`, Cooper worker threads in their own worktrees, verifiers on the other model family, drains on a T3 heartbeat. Ported from pstack's Orchestrate. | Merge-ready PRs; merges only if the standing orders allow it. |
 | Cleanup | Prunes worktrees and other disk leftovers after an audit; the user picks what goes. | Space reclaimed. |
 
@@ -103,7 +103,7 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 - Models: recommends source-declaration upgrades from session evidence. It does not apply them; cooper-models handles approved edits.
 - Correct: makes a repo's repeated agent mistakes impossible (architecture, then types, then lint, then tests), proven against a real past mistake.
 
-**`dispatch`** is the long-running project coordinator. Its existing `dispatch-*` setup/decompose/chase/digest structure and local event/report/explicit Wayfinder playbooks remain. Work lives in the repo's Beads graph; the inline T3 board renders it with live worker evidence, with Now, Backlog, What landed, Watch and links. Wayfinder maps and decision resolutions are Beads issues, with optional tracker mirrors. Cooper workers claim and update their own issue, merge only under an `auto` merge policy, and notify the current exact Dispatch owner via T3. See `docs/dispatch-t3-validation.md` for checks and limitations.
+**`dispatch`** is the long-running project coordinator. Its existing `dispatch-*` setup/decompose/chase/digest structure and local event/report/explicit Wayfinder playbooks remain. The canonical board and running journal live in `.dispatch/<id>/`; the optional inline T3 board derives from Markdown, with Now, Backlog, What landed, Watch and links. New Wayfinder maps and decision resolutions live in the store, with optional tracker mirrors. Cooper workers notify the current exact Dispatch owner via T3 and never edit its store. See `docs/dispatch-t3-validation.md` for checks and limitations.
 
 ## Decisions and why
 
@@ -111,11 +111,10 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 - **Superseded 2026-10-29: `models.yaml` was data, not Markdown.** Dan approved hardcoding each role's model/effort in its launching skill and retaining cooper-models to upgrade those source declarations. Existing user files stay untouched.
 - **Principles are separate skills,** like pstack, so Cooper loads only the one a step needs. A single combined file was rejected.
 - **Verify skills live in each repo.** Only the generator is global.
-- **Auto-babysit, with review replies.** Dan wants PRs handed back merge-ready. Merging still needs his say-so, except under Dispatch's merge policy below.
-- **Beads for tracking; workers merge low-risk work (2026-11-02).** Dispatch and Cooper moved from `.dispatch/` Git stores to the repo's Beads graph. Dan chose: Beads as the only store, workers claim and update their own issue, setup commits only `.beads/` config. Workers may merge end to end when Dispatch marks a job `MERGE auto`, and tell Dispatch; high-blast-radius work (auth, money, stored data, public API, other teams' infra, unproven blast radius) is `human` and waits for Dan. Workers may escalate, never downgrade.
-- **Running count from the final project-wide list (2026-11-02).** Dan, from GameStock's Dispatch, after a status missed a Cooper that resumed mid-pass: status and chase read the project's full live thread list at entry and again just before rendering, and the renderer trusts the last list. A partial or missing list makes the count a lower bound. Status stays read-only, and still shows live Coopers when Beads is down.
-- **Coopers always in worktrees; open Coopers always in Now (2026-11-02).** Dan, from CrabStock's Dispatch: every Cooper launch gets its own T3 worktree, read-only investigations included, never the project root. Every unsettled Cooper, idle or waiting on him, shows in Now; the board counts open Coopers separately from those running, and a reused worker gets one card.
-- **Passwordless Beads server (2026-11-02).** Stapler's Dolt is tailnet-only, so Dan dropped its passwords: one `beads` account with no password and full privileges, no admin credential, nothing in Vaultwarden or on client machines.
+- **Auto-babysit, with review replies.** Dan wants PRs handed back merge-ready. Merging still needs his say-so.
+- **Beads dropped (2026-11-02).** Dan rolled Dispatch and Cooper back from the shared Beads graph to the `.dispatch/<id>/` Git store, and dropped the `beads` program. The worker-merge policy that shipped with Beads went with it, so workers stop at merge-ready again. Later non-Beads work stays: the pstack updates, Coopers in worktrees, open Coopers in Now, and the final-list running count (now a `Live list:` line on `board.md`).
+- **Running count from the final project-wide list (2026-11-02).** Dan, from GameStock's Dispatch, after a status missed a Cooper that resumed mid-pass: status and chase read the project's full live thread list at entry and again just before rendering, and the board states that final list's time. A partial or missing list makes the count a lower bound. Status stays read-only.
+- **Coopers always in worktrees; open Coopers always in Now (2026-11-02).** Dan, from CrabStock's Dispatch: every Cooper launch gets its own T3 worktree, read-only investigations included, never the project root. Every unsettled Cooper, idle or waiting on him, shows in Now; the board counts open Coopers separately from those running.
 - **Decided stays decided (2026-10-19).** In the CrabStock payment stack (#84–#94), workers redesigned around blockers without asking: Kafka swapped for Postgres polling when librdkafka wouldn't build, a provider fallback Dan had dropped, a split ledger, production's outflow cap set to 0, another service's infra edited during a restack. `skills/cooper/SKILL.md` now names the calls that stay Dan's (stored data shape, transport, providers, money values, other teams' infra, shared contracts, anything he already decided). Briefs carry DECIDED, Review runs a decision check on every diff, PRs list **Decisions made here**, and Orchestrate holds a departure as `needs-decision` with a gate. Everything outside that list stays Cooper's to decide, per the 2026-10-13 complaint that Cooper asked too much.
 - **"Adversarial review", not "interrogate".** It reviews code; it doesn't question the user.
 
@@ -128,7 +127,7 @@ Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf 
 **Parked, Dan unsure:**
 
 - `figure-it-out` (a playbook for jobs no other playbook fits) and `show-me-your-work` (an auditable decision log). Refactor and Perf currently stop and propose a split when a job is too big.
-- Run (pstack's Autonomous run), Shipping, Autopilot-stack, and Autopilot-full. Run and Shipping were ported, then removed on 2026-10-12 until needed; Orchestrate keeps its own Land step. Hold until Cooper has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Cooper's rule that merging needs Dan or a Dispatch `MERGE auto` brief.
+- Run (pstack's Autonomous run), Shipping, Autopilot-stack, and Autopilot-full. Run and Shipping were ported, then removed on 2026-10-12 until needed; Orchestrate keeps its own Land step. Hold until Cooper has earned trust on watched runs. Autopilot-full merges on its own, which clashes with Cooper's never-merge rule.
 - Pause safely and Session pickup. T3 threads already hold much of that context.
 - Formal verification (pstack's `create-formal-verification-skill` and `maintain-formal-verification-skill`, added in 0.15.26 to 0.15.28). They prove one property of a risky piece of code (races, retries, leases, state machines) in every case within a bound, TLA+ by default, and leave a skill in the repo with a sync commit for upkeep. If ported, they'd become two more `cooper-verify` playbooks. Parked 2026-10-19: not needed yet.
 

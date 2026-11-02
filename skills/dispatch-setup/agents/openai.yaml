@@ -1,7 +1,7 @@
 interface:
   display_name: "dispatch-setup"
-  short_description: "Onboard a repo to Beads and set up its Dispatch root"
-  default_prompt: "Use $dispatch-setup for this repository's Dispatch root within its approved scope."
+  short_description: "Set up a portable Dispatch store and its T3 owner"
+  default_prompt: "Use $dispatch-setup for the selected repository Dispatch store within its approved scope."
 
 policy:
   allow_implicit_invocation: false

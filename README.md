@@ -111,9 +111,9 @@ Dispatch and Cooper run inside [T3 Code](https://github.com/pingdotgg/t3code). D
 
 **Fleet Control** retains `grokbot-fleet-control` for its existing bot scopes and approved cadences. New T3 Dispatches do not register with it or depend on it; cross-project T3 Dispatch routing is outside this port.
 
-**Dispatch** is the per-project engineering lead. Each repository tracks its work in a [Beads](docs/beads.md) graph on the shared Dolt server, and each Dispatch owns one root issue there. Independent Dispatches use separate roots; taking over another requires explicit authorization and a guarded ownership change. It decomposes approved work, launches Cooper, chases CI/reviews/stalls, and owns the item until completion, explicit abandonment, or handback. It never writes repo code. PRs that need Dan's review stay owned while waiting on him.
+**Dispatch** is the per-project engineering lead. Each repository uses the same `dispatch` skill with a separate Git-shareable `.dispatch/<id>/` store. Independent Dispatches can use separate stores; taking over another store requires explicit authorization and an exclusive-writer handoff. It decomposes approved work, launches Cooper, chases CI/reviews/stalls, and owns the item until completion, explicit abandonment, or handback. It never writes repo code or merges. A merge-ready PR stays owned while waiting on Dan.
 
-**Cooper** is the engineer. Each worker claims its Beads issue, runs the right playbook, performs repo work and verification, opens its authorized PR, keeps the issue's notes current, and reports in its T3 reply, as an issue comment, and to the exact owning Dispatch thread. Coopers can use subagents. Dispatch marks each job's merge policy: workers merge low-risk `auto` work themselves; high-blast-radius `human` work waits for Dan. Standalone Cooper in a Beads repo tracks its own job there too.
+**Cooper** is the engineer. Each worker runs the right playbook, performs repo work and verification, opens its authorized PR, and reports in its own T3 reply and notifies the exact owning Dispatch thread. Dispatch preserves a sanitized copy with source markers in Git. Coopers can use subagents. Only Dan approves merges.
 
 **GameStock Support** uses `grokbot-gs-crisp-support`, imported from the content Dan supplied. Its interactive Crisp queue and exact production-write approvals remain separate from engineering auto-dispatch. It keeps its own Executor launch and thread-message report contract, plus the existing approval and settlement boundaries.
 
@@ -169,20 +169,28 @@ Small changes go straight through. Cooper only stops to ask when the work is com
 
 ## T3 Dispatch project state
 
-In a T3 project thread for the repository, invoke `$dispatch setup` or `/dispatch setup`. Setup verifies the exact thread/project/repository identity and the `bd` client. For a new repository it picks an unused database name on the shared server, runs `bd init` (which creates the database) with bd's agent files and hooks skipped, and commits just the `.beads/` configuration to `main` with `[skip ci]`. For an onboarded repository it only verifies the connection. The server is tailnet-only and its single `beads` account has no password, so no machine needs credentials. It then creates, resumes or takes over the Dispatch root and pins the coordinator. Setup creates no schedules or workers.
+In a T3 project thread for the repository, invoke `$dispatch setup` or `/dispatch setup`. Setup verifies the exact thread/project/repository identity, initializes or resumes its owned store, and pins the coordinator with the available `t3_thread_organize` pin action. A missing pin capability leaves an explicit manual step. Setup creates no schedules or workers.
 
-| Graph | Holds |
-| --- | --- |
-| Dispatch root (pinned epic) | Identity, current owner, working rules and standing orders |
-| Child issues | Work items: brief in description/design/acceptance, labels for approval, merge policy and gates |
-| Notes | The owning worker's current state |
-| Comments and Dolt history | Launch records, reports, handoffs, the running history |
-| `decision` issues | Questions for Dan, then his answers with exact words and sources |
-| Wayfinder map epics | Planning tickets with real dependency edges |
+```text
+<repo>/.dispatch/t-<sha256 of exact initial thread ID>/
+├── store.md          stable identity, current owner and generation, standing orders
+├── board.md          Now, Backlog, What landed, Watch and links
+├── journal.md        running history, source/report markers, ownership handoffs
+├── decisions.md      human decisions with exact words and sources
+├── briefs/           worker scope, authorization, exact launch identity
+├── reports/          shareable evidence with source, attempt and head SHA
+└── wayfinder/        explicitly invoked planning maps and resolutions
+```
 
-The board is rendered each pass from the graph plus live T3 and PR evidence; nothing is committed after setup. Ownership is the root's assignee, so takeover is one guarded update that refuses if someone else changed it first. Takeover still does not make another user's worker threads accessible: inaccessible workers stay gated with their last verified evidence. See [the state and takeover contract](skills/dispatch/references/project-state.md), [worker contract](skills/dispatch/references/cooper-workers.md) and [Cooper's Beads rules](skills/cooper/references/beads.md).
+The ID is `t-` plus the full lowercase SHA-256 of the initial thread's exact UTF-8 ID, including prefixes and punctuation. `store.md` retains that exact original ID forever. The owner thread/user and ownership generation can change without renaming the store. Only the current owner edits it. A second independent Dispatch gets its own folder and must avoid overlapping jobs/branches.
 
-Legacy `.dispatch/<id>/` Git stores are left untouched and read-only; migrating one into Beads needs an explicit request. Nothing secret, private or machine-specific goes in the graph.
+Save board and journal updates together, review `git diff -- .dispatch/<id>`, and automatically commit/push the owned state documents directly to `main` with `[skip ci]`. No per-save approval is needed. Leave unrelated changes and outgoing commits untouched; use a dedicated checkout from `origin/main` when needed. Never force-push or change repository protection settings. The skip marker suppresses supported CI triggers, not every possible integration. Tell the recipient which branch/commit contains the latest state. Pulling an unshared local checkpoint is impossible. Store sanitized evidence and repo-relative paths, never secrets, credentials, private customer material, absolute machine paths, or connection tokens. Runtime access is verified again on each machine.
+
+To transfer ownership, stop the old writer, save/share its final snapshot, pull that branch on the recipient's machine, start a new Dispatch in the same repo, and explicitly request `dispatch takeover <id>`. Preserve identity/history and increment the owner generation. Share the ownership transition before new worker actions. If the old thread is inaccessible, the operator must confirm it will no longer write. Git is not a lock; divergent ownership or offline uncertainty stops mutations until reconciled.
+
+Takeover does not make another user's worker threads accessible. Keep inaccessible workers gated with their last verified report/time/head. Recover access and confirm control before retargeting or settling; a replacement requires explicit approval and evidence the prior worker is stopped or isolated. Never silently declare it finished or discard its provenance. See [the state and takeover contract](skills/dispatch/references/project-state.md) and [worker contract](skills/dispatch/references/cooper-workers.md).
+
+Dispatch coordinates; Cooper investigates, implements and validates in T3 worker threads. Each worker reports its store/item/attempt/generation and notifies the exact current owner via `t3_thread_send`. Dispatch reads the full reply and preserves shareable evidence before advancing report markers. Lost/duplicate notifications are reconciled without duplicate launches. The worker model choices are preserved. Their source declarations are now direct launch settings rather than YAML lookups.
 
 [`tools/t3-grokbot-bridge`](tools/t3-grokbot-bridge/README.md) remains a separate optional bot tool. T3 Dispatch does not require it, Fleet Control, Executor, a global instance registry, or an external Page. No actual CrabStock state, live bot configuration, or installed skill copies are migrated by this source change. Historical [Grok Bot validation](docs/grokbot-validation.md) records the previous port, not this Dispatch runtime. Current checks are recorded in [T3 Dispatch validation](docs/dispatch-t3-validation.md).
 
@@ -196,7 +204,7 @@ Each launch step declares its exact model, effort and provider family. Cooper bu
 
 ## House rules
 
-- Cooper never deploys, deletes data, or force-pushes shared branches without you. It merges only when you say so, or when Dispatch's brief marks a low-risk job `auto`; high-blast-radius work waits for you.
+- Cooper never merges, deploys, deletes data, or force-pushes shared branches without you.
 - Everything Cooper says is backed by a run, a line of code, or flagged as a guess.
 - Comments explain why. Prototypes never ship.
 - If a session went sideways, run `/cooper-improve` and Cooper fixes his own skills.

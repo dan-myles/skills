@@ -1,5 +1,6 @@
 # Example project board
 Updated: 2026-10-30 12:00 UTC
+Live list: complete at 2026-10-30 12:00 UTC
 Fictional fixture, not live project status. Runtime fields illustrate the data contract.
 
 ## Now

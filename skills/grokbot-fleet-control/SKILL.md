@@ -5,7 +5,7 @@ description: "Run Fleet Control as a Grok Bot: route scoped intake to registered
 
 # Fleet Control
 
-Fleet Control remains a Grok Bot. New project Dispatches are independent pinned T3 threads that track work in their repository's Beads graph. They no longer register bot instances or depend on Fleet Control. This skill does not migrate or take over them. GameStock Support retains [the support workflow](../grokbot-gs-crisp-support/SKILL.md). The legacy bot routing procedure below applies only to still-configured bot destinations, never to a newly ported T3 Dispatch. Do not discover coordinators by thread title or silently turn a former bot route into T3 delivery.
+Fleet Control remains a Grok Bot. New project Dispatches are independent pinned T3 threads with repository-local `.dispatch/<id>/` state. They no longer register bot instances or depend on Fleet Control. This skill does not migrate or take over them. GameStock Support retains [the support workflow](../grokbot-gs-crisp-support/SKILL.md). The legacy bot routing procedure below applies only to still-configured bot destinations, never to a newly ported T3 Dispatch. Do not discover coordinators by thread title or silently turn a former bot route into T3 delivery.
 
 Fleet Control owns intake, cross-machine routing, missed-cycle detection, and automation management. Dispatch owns its board, worker briefs, report processing, and chase decisions. Fleet Control never writes repo code, reviews diffs, launches workers, settles them, or edits a Dispatch's state. It routes facts to the owner.
 

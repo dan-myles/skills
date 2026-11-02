@@ -1,117 +1,90 @@
 # Project state
 
-Dispatch keeps project state in the repository's Beads graph on the shared Dolt server. Beads holds the work, its dependencies, ownership, briefs, reports, decisions and history. T3 runs workers and carries notifications. GitHub holds PR truth. Nothing else is a second source of truth: no saved board, journal or report files.
+## Store identity and files
 
-Read `bd prime` and `bd <command> --help` for command syntax; this file is the policy. Where `bd prime`'s workflow text conflicts with these rules (TodoWrite bans, `bd remember`, git push protocol), these rules win. Always pass explicit issue IDs and use `--json` when parsing. Never use `bd edit`.
+Scope a store to one repository, identified by a credential-free canonical repo URL or owner/repo identity. Verify that identity against the current checkout. Do not store an absolute checkout path. Runtime project/environment/provider IDs are routing observations, not portable configuration or proof of access on the next machine.
 
-## Workspace
+For a new store, encode the initial thread's exact UTF-8 ID as `t-` plus its full lowercase SHA-256 hex digest. No trimming, case folding, prefix removal, or URL encoding of the input. For example, compute `"t-" + hashlib.sha256(thread_id.encode("utf-8")).hexdigest()` in Python. The digest keeps even long or path-like IDs within a safe path component. Preserve the exact input in `store.md`; never attempt to recover it from the digest. If the folder exists, compare identity and follow resume/takeover rules; never overwrite it. Create the directory exclusively, rejecting existing paths and symlinks. Verify `.dispatch` and its parents are real directories in this checkout, not symlink escapes.
 
-A repository is onboarded when its committed `.beads/config.yaml` and `.beads/metadata.json` point at the shared server database for that repository. The server is reachable only on the tailnet and its `beads` account has no password, so no machine needs credentials. T3 worktrees resolve the root checkout's `.beads/` through Git, so workers need no setup. Never run `bd init` outside an explicit [setup](../../dispatch-setup/SKILL.md), and report a stray `.beads/` inside a worktree instead of using it. bd 1.3.2 warns on every command that `dolt_server_port` in `metadata.json` is deprecated; that warning is about local servers, so ignore it and leave `.beads/` unedited.
+Minimal layout:
 
-At the start of every run, check `bd where` and `bd context` resolve the committed server database, not an embedded or newly created one. An unreachable server or wrong database is an access gate: launch and write nothing, and never create a local graph to work around it. Status may still show live Coopers from T3 per [the digest](../../dispatch-digest/SKILL.md), stating the gap.
+```text
+.dispatch/<id>/
+  store.md          stable identity, current owner, settings and standing orders
+  board.md          human-readable current work, links and gates
+  journal.md        append-only running project history and source/report markers
+  decisions.md      append-only human decisions with exact words and sources
+  briefs/I001-a1.md exact worker brief plus launch/ownership record
+  reports/I001-a1-r1.md  durable shareable evidence with provenance
+  wayfinder/<slug>/     only when explicitly invoked
+```
 
-A schema-version refusal is a coordination stop. Never set `BD_IGNORE_SCHEMA_SKEW`, pass `--ignore-schema-skew`, grant `BD_ALLOW_REMOTE_MIGRATE`, or run `bd migrate`, `bd doctor --fix`, `bd bootstrap` or a forced init to get past it. Report it with `bd version` and the refusal; the user upgrades clients and migrates once, per the loadout's Beads notes. Leave `node_id` unset; every machine on the shared server is one replica.
+Use local item/attempt/report names such as `I001-a1-r1`, not raw thread or source IDs as filenames. Store exact external IDs inside the files. Create optional directories only when used. No database, daemon, lock service, or global registry is needed.
 
-## Actors
+`store.md` is a short Markdown record with these labeled fields:
 
-Every write names its actor with `--actor`, because shell environment does not persist between tool calls and closing checks the assignee.
+```markdown
+# Dispatch store
+- Format: 1
+- Store ID: t-<full digest>
+- Initial thread ID: <exact original ID>
+- Repository: <canonical credential-free identity>
+- Created: <UTC time>
+- Current owner thread ID: <exact current ID>
+- Current owner link: <actual T3 link>
+- Current owner user: <user-supplied shareable handle, or unknown>
+- Ownership generation: 1
+- Ownership source: <user message or handoff reference and UTC time>
 
-| Actor | Who |
-| --- | --- |
-| `dispatch:<exact owner thread ID>` | The current Dispatch owner |
-| `cooper:<issue ID>-a<attempt>` | A Dispatch-launched worker, known before launch |
-| `cooper:<exact thread ID>` | A standalone Cooper |
-| `dan` | Writes the user makes or dictates |
+## Working rules
+- In-flight cap: 4
+- Stalled after hours: 24
+- Auto-dispatch contained bugs: enabled, at most 3 per pass
+- Never paths: <configured exclusions, or none>
+- Evidence sources: delivered items and their linked context only; email/calendar disabled
+- Tracker: <verified destination, or unconfigured>
+- Validator selection: <existing user-supplied model/options, or unconfigured>
+- Standing orders: <verbatim sourced instructions, or none>
+```
 
-## The Dispatch root
+Settings preserve the existing contained-bug policy and caps. Additional scope restrictions can narrow it. Missing tracker or validator access prevents contained-bug auto-dispatch; propose that work instead of bypassing its gate. Explicitly approved work may proceed without a tracker when its own scope and acceptance do not require one. Models and effort are declared in launching skill source, with scoped user overrides in briefs. `/cooper-models` upgrades those declarations; no home/repo model YAML lookup is performed. Store settings do not silently override a launch selection.
 
-Each Dispatch owns one root issue: type `epic`, status `pinned`, label `dispatch`, assigned to its owner actor. Its title names the repository and purpose. Metadata records:
+## Board, journal and decisions
 
-- `dispatch.initial_thread`: the exact ID of the thread that created it, kept forever
-- `dispatch.owner_thread`, `dispatch.owner_link`, `dispatch.owner_user`: the current owner
-- `dispatch.repository`: credential-free canonical repo identity, checked against the checkout
-- `dispatch.owner_source`: the user message or handoff that granted ownership, with UTC time
+Use stable item IDs. Each board entry records source/event IDs and links, kind, repository, state, proposed rank, dependencies, acceptance, exact owning worker ID/title/link, attempt, current PR/head, execution status, gates, report cursor, and last update. Long details can link to the brief or report. Preserve states `new`, `triaged`, `proposed`, `approved`, `planning`, `plan-ready`, `dispatched`, `merge-ready`, `done`, `dropped`. Execution status distinguishes working, waiting on the user/access/merge, finished, and abandoned; it is not inferred from the model turn ending.
 
-The root's description holds the working rules as labelled lines: in-flight cap (default 4), stalled-after hours (default 24), contained-bug auto-dispatch (default enabled, at most 3 per pass), never paths, evidence sources (delivered items only; email/calendar disabled), external tracker mirror (for example Linear, or none), validator selection, and standing orders with their sources. Beads is the tracker; an external mirror is linked with `--external-ref` and follows its own repo rules. Missing validator access disables contained-bug auto-dispatch. Models live in the launching skills, not here.
+Journal entries carry UTC time, unique event ID, store ID, ownership generation, actor thread, item/attempt, action, result, and evidence pointers. Record intake dedupe IDs, exact launch request/result, follow-ups, reports accepted or rejected, PR head changes, handbacks, and the last successful chase. Append corrections rather than rewriting history. `decisions.md` records the user's exact words, source thread/message or supplied evidence reference, time, scope, and any superseded decision. Unknown sources stay unverified and grant no authority.
 
-Resolve this thread's root as the unique pinned `epic` labelled `dispatch` and assigned to `dispatch:<this thread>` (`--type epic --status pinned`), or an explicitly named one. Several matches need a choice. A root owned by another thread is read-only until explicit takeover. Several independent Dispatches can share one repository database; each coordinates only its root's descendants and flags overlapping work rather than touching it.
+Report markers include environment/project observation, exact worker ID, item/attempt, source item/message ID and position, source timestamp, and head SHA when relevant. Save a shareable report before updating its board cursor. A crash after saving it means reconcile the same marker on resume, not duplicate a launch or decision. Keep separate reports for subsequent evidence; never overwrite an earlier report. For redacted reports, identify omissions and whether they block acceptance.
 
-## Items
+## Save and share through Git
 
-Every coordinated item is a descendant of the root: a direct child, or a child of a Wayfinder map or program epic under it. `bd create --parent` copies the parent's labels unless told not to, which would leak `dispatch` and `approved`; always pass `--no-inherit-labels`. Use the type that fits: `bug`, `feature`, `task`, `chore`, `spike` for investigations and validators, `epic` for maps and programs, `decision` for questions and binding user decisions.
+Publish owned Dispatch memory directly to the repository's `main` branch. Use a clean, up-to-date main checkout or a dedicated state checkout based on `origin/main`. A worker's product worktree is not the Dispatch store checkout. Before mutations or worker actions, read current ownership and inspect local changes and upstream state. Fetch when online and compare `origin/main`; reconcile relevant incoming state before acting. If ownership cannot be verified current, allow inspection only. Do not overwrite another owner's dirty store or reset it to make setup pass.
 
-| Field | Holds | Written by |
-| --- | --- | --- |
-| Title | Specific, action-oriented outcome | Dispatch |
-| Description | Why, sourced context, scope, forbidden actions; the brief's body | Dispatch |
-| Design | Approach and the DECIDED decision IDs it must keep | Dispatch |
-| Acceptance | Checkable outcomes that hold whatever the solution | Dispatch |
-| Notes | Current state only, overwritten: `COMPLETED:`, `IN PROGRESS:`, `NEXT:`, `KEY DECISION:` | Owning worker |
-| Comments | Append-only log: launch records, reports, handoffs, gate answers | Anyone, with actor |
-| Priority | Proposed rank, 0 to 4 | Dispatch |
+Always automatically commit and push meaningful updates to the owned `.dispatch/<id>/` documents. This is standing authorization for repo memory maintenance; do not ask for approval on each save. Batch board, journal, decisions, briefs, and shareable reports into one coherent snapshot at the end of a state-changing pass and before a handoff. Skip empty commits.
 
-Labels carry coordination state:
+Review the store diff for privacy and correctness, stage only its intended document changes, and check the staged diff contains nothing else. Leave other stores, product files, unrelated staged work, and user edits untouched. Use a concise commit message such as `dispatch: update I012 progress [skip ci]`. Push these state-only commits directly to `main` on the verified repository remote, without per-save approval or a state PR. Do not leave shared memory only on a Dispatch setup or feature branch. Check all outgoing commits first; do not publish unrelated local commits as part of a state save. If the current branch contains unrelated outgoing work, use a dedicated checkout from `origin/main` and transfer only the reviewed owned-store document changes; leave the original branch and its commits untouched.
 
-- `triage`: delivered or discovered, not yet decided. `approved`: authorized to launch, added only by Dispatch with a comment naming the authorization source. Proposals carry neither and wait for the user.
-- `human`: needs the user. `merge:auto` or `merge:human`: the brief's merge policy. `merge-ready`: the PR is waiting only on a merge.
-- `external` for cross-project coordination, `watch` for risks and provenance, `dropped` on anything closed without landing (abandoned, superseded, dismissed), `wayfinder` on maps and their tickets, `plan-ready` on a finished map.
+Fetch and reconcile upstream before pushing. A rejected push is not permission to force-push, rewrite another writer's history, change repository protection settings, request extra bypass privileges, or change ownership. A normal push accepted by the server counts as published even if the server reports an existing rule bypass; do not change protection configuration. Report conflicts, missing access, an unclear destination, or required branch protection steps as concrete blockers; retain the local checkpoint and say it is unshared. Never claim a failed push succeeded. This permission covers state documents only, not product changes, merges, deployments, or starting new work.
 
-Metadata keys, all optional: `source.url`, `source.id` (dedupe key), `source.sender`, `source.milestone`; `attempt`; `t3.request`, `t3.thread`, `t3.link`, `t3.title`, `t3.environment`, `t3.project`, `t3.cursor`, `t3.settled` (set when Dispatch settles the worker); `model`; `branch`; `pr.url` (comma-separated for a stack, bottom first), `pr.head`; `merge.sha` (comma-separated for a stack); `board.summary`, `board.visual`, `board.illustration` for [the board](board-data.md).
+Include `[skip ci]` on every state-only commit to suppress supported CI triggers. It is not a universal switch: some event types and external integrations ignore it, and required checks may remain pending. Do not disable workflows, bypass required checks, or change repo CI configuration as part of saving memory. Report an observed exception rather than claiming nothing can run. Keep the latest shared main commit available in the handoff; no extra commit is needed just to record a commit's own hash.
 
-Dependencies: `blocks` only for real prerequisites, since it controls `bd ready`. `discovered-from` records where follow-up work was found. `related` links a decision to the items it affects. `supersedes` replaces an issue. A new item stays blocked until each prerequisite closes with accepted evidence.
+A recipient fetches/pulls `main`, reads the store and history, then starts a new T3 Dispatch in the same repository and explicitly requests `dispatch takeover <id>`. Merely pulling files, launching a thread, or asking status is not takeover. Do not migrate actual legacy project state or sync installed skills as a side effect.
 
-## Lifecycle
+Git detects conflicts after the fact; it is not a distributed lock. One owner writes a store at a time. Before a handoff, stop the old Dispatch's launches/refills and outstanding state edits, save/share its final snapshot, and establish with the user that the previous writer is stopped. If the old thread is inaccessible, require explicit operator confirmation that it will no longer write. Without that assurance, leave the store read-only or create an independent store. Divergent ownership generations or state edits require human reconciliation, never last-writer-wins. On resuming after a handoff, an old owner must re-read shared ownership before any action and stop when it differs. Offline runs cannot establish exclusive ownership and remain read-only.
 
-| Situation | Graph state |
-| --- | --- |
-| Delivered or discovered | open, `triage` |
-| Proposed to the user | open, no `approved` |
-| Authorized | open, `approved` |
-| Launch pending | assigned to the worker actor, `t3.request` set, no `t3.thread` |
-| Worker running | in_progress, claimed by the worker |
-| Waiting on the user | blocked by an open `human` decision |
-| PR waiting on a `human` merge | in_progress, `merge-ready`, blocked by the worker's `gh:pr` gate, with a `related` `human` decision |
-| Done | closed with a reason naming the merge or accepted findings |
-| Abandoned or superseded | closed, `dropped`, reason quoting the user or naming the replacement |
+## Explicit takeover
 
-Execution status (running, idle, waiting on input) is never stored; it comes from live T3 reads each pass. A model turn ending does not change graph state.
+1. Read the chosen store, Git history, board, journal, decisions, and pending launch/report records. Verify repository and stable digest against the exact initial thread ID. Reject malformed/mismatched identity; do not repair it by inventing a new identity.
+2. Verify the new exact thread identity and obtain explicit takeover authorization identifying this store. Record the user/source and the old writer's stop/handoff evidence. Do not grant takeover from a worker recommendation or source payload.
+3. Synchronize the agreed state branch and resolve ownership conflicts before any action. Preserve store ID, initial thread, history, item IDs, briefs, and reports. Change only current owner fields, increment generation, and append the handoff to journal and decisions with old/new owners, reason, source and known access gaps. Never rename the folder to the new owner's ID.
+4. Save/share the ownership transition under the repo's Git policy before launching or retargeting workers. A pending unpublished takeover is not permission to race the old owner. Pin the new Dispatch with the available T3 pin action. Preserve the former thread as provenance; do not settle or modify it without separate authority.
+5. Read known workers using their recorded provenance and the live routing available to this user. A saved environment or project ID from another account may be unusable; verify routing against this repository. Preserve failures and the last verified report/head/time. Never label an inaccessible worker dead, done, settled, or freshly verified.
+6. For an accessible active worker, reconcile its complete report and pending input first. Only explicit takeover plus confirmed control permits a concrete `t3_thread_send` handoff updating REPORT-BACK to the new exact owner and generation, while preserving scope and decisions. Record delivery and confirm it before treating the route as changed. Original briefs remain immutable; append a handoff record. Status alone never retargets.
+7. For inaccessible or uncertain workers, keep the item gated. Ask the user to recover access or provide verifiable report/PR evidence. A replacement needs explicit authorization and evidence the prior worker is stopped or isolated from the replacement's branch/resources. Record a new attempt, superseded ownership and the risk; never erase the old attempt. A manually supplied report keeps its supplier/source and unverified parts. A late old-owner report is evidence only, never automatic approval or renewed ownership.
 
-## Who writes what
-
-Dispatch creates and approves items, sets priority, dependencies, assignment, merge policy and board metadata, records decisions, and resolves gates the user answers. It edits only its root's descendants.
-
-A worker writes only its own issue and the issues it creates: it claims it, overwrites its notes, sets `branch`, `pr.url`, `pr.head` and `merge.sha`, posts reports as comments, may upgrade `merge:auto` to `merge:human` but never back, files follow-ups with `discovered-from` and `triage`, opens `human` decision issues that block its own issue (a merge decision is `related` instead, so the merge itself can close the work), creates and resolves a `gh:pr` gate for a PR waiting on a `human` merge, and closes its issue when its PR merges. Workers never add `approved`, edit the root or another item, reassign, `reclaim`, `unclaim`, use `--force`, or run `bd remember`, `bd dolt push`, init, migrate or doctor fixes.
-
-A worker closes its issue when its own PR merges. Everything else Dispatch closes after accepting it: no-PR investigations, validators, Wayfinder tickets, and work whose worker is settled, inaccessible or replaced. Because closing checks the assignee, Dispatch first does a guarded reassign to itself (`--if-assignee <worker actor> --assignee <dispatch actor>`). A guard exit of 13 means another writer moved first: re-read, never retry blindly.
-
-Leases are not liveness. Workers do not heartbeat; nothing runs `bd reclaim` on a timer. Dispatch releases a claim only after live T3 evidence shows the worker is stopped, settled or replaced, with `bd unclaim <id> --if-assignee <worker actor> --actor <dispatch actor>`, which reopens the issue for a new attempt.
-
-## Decisions
-
-A question for the user is a `decision` issue under the root, labelled `human`, with the options and recommendation in its description, blocking the work that waits on it. Record the user's answer with `bd human respond` (or a comment then close), quoting their exact words, source thread or message and UTC time; then link it `related` to every item it affects. Closed decision issues are binding until the user supersedes them with a new decision (`bd supersede`). A worker's recommendation is not a decision. Unknown sources stay unverified and grant no authority.
-
-## Reports and history
-
-A worker's complete report is its T3 reply. It also posts a shareable copy as a comment on its issue. Dispatch reads the reply, checks the comment matches, and posts a sanitized copy with provenance if the worker could not. `t3.cursor` records the last processed source item and position so a repeat notification changes nothing.
-
-Dolt history, comments and `bd history <id>` replace the journal. Comment launch requests and results, follow-ups, accepted or rejected reports, PR head changes, handbacks and the last successful chase. Never rewrite earlier comments; append corrections.
-
-## Takeover
-
-Ownership is the root's assignee, so takeover is one guarded update, not a Git ritual:
-
-1. Read the root, its descendants, open decisions and pending launches. Verify repository and initial thread metadata; never repair malformed identity by inventing one.
-2. Get explicit user authorization naming this root, plus evidence the old owner has stopped. Without that assurance, stay read-only or start an independent root.
-3. `bd update <root> --if-assignee dispatch:<old> --assignee dispatch:<new>` with the new owner metadata and source, then comment the handoff: old and new owners, reason, source, known access gaps. Exit 13 means the old owner or someone else changed it; stop and reconcile with the user.
-4. Pin the new Dispatch thread. Leave the former thread as provenance.
-5. Read known workers through the routing this user has. An inaccessible worker stays gated with its last verified evidence; never label it dead, done or freshly verified.
-6. For an accessible active worker, reconcile its report first, then send a concrete `t3_thread_send` handoff updating REPORT-BACK to the new owner. Original issue fields stay; append the handoff as a comment.
-7. A replacement worker needs explicit authorization and evidence the prior one is stopped or isolated. Give it a new attempt and actor; keep the old attempt's comments. A late report from the old owner or worker is evidence only.
+Independent Dispatches may use separate stores without takeover. Each coordinates only its own items and branches; check for known overlapping work before launch and flag it rather than claiming the other's ownership.
 
 ## Shareable content only
 
-The graph is shared with every machine, worker and user on the server. Exclude secrets, credentials, connection URLs with tokens, customer or private data, machine-specific absolute paths and raw environment dumps. Keep sanitized evidence, public or authorized links and exact thread identities. Keep restricted material in its authorized system, reference it, and record the gap.
-
-## Legacy stores
-
-Existing `.dispatch/<id>/` Git stores stay untouched. Read them for context; never write, push or delete them. Migrating one into Beads happens only on an explicit request: create the root and items from its board, keep its IDs as `legacy.id` metadata, paste decisions verbatim with their sources, and leave the Git store in place as provenance.
+Exclude secrets, credentials, connection URLs with tokens, customer/private data, machine-specific absolute paths, raw environment dumps, and unshareable runtime artifacts. Keep only needed sanitized evidence, repo-relative artifact links, public/authorized source links, and exact thread identities. Access to private source does not authorize publishing it into Git. Keep the full restricted report in its original authorized system and a redacted summary with provenance here; record any evidence gap. Never create a secret side-store as Dispatch's durable authority. Resolve runtime access anew on each machine, and report missing access honestly.

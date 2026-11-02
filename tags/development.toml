@@ -130,11 +130,6 @@ source = "skills/personal-restart-t3-thread"
 [programs.gh]
 brew = "gh"
 
-# Shared work-graph client. Dolt server provisioning is separate from loadout.
-[programs.beads]
-brew = "beads"
-when = { os = ["linux", "macos"] }
-
 # The tailscaled daemon. Neither manager has a package by that name: the tailscale package ships
 # tailscaled and the CLI. macOS takes the brew formula; Linux takes apt from Tailscale's own
 # repository, which loadout adds on a machine that lacks the package (needs apply --elevated).
