@@ -169,7 +169,7 @@ Small changes go straight through. Cooper only stops to ask when the work is com
 
 ## T3 Dispatch project state
 
-In a T3 project thread for the repository, invoke `$dispatch setup` or `/dispatch setup`. Setup verifies the exact thread/project/repository identity and the `bd` client. For a new repository it provisions a database on the shared server, grants the shared Beads client user access to that database only, runs `bd init` with bd's agent files and hooks skipped, and commits just the `.beads/` configuration to `main` with `[skip ci]`. For an onboarded repository it only installs this machine's client credential from Vaultwarden and verifies the connection. It then creates, resumes or takes over the Dispatch root and pins the coordinator. Setup creates no schedules or workers.
+In a T3 project thread for the repository, invoke `$dispatch setup` or `/dispatch setup`. Setup verifies the exact thread/project/repository identity and the `bd` client. For a new repository it picks an unused database name on the shared server, runs `bd init` (which creates the database) with bd's agent files and hooks skipped, and commits just the `.beads/` configuration to `main` with `[skip ci]`. For an onboarded repository it only verifies the connection. The server is tailnet-only and its single `beads` account has no password, so no machine needs credentials. It then creates, resumes or takes over the Dispatch root and pins the coordinator. Setup creates no schedules or workers.
 
 | Graph | Holds |
 | --- | --- |
@@ -182,7 +182,7 @@ In a T3 project thread for the repository, invoke `$dispatch setup` or `/dispatc
 
 The board is rendered each pass from the graph plus live T3 and PR evidence; nothing is committed after setup. Ownership is the root's assignee, so takeover is one guarded update that refuses if someone else changed it first. Takeover still does not make another user's worker threads accessible: inaccessible workers stay gated with their last verified evidence. See [the state and takeover contract](skills/dispatch/references/project-state.md), [worker contract](skills/dispatch/references/cooper-workers.md) and [Cooper's Beads rules](skills/cooper/references/beads.md).
 
-Legacy `.dispatch/<id>/` Git stores are left untouched and read-only; migrating one into Beads needs an explicit request. Nothing secret, private or machine-specific goes in the graph; credentials live per machine in the Beads credentials file.
+Legacy `.dispatch/<id>/` Git stores are left untouched and read-only; migrating one into Beads needs an explicit request. Nothing secret, private or machine-specific goes in the graph.
 
 [`tools/t3-grokbot-bridge`](tools/t3-grokbot-bridge/README.md) remains a separate optional bot tool. T3 Dispatch does not require it, Fleet Control, Executor, a global instance registry, or an external Page. No actual CrabStock state, live bot configuration, or installed skill copies are migrated by this source change. Historical [Grok Bot validation](docs/grokbot-validation.md) records the previous port, not this Dispatch runtime. Current checks are recorded in [T3 Dispatch validation](docs/dispatch-t3-validation.md).
 

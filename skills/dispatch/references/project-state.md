@@ -6,9 +6,9 @@ Read `bd prime` and `bd <command> --help` for command syntax; this file is the p
 
 ## Workspace
 
-A repository is onboarded when its committed `.beads/config.yaml` and `.beads/metadata.json` point at the shared server database for that repository. Credentials never enter the repository; each machine keeps its own in the Beads credentials file. T3 worktrees resolve the root checkout's `.beads/` through Git, so workers need no setup. Never run `bd init` outside an explicit [setup](../../dispatch-setup/SKILL.md), and report a stray `.beads/` inside a worktree instead of using it.
+A repository is onboarded when its committed `.beads/config.yaml` and `.beads/metadata.json` point at the shared server database for that repository. The server is reachable only on the tailnet and its `beads` account has no password, so no machine needs credentials. T3 worktrees resolve the root checkout's `.beads/` through Git, so workers need no setup. Never run `bd init` outside an explicit [setup](../../dispatch-setup/SKILL.md), and report a stray `.beads/` inside a worktree instead of using it. bd 1.3.2 warns on every command that `dolt_server_port` in `metadata.json` is deprecated; that warning is about local servers, so ignore it and leave `.beads/` unedited.
 
-At the start of every run, check `bd where` and `bd context` resolve the committed server database, not an embedded or newly created one. An unreachable server, wrong database or missing credentials is an access gate: inspect nothing further, launch nothing, and never create a local graph to work around it.
+At the start of every run, check `bd where` and `bd context` resolve the committed server database, not an embedded or newly created one. An unreachable server or wrong database is an access gate: inspect nothing further, launch nothing, and never create a local graph to work around it.
 
 A schema-version refusal is a coordination stop. Never set `BD_IGNORE_SCHEMA_SKEW`, pass `--ignore-schema-skew`, grant `BD_ALLOW_REMOTE_MIGRATE`, or run `bd migrate`, `bd doctor --fix`, `bd bootstrap` or a forced init to get past it. Report it with `bd version` and the refusal; the user upgrades clients and migrates once, per the loadout's Beads notes. Leave `node_id` unset; every machine on the shared server is one replica.
 

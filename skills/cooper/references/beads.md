@@ -2,7 +2,7 @@
 
 Some repos track work in Beads (`bd`), a shared issue graph on a Dolt server. When `bd where` resolves a workspace for this checkout, Cooper records its job there so Dispatch, other workers and the next session can see it. When it exits nonzero with no workspace, skip this file. Workers launched by a coordinator other than Dispatch (Orchestrate units, Grok Bot support) and briefs with no ISSUE line skip it too; their coordinator keeps its own records.
 
-Run `bd prime` once for command syntax, and `bd <command> --help` for flags. Where its workflow text disagrees with Cooper, Cooper wins: keep the playbook todo list, don't use `bd remember`, and follow the repo's and brief's git rules rather than its session-close protocol. Always pass explicit issue IDs and `--actor <actor>` on every write, since shell environment doesn't carry between tool calls. Use `--json` when parsing. Never use `bd edit`.
+Run `bd prime` once for command syntax, and `bd <command> --help` for flags. Where its workflow text disagrees with Cooper, Cooper wins: keep the playbook todo list, don't use `bd remember`, and follow the repo's and brief's git rules rather than its session-close protocol. Always pass explicit issue IDs and `--actor <actor>` on every write, since shell environment doesn't carry between tool calls. Use `--json` when parsing. Never use `bd edit`. Ignore bd's warning that `dolt_server_port` in `metadata.json` is deprecated, and never edit `.beads/`.
 
 ## Your issue
 
