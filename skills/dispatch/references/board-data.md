@@ -11,7 +11,7 @@ python3 <installed-dispatch>/scripts/render-board.py --beads "$dir/issues.json" 
   --output "$dir/board.html" --project '<project>'
 ```
 
-Read the JSON result for warnings. Fix missing board fields on the issues before presenting. Missing fields remain visible gaps; HTML generation does not verify runtime or PR state. Write the export, live file and HTML outside the repository. A legacy `board.md` can still be rendered read-only by passing its path instead of `--beads`.
+Read the JSON result for warnings. Fix missing board fields on the issues before presenting. Missing fields remain visible gaps; HTML generation does not verify runtime or PR state. Write the export, live file and HTML outside the repository. When Beads is unreachable, pass `--live` alone: the board shows live Coopers from the thread list and worker entries, and says the graph is unavailable. A legacy `board.md` can still be rendered read-only by passing its path instead of `--beads`.
 
 ## Placement
 
@@ -51,10 +51,23 @@ Write the live file fresh on every pass from T3 and PR reads; never from saved s
 {"verified": "<UTC time of this pass>",
  "workers": {"<issue ID>": {"runtime": "<exact T3 runtime>", "verified": "<UTC>",
              "run": "<latest run ID and status, active run if any>", "pendingInput": 0, "settled": false,
-             "evidence": "<message cursor, PR head, checks and reviews with source times>"}}}
+             "evidence": "<message cursor, PR head, checks and reviews with source times>"}},
+ "listing": {"project": "<projectId>", "coordinator": "<this Dispatch thread ID>",
+             "snapshots": [{"at": "<UTC>", "statuses": ["running", "starting", "preparing", "queued", "waiting"],
+                            "pages": [{"cursor": 0, "nextCursor": null, "total": 3,
+                                       "threads": [{"threadId": "...", "title": "...", "status": "running", "link": "..."}]}]},
+                           {"at": "<UTC, just before rendering>", "statuses": ["..."], "pages": ["..."]}]}}
 ```
 
-Include every open worker, closed issues without `t3.settled` too, and set `settled` from the thread's T3 state. An open worker with no live entry still goes in Now, marked unreconciled, and the running total becomes unknown, never zero by inference. The summary counts open Coopers (distinct worker links in Now, plus uncertain launches) separately from those running now (an active runtime); several cards for one worker count once. `external` cards are excluded from local worker counts.
+`snapshots` holds the entry list then the final one, each page copied as `t3_thread_list` returned it; record `"error"` on a snapshot whose call failed. Without Beads, worker entries are keyed by thread and carry `thread`, `title` and `link`.
+
+The final snapshot wins on runtime. It is complete only when its last page has no `nextCursor`, nothing failed, it read every one of `total` threads, and its statuses include every running state. The coordinator is dropped, and a thread repeated across pages counts once.
+- A listed worker takes the list's status, so a resumed worker lands in Now as running. When that differs from its worker entry, the card says to reread its run, pending input and activity; update the entry and render again.
+- A worker missing from a complete list is not running at that time.
+- A listed Cooper with no issue gets an untracked Now card; one owned by an issue under another root goes to Watch and links as external. Other active threads are counted in a footnote, not as workers.
+- An incomplete, failed or missing list makes running now a lower bound with the total unknown (`activeIsLowerBound` in the JSON result).
+
+Include every open worker, closed issues without `t3.settled` too, and set `settled` from the thread's T3 state. An open worker with no live entry still goes in Now, marked unreconciled, and the running total becomes unknown, never zero by inference. The summary counts open Coopers (distinct worker threads in Now, plus uncertain launches) separately from those running now (`running`, `starting` or `preparing`; `queued` and `waiting` are open but not running); several cards for one worker count once. `external` cards are excluded from local worker counts.
 
 ## Illustrations
 

@@ -19,9 +19,17 @@ Keep text below the board to one to three short lines: the material change, any 
 
 ## Reconcile before presenting
 
+Saved owners and old final replies cannot show a worker that resumed or started since. Status and chase therefore read the project's live thread list twice:
+
+1. **Entry list.** At entry, call `t3_thread_list` with the exact repository `projectId` (and `environmentId` for another machine), `statuses: ["running", "starting", "preparing", "queued", "waiting"]` and `limit: 100`. Follow `nextCursor` until it is null. Match each thread to known owners by exact thread ID; add any running Cooper you didn't know. Never list other projects or `allProjects`.
+2. **Owner reads.** Then, for each owner, snapshot the details below.
+3. **Final list.** After owner, activity and PR reconciliation, immediately before rendering or stating any count, read the same list again, every page. For each relevant thread whose state changed since its owner read, read its exact active/latest run, pending input and bounded new activity, update its entry, and place it by the new state.
+
+Record both lists under `listing` in the live file (see [board data](board-data.md#live-evidence)). The renderer treats the last one as the final word on who is running. A list cut short, failed, or missing makes the running count a lower bound with the total unknown, never zero. Exclude this Dispatch thread. A thread that resumes after the final list will show on the next pass; state the list's time, and never promise an atomic or live count.
+
 Before every status/chase, snapshot the owner of every in_progress or assigned issue, and of every closed issue without `t3.settled`: exact runtime status, active/latest run ID and status, and pending input count. Read new messages and comments since `t3.cursor`, including user follow-ups after final reports. Check current PR head, checks and reviews, and run `bd gate check`. Follow truncated relevant evidence, without scanning unrelated threads. Never wake or launch a worker to obtain status.
 
-A past final answer is historical evidence, not current runtime. An open worker stays in Now whatever its last report said. Keep runtime separate from acceptance, merge and deployment. An idle run may still own an open job. Missing access remains an explicit unverified gap. If the graph and live observations disagree, resolve them before presenting or label the uncertainty. A non-owner renders the same view without writing to the graph.
+A past final answer is historical evidence, not current runtime. An open worker stays in Now whatever its last report said, and a resumed one shows its current runtime, not "awaiting review" from that report. Keep runtime separate from acceptance, merge and deployment. An idle run may still own an open job. Missing access remains an explicit unverified gap. If the graph and live observations disagree, resolve them before presenting or label the uncertainty. A non-owner renders the same view without writing to the graph.
 
 ## Required renderer
 

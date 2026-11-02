@@ -1,3 +1,13 @@
 {"verified": "2026-10-30 12:00 UTC",
- "workers": {"demo-r.1": {"runtime": "running", "verified": "2026-10-30 12:00 UTC", "run": "example-run, running", "pendingInput": 0,
-                          "evidence": "PR head abc1234; checks pending"}}}
+ "workers": {"demo-r.1": {"runtime": "running", "verified": "2026-10-30 11:59 UTC", "run": "example-run, running", "pendingInput": 0,
+                          "settled": false, "evidence": "PR head abc1234; checks pending"}},
+ "listing": {"project": "example-project", "coordinator": "example-dispatch",
+             "snapshots": [
+               {"at": "2026-10-30 11:58 UTC", "statuses": ["running", "starting", "preparing", "queued", "waiting"],
+                "pages": [{"cursor": 0, "nextCursor": null, "total": 2, "threads": [
+                  {"threadId": "example-dispatch", "title": "Dispatch", "status": "running"},
+                  {"threadId": "example-worker", "title": "cooper: clarify the save action", "status": "running"}]}]},
+               {"at": "2026-10-30 12:00 UTC", "statuses": ["running", "starting", "preparing", "queued", "waiting"],
+                "pages": [{"cursor": 0, "nextCursor": null, "total": 2, "threads": [
+                  {"threadId": "example-dispatch", "title": "Dispatch", "status": "running"},
+                  {"threadId": "example-worker", "title": "cooper: clarify the save action", "status": "running"}]}]}]}}
