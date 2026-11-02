@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 
 SECTIONS = ('Now', 'Backlog', 'What landed', 'Watch and links')
 NOTES = (
-    'Active work and its next checkpoint.',
+    'Every open Cooper, running, idle or waiting, and its next checkpoint.',
     'Waiting for review, access, a decision or a place in the queue.',
     'Merged work and accepted findings. Deployment is recorded separately.',
     'Risks, provenance and coordination links.',
@@ -164,7 +164,7 @@ def illustration(raw):
 def render(text, root, project='Repository'):
     title, stamp, metadata, sections = parse(text)
     warnings, panel_html = [], []
-    active_workers, verified_workers, external, missing_runtime = set(), set(), 0, 0
+    active_workers, verified_workers, open_workers, external, missing_runtime = set(), set(), set(), 0, 0
     if not stamp:
         warnings.append('Board has no Updated timestamp.')
     for index, section in enumerate(sections):
@@ -185,6 +185,8 @@ def render(text, root, project='Repository'):
             runtime = field(body, 'Runtime').lower()
             worker_links = [target for _, target, _ in links(field(body, 'Worker') or field(body, 'Owner'), root) if target.startswith('t3-thread://')]
             coordination = field(body, 'Coordination').lower() == 'external'
+            if index == 0 and not coordination:
+                open_workers.update(worker_links or ([card['id']] if 'uncertain launch' in field(body, 'State') else []))
             if coordination:
                 external += 1
             elif runtime in ('running', 'starting', 'preparing') and not worker_links:
@@ -242,11 +244,11 @@ def render(text, root, project='Repository'):
         title=esc(title), project=esc(project), css=(ASSETS / 'board.css').read_text(), js=(ASSETS / 'board.js').read_text(),
         stamp=esc(stamp or 'Timestamp not recorded'), warnings=('<p class="notice">Board has missing presentation fields; see renderer warnings.</p>' if warnings else ''),
         metrics=metrics, tabs=tabs, segments=segments, panels=''.join(panel_html),
-        runtime_summary=esc(f'{"At least " if missing_runtime else ""}{len(active_workers)} verified active workers / {len(verified_workers)} reconciled owners · {sum(counts)} issue cards · {external} external coordination cards'
+        runtime_summary=esc(f'{len(open_workers)} open Cooper{"" if len(open_workers) == 1 else "s"} · {"at least " if missing_runtime else ""}{len(active_workers)} running now / {len(verified_workers)} reconciled owners · {sum(counts)} issue cards · {external} external coordination cards'
                             + (f' · {missing_runtime} worker cards still need reconciliation; total active count unknown' if missing_runtime else '')),
         distribution_label=esc('; '.join(f'{name}: {counts[i]}' for i, name in enumerate(SECTIONS))),
         provenance=esc(provenance) + '<br>Markdown SHA-256: ' + digest[:12])
-    return page, {'cards': sum(counts), 'sections': dict(zip(SECTIONS, counts)), 'markdownSha256': digest, 'activeWorkers': len(active_workers), 'reconciledOwners': len(verified_workers), 'externalCoordinationCards': external, 'unreconciledWorkerCards': missing_runtime, 'warnings': warnings}
+    return page, {'cards': sum(counts), 'sections': dict(zip(SECTIONS, counts)), 'markdownSha256': digest, 'openWorkers': len(open_workers), 'activeWorkers': len(active_workers), 'reconciledOwners': len(verified_workers), 'externalCoordinationCards': external, 'unreconciledWorkerCards': missing_runtime, 'warnings': warnings}
 
 
 HIDDEN_TYPES = ('gate', 'event', 'message', 'molecule')
@@ -277,6 +279,24 @@ def descendants(issues, root):
     return found
 
 
+def worker_of(issue):
+    meta = issue.get('metadata') or {}
+    return meta.get('t3.thread') or meta.get('t3.link') or ''
+
+
+def current_issues(issues):
+    """Map each worker to the one issue it currently works, so a reused worker gets one card."""
+    def rank(issue):
+        when = parse_time(issue.get('updated_at') or issue.get('closed_at') or issue.get('created_at') or '')
+        return issue.get('status') != 'closed', when.timestamp() if when else 0
+    best = {}
+    for issue in issues:
+        key = worker_of(issue)
+        if key and (key not in best or rank(issue) > rank(best[key])):
+            best[key] = issue
+    return {key: issue['id'] for key, issue in best.items()}
+
+
 def beads_markdown(issues, root_id, live=None, landed_days=14, now=None):
     """Convert `bd list --all --include-gates --json` output and live T3 evidence into the board format."""
     live = live or {}
@@ -298,6 +318,7 @@ def beads_markdown(issues, root_id, live=None, landed_days=14, now=None):
             elif target.get('status') != 'closed':
                 blocked.setdefault(issue['id'], []).append(target)
     blocking = {target['id'] for targets in blocked.values() for target in targets}
+    current = current_issues([i for i in mine if i.get('issue_type') not in HIDDEN_TYPES and 'dropped' not in (i.get('labels') or [])])
     sections = {name: [] for name in SECTIONS}
     for issue in mine:
         kind, status, labels = issue.get('issue_type'), issue.get('status'), set(issue.get('labels') or [])
@@ -306,10 +327,15 @@ def beads_markdown(issues, root_id, live=None, landed_days=14, now=None):
             continue
         if kind == 'decision' and (status == 'closed' or issue['id'] in blocking):
             continue
-        evidence = observed.get(issue['id'], {})
+        worker = worker_of(issue)
+        moved = current.get(worker) if worker and current.get(worker) != issue['id'] else ''
+        evidence = {} if moved else observed.get(issue['id'], {})
         runtime = line(evidence.get('runtime', '')).lower()
         closed = parse_time(issue.get('closed_at', ''))
-        if runtime in ACTIVE:
+        settled = evidence.get('settled') is True or bool(meta.get('t3.settled'))
+        uncertain = bool(meta.get('t3.request')) and not meta.get('t3.thread') and status != 'closed'
+        open_worker = bool(worker) and not moved and not settled
+        if open_worker or uncertain or runtime in ACTIVE:
             section = 'Now'
         elif status == 'closed':
             if closed and closed < now - timedelta(days=landed_days):
@@ -319,7 +345,6 @@ def beads_markdown(issues, root_id, live=None, landed_days=14, now=None):
             section = 'Watch and links'
         else:
             section = 'Backlog'
-        uncertain = bool(meta.get('t3.request')) and not meta.get('t3.thread') and status != 'closed'
         gates = [f'{t["id"]} {t["title"]}' + (' (needs Dan)' if 'human' in (t.get('labels') or []) else '')
                  for t in blocked.get(issue['id'], [])]
         gates += [f'{target} (not in export; include gates)' for target in missing.get(issue['id'], [])]
@@ -328,8 +353,10 @@ def beads_markdown(issues, root_id, live=None, landed_days=14, now=None):
                   ('State', '; '.join(filter(None, [status, 'uncertain launch' if uncertain else '', ', '.join(sorted(labels))]))),
                   ('Gate', '; '.join(gates)),
                   ('Owner', issue.get('assignee', '')),
-                  ('Thread' if status == 'closed' and not evidence else 'Worker',
+                  ('Worker' if open_worker else 'Thread',
                    f'[{meta.get("t3.title") or "Worker"}]({meta["t3.link"]})' if meta.get('t3.link') else ''),
+                  ('Worker state', 'moved to ' + moved if moved else 'settled' if worker and settled
+                   else 'open, ' + (runtime or 'runtime not reconciled') if open_worker else ''),
                   ('Runtime', runtime), ('Verified', evidence.get('verified', '')), ('Run', evidence.get('run', '')),
                   ('Pending input', evidence.get('pendingInput', '')), ('Evidence', evidence.get('evidence', '')),
                   ('PR', ' '.join(str(meta.get('pr.url') or '').split(','))), ('Head', meta.get('pr.head', '')),

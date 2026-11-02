@@ -4,8 +4,8 @@ The board is a view of the Beads graph under this Dispatch's root, joined with l
 
 Sections, in order:
 
-1. **Now**: currently executing workers, what they are doing, actual model/effort if known, exact worker links, PR/head, and gates. Say plainly when none is running.
-2. **Backlog**: queued work, proposals, dependencies, work waiting on a user decision/access/merge, and why it cannot start or finish. Merge-ready PRs and their worker links stay visible here until they merge. Waiting on a merge is not executing work.
+1. **Now**: every open Cooper, until it is settled: running, idle, finished but unsettled, or waiting on Dan, a merge or review. Show its runtime, actual model/effort if known, exact worker link, PR/head and gates. A completed run does not move it out. Say plainly how many are open and how many are running right now.
+2. **Backlog**: queued work, proposals, dependencies and work with no open Cooper, and why it cannot start or finish.
 3. **What landed**: merged implementation or accepted no-PR findings, with evidence and caveats. A model turn ending or an open merge-ready PR does not count as landed.
 4. **Watch and links**: risks, inaccessible evidence, external coordination and the source links behind the work.
 
@@ -19,9 +19,9 @@ Keep text below the board to one to three short lines: the material change, any 
 
 ## Reconcile before presenting
 
-Before every status/chase, snapshot every in_progress or assigned issue's owner: exact runtime status, active/latest run ID and status, and pending input count. Read new messages and comments since `t3.cursor`, including user follow-ups after final reports. Check current PR head, checks and reviews, and run `bd gate check`. Follow truncated relevant evidence, without scanning unrelated threads. Never wake or launch a worker to obtain status.
+Before every status/chase, snapshot the owner of every in_progress or assigned issue, and of every closed issue without `t3.settled`: exact runtime status, active/latest run ID and status, and pending input count. Read new messages and comments since `t3.cursor`, including user follow-ups after final reports. Check current PR head, checks and reviews, and run `bd gate check`. Follow truncated relevant evidence, without scanning unrelated threads. Never wake or launch a worker to obtain status.
 
-A past final answer is historical evidence, not current runtime. Resumed execution returns to Now even when its prior report said finished or awaiting merge. Keep runtime separate from acceptance, merge and deployment. An idle run may still own an open job. Missing access remains an explicit unverified gap. If the graph and live observations disagree, resolve them before presenting or label the uncertainty. A non-owner renders the same view without writing to the graph.
+A past final answer is historical evidence, not current runtime. An open worker stays in Now whatever its last report said. Keep runtime separate from acceptance, merge and deployment. An idle run may still own an open job. Missing access remains an explicit unverified gap. If the graph and live observations disagree, resolve them before presenting or label the uncertainty. A non-owner renders the same view without writing to the graph.
 
 ## Required renderer
 

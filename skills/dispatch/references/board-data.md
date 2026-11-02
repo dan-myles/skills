@@ -19,12 +19,12 @@ Cards are the root's descendants. Gates, events, messages and molecules never ge
 
 | Section | Issues |
 | --- | --- |
-| Now | live runtime `running`, `starting` or `preparing`, whatever the status or labels |
+| Now | an open Cooper: a worker link without `t3.settled` or live `"settled": true`, or an uncertain launch, whatever the issue status, labels or runtime |
 | What landed | otherwise closed within `--landed-days` (default 14), newest first |
 | Watch and links | otherwise open and labelled `watch` or `external` |
 | Backlog | everything else still open, including merge-ready PRs and idle owners |
 
-Other sections sort by priority.
+Other sections sort by priority. A worker reused across issues, keyed by `t3.thread` (else `t3.link`), gets one card: its open issue, else its most recently updated one. Its other issues place by status and say `moved to <id>`.
 
 ## Issue fields shown
 
@@ -36,7 +36,8 @@ Other sections sort by priority.
 | State | status, labels, and `uncertain launch` when `t3.request` is set without `t3.thread` |
 | Owner | assignee |
 | Gate | open `blocks` prerequisites |
-| Worker | `t3.title` and `t3.link`; on a closed issue with no live entry it shows as a thread link only |
+| Worker | `t3.title` and `t3.link`; a settled or moved worker shows as a thread link only |
+| Worker state | `open, <runtime>`, `settled`, or `moved to <id>` |
 | PR, Head, Merge | `pr.url`, `pr.head`, `merge.sha` |
 | Source, External, Acceptance, Closed | `source.url`, external ref, acceptance, close reason |
 
@@ -49,11 +50,11 @@ Write the live file fresh on every pass from T3 and PR reads; never from saved s
 ```json
 {"verified": "<UTC time of this pass>",
  "workers": {"<issue ID>": {"runtime": "<exact T3 runtime>", "verified": "<UTC>",
-             "run": "<latest run ID and status, active run if any>", "pendingInput": 0,
+             "run": "<latest run ID and status, active run if any>", "pendingInput": 0, "settled": false,
              "evidence": "<message cursor, PR head, checks and reviews with source times>"}}}
 ```
 
-An in_progress issue with a worker link but no live entry shows as unreconciled, and the active total becomes unknown, never zero by inference. Active workers count distinct worker links with an active runtime; several cards for one worker count once. `external` cards are excluded from local worker counts.
+Include every open worker, closed issues without `t3.settled` too, and set `settled` from the thread's T3 state. An open worker with no live entry still goes in Now, marked unreconciled, and the running total becomes unknown, never zero by inference. The summary counts open Coopers (distinct worker links in Now, plus uncertain launches) separately from those running now (an active runtime); several cards for one worker count once. `external` cards are excluded from local worker counts.
 
 ## Illustrations
 

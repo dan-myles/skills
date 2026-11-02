@@ -29,7 +29,7 @@ await tools["t3-code-mac-studio"].t3_thread_launch({
 });
 ```
 
-`baseRef: "main"` with `startFromOrigin: true` binds the new checkout off `origin/main`; do not supply `origin/origin/main`. Paperclip uses the same shape under its configured app. Read-only investigations use `workspaceStrategy: {type: "root"}` and explicitly forbid repo or production writes. Production operations are not repo edits; support's exact-call rules govern them. Prototypes use isolated writable storage without touching product source.
+`baseRef: "main"` with `startFromOrigin: true` binds the new checkout off `origin/main`; do not supply `origin/origin/main`. Paperclip uses the same shape under its configured app. Every Cooper launch gets its own T3 worktree, read-only investigations included; never `{type: "root"}`. Read-only briefs explicitly forbid repo or production writes. Production operations are not repo edits; support's exact-call rules govern them. Prototypes use isolated writable storage without touching product source.
 
 Default worker model is Claude Opus 5.5 at medium effort, set by the user. Use another model only when the user names one for that job, and then pass it explicitly for that launch only. Do not silently replace the configured provider, model, or effort setting if unavailable. Surface the failure and request a decision. This launch setting is separate from the Cooper subagent roles loaded on the worker's machine. A different validation model requires an explicit, verified instance `validator_model` override; a same-family run does not satisfy a second-model check.
 

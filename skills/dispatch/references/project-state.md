@@ -56,7 +56,7 @@ Labels carry coordination state:
 - `human`: needs the user. `merge:auto` or `merge:human`: the brief's merge policy. `merge-ready`: the PR is waiting only on a merge.
 - `external` for cross-project coordination, `watch` for risks and provenance, `dropped` on anything closed without landing (abandoned, superseded, dismissed), `wayfinder` on maps and their tickets, `plan-ready` on a finished map.
 
-Metadata keys, all optional: `source.url`, `source.id` (dedupe key), `source.sender`, `source.milestone`; `attempt`; `t3.request`, `t3.thread`, `t3.link`, `t3.title`, `t3.environment`, `t3.project`, `t3.cursor`; `model`; `branch`; `pr.url` (comma-separated for a stack, bottom first), `pr.head`; `merge.sha` (comma-separated for a stack); `board.summary`, `board.visual`, `board.illustration` for [the board](board-data.md).
+Metadata keys, all optional: `source.url`, `source.id` (dedupe key), `source.sender`, `source.milestone`; `attempt`; `t3.request`, `t3.thread`, `t3.link`, `t3.title`, `t3.environment`, `t3.project`, `t3.cursor`, `t3.settled` (set when Dispatch settles the worker); `model`; `branch`; `pr.url` (comma-separated for a stack, bottom first), `pr.head`; `merge.sha` (comma-separated for a stack); `board.summary`, `board.visual`, `board.illustration` for [the board](board-data.md).
 
 Dependencies: `blocks` only for real prerequisites, since it controls `bd ready`. `discovered-from` records where follow-up work was found. `related` links a decision to the items it affects. `supersedes` replaces an issue. A new item stays blocked until each prerequisite closes with accepted evidence.
 
