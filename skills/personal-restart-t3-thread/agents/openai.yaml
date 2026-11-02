@@ -1,0 +1,7 @@
+interface:
+  display_name: "personal-restart-t3-thread"
+  short_description: "Restart a T3 thread's session so it reloads MCP servers"
+  default_prompt: "Use $personal-restart-t3-thread to restart this T3 thread's session so it picks up new MCP connections, then continue."
+
+policy:
+  allow_implicit_invocation: true

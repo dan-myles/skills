@@ -124,6 +124,9 @@ source = "skills/dispatch-digest"
 [skills.personal-loadout-programs]
 source = "skills/personal-loadout-programs"
 
+[skills.personal-restart-t3-thread]
+source = "skills/personal-restart-t3-thread"
+
 [programs.gh]
 brew = "gh"
 
