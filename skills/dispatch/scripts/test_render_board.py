@@ -1,5 +1,7 @@
-"""Behavior checks for portable board rendering, privacy and truthful counts."""
+"""Behavior checks for board rendering from Beads, privacy and truthful counts."""
+from datetime import datetime, timezone
 import importlib.util
+import json
 from pathlib import Path
 import unittest
 
@@ -8,6 +10,9 @@ board = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(board)
 ROOT = Path('/tmp/dispatch-fixture')
 EXAMPLE = (board.ASSETS / 'example-board.md').read_text()
+ISSUES = json.loads((board.ASSETS / 'example-beads.json').read_text())
+LIVE = json.loads((board.ASSETS / 'example-live.json').read_text())
+NOW = datetime(2026, 10, 31, tzinfo=timezone.utc)
 
 class BoardTests(unittest.TestCase):
     def test_fixture_and_illustrations(self):
@@ -48,6 +53,60 @@ class BoardTests(unittest.TestCase):
     def test_empty_sections(self):
         text = '# Empty\nUpdated: 2026-10-30 12:00 UTC\n' + '\n'.join('## ' + s for s in board.SECTIONS)
         self.assertEqual(board.render(text, ROOT)[1]['cards'], 0)
+
+class BeadsTests(unittest.TestCase):
+    def test_graph_places_cards_by_status_labels_and_live_runtime(self):
+        page, stats = board.render(board.beads_markdown(ISSUES, 'demo-r', LIVE, now=NOW), ROOT)
+        self.assertEqual(stats['sections'], {'Now': 1, 'Backlog': 1, 'What landed': 1, 'Watch and links': 1})
+        self.assertEqual(stats['activeWorkers'], 1)
+        self.assertEqual(stats['warnings'], [])
+        self.assertEqual(page.count('class="illustration"'), 3)
+        self.assertIn('Approve the confirmation copy? (needs Dan)', page)
+        self.assertNotIn('Another Dispatch', page)
+        self.assertNotIn('Abandoned idea', page)
+
+    def test_without_live_evidence_worker_is_unreconciled_backlog(self):
+        page, stats = board.render(board.beads_markdown(ISSUES, 'demo-r', now=NOW), ROOT)
+        self.assertEqual(stats['sections']['Now'], 0)
+        self.assertGreater(stats['unreconciledWorkerCards'], 0)
+
+    def test_old_landed_work_ages_out_and_unblocked_decision_shows(self):
+        issues = [dict(i, dependencies=[]) if i['id'] == 'demo-r.2' else i for i in ISSUES]
+        text = board.beads_markdown(issues, 'demo-r', LIVE, landed_days=0, now=NOW)
+        self.assertNotIn('demo-r.3:', text)
+        self.assertIn('### demo-r.5: Approve the confirmation copy?', text)
+
+    def test_graph_text_cannot_inject_board_structure(self):
+        issues = [dict(i, title='Real\n## Now\n### X: injected') if i['id'] == 'demo-r.4' else i for i in ISSUES]
+        text = board.beads_markdown(issues, 'demo-r', LIVE, now=NOW)
+        self.assertEqual(board.render(text, ROOT)[1]['cards'], 4)
+
+    def test_landed_worker_link_is_not_a_live_owner(self):
+        issues = [dict(i, metadata=dict(i['metadata'], **{'t3.link': 't3-thread://v1/done'})) if i['id'] == 'demo-r.3' else i for i in ISSUES]
+        page, stats = board.render(board.beads_markdown(issues, 'demo-r', LIVE, now=NOW), ROOT)
+        self.assertIn('href="t3-thread://v1/done"', page)
+        self.assertEqual(stats['warnings'], [])
+
+    def test_live_runtime_wins_placement(self):
+        live = {'verified': 'now', 'workers': {i: {'runtime': 'running', 'verified': 'now'} for i in ('demo-r.3', 'demo-r.4')}}
+        issues = [dict(i, metadata=dict(i.get('metadata', {}), **{'t3.link': 't3-thread://v1/' + i['id']}))
+                  if i['id'] in ('demo-r.3', 'demo-r.4') else i for i in ISSUES]
+        page, stats = board.render(board.beads_markdown(issues, 'demo-r', live, now=NOW), ROOT)
+        self.assertEqual(stats['sections']['Now'], 2)
+        self.assertFalse(any('outside Now' in w for w in stats['warnings']))
+
+    def test_hidden_gate_and_uncertain_launch_are_visible(self):
+        issues = [dict(i, assignee='cooper:demo-r.2-a1', metadata=dict(i['metadata'], **{'t3.request': 'req'}),
+                       dependencies=i['dependencies'] + [{'depends_on_id': 'gate-1', 'type': 'blocks'}])
+                  if i['id'] == 'demo-r.2' else i for i in ISSUES]
+        text = board.beads_markdown(issues, 'demo-r', LIVE, now=NOW)
+        self.assertIn('gate-1 (not in export; include gates)', text)
+        self.assertIn('uncertain launch', text)
+        self.assertIn('- Owner: cooper:demo-r.2-a1', text)
+
+    def test_missing_root_fails(self):
+        with self.assertRaises(ValueError):
+            board.beads_markdown(ISSUES, 'missing')
 
 if __name__ == '__main__':
     unittest.main()

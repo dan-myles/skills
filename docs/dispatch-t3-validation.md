@@ -1,6 +1,6 @@
 # T3 Dispatch port checks
 
-This records commit `4eee036`, before the separate [hardcoded model migration](hardcoded-models-validation.md). Model-file statements below describe that snapshot.
+This records commit `4eee036`, before the separate [hardcoded model migration](hardcoded-models-validation.md). Model-file statements below describe that snapshot. Dispatch state has since moved from `.dispatch/` Git stores to the Beads graph; see [Beads](beads.md). The store design below is historical.
 
 This is the 2026-10-29 port of Dispatch from Grok Bot coordination to a long-running pinned T3 thread for one repository. No actual project state, live bots, installed skills, model settings, schedules or deployments were changed.
 

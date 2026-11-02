@@ -1,5 +1,6 @@
-"""Render saved Dispatch Markdown as a self-contained, themed issue-card board."""
+"""Render a Dispatch board from its Beads graph as a self-contained, themed issue-card board."""
 import argparse
+from datetime import datetime, timedelta, timezone
 import hashlib
 import html
 import json
@@ -165,7 +166,7 @@ def render(text, root, project='Repository'):
     warnings, panel_html = [], []
     active_workers, verified_workers, external, missing_runtime = set(), set(), 0, 0
     if not stamp:
-        warnings.append('Saved board has no Updated timestamp.')
+        warnings.append('Board has no Updated timestamp.')
     for index, section in enumerate(sections):
         cards = []
         for card in section['cards']:
@@ -207,7 +208,7 @@ def render(text, root, project='Repository'):
                 sketch = illustration(field(body, 'Illustration'))
             except (ValueError, KeyError, TypeError) as error:
                 warnings.append(f'{card["id"]}: invalid Illustration ({type(error).__name__}).')
-                sketch = '<p class="notice">Illustration needs review; see saved evidence.</p>'
+                sketch = '<p class="notice">Illustration needs review; see the issue evidence.</p>'
             steps = '<span class="arrow" aria-hidden="true">→</span>'.join(
                 f'<div class="step"><span class="step-number">{i + 1:02}</span><span>{esc(step)}</span></div>' for i, step in enumerate(visual))
             flow = ('<div class="diagram-label">Issue schematic</div><div class="flow" role="group" aria-label="Issue cause/effect or before/after schematic">'
@@ -236,10 +237,10 @@ def render(text, root, project='Repository'):
     tabs = ''.join(f'<button role="tab" aria-selected="{str(i == 0).lower()}" tabindex="{0 if i == 0 else -1}" aria-controls="panel-{i}" id="tab-{i}" data-target="{i}" data-label="{esc(name)}">{esc(name)}<span>{counts[i]}</span></button>' for i, name in enumerate(SECTIONS))
     segments = ''.join(f'<span style="flex:{count}" class="segment segment-{i}" title="{esc(SECTIONS[i])}: {count}"></span>' for i, count in enumerate(counts) if count)
     digest = hashlib.sha256(text.encode()).hexdigest()
-    provenance = ' · '.join(metadata) if metadata else 'Publication and ownership details are in the saved store.'
+    provenance = ' · '.join(metadata) if metadata else 'Ownership details are on the Dispatch root issue.'
     page = Template((ASSETS / 'board.html').read_text()).substitute(
         title=esc(title), project=esc(project), css=(ASSETS / 'board.css').read_text(), js=(ASSETS / 'board.js').read_text(),
-        stamp=esc(stamp or 'Timestamp not recorded'), warnings=('<p class="notice">Saved board has missing presentation fields; see renderer warnings.</p>' if warnings else ''),
+        stamp=esc(stamp or 'Timestamp not recorded'), warnings=('<p class="notice">Board has missing presentation fields; see renderer warnings.</p>' if warnings else ''),
         metrics=metrics, tabs=tabs, segments=segments, panels=''.join(panel_html),
         runtime_summary=esc(f'{"At least " if missing_runtime else ""}{len(active_workers)} verified active workers / {len(verified_workers)} reconciled owners · {sum(counts)} issue cards · {external} external coordination cards'
                             + (f' · {missing_runtime} worker cards still need reconciliation; total active count unknown' if missing_runtime else '')),
@@ -248,21 +249,134 @@ def render(text, root, project='Repository'):
     return page, {'cards': sum(counts), 'sections': dict(zip(SECTIONS, counts)), 'markdownSha256': digest, 'activeWorkers': len(active_workers), 'reconciledOwners': len(verified_workers), 'externalCoordinationCards': external, 'unreconciledWorkerCards': missing_runtime, 'warnings': warnings}
 
 
+HIDDEN_TYPES = ('gate', 'event', 'message', 'molecule')
+ACTIVE = ('running', 'starting', 'preparing')
+
+
+def line(value):
+    return ' '.join(str(value).split())
+
+
+def parse_time(value):
+    try:
+        return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except ValueError:
+        return None
+
+
+def descendants(issues, root):
+    children = {}
+    for issue in issues:
+        if issue.get('parent'):
+            children.setdefault(issue['parent'], []).append(issue)
+    found, frontier = [], [root]
+    while frontier:
+        for child in children.get(frontier.pop(), []):
+            found.append(child)
+            frontier.append(child['id'])
+    return found
+
+
+def beads_markdown(issues, root_id, live=None, landed_days=14, now=None):
+    """Convert `bd list --all --include-gates --json` output and live T3 evidence into the board format."""
+    live = live or {}
+    observed = live.get('workers', {})
+    now = now or datetime.now(timezone.utc)
+    by_id = {issue['id']: issue for issue in issues}
+    root = by_id.get(root_id)
+    if root is None:
+        raise ValueError(f'Root issue {root_id} is not in the Beads export.')
+    mine = descendants(issues, root_id)
+    blocked, missing = {}, {}
+    for issue in mine:
+        for dep in issue.get('dependencies') or []:
+            target = by_id.get(dep.get('depends_on_id'))
+            if dep.get('type') != 'blocks':
+                continue
+            if target is None:
+                missing.setdefault(issue['id'], []).append(dep.get('depends_on_id'))
+            elif target.get('status') != 'closed':
+                blocked.setdefault(issue['id'], []).append(target)
+    blocking = {target['id'] for targets in blocked.values() for target in targets}
+    sections = {name: [] for name in SECTIONS}
+    for issue in mine:
+        kind, status, labels = issue.get('issue_type'), issue.get('status'), set(issue.get('labels') or [])
+        meta = issue.get('metadata') or {}
+        if kind in HIDDEN_TYPES or 'dropped' in labels:
+            continue
+        if kind == 'decision' and (status == 'closed' or issue['id'] in blocking):
+            continue
+        evidence = observed.get(issue['id'], {})
+        runtime = line(evidence.get('runtime', '')).lower()
+        closed = parse_time(issue.get('closed_at', ''))
+        if runtime in ACTIVE:
+            section = 'Now'
+        elif status == 'closed':
+            if closed and closed < now - timedelta(days=landed_days):
+                continue
+            section = 'What landed'
+        elif labels & {'watch', 'external'}:
+            section = 'Watch and links'
+        else:
+            section = 'Backlog'
+        uncertain = bool(meta.get('t3.request')) and not meta.get('t3.thread') and status != 'closed'
+        gates = [f'{t["id"]} {t["title"]}' + (' (needs Dan)' if 'human' in (t.get('labels') or []) else '')
+                 for t in blocked.get(issue['id'], [])]
+        gates += [f'{target} (not in export; include gates)' for target in missing.get(issue['id'], [])]
+        fields = [('Summary', meta.get('board.summary') or (issue.get('description') or '').split('. ')[0]),
+                  ('Visual', meta.get('board.visual', '')),
+                  ('State', '; '.join(filter(None, [status, 'uncertain launch' if uncertain else '', ', '.join(sorted(labels))]))),
+                  ('Gate', '; '.join(gates)),
+                  ('Owner', issue.get('assignee', '')),
+                  ('Thread' if status == 'closed' and not evidence else 'Worker',
+                   f'[{meta.get("t3.title") or "Worker"}]({meta["t3.link"]})' if meta.get('t3.link') else ''),
+                  ('Runtime', runtime), ('Verified', evidence.get('verified', '')), ('Run', evidence.get('run', '')),
+                  ('Pending input', evidence.get('pendingInput', '')), ('Evidence', evidence.get('evidence', '')),
+                  ('PR', ' '.join(str(meta.get('pr.url') or '').split(','))), ('Head', meta.get('pr.head', '')),
+                  ('Merge', meta.get('merge.sha', '')), ('Source', meta.get('source.url', '')),
+                  ('External', issue.get('external_ref', '')), ('Acceptance', issue.get('acceptance_criteria', '')),
+                  ('Closed', issue.get('close_reason', '')),
+                  ('Coordination', 'external' if 'external' in labels else ''),
+                  ('Illustration', meta['board.illustration'] if isinstance(meta.get('board.illustration'), str)
+                   else json.dumps(meta['board.illustration']) if meta.get('board.illustration') else '')]
+        body = [f'- {name}: {line(value)}' for name, value in fields if line(value)]
+        order = -closed.timestamp() if section == 'What landed' and closed else issue.get('priority', 2)
+        sections[section].append((order, f'### {issue["id"]}: {line(issue["title"])}\n' + '\n'.join(body)))
+    owner = (root.get('metadata') or {}).get('dispatch.owner_link', '')
+    stamp = live.get('verified', '')
+    text = [f'# {line(root["title"])}'] + ([f'Updated: {line(stamp)}'] if stamp else []) + [f'Beads root {root_id}' + (f' · owner {line(owner)}' if owner else '')]
+    for name in SECTIONS:
+        text.append(f'## {name}')
+        text.extend(card for _, card in sorted(sections[name], key=lambda item: item[0]))
+    return '\n'.join(text) + '\n'
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('board', type=Path, help='Authoritative saved board.md')
-    parser.add_argument('--output', type=Path, required=True, help='Derived HTML; use a temporary path for read-only views')
+    parser.add_argument('board', type=Path, nargs='?', help='Legacy saved board.md, read-only')
+    parser.add_argument('--beads', type=Path, help='Output of `bd list --all --limit 0 --json`')
+    parser.add_argument('--root', help='Dispatch root issue ID')
+    parser.add_argument('--live', type=Path, help='Live T3 evidence JSON from this pass')
+    parser.add_argument('--landed-days', type=int, default=14, help='Show closed work from this many days')
+    parser.add_argument('--output', type=Path, required=True, help='Derived HTML; use a temporary path')
     parser.add_argument('--project', default='Repository', help='Shareable project label')
     args = parser.parse_args()
     try:
-        board = args.board.resolve()
-        if args.output.resolve() == board:
-            raise ValueError('HTML output must not overwrite the Markdown source.')
-        page, result = render(board.read_text(), board.parent, args.project)
+        if bool(args.board) == bool(args.beads) or bool(args.beads) != bool(args.root):
+            raise ValueError('Pass --beads with --root, or a legacy board.md, not both.')
+        if args.beads:
+            live = json.loads(args.live.read_text()) if args.live else {}
+            text, root = beads_markdown(json.loads(args.beads.read_text()), args.root, live, args.landed_days), Path.cwd()
+        else:
+            board = args.board.resolve()
+            if args.output.resolve() == board:
+                raise ValueError('HTML output must not overwrite the Markdown source.')
+            text, root = board.read_text(), board.parent
+        page, result = render(text, root, args.project)
         args.output.write_text(page)
         result['output'] = str(args.output.resolve())
         print(json.dumps(result))
-    except (OSError, ValueError) as error:
+    except (OSError, ValueError, KeyError, TypeError) as error:
         print(f'Board render failed: {error}', file=sys.stderr)
         return 2
     return 0

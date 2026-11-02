@@ -1,6 +1,6 @@
 # Cooper workers through Executor
 
-Used by Grok Bot support and Fleet Control for read-only observation. T3 Dispatch uses its own direct worker contract; references to bot-local boards below apply only to existing bot stores, not T3 Dispatch stores. Read the calling workflow's authority first. Support keeps ownership and report markers in its session queue and worker replies, rather than persisting customer data in an engineering board; its case-specific rules govern that storage. Common launch mechanics do not grant engineering, customer-contact, production-write, or schedule permission.
+Used by Grok Bot support and Fleet Control for read-only observation. T3 Dispatch uses its own direct worker contract; references to bot-local boards below apply only to existing bot stores, not T3 Dispatch's Beads graph. Read the calling workflow's authority first. Support keeps ownership and report markers in its session queue and worker replies, rather than persisting customer data in an engineering board; its case-specific rules govern that storage. Common launch mechanics do not grant engineering, customer-contact, production-write, or schedule permission.
 
 ## Route and launch
 

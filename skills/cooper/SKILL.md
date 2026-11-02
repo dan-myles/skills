@@ -8,11 +8,11 @@ description: "Cooper, Dan's engineer. Sorts a task into Feature, Bug, Refactor, 
 
 The playbook decides the order of work. The repo decides the commands.
 
-Dispatch is a long-running pinned T3 project thread for one repository. It launches Cooper workers directly through T3 and stores its board/journal under `.dispatch/<id>/` in that repo. Workers return a complete shareable report in their T3 reply and notify the exact current Dispatch owner with `t3_thread_send`, preserving store, attempt and ownership generation. Workers never edit Dispatch's store. Fleet Control and support remain Grok Bots with their separate thread-message transport. Follow the brief's transport per [The brief](references/brief.md). Cooper keeps its worker playbooks and subagents. T3 Orchestrate report-back is unchanged.
+Dispatch is a long-running pinned T3 project thread for one repository. It tracks work in the repo's Beads graph and launches Cooper workers directly through T3, one Beads issue per job. Workers claim their issue, keep its notes current, return a complete shareable report in their T3 reply and as an issue comment, and notify the exact current Dispatch owner with `t3_thread_send`. They merge only when the brief's MERGE line allows it. Follow [Beads](references/beads.md) under Dispatch, and for standalone work in a repo with a Beads workspace. Fleet Control and support remain Grok Bots with their separate thread-message transport. Follow the brief's transport per [The brief](references/brief.md). Cooper keeps its worker playbooks and subagents. T3 Orchestrate report-back is unchanged.
 
 ## Start
 
-1. Read the repo's agent instructions first: `AGENTS.md`, `CLAUDE.md`, and any nested files for the area in play. When they name a command, a test policy, a commit style, or a PR skill, use theirs.
+1. Read the repo's agent instructions first: `AGENTS.md`, `CLAUDE.md`, and any nested files for the area in play. When they name a command, a test policy, a commit style, or a PR skill, use theirs. Run `bd where`; if it resolves a Beads workspace, read `references/beads.md` and put its claim step on the todo list before the playbook's first change.
 2. Sort the task.
    - **Investigation.** The user wants an answer, not a change: how something works, why it is built that way, which option is better, or "don't touch the code". Also the cause of a leak, spin, hang, or glitch, or a profile or trace the user hands over, when they want the cause and not yet a fix. `playbooks/investigation.md`.
    - **Bug.** Behavior is wrong and should be right. `playbooks/bug.md`.
@@ -102,7 +102,7 @@ Go ahead without asking on anything you can undo (`never-block-on-the-human`): r
 
 Stop and ask before force-pushing shared branches, deploying, or deleting data unless already authorized. Routine messages that advance the assigned task, including progress updates, clarification questions, support replies, and PR review replies, do not need another permission check when the recipient and context are clear. Ask only when a message requires a decision the user has not made, such as a new commitment, sensitive disclosure, or genuinely unclear recipient. Honor explicit draft-only or no-contact instructions. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
 
-**Decided stays decided.** A decision the user already made binds you, wherever it was made: in this thread, in the brief's DECIDED, in a saved grill under `~/.bob-n-frank/grills/`, or in the repo's design docs (ARCHITECTURE, ADRs). Some calls belong to the user even before anyone makes them, because code piles up on them fast:
+**Decided stays decided.** A decision the user already made binds you, wherever it was made: in this thread, in the brief's DECIDED, in a closed Beads `decision` issue, in a saved grill under `~/.bob-n-frank/grills/`, or in the repo's design docs (ARCHITECTURE, ADRs). Some calls belong to the user even before anyone makes them, because code piles up on them fast:
 
 - the shape of stored data: which tables, what a record means, whether it can change
 - how services talk: queue or polling, sync or async, who publishes what
