@@ -1,21 +1,22 @@
 ---
 name: cooper-grill
 disable-model-invocation: true
-description: "Settle every open decision in a complex or risky piece of work before anyone designs, builds, or dispatches it. Maps the decisions as a tree, asks the user each round's ready questions with a recommended answer, looks facts up instead of asking, and saves the agreed decisions. Use when a feature is complex, something could easily go wrong, the right behavior is unclear, or the user says 'grill me'. Manual-only: `/cooper-grill plan` in Claude Code, `$cooper-grill ...` in Codex. `cooper` and `dispatch` run it when unsure."
+description: "Settle every open decision in a schema, infrastructure, or other change that's the user's call before anyone designs, builds, or dispatches it. Maps the decisions as a tree, asks the user each round's ready questions with a recommended answer, looks facts up instead of asking, and saves the agreed decisions. Use when work changes stored data, infrastructure, how services talk, providers, money values, or a shared contract, is a one-way door, leaves a feature's product or taste call open, or the user says 'grill me'. Manual-only: `/cooper-grill plan` in Claude Code, `$cooper-grill ...` in Codex. `cooper` and `dispatch` run it when unsure."
 ---
 
 # Grill
 
-Ask until you and the user understand the plan the same way, with nothing left assumed.
+Ask until you and the user understand the plan the same way, with nothing left assumed. A grill is a Cooper **Checkpoint**: the main kind of stop for the user, alongside Prototype's pick and Babysit's high-stakes question.
 
 ## When
 
-Only for complex work that needs the user's decisions. Run it before designing, building, or dispatching when either holds:
+Only for real changes the user has to decide. Run it before designing, building, or dispatching when the request leaves one of these open:
 
-- several decisions only the user can make, especially ones that depend on each other
+- a call that belongs to the user, per **Decided stays decided** in `../cooper/SKILL.md`: the schema or shape of stored data, infrastructure, how services talk, external providers, money values, contracts other code calls
 - a one-way door: a data migration, deleting data, breaking a public API
+- in a feature, a product or taste call the request, the code, and the docs don't settle
 
-Or when the user asks for it ("grill me"). Never for small changes, however sensitive the area; Cooper's review covers their risk. Never when the only open questions are facts, or details small and easy to change later; Cooper picks those himself.
+Or when the user asks for it ("grill me"). Size doesn't matter: a one-column schema change grills, and a big change that touches none of these doesn't. Everything else is Cooper's to decide without asking: names, file layout, internal structure, which existing library to use, and any detail that's easy to change later. Facts are never questions either; look them up.
 
 ## Map the tree
 

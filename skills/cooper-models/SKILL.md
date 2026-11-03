@@ -11,7 +11,7 @@ Maintain the model choices written directly in the skills. This is an authoring 
 ## Use
 
 - `/cooper-models`: inventory current choices, validate availability, and recommend changes without editing.
-- `/cooper-models <change>`: make an explicit source change, such as "upgrade adversarial reviewers", "put build subagents on <model> high", or "update every use of <model>".
+- `/cooper-models <change>`: make an explicit source change, such as "upgrade the architect designers", "put build subagents on <model> high", or "update every use of <model>".
 - Recommendations from `/cooper-improve models` are evidence to assess, not approval to apply them.
 
 A change to shared skill source affects future launches wherever that source is installed. A request limited to one project/job is an explicit brief override, not permission to rewrite shared defaults. Record the instruction and scope in the current job brief. A project-wide instruction may instead be a sourced Dispatch standing order, applied explicitly to each in-scope brief and launch. Honor that scope without asking again; do not introduce a hidden project model registry. Identify that scope before editing. Model edits do not change already-running threads, install skills, or sync a machine.
@@ -22,7 +22,7 @@ Resolve the authoring repository and read its instructions first. If only an ins
 
 Search actual source, not a cached role registry. Start with `rg -n 'modelSelection|reasoningEffort|effort:|provider family|claude-|gpt-' skills/cooper* skills/dispatch* skills/grokbot-gs-crisp-support README.md PARKING_LOT.md`. Follow every caller and launch example for an affected role. Include active README/PARKING_LOT summaries and any current human documentation reached by those references. Read each match in context so a historical note, model in evidence, or unrelated role is not accidentally changed. Dated validation reports describe their original commits and stay unchanged.
 
-Build a table with role, source file/step, provider family, exact model/options, thread or subagent transport, and whether the setting is authoritative or a matching example. Include Cooper build/hard roles, How/Why, architect/judge, adversarial reviewers, comment review, verify readers, Improve reflection/eval, Orchestrate workers/verifiers, and Dispatch workers/programs/validator policy. Include the separate support worker contract when the requested change covers it. The table is a review artifact, not a new runtime configuration file.
+Build a table with role, source file/step, provider family, exact model/options, thread or subagent transport, and whether the setting is authoritative or a matching example. Include Cooper build/hard roles, How/Why, architect/judge, comment review, verify readers, Improve reflection/eval, Orchestrate workers/verifiers, and Dispatch workers/programs/validator policy. Include the separate support worker contract when the requested change covers it. The table is a review artifact, not a new runtime configuration file.
 
 ## Check and recommend
 

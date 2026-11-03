@@ -20,11 +20,11 @@ Vet every number, the baseline included, with `references/benchmark-checklist.md
    5. Do it where nobody waits on it.
    6. Do it concurrently.
    7. Do it cheaper.
-3. Plan the fix from the profile. When it crosses modules or changes a public interface, run `cooper-architect`. Hand it to a subagent with the files, the hot path, and the target number. One attempt at a time, measured before the next, per `sequence-verifiable-units`. Revert an attempt that doesn't move the number.
-4. Compare with the same harness and case, before and after. Commit the harness first when it's worth keeping. A result that's inconclusive or on the wrong surface isn't a win; report it that way.
-5. Run the repo's checks. Behavior must not change.
-6. Review per **Review** in the skill.
-7. Stop with the work committed on its branch, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
+3. Plan the fix from the profile. When it changes the schema, infrastructure, a public interface, or another call that's the user's (see **When** in `../cooper-grill/SKILL.md`), that's a **Checkpoint**: run `cooper-grill` first. When it crosses modules, run `cooper-architect` and build against its sketch. Commit the harness first when it's worth keeping.
+4. Build it in attempts, measuring each. Hand each attempt to a subagent with the files, the hot path, the target number, and the harness command as its check. The subagent measures and reports the output; rerun the measurement yourself. Keep an attempt that moves the number and commit it; revert one that doesn't. One attempt at a time, measured before the next, per `sequence-verifiable-units`.
+5. Review per **Review** in the skill. It comes before the final check because its fixes change code.
+6. Verify on the final code: compare with the same harness and case, baseline against the final code, and run the repo's checks, since behavior must not change. A result that's inconclusive or on the wrong surface isn't a win; report it that way. Any code change after this, including a Babysit fix, reruns this check for what it touched before it's pushed.
+7. Ship it: run `playbooks/open-pr.md`, which opens a ready-for-review PR and babysits it. Stop when Open PR stops.
 
 **Reply:** the verdict, baseline and after with units, run count, range, the limiter, the fix, the artifact path, and the branch it's committed on. **Show:** a before-and-after chart with units, range, and the limiter, and the file map of what changed.
 
@@ -32,18 +32,20 @@ Vet every number, the baseline included, with `references/benchmark-checklist.md
 
 One change, one measurement, keep or revert. Never stack untested changes. Never claim a win from reading code.
 
-1. Pick the case and the metric. Run `cooper-how` over the target. Name what moves the number (data size, history, concurrency, state) and pick a case that reproduces the user's complaint. If none does, fix the repro first. Then fix one metric, which direction is better, and a stop rule that pairs a target with a minimum number of tries ("50% faster than baseline, after at least 10 tries"), so a lucky first try can't end the run. Use the user's numbers, or propose them. **Checkpoint:** show the case, metric, and stop rule and wait, unless the user said to skip this.
+1. Pick the case and the metric. Run `cooper-how` over the target. Name what moves the number (data size, history, concurrency, state) and pick a case that reproduces the user's complaint. If none does, fix the repro first. Then fix one metric, which direction is better, and a stop rule that pairs a target with a minimum number of tries ("50% faster than baseline, after at least 10 tries"), so a lucky first try can't end the run. Use the user's numbers, or propose them. Show the case, metric, and stop rule and keep going; the user can change them mid-run.
 2. Build the harness, prove it, then freeze it, per `build-the-lever`. Run contrasting workloads: the target case should show the problem and easier cases should separate from it. If they don't, change the workload or the metric. Vet it with the checklist. It prints its error count and a count of work done. Once frozen, one command prints the metric as a median of enough runs to clear the noise. Record the baseline and a green run of the regression gate: the tests that must keep passing.
 3. Open a decision log: `decision.tsv` in a scratch folder outside the repo, one row per try with id, hypothesis, change, before, after, delta, tests, verdict (kept or reverted), and a note. Read it before each try.
 4. Give each hypothesis a mechanism from step 1 ("move X off the startup path; it blocks first paint"), not "try memoizing something". Order them by the list in Fix step 2.
 5. Loop, one hypothesis per try:
-   - A subagent makes the change from a tight brief; you review the diff. Independent hypotheses can run in parallel, each in its own worktree, per `separate-before-serializing-shared-state`.
+   - A subagent makes the change from a tight brief, runs the frozen harness and the gate, and reports the output; you review the diff and rerun the measurement. Independent hypotheses can run in parallel, each in its own worktree, per `separate-before-serializing-shared-state`.
    - Measure with the frozen harness and run the gate.
    - Keep the change only when the metric moves past the noise and the gate stays green. Otherwise revert it fully.
    - Commit each kept change on its own, staging only its files. Log the row either way.
 6. Push past the first plateau. After several rejects in a row, switch category, combine near-misses, reread the source, or try something bolder. Correctness and simplicity outrank the number: revert a win that breaks behavior, and keep a simplification that holds the number.
 7. Stop when the rule is met, or when the ideas left aren't worth their cost. Don't loosen the rule to meet it, and don't quit with cheap ideas untried. If you're stuck, say so.
-8. Review per **Review** in the skill. Stop with the kept commits on the branch in the order they landed, unpushed. No PR until the user asks; then it's `playbooks/open-pr.md`.
+8. Review per **Review** in the skill. It comes before the final check because its fixes change code.
+9. Verify on the final code: run the frozen harness on the final branch against the baseline, plus the regression gate and the repo's checks. Any code change after this, including a Babysit fix, reruns this check for what it touched before it's pushed.
+10. Ship it: keep the commits in the order they landed, and run `playbooks/open-pr.md`, which opens a ready-for-review PR and babysits it. Stop when Open PR stops.
 
 **Reply:** the metric and target, baseline to final with the percent change, tries kept and reverted, each kept change in one line, the `decision.tsv` path, and the next idea you'd try. **Show:** the metric across tries, kept and reverted marked, against the target.
 

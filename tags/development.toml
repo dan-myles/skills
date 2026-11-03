@@ -1,9 +1,6 @@
 [skills.cooper]
 source = "skills/cooper"
 
-[skills.cooper-adversarial-review]
-source = "skills/cooper-adversarial-review"
-
 [skills.cooper-architect]
 source = "skills/cooper-architect"
 

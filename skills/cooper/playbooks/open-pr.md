@@ -1,6 +1,6 @@
 # Open PR
 
-Turn finished work in this checkout into a reviewable PR, then babysit it to merge-ready. It runs only when the user asks ("open the PR", "ship this", "put it up"); no other playbook opens one on its own.
+Turn finished work in this checkout into a ready-for-review PR, then babysit it so the user comes back to a full PR: checks green, the AI reviewers' one round answered. Feature, Bug, Refactor, and Perf end here on their own; skip it only when the user or the brief said not to open a PR. It also runs when the user asks ("open the PR", "ship this", "put it up").
 
 1. **Find the work.** Read `git status`, the branch's commits since its base, and any PR already open for the branch (`gh pr view`). Name the base: the user's target, an existing PR's base, or the branch the work was cut from. When the records disagree, ask. An open PR means this run updates it rather than opening a second one. Leave out changes that aren't part of this work, and say which.
 2. **Review.** Run **Review** in the skill on the whole diff, unless it already ran in this thread on this same diff. Work the user or another session wrote gets the full Review too.
@@ -31,7 +31,7 @@ Turn finished work in this checkout into a reviewable PR, then babysit it to mer
    - **Verification:** one to three real runs and their results. For perf, one number as before → after; the runs, range, and limiter go in the details or a linked artifact.
 
    Add screenshots or video when they prove a claim. No SHAs, no file-by-file lists, no walls of text. Run `unslop` on it.
-7. **Babysit it.** Put `playbooks/babysit.md`'s Drive steps on the todo list and run them until the PR is merge-ready. Skip this only when the user said not to ("don't babysit", "just open the PR").
+7. **Babysit it.** Put `playbooks/babysit.md`'s Drive steps on the todo list and run them until the PR is merge-ready, with one AI review round. Skip this only when the user said not to ("don't babysit", "just open the PR").
 8. **Stop at merge-ready.** Merge only when the user says to, even if the repo's PR skill would merge; stop before that step. The one exception is a bug fix in a repo whose normal flow merges fixes once they're ready: follow that flow.
 
 **Reply:** the owning worker's clickable thread link per **Review handoffs** in the skill, the PR link, its base, what Review found and what changed because of it, and Babysit's status: the PR's state, what was fixed and dismissed, and what needs the user. Include the owning thread in review-ready status updates too. **Show:** the file map of what the PR changes, and for a stack, the PRs bottom to top with each one's state and owning worker link.

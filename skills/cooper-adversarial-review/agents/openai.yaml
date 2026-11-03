@@ -1,7 +1,0 @@
-interface:
-  display_name: "cooper-adversarial-review"
-  short_description: "Adversaries on different models try to break a change; only run-proven findings survive"
-  default_prompt: "Use $cooper-adversarial-review to review this change: state its intent, have adversaries on different models try to break it with runs, and keep only the findings a rerun confirms."
-
-policy:
-  allow_implicit_invocation: false

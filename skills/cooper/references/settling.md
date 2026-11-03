@@ -19,7 +19,7 @@ Settle only when every check passes. Otherwise leave the thread active and write
 - `t3_thread_organize` with `action: "settle"` and `threadId: <worker>`. Always pass the worker's `threadId`; leaving it out settles your own thread.
 - A snoozed worker: `unsnooze` it first, since settling leaves it snoozed (T3 bug #16516).
 - Note `settled <time>` on the row.
-- Settling doesn't remove worktrees or branches. Pruning them is `playbooks/cleanup.md`, after its audit.
+- Settling doesn't remove worktrees or branches.
 
 ## Repeats and misses
 

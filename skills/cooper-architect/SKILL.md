@@ -57,7 +57,7 @@ Fill the merged rationale's **Synthesis decision**: the base and why, what came 
 
 ## 7. Hand back
 
-Return the merged `rationale.md` and the sketch, shown per `../cooper/references/visuals.md`: a file map of the chosen shape (every file, where it lives, how they connect), its types, and the two designs side by side with the judge's scores. When `cooper` called this, its step 3 **Checkpoint** shows them to the user and waits. When run alone, show them and stop. For a contested design, `../cooper-adversarial-review/SKILL.md` can review the sketch before the user sees it.
+Return the merged `rationale.md` and the sketch, shown per `../cooper/references/visuals.md`: a file map of the chosen shape (every file, where it lives, how they connect), its types, and the two designs side by side with the judge's scores. When `cooper` called this, it shows them and builds against the sketch; a call in it that's the user's goes through `cooper-grill` as a **Checkpoint**. When run alone, show them and stop.
 
 The repo's rules decide where the rationale is kept. If they're silent, it goes in the PR body. After approval, the sketch lands as the first commit on the branch. Delete the working folder when the PR is open.
 

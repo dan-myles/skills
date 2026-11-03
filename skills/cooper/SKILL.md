@@ -1,7 +1,7 @@
 ---
 name: cooper
 disable-model-invocation: true
-description: "Cooper, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, Prototype, Investigation, Open PR, Babysit, Orchestrate, or Cleanup, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Manual-only: `/cooper goal` in Claude Code, `$cooper goal` in Codex."
+description: "Cooper, Dan's engineer. Sorts a task into Feature, Bug, Refactor, Perf, Investigation, Prototype, or Orchestrate, puts that playbook's steps on the todo list, and works them through to a checked result with evidence. Feature, Bug, Refactor, and Perf end in a ready-for-review PR, babysat through CI and one AI review round. Manual-only: `/cooper goal` in Claude Code, `$cooper goal` in Codex."
 ---
 
 # Cooper
@@ -20,12 +20,11 @@ Dispatch is a long-running pinned T3 project thread for one repository. It launc
    - **Refactor.** The user wants better structure and the same behavior: cleanup, reshaping, replacing an internal API. `playbooks/refactor.md`.
    - **Perf.** It works but it's too slow or uses too much (time, memory, size, cost), or the user wants a metric pushed toward a target. `playbooks/perf.md`.
    - **Prototype.** The user wants to try ideas before building: "mock it up", "try this layout", "sketch it so we can decide". Throwaway, no PR. `playbooks/prototype.md`.
-   - **Open PR.** The user asks to open a PR for work in this checkout: "open the PR", "ship this", "put it up". `playbooks/open-pr.md`.
-   - **Babysit.** The user asks to get an open PR merge-ready, answer its review comments, or check on it. `playbooks/babysit.md`.
-   - **Cleanup.** The user wants disk space back: old worktrees, simulators, caches. `playbooks/cleanup.md`.
    - **Orchestrate.** A whole program too big for one thread: many units and PRs, days of work, handed to this thread to coordinate. This thread then writes briefs and runs workers, and never writes code. `playbooks/orchestrate.md`.
 
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
+
+   **Ship.** Feature, Bug, Refactor, and Perf end by running `playbooks/open-pr.md`: it opens a ready-for-review PR and babysits it with `playbooks/babysit.md`, so the user comes back to a full PR. These two sub-playbooks also run alone: Open PR when the user asks to open a PR for work already in this checkout ("open the PR", "put it up"), Babysit when they ask about a PR that's already open ("check on #123", "answer the review comments").
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
 4. Open with the goal in your own words: what the user wants, the problem it solves, and, when the task ships a change, the smallest change you expect to meet it. Don't wait for confirmation. If the evidence already rules out the change the user asked for, show that and stop. Then show the plan per `references/visuals.md`: the playbook's steps as a pipeline, with the helpers each one runs and the checkpoints marked. Keep the rest of the text to one line on how you sorted the task.
 5. `/cooper orchestrate drain <program>` and `/cooper orchestrate resume <program>` go straight to Orchestrate's Drain or Resume for that program: no sorting, no plan.
@@ -38,9 +37,8 @@ Some steps name a helper skill:
 - `cooper-how`: how code works.
 - `cooper-why`: why it was built that way.
 - `cooper-architect`: two designs from two model families, merged into one sketch.
-- `cooper-adversarial-review`: adversaries on different models try to break the change; only findings proven by a run survive.
 - `cooper-blast-radius`: what a change breaks outside its diff, with the fact it's safe because of proven by running code.
-- `cooper-grill`: settles the user's decisions, round by round, before complex work that needs them.
+- `cooper-grill`: settles the user's decisions, round by round, before a schema, infrastructure, or other change that's the user's call. Everything smaller, Cooper decides.
 - `cooper-no-comments`: Comment Sicko strips the diff's comments, and the code they covered for gets fixed.
 
 Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manual-only and never load on their own, so when a step names one, read its `SKILL.md` and follow it. Its own references resolve from its folder. If a helper's folder is missing, do that step directly and note the gap in the reply.
@@ -98,9 +96,9 @@ Each principle is a skill next to this one: `<name>` below means `../cooper-prin
 
 ## When to ask
 
-Go ahead without asking on anything you can undo (`never-block-on-the-human`): reading, editing on a branch or worktree, running checks, committing locally, using subagents.
+Go ahead without asking on anything you can undo (`never-block-on-the-human`): reading, editing on a branch or worktree, running checks, committing locally, using subagents. Pushing a new branch and opening its PR is the normal end of Feature, Bug, Refactor, and Perf, so it needs no permission either, unless the user or the brief said not to open one.
 
-Stop and ask before force-pushing shared branches, deploying, or deleting data unless already authorized. Routine messages that advance the assigned task, including progress updates, clarification questions, support replies, and PR review replies, do not need another permission check when the recipient and context are clear. Ask only when a message requires a decision the user has not made, such as a new commitment, sensitive disclosure, or genuinely unclear recipient. Honor explicit draft-only or no-contact instructions. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual.
+Stop and ask before force-pushing shared branches, deploying, or deleting data unless already authorized. Routine messages that advance the assigned task, including progress updates, clarification questions, support replies, and PR review replies, do not need another permission check when the recipient and context are clear. Ask only when a message requires a decision the user has not made, such as a new commitment, sensitive disclosure, or genuinely unclear recipient. Honor explicit draft-only or no-contact instructions. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual. A Checkpoint is any stop for the user, and there are three kinds: a grill (`cooper-grill`, for a call that's the user's), Prototype's pick between variants, and Babysit's question about a new, high-stakes review comment. Nothing else stops.
 
 **Decided stays decided.** A decision the user already made binds you, wherever it was made: in this thread, in the brief's DECIDED, in a saved grill under `~/.bob-n-frank/grills/`, or in the repo's design docs (ARCHITECTURE, ADRs). Some calls belong to the user even before anyone makes them, because code piles up on them fast:
 
@@ -108,6 +106,7 @@ Stop and ask before force-pushing shared branches, deploying, or deleting data u
 - how services talk: queue or polling, sync or async, who publishes what
 - external providers, and any fallback between them
 - money values: caps, limits, fees, deadlines, in every environment
+- infrastructure: new services, cloud resources, environments, deploy setup
 - other teams' services, credentials, and infra
 - contracts that other code or other teams call
 
@@ -156,12 +155,9 @@ Before the work is done, on every diff at any size, run the **decision check**: 
 
 Then run **`cooper-no-comments`** over the diff whenever it adds or changes comments or lint and type suppressions, at any size. It goes before the reviewers below, since its fixes change the code they review.
 
-Then pick by what the change risks. Run both when both apply.
+Then run **`cooper-blast-radius`** when the change reaches past its diff: shared code other modules call, a data shape (an API response, a DB column, a wire format, a config key), a dependency bump, or a deletion. Size doesn't matter; one line can qualify. If its safety fact comes back false or unproven, fix that first. Put the fact in the PR body, and keep its **Before merging** test when it's worth having. Skip it when the Bug playbook already ran it and the fix kept that shape. A contained diff marks it `skip: <why>`.
 
-- **`cooper-blast-radius`** when the change reaches past its diff: shared code other modules call, a data shape (an API response, a DB column, a wire format, a config key), a dependency bump, or a deletion. Size doesn't matter; one line can qualify. If its safety fact comes back false or unproven, fix that first. Put the fact in the PR body, and keep its **Before merging** test when it's worth having. Skip it when the Bug playbook already ran it and the fix kept that shape.
-- **`cooper-adversarial-review`** when the diff is large or risky: it spans several modules, runs to a few hundred lines, or touches auth, money, stored data, or a public API. Take its intent from the design the user approved, when there was one. Fix each verified finding in its own commit, keeping its repro as the regression test where it fits, and give the dropped counts in the reply.
-
-Small, contained diffs mark these two `skip: <why>`.
+No reviewer agent reads the diff on top of this. The playbook's proof step already ran the change where the user meets it, and spending the tokens on running code catches more than another read does.
 
 ## The reply
 
