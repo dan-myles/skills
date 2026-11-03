@@ -123,7 +123,7 @@ Name the decision, gather references, build throwaway variants in `/tmp` behind 
 <details>
 <summary><b>Open PR</b> and <b>Babysit</b>: the shared ending</summary>
 
-**Open PR** runs on its own at the end of Feature, Bug, Refactor, and Perf, or when you say "open the PR": repo checks until clean, commits in story order (stacked when the diff has several kinds of change), opened **ready for review**, never a draft, with a body a reviewer reads in a minute. The final check's proof is posted in it: command output as text, plus screenshots and recordings for frontend changes, uploaded to GitHub with `gh --attach`.
+**Open PR** runs on its own at the end of Feature, Bug, Refactor, and Perf, or when you say "open the PR": repo checks until clean, commits in story order (stacked when the diff has several kinds of change), opened **ready for review**, never a draft, with a body a reviewer reads in a minute. Every PR gets a Mermaid architecture diagram of what it modifies (services and data for backend, routes, components, and state for frontend), changed parts highlighted. The final check's proof is posted in it: command output as text, plus screenshots and recordings for frontend changes, uploaded to GitHub with `gh --attach`.
 
 **Babysit** runs after it, or when you say "check on #123": conflicts, then review threads, then CI.
 
