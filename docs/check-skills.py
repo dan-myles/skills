@@ -18,7 +18,7 @@ GENERATED_OUTPUTS = {("personal-taste/references/imagery.md", "assets/credits.js
 
 def links(body):
     body = re.sub(r"^(`{3,}|~{3,}).*?^\1[^\n]*$", "", body, flags=re.M | re.S)
-    for target in re.findall(r"\[[^\]]*\]\(([^\s)]+)\)", body):
+    for target in re.findall(r"\[[^\]]*\]\(([^\s)]+)\)", re.sub(r"`[^`\n]*`", "", body)):
         if not urlsplit(target).scheme and not target.startswith("#"):
             yield unquote(target.split("#")[0]), False
     for target in re.findall(r"`([^`\n]+)`", body):

@@ -28,9 +28,9 @@ Turn finished work in this checkout into a ready-for-review PR, then babysit it 
    - **Tradeoffs:** only alternatives a reviewer would ask about.
    - **Decisions made here:** each choice the request or design didn't settle, with why. One that touches a decided or reserved call names where the user approved it.
    - **Blast radius:** who or what it touches, and why that's safe. `cooper-blast-radius`'s safety fact goes here.
-   - **Verification:** one to three real runs and their results. For perf, one number as before → after; the runs, range, and limiter go in the details or a linked artifact.
+   - **Verification:** the proof from the playbook's final check, posted, not described. Command output goes in as text blocks, trimmed to what proves the claim. Screenshots and recordings are for frontend changes only, where someone sees the result on a screen; a backend, API, CLI, or infra change posts its command output and nothing else. They're uploaded with `gh`'s `--attach` (on `gh pr create`, `gh pr edit`, or `gh pr comment`): reference each file in the body as `![<caption>](./<file>)` and `gh` swaps in the uploaded asset. Images sit before next to after, each captioned; videos play inline. For perf, one number as before → after; the runs, range, and limiter go in the details or a linked artifact. Failures and checks you couldn't run are listed too.
 
-   Add screenshots or video when they prove a claim. No SHAs, no file-by-file lists, no walls of text. Run `unslop` on it.
+   No SHAs, no file-by-file lists, no walls of text. Run `unslop` on it.
 7. **Babysit it.** Put `playbooks/babysit.md`'s Drive steps on the todo list and run them until the PR is merge-ready, with one AI review round. Skip this only when the user said not to ("don't babysit", "just open the PR").
 8. **Stop at merge-ready.** Merge only when the user says to, even if the repo's PR skill would merge; stop before that step. The one exception is a bug fix in a repo whose normal flow merges fixes once they're ready: follow that flow.
 

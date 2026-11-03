@@ -123,13 +123,13 @@ Name the decision, gather references, build throwaway variants in `/tmp` behind 
 <details>
 <summary><b>Open PR</b> and <b>Babysit</b>: the shared ending</summary>
 
-**Open PR** runs on its own at the end of Feature, Bug, Refactor, and Perf, or when you say "open the PR": repo checks until clean, commits in story order (stacked when the diff has several kinds of change), opened **ready for review**, never a draft, with a body a reviewer reads in a minute.
+**Open PR** runs on its own at the end of Feature, Bug, Refactor, and Perf, or when you say "open the PR": repo checks until clean, commits in story order (stacked when the diff has several kinds of change), opened **ready for review**, never a draft, with a body a reviewer reads in a minute. The final check's proof is posted in it: command output as text, plus screenshots and recordings for frontend changes, uploaded to GitHub with `gh --attach`.
 
 **Babysit** runs after it, or when you say "check on #123": conflicts, then review threads, then CI.
 
 - One review round: each bot's first review is answered. Cooper doesn't wait for re-reviews.
 - Bot threads get a fix or a dismissal and are resolved, without a reply. Humans get replies.
-- A fix reruns the playbook's final check before it's pushed.
+- A fix reruns the playbook's final check before it's pushed, and that proof is posted as a PR comment.
 - Waits with T3's PR watch, not polling. Stops at merge-ready. Never merges.
 
 </details>

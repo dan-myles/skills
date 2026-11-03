@@ -108,6 +108,8 @@ Whenever a step checks behavior on the real app (Feature's check, Bug's rerun of
 
 Failures go in the gallery too, marked, so nothing passes by omission.
 
+When the work ships a PR, the same gallery goes on the PR, per **Verification** in `../playbooks/open-pr.md`: screenshots and recordings for frontend changes, command output for everything else. `gh --attach` stores files with GitHub, where a private repo's attachments need repo access to view. Never upload them anywhere else, such as a gist or an image host, where a link alone opens them. Keep secrets, tokens, customer data, and another person's private details out of every screenshot and log; crop or redact before uploading.
+
 ## Activity board: what's running
 
 When the user asks what Cooper threads are doing ("what are my coopers doing", "status", "what's running"), draw an activity board from real state, never memory:

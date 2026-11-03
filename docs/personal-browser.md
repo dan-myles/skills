@@ -25,9 +25,7 @@ current login without installing a launchd service.
 Chrome for Testing is agent-browser's supported Chromium distribution. Downloads
 live in `~/.agent-browser/browsers`. Explicit setup is needed because Loadout has
 no installation hooks for this download or service activation. Do not run setup
-or restart services during another agent's active sign-in. Use the migration-only
-command in [profile migration](profile-migration.md) to preserve the legacy origin
-without installing anything or touching the live browser.
+or restart services during another agent's active sign-in.
 
 ## Use the saved profile
 
