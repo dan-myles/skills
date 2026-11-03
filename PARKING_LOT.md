@@ -4,11 +4,10 @@ Where the Cooper work stands, for the next agent who picks it up. Read this befo
 
 ## What this repo is
 
-Dan's loadout, applied by the loadout CLI from this repository's `main` branch. `loadout.toml` is the deployment contract. `tags/development.toml` adds Cooper and Dispatch on machines that locally select development, currently Studio and Paperclip; `machines/grokbot.toml` enables only the Grok Bot destination and the global non-coding skills. Capy on the Studio is pending a documented user-level skills path; it cannot be declared validly without one. See `README.md` for machine names, rollout questions, ownership limits, and branch-specific setup.
+Dan's loadout, applied by the loadout CLI from this repository's `main` branch. `loadout.toml` is the deployment contract for every machine. `tags/development.toml` adds Cooper, Dispatch, and the coding tools on machines that locally select development: Stapler (the Mac Studio) and Paperclip. The MacBook Pro is base only. See `docs/operations.md` for setup.
 
-All skill folders live under `skills/`, matching the Loadout starter, with their contents intact. `.skills-manager/` is historical migration metadata, ignored by Loadout. Do not use it to deploy these skills after migrating a machine. Preserve and reconcile live-library-only edits, then undeploy the manager-created links before switching ownership. Loadout follows top-level skill links and can otherwise adopt the library targets. See the README migration steps. This conversion did not apply any machine or change `main`.
+All skill folders live under `skills/`, matching the Loadout starter.
 
-Pending skill-content follow-up: `skills/cooper-improve/SKILL.md` still instructs agents to import into Skills Manager and deploy Default. Its body was preserved at Dan's request. Do not run those old deployment steps after migrating; follow `README.md` and update the skill only when Dan authorizes changing its contents.
 
 Most of it is **Cooper**: Dan's agent persona and his software workflow, a set of `cooper-` skills. Cooper is a port of pstack, a Cursor plugin, rewritten in our own words and rebuilt for T3 Code.
 
@@ -21,12 +20,11 @@ Also here, outside Cooper:
 - `personal-restart-t3-thread`: restarts a T3 thread's provider session so it reloads MCP servers. It settles the thread, waits for the detach in T3's event log (read-only), unsettles it and sends the continuation. A thread restarting itself hands off to a temporary helper thread. Development profile. Requested by Dan through his agent, 2026-11-02, with automatic invocation so a thread can restart itself.
 - `personal-tailscale-ssh`: automatically handles work on Dan's other machines through passwordless Tailscale SSH. Dan explicitly requested automatic invocation. Records verified stapler (the Mac Studio), Archie, and Paperclip accounts.
 - `ketchup`: catches Dan up on a chat since his last message and lists every call waiting on him. Unprefixed like `unslop`, but manual-only. Ported from pstack's `ketchup` (2026-10-20).
-- `tools/t3-grokbot-bridge/`: a standalone Node program, not a skill, that streams T3 thread updates per project to a Grok Bot webhook (Dan's call, 2026-10-29). Loadout ignores `tools/`. Its runtime state and credentials live in `~/.crabstock-dispatch/`, never in this repo. Read its README before changing it; it records what was verified against T3 and what was not (real Grok Bot delivery).
 - `personal-*`: Dan's one-off automations (GameStock PR review, Mercury receipts, Paper comment watch) and third-party skills Dan is trying out (`personal-anatomy`, from skills.wheresryan.sh/anatomy, MIT; `personal-taste`, Leon Lin's taste-skill v2 from github.com/Leonxlnx/taste-skill at f624f37, MIT; `personal-landing-page-design` and `personal-design-to-motion`, Elaya's ai-design-skills from github.com/elayadesign/ai-design-skills at a2735a3, MIT). Third-party skills are copied as is with only `name` changed (plus the manual-only flags) and keep their LICENSE. Every `personal-*` skill is manual-only except `personal-tailscale-ssh` (Dan's call, 2026-10-26), `personal-loadout-programs` (Dan's call, 2026-10-29), `personal-vaultwarden` (Dan's call, 2026-10-29), `personal-messaging` (Dan's call, 2026-10-30), and `personal-restart-t3-thread` (Dan's request, 2026-11-02).
 
 ## Status
 
-Cooper is still being designed. **Nothing in it has run on real work yet.** Don't use it on Dan's real repos until he says so. The suggested next step is a dry run of `/cooper` on a small task in a throwaway repo.
+Cooper and Dispatch run on Dan's real repos (CrabStock and GameStock each have a Dispatch). Watch real runs before adding more skills.
 
 ## Ground rules
 
@@ -36,11 +34,11 @@ Cooper is still being designed. **Nothing in it has run on real work yet.** Don'
 - Explain to Dan with rendered visuals, and keep the text to what the visual doesn't say.
 - Ask Dan with the question tool (`AskUserQuestion` in Claude Code and T3), the recommended option first. The confirm option is labeled **Send it**, and Dan types "send it" to approve. Cooper's rule is **How to ask** in `skills/cooper/SKILL.md`.
 - Commit messages are short and lowercase (`add cooper-verify`, `cooper: add perf playbook`). Commit and push only when Dan asks.
-- Never print or copy secrets. The 1Password master password lives in `~/.config/agents/1password.txt`; leave it there.
+- Never print or copy secrets. Credentials go through `personal-vaultwarden`.
 
-## Fleet layers
+## Cooper and Dispatch
 
-Dispatch is a pinned long-running T3 project thread scoped to one repo, with portable state under `.dispatch/<id>/`. It coordinates Cooper worker threads directly with T3 tools. Fleet Control and support remain Grok Bots with their own registry and Executor transport; new Dispatches do not depend on them or participate in cross-project routing. No live stores, bots, installed skills or schedules are migrated by the T3 port.
+Cooper is a software engineer and nothing else: no `cooper` or `cooper-*` skill mentions Dispatch. Dispatch is a pinned long-running T3 project thread scoped to one repo, with portable state under `.dispatch/<id>/`, and it owns everything about coordinating Coopers: the brief (`skills/dispatch/references/brief.md`), which carries the report-back instructions, and settling (`skills/dispatch/references/settling.md`). Cooper's own Orchestrate playbook can run Cooper worker threads too, but keeps no store; its kickoff carries the report-back line.
 
 ## Adding or renaming a skill
 
@@ -49,14 +47,14 @@ Do all of these together:
 1. Create the folder under `skills/`. Its folder name and `name:` in `SKILL.md` frontmatter match.
 2. `disable-model-invocation: true` in the frontmatter unless Dan explicitly requests automatic invocation, as for the automatic personal skills above.
 3. `agents/openai.yaml` with the same name and `allow_implicit_invocation: false`, or `true` for an explicitly automatic skill.
-4. Add `[skills.<name>] source = "skills/<name>"` to `tags/development.toml` for `cooper` and `cooper-*`, or `loadout.toml` for the requested non-coding set. Personal skills tied to coding-only tooling, such as `personal-vaultwarden`, belong in the development profile. The box gets global skills only. Keep machine-specific destinations in machine layers.
-5. Run `loadout validate .` and `loadout plan --loadout .`, then commit and push only when Dan asks. Apply approved changes per `docs/operations.md`; do not hand-edit agent links or reintroduce Skills Manager as a second deployment source.
+4. Add `[skills.<name>] source = "skills/<name>"` to `tags/development.toml` for `cooper` and `cooper-*`, or `loadout.toml` for the requested non-coding set. Personal skills tied to coding-only tooling, such as `personal-vaultwarden`, belong in the development profile.
+5. Run `loadout validate .` and `loadout plan --loadout .`, then commit and push only when Dan asks. Apply approved changes per `docs/operations.md`; do not hand-edit agent links.
 6. Add it to the skills list in `skills/cooper-improve/SKILL.md`, and to `skills/cooper/SKILL.md` if Cooper uses it.
 7. Run `unslop` on new prose.
 
 ## Cooper and Dispatch's home
 
-Cooper's grills and Orchestrate stores remain in place. Home/repo model YAML files are no longer read, written or deleted. Launch settings live directly at each launching step; scoped explicit user instructions may override a job. `cooper-models` upgrades those skill source declarations.
+Cooper saves grills to `~/.cooper/grills/`. Orchestrate keeps no store. Launch settings live directly at each launching step; scoped explicit user instructions may override a job. `cooper-models` upgrades those skill source declarations.
 
 Dispatch owns `.dispatch/<id>/` inside one repository, never a global instance lookup. The store ID derives from the initial thread's exact ID; metadata separates that immutable identity from the current owner and generation. Markdown board, journal, decisions, briefs, reports and explicit Wayfinder maps are Git-shareable. Read `skills/dispatch/references/project-state.md` for the format, save/share and explicit takeover protocol, privacy exclusions, and inaccessible-worker recovery. Git is not a distributed lock. No silent adoption or concurrent writing to another owner's store is allowed.
 
@@ -74,7 +72,7 @@ Dispatch owns `.dispatch/<id>/` inside one repository, never a global instance l
 | Prototype | Throwaway sketches to settle a design call. | A pick. No PR. |
 | Open PR (sub-playbook) | The ending of Feature, Bug, Refactor, and Perf: check, commit, open ready for review, babysit. Also runs alone on request. | A ready-for-review PR. |
 | Babysit (sub-playbook) | Getting a PR merge-ready: conflicts, review threads, CI, one AI review round. Waits with T3's `watch_pull_request`. Also runs alone on request. | Merge-ready. Never merges unless told. |
-| Orchestrate | A whole program handed to one T3 thread that never writes code: briefs, standing orders, a store of tables in `~/.bob-n-frank/orchestrate/<program>/`, Cooper worker threads in their own worktrees, verifiers on the other model family, drains on a T3 heartbeat. Ported from pstack's Orchestrate. | Merge-ready PRs; merges only if the standing orders allow it. |
+| Orchestrate | Work too big for one thread. The coordinating Cooper thread never writes code: it launches Cooper workers in their own worktrees with kickoffs that name their done evidence, runs a verifier per PR on the other model family, and keeps no store; state is what T3 and GitHub show. pstack's agentic Orchestrate, ported 2026-11-03. | Merge-ready PRs. |
 
 Cooper babysits every PR he opens unless told not to, and replies to human reviewers without asking. Bot threads get a fix or a dismissal and are resolved without a reply (2026-11-03).
 
@@ -86,7 +84,7 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 - `cooper-why`: why it was built that way, from every evidence source.
 - `cooper-architect`: two designers on different model families, a judge, a merged sketch.
 - `cooper-blast-radius`: what a change breaks outside its diff, with its safety fact proven by running code.
-- `cooper-grill`: settles the user's open calls before a schema, infrastructure, or other reserved change, or a one-way door; Cooper decides everything smaller (narrowed 2026-11-03). It maps the decisions as a tree, asks each round's ready questions with recommendations through the question tool, looks facts up instead of asking, and saves the result to `~/.bob-n-frank/grills/<slug>.md`. Cooper runs it in Feature (before design), Bug, and Refactor when unsure; Dispatch runs it before dispatching an item with open decisions. Not in Orchestrate for now. Adapted from Matt Pocock's grilling skill.
+- `cooper-grill`: settles the user's open calls before a schema, infrastructure, or other reserved change, or a one-way door; Cooper decides everything smaller (narrowed 2026-11-03). It maps the decisions as a tree, asks each round's ready questions with recommendations through the question tool, looks facts up instead of asking, and saves the result to `~/.cooper/grills/<slug>.md`. Cooper runs it as a Checkpoint in Feature, Bug, Refactor, Perf, and Orchestrate. Adapted from Matt Pocock's grilling skill.
 - `cooper-no-comments`: Comment Sicko, a read-only subagent on the other family, lists every comment to kill; Cooper deletes them, fixes the code each `MUST KILL` flag blames, and encodes claimed constraints as types, tests, or lint without asking. Runs first at Review whenever a diff touches comments or suppressions. Ported from pstack's `no-comments` and its Comment Sicko agent, with the Sicko read-only so a child never edits Cooper's worktree.
 - `cooper-sharpen`: rewrites a prompt so it asks for a deeper version of the task, not a bigger one, and hands back only the rewrite. Ported from pstack's `sharpen` as of 0.15.29, where it stopped doing the task itself.
 - `cooper-verify`: writes and maintains a repo's own `cooper-verify-<app>` skill (committed in that repo at `.claude/skills/cooper-verify-<app>/`, symlinked from `.agents/skills/`). Cooper uses it when driving an app and only offers to create one.
@@ -121,13 +119,17 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 - **Cleanup playbook dropped (2026-11-03).** Dan didn't use it.
 - **Grill only for real changes (2026-11-03).** Dan doesn't want to be asked about small things. `cooper-grill` runs when work changes the schema, infrastructure, how services talk, providers, money, or a shared contract and the request leaves it open, or is a one-way door; size doesn't matter. Infrastructure joined the calls reserved for Dan. A Bug whose right behavior is unclear no longer grills; Cooper picks what the code, tests, and docs point to and names it in the PR.
 - **One word for stopping: Checkpoint (2026-11-03).** Dan: "grill is also a checkpoint." A Checkpoint is any stop for him, and there are three kinds: a grill, Prototype's pick, and Babysit's high-stakes question. Feature's design stop for a product or taste call is now a grill too, and `cooper-architect` no longer waits on its own.
+- **Grok Bots dropped (2026-11-03).** Dan stopped using them. Gone: `grokbot-fleet-control`, `grokbot-gs-crisp-support`, the `grokbot` machine layer and `grok-bot` agent, `tools/t3-grokbot-bridge`, and the second report path through Executor in Cooper's brief and settling rules.
+- **Cooper knows nothing about Dispatch (2026-11-03).** Dan: "cooper is just a SWE." The brief and settling references moved from `skills/cooper/references/` to `skills/dispatch/references/`, and Dispatch's brief tells each worker how to report back. Cooper's skills, `cooper-improve` and `cooper-models` included, no longer name Dispatch.
+- **Orchestrate keeps no state (2026-11-03).** Dan wants Cooper able to orchestrate threads without a store. Ported pstack's agentic Orchestrate: no `~/.bob-n-frank/orchestrate/` tables, heartbeat, or drain/resume commands. The picture is rebuilt from T3 threads and GitHub.
+- **Bob leftovers and migration history removed (2026-11-03).** Grills moved to `~/.cooper/grills/`; the `bob-verify-*` fallback, rename notes, `.skills-manager/`, and the one-time validation and migration docs are gone. `docs/check-skills.py` replaced the two link checkers and checks every declared skill.
 - **Investigation verifies (2026-11-03).** Explain mode runs something for each claim the answer rests on and shows the output, so every playbook has a verification step.
 
 ## Where we stopped
 
 Ported: pstack's main skill and its Feature, Bug, Investigation, Refactor, Perf (with hillclimb and benchmark checklist), Prototype, Babysit, runtime and trace forensics (as Diagnose); `how`, `why`, `architect` (with `arena` folded in), `interrogate` (dropped 2026-11-03), `blast-radius`, `reflect`, eval, `correct`, `setup-pstack` (as `cooper-models`), `create-verification-skill` and `maintain-verification-skill` (as `cooper-verify`), all 24 principles, `no-comments` with Comment Sicko (as `cooper-no-comments`), `sharpen` (as `cooper-sharpen`), `ketchup`, and `unslop`.
 
-**Next:** dry-run `/cooper` on a small task in a throwaway repo, and fix what that turns up through `/cooper-improve`.
+**Next:** watch real runs of the hand-off playbooks (ready PR, one bot round, Checkpoints only through grill) and fix what they turn up through `/cooper-improve`.
 
 **Parked, Dan unsure:**
 
@@ -144,18 +146,17 @@ PostHog posted 38 lessons from building their AI products ([thread](https://x.co
 
 1. **Freeze features and run Cooper on real work.** Watch a few real runs end to end before adding more skills. (Habit; matches **Next** above.)
 2. **Turn failures into evals.** `cooper-improve reflect` saves each bad session as a case, and `cooper-improve eval` replays the cases before a skill change ships.
-3. **Count lookups as missing skills.** Add a line to REPORT in `skills/cooper/references/brief.md` for what the thread had to look up or wished it had.
+3. **Count lookups as missing skills.** Add a line to REPORT in `skills/dispatch/references/brief.md` for what the thread had to look up or wished it had.
 4. **Cut subagents back to where they pay.** PostHog keeps readers on the parent model to share its cache. Dan doesn't mind either way, so the read-only roles keep Sonnet in their launch declarations.
 5. **Cost per thread.** Report tokens and dollars per thread so Dispatch can show spend.
 6. **Keep the harness thin.** Fewer rules in prompts, more of the model's own judgment. (Habit.)
-7. **Drift check after merges.** Fleet Control flags skills that name files, flags, or tools that no longer exist.
+7. **Drift check after merges.** Flag skills that name files, flags, or tools that no longer exist. `docs/check-skills.py` already catches broken relative links.
 8. **Worked examples.** Add one short real run to each playbook.
 
 #3 and #5 are the cheapest to build, as two new REPORT lines plus a Dispatch roll-up.
 
 ## Known gaps
 
-- Nothing has been run. Expect wording that reads fine and fails in practice.
 - The model picks came from research on 2026-10-12 (benchmarks, speed, pstack-t3's defaults). Recheck the hardcoded choices with `/cooper-models` as T3 capabilities and session evidence change; no model upgrade follows from catalog availability alone.
 - T3 issues tracked by the launch guidance; failures remain visible gates rather than reasons to switch transport:
   - #16808: `delegate_task` fails with `parent_not_active` from a background subagent.

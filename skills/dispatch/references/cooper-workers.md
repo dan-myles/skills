@@ -1,6 +1,6 @@
 # Cooper workers in T3
 
-Dispatch launches long-lived Cooper worker threads with actual T3 tools. Read the calling mode's authority first. This contract grants no implementation, production-write, merge, or scheduling permission beyond its brief. Grok Bot support retains its separate [Executor contract](../../grokbot-gs-crisp-support/references/cooper-workers.md).
+Dispatch launches long-lived Cooper worker threads with actual T3 tools. Read the calling mode's authority first. This contract grants no implementation, production-write, merge, or scheduling permission beyond its brief.
 
 ## Route and launch
 
@@ -61,7 +61,7 @@ REPORT-BACK  transport t3-thread: <exact current Dispatch owner ID>
              Send a notification with a stable store/item/attempt/revision clientRequestId.
 ```
 
-Use [Cooper's brief rules](../../cooper/references/brief.md) for attended/headless behavior. Investigation and planning briefs explicitly forbid implementation/PRs/production writes. The complete report belongs in the worker reply at each gate or handoff; the notification points to it and does not replace it. Dispatch copies sanitized evidence into its store. Workers never edit Dispatch's board, journal, ownership metadata or report cursors, including in another worktree that contains the same `.dispatch` folder. A report file outside shared Git is supplemental only. Preserve required artifacts with repository-relative links or a verified authorized shared destination before accepting them.
+Use [the brief's rules](brief.md) for attended/headless behavior. Investigation and planning briefs explicitly forbid implementation/PRs/production writes. The complete report belongs in the worker reply at each gate or handoff; the notification points to it and does not replace it. Dispatch copies sanitized evidence into its store. Workers never edit Dispatch's board, journal, ownership metadata or report cursors, including in another worktree that contains the same `.dispatch` folder. A report file outside shared Git is supplemental only. Preserve required artifacts with repository-relative links or a verified authorized shared destination before accepting them.
 
 A send uses `t3_thread_send` with the exact coordinator ID, `mode: "auto"`, and stable `clientRequestId` for that revision. Cross-machine return links are one-way and account-specific: verify the coordinator environment through the worker's live links and pass its `environmentId` when required. If no verified return route is available, leave the complete reply and record notification failure; Dispatch can still read it on the saved worker destination. Never send to a same-looking local thread or invent reverse connectivity. A failed notification leaves a delivery gap, not a missing report or permission to invent a coordinator. On takeover, update the route only after the new owner has reconciled and explicitly handed off control. Late reports retain their original owner generation and attempt.
 
@@ -75,6 +75,6 @@ Use `t3_thread_send` only for concrete authorized follow-up on the same active j
 
 ## Settle safely
 
-Only the owning coordinator settles a worker. An explicit store takeover inherits recorded coordination responsibility, but not control of inaccessible threads; recover/confirm control first. Read [settlement checks](../../cooper/references/settling.md). All must pass: acceptance or explicit handback, complete recorded report/follow-ups, no running turns/children, no pending questions/queues, all owned PRs merged/closed, clean and pushed work where applicable, preserved artifacts, and safe project settle actions. Repo/worktree verification comes from fresh Cooper evidence, not Dispatch running a validation job itself. Missing access is not a pass.
+Only the owning coordinator settles a worker. An explicit store takeover inherits recorded coordination responsibility, but not control of inaccessible threads; recover/confirm control first. Read [settlement checks](settling.md). All must pass: acceptance or explicit handback, complete recorded report/follow-ups, no running turns/children, no pending questions/queues, all owned PRs merged/closed, clean and pushed work where applicable, preserved artifacts, and safe project settle actions. Repo/worktree verification comes from fresh Cooper evidence, not Dispatch running a validation job itself. Missing access is not a pass.
 
 Use `t3_thread_organize` on the verified environment with the exact worker `threadId`; unsnooze first if necessary. After it succeeds, record the settle time on its card; until then the worker is open and its card stays in Now. Never omit the ID, settle this Dispatch, archive, or prune as part of this step. A merge-ready PR waiting on the user keeps ownership active. Status/digest skips all settlement. Workers retain authorized PR watches; Dispatch needs no polling loop or invented automatic wakeup.

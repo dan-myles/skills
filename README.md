@@ -2,7 +2,7 @@
 
 The skills, agents, programs, and MCP servers Dan's machines run, applied by the [loadout](https://github.com/dan-myles/loadout) CLI from `main`. Most of it is **Cooper**, an engineer you hand a task to, and **Dispatch**, the project lead that runs Coopers for a repo. Both run in [T3 Code](https://github.com/pingdotgg/t3code).
 
-Setting up a machine, agent destinations, Grok Bots, and migrations: [docs/operations.md](docs/operations.md).
+Setting up a machine and where each agent gets its skills: [docs/operations.md](docs/operations.md).
 
 ## Cooper
 
@@ -40,7 +40,7 @@ flowchart TD
 | **Perf** | Too slow or too heavy | Measure it | Same harness, baseline vs final | Merge-ready PR |
 | **Investigation** | You want an answer, not a change | Read the code and its history | Run what each claim rests on | An answer page |
 | **Prototype** | You want to see options first | Name the decision | Look at each variant as you would | Your pick |
-| **Orchestrate** | A whole program, days of work | Countable done condition | Verifiers on the other model family | Many merge-ready PRs |
+| **Orchestrate** | Work too big for one thread | Countable done condition | A verifier per PR, other model family | Merge-ready PRs |
 
 Click a playbook for its steps.
 
@@ -137,7 +137,7 @@ Name the decision, gather references, build throwaway variants in `/tmp` behind 
 <details>
 <summary><b>Orchestrate</b>: a whole program</summary>
 
-A coordinator thread that never writes code: frame a countable done condition, set up a store and heartbeat, pilot one unit end to end, then scale Cooper workers in their own worktrees. Verifiers on the other model family fill a ledger, and the lowest unmerged PR lands first.
+The Cooper thread coordinates and never writes code. It frames a countable done condition, takes one unit all the way through first, then runs up to four Cooper workers in their own worktrees. Each kickoff names the evidence that proves the unit done and tells the worker where to report. A verifier on the other model family checks each PR at its current head. No store: the picture is whatever T3 and GitHub show right now, the way pstack's Orchestrate works.
 
 </details>
 
@@ -149,7 +149,7 @@ A Checkpoint is any stop for you. There are three kinds, and nothing else stops:
 - **Prototype's pick** between variants.
 - **Babysit's question** about a new, high-stakes review comment.
 
-Answer **Send it** to take Cooper's pick. A Dispatch worker running headless skips Checkpoints and reports a gate instead.
+Answer **Send it** to take Cooper's pick. When Dispatch runs Cooper headless, its brief tells Cooper to skip Checkpoints and report a gate instead.
 
 ### Review
 
@@ -181,6 +181,8 @@ flowchart LR
     d -->|digest, gates| you
 ```
 
+Cooper's skills know nothing about Dispatch. Everything a worker needs from Dispatch, including where to report back, travels in the brief Dispatch writes.
+
 The store, takeover, and model declarations: [docs/dispatch.md](docs/dispatch.md).
 
 ## The cast
@@ -199,8 +201,6 @@ The store, takeover, and model declarations: [docs/dispatch.md](docs/dispatch.md
 | `/cooper-improve` | Cooper learns from a session that went sideways and fixes his own skills. |
 | `cooper-principle-*` | 24 short engineering principles Cooper reads when a step needs one. |
 | `dispatch`, `dispatch-*` | The project lead and its setup, decompose, chase, and digest modes. |
-| `grokbot-fleet-control` | Grok Bot outer loop: routing, approved cadences, the fleet digest. |
-| `grokbot-gs-crisp-support` | GameStock Crisp support triage, with Cooper investigations. |
 
 ## House rules
 

@@ -17,7 +17,7 @@ Every repo Cooper works in needs a scripted way to prove behavior on the surface
 
 ## Start
 
-1. Find existing verify skills: `cooper-verify-*` and legacy `bob-verify-*` under `.claude/skills/` or `.agents/skills/`, or any repo skill with launch and drive steps and a feature map. Maintain the existing skill in place. A name change in another repo requires the user's explicit migration scope; it is not part of ordinary maintenance. Create new skills with the `cooper-verify-` prefix.
+1. Find existing verify skills: `cooper-verify-*` under `.claude/skills/` or `.agents/skills/`, or any repo skill with launch and drive steps and a feature map. Maintain the existing skill in place. A name change in another repo requires the user's explicit migration scope; it is not part of ordinary maintenance. Create new skills with the `cooper-verify-` prefix.
 2. Pick the playbook.
    - **Create.** The repo has none, or the user asks for one for another surface. `playbooks/create.md`.
    - **Maintain.** One exists and the user asks to check it, or a Cooper run found it wrong. `playbooks/maintain.md`. With several, ask which.

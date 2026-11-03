@@ -1,6 +1,6 @@
 # Open PR
 
-Turn finished work in this checkout into a ready-for-review PR, then babysit it so the user comes back to a full PR: checks green, the AI reviewers' one round answered. Feature, Bug, Refactor, and Perf end here on their own; skip it only when the user or the brief said not to open a PR. It also runs when the user asks ("open the PR", "ship this", "put it up").
+Turn finished work in this checkout into a ready-for-review PR, then babysit it so the user comes back to a full PR: checks green, the AI reviewers' one round answered. Feature, Bug, Refactor, and Perf end here on their own; skip it only when the user or the task said not to open a PR. It also runs when the user asks ("open the PR", "ship this", "put it up").
 
 1. **Find the work.** Read `git status`, the branch's commits since its base, and any PR already open for the branch (`gh pr view`). Name the base: the user's target, an existing PR's base, or the branch the work was cut from. When the records disagree, ask. An open PR means this run updates it rather than opening a second one. Leave out changes that aren't part of this work, and say which.
 2. **Review.** Run **Review** in the skill on the whole diff, unless it already ran in this thread on this same diff. Work the user or another session wrote gets the full Review too.

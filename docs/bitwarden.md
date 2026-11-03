@@ -2,7 +2,7 @@
 
 The development profile installs Homebrew `bitwarden-cli` and the official npm package
 `@bitwarden/mcp-server`. It adds the `bitwarden` stdio MCP to Claude, Codex,
-Cursor, and Grok on the coding machines. Grok Bot receives none of it. The
+Cursor, and Grok on the coding machines. The
 existing Node declaration supplies Node; the launcher requires version 22+.
 
 The vault is Dan's Vaultwarden at <https://archie.tail156535.ts.net:8443>.

@@ -1,6 +1,6 @@
 # Maintain
 
-Keep the repo's existing `cooper-verify-<app>` or legacy `bob-verify-<app>` true to the app, preserving its name and paths. Cover every feature file from source and drive every feature live at least once. The unit is the feature, not every sentence.
+Keep the repo's existing `cooper-verify-<app>` true to the app, preserving its name and paths. Cover every feature file from source and drive every feature live at least once. The unit is the feature, not every sentence.
 
 Only edit the verify skill's own folder: its `SKILL.md`, `features/`, and the scripts it owns.
 

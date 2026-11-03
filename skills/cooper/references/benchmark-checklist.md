@@ -1,6 +1,6 @@
 # Benchmark checklist
 
-Run this on every performance number before you report it or act on it: a PR's before and after, a regression claim, a Climb harness, a choice between libraries or settings. `../cooper-principle-explain-the-number/SKILL.md` says why. Answer each question from a run, not from reading code.
+Run this on every performance number before you report it or act on it: a PR's before and after, a regression claim, a Climb harness, a choice between libraries or settings. `../../cooper-principle-explain-the-number/SKILL.md` says why. Answer each question from a run, not from reading code.
 
 For a quick ballpark the user asked for, one run is enough. Still answer questions 4 and 7, and say it was one run. A choice between options is never a ballpark.
 

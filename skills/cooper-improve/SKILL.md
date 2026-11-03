@@ -19,7 +19,7 @@ Cooper gets better one approved edit at a time. Every edit traces back to someth
 
 ## Where Cooper lives
 
-The cooper- skills are folders next to this one: `cooper`, `cooper-how`, `cooper-why`, `cooper-architect`, `cooper-blast-radius`, `cooper-grill`, `cooper-sharpen`, `cooper-no-comments`, `cooper-models`, `cooper-verify`, `cooper-improve`, `dispatch` (Cooper's chief of staff), and the `cooper-principle-*` skills. Resolve this folder's real path first. Installed copies live in the stable Skills Manager library, separate from the authoring checkout. Make approved edits in the authoring checkout, then deliberately import them into the stable library through Skills Manager CLI and deploy. Never point agent skill links into a checkout whose branch can change. Read the authoring repo's deployment instructions before syncing; preserve library-only edits.
+The cooper- skills are folders next to this one: `cooper`, `cooper-how`, `cooper-why`, `cooper-architect`, `cooper-blast-radius`, `cooper-grill`, `cooper-sharpen`, `cooper-no-comments`, `cooper-models`, `cooper-verify`, `cooper-improve`, and the `cooper-principle-*` skills. Resolve this folder's real path first. Installed copies live in the stable Skills Manager library, separate from the authoring checkout. Make approved edits in the authoring checkout, then deliberately import them into the stable library through Skills Manager CLI and deploy. Never point agent skill links into a checkout whose branch can change. Read the authoring repo's deployment instructions before syncing; preserve library-only edits.
 
 `personal-messaging` is an automatic sibling skill for concise drafts and authorized messages to other people on Dan's behalf. Deploy it through Loadout.
 
@@ -31,7 +31,7 @@ Each lesson goes to exactly one place.
 
 - **A cooper- skill** when it holds in any repo: how Cooper sorts work, builds, checks, reviews, or writes.
 - **The repo's AGENTS.md** (the nearest nested one) when it's about one codebase: a command, a boundary, a trap. Repo facts never go into a cooper- skill.
-- **The repo's verify skill** (`.claude/skills/cooper-verify-<app>/` or its legacy `bob-verify-<app>` name) when it's about launching or driving that app: a handle, a readiness signal, a gotcha. Route a big drift to `/cooper-verify maintain` instead.
+- **The repo's verify skill** (`.claude/skills/cooper-verify-<app>/`) when it's about launching or driving that app: a handle, a readiness signal, a gotcha. Route a big drift to `/cooper-verify maintain` instead.
 - **A mechanism** when a type, lint, test, or script could enforce it, per `../cooper-principle-encode-lessons-in-structure/SKILL.md`. Pick the strongest that fits: a state that can't compile, then a lint or banned API that fails CI, then a shared helper, then a runtime check. Prose is for what only judgment can catch. A mechanism inside a repo goes to Correct.
 - **Nowhere** when it happened once.
 

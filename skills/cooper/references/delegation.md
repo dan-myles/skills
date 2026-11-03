@@ -26,9 +26,9 @@ Follow the delegate result's `next`. When completion will wake this thread, end 
 
 ## Worker threads
 
-Top-level worker threads use `t3_thread_launch` only when the user or invoked coordination skill requests them. Set `modelSelection: {instanceId: <resolved instance>, model: <declared model>, options: <complete options>}` and a T3 `worktree` workspace strategy in the launch call. Every Cooper thread gets its own worktree, read-only work included; never the project root. Do not substitute `create_threads` or a fork for a delegated child. Do not create the worker checkout in shell or tell the worker to set it up.
+Top-level worker threads use `t3_thread_launch` only when the user or Orchestrate asks for them. Set `modelSelection: {instanceId: <resolved instance>, model: <declared model>, options: <complete options>}` and a T3 `worktree` workspace strategy in the launch call. Every Cooper thread gets its own worktree, read-only work included; never the project root. Do not substitute `create_threads` or a fork for a delegated child. Do not create the worker checkout in shell or tell the worker to set it up.
 
-T3 Dispatch uses [its direct worker contract](../../dispatch/references/cooper-workers.md), including saved briefs, request IDs, ownership and report-back. Bot support retains [its Executor contract](../../grokbot-gs-crisp-support/references/cooper-workers.md); it cannot substitute a native/delegated child for a Cooper worker. A current coordinator's own model remains its T3 selection; changing a launch declaration does not change that thread.
+A running thread keeps its own T3 model selection; changing a launch declaration doesn't change it.
 
 ## Headless execution
 

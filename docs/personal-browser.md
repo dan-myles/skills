@@ -3,7 +3,7 @@
 The locally selected development profile installs agent-browser through Homebrew
 on macOS and npm on x86_64 Linux. It deploys the personal wrapper, setup command,
 and configuration; Linux also gets a systemd user dashboard service. Base-only
-machines and Grokbot receive none of these declarations.
+machines receive none of these declarations.
 
 ## Install and activate
 

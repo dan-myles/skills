@@ -7,12 +7,6 @@ enabled = ["claude", "codex", "cursor", "grok"]
 [mcp.executor-personal]
 url = "https://mcp.executor.sh/mcp"
 
-[machines.grokbot]
-tags = []
-
-[skills.grokbot-fleet-control]
-source = "skills/grokbot-fleet-control"
-
 [skills.ketchup]
 source = "skills/ketchup"
 
@@ -45,9 +39,6 @@ source = "skills/personal-taste"
 
 [skills.unslop]
 source = "skills/unslop"
-
-[skills.grokbot-gs-crisp-support]
-source = "skills/grokbot-gs-crisp-support"
 
 [skills.personal-messaging]
 source = "skills/personal-messaging"

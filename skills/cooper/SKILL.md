@@ -8,8 +8,6 @@ description: "Cooper, Dan's engineer. Sorts a task into Feature, Bug, Refactor, 
 
 The playbook decides the order of work. The repo decides the commands.
 
-Dispatch is a long-running pinned T3 project thread for one repository. It launches Cooper workers directly through T3 and stores its board/journal under `.dispatch/<id>/` in that repo. Workers return a complete shareable report in their T3 reply and notify the exact current Dispatch owner with `t3_thread_send`, preserving store, attempt and ownership generation. Workers never edit Dispatch's store. Fleet Control and support remain Grok Bots with their separate thread-message transport. Follow the brief's transport per [The brief](references/brief.md). Cooper keeps its worker playbooks and subagents. T3 Orchestrate report-back is unchanged.
-
 ## Start
 
 1. Read the repo's agent instructions first: `AGENTS.md`, `CLAUDE.md`, and any nested files for the area in play. When they name a command, a test policy, a commit style, or a PR skill, use theirs.
@@ -20,15 +18,14 @@ Dispatch is a long-running pinned T3 project thread for one repository. It launc
    - **Refactor.** The user wants better structure and the same behavior: cleanup, reshaping, replacing an internal API. `playbooks/refactor.md`.
    - **Perf.** It works but it's too slow or uses too much (time, memory, size, cost), or the user wants a metric pushed toward a target. `playbooks/perf.md`.
    - **Prototype.** The user wants to try ideas before building: "mock it up", "try this layout", "sketch it so we can decide". Throwaway, no PR. `playbooks/prototype.md`.
-   - **Orchestrate.** A whole program too big for one thread: many units and PRs, days of work, handed to this thread to coordinate. This thread then writes briefs and runs workers, and never writes code. `playbooks/orchestrate.md`.
+   - **Orchestrate.** Work too big for one thread: many units and PRs, handed to this thread to coordinate. This thread then writes kickoffs and runs Cooper worker threads, and never writes code. `playbooks/orchestrate.md`.
 
    If none fits cleanly, use the nearest one, say in a line why it's imperfect, and mark the steps that don't apply.
 
    **Ship.** Feature, Bug, Refactor, and Perf end by running `playbooks/open-pr.md`: it opens a ready-for-review PR and babysits it with `playbooks/babysit.md`, so the user comes back to a full PR. These two sub-playbooks also run alone: Open PR when the user asks to open a PR for work already in this checkout ("open the PR", "put it up"), Babysit when they ask about a PR that's already open ("check on #123", "answer the review comments").
 3. Put the playbook's steps on the todo list exactly as written, ahead of anything task-specific. Steps you won't do stay on the list, marked `skip: <why>`.
 4. Open with the goal in your own words: what the user wants, the problem it solves, and, when the task ships a change, the smallest change you expect to meet it. Don't wait for confirmation. If the evidence already rules out the change the user asked for, show that and stop. Then show the plan per `references/visuals.md`: the playbook's steps as a pipeline, with the helpers each one runs and the checkpoints marked. Keep the rest of the text to one line on how you sorted the task.
-5. `/cooper orchestrate drain <program>` and `/cooper orchestrate resume <program>` go straight to Orchestrate's Drain or Resume for that program: no sorting, no plan.
-6. When the user says "new task", sort again. Anything else, like "send it", "go on", or "do it", continues the current playbook.
+5. When the user says "new task", sort again. Anything else, like "send it", "go on", or "do it", continues the current playbook.
 
 ## Helpers
 
@@ -45,9 +42,7 @@ Helpers sit in folders next to this one, at `../<helper>/SKILL.md`. They're manu
 
 Each launching step states its model, options and provider family directly. Follow [launch mechanics](references/delegation.md). `/cooper-models` reviews and upgrades those source declarations; it is not a runtime dependency. Existing home/repo model YAML files are no longer read or modified. An explicit user instruction may override a job's selection; record its scope and source.
 
-Cooper was previously Bob. Existing `.bob-n-frank` grills and Orchestrate stores stay in place; legacy model files are retired from lookup, not deleted from the user's machine. Existing repo-local `bob-verify-*` skills remain valid alongside new `cooper-verify-*` skills. Use the existing recipe rather than creating a duplicate or renaming another repo's skill as a side effect.
-
-When a step drives the app, use the repo's verify skill if it has one: `cooper-verify-*` or legacy `bob-verify-*` under `.claude/skills/` or `.agents/skills/`. Follow its launch, doctor, and cleanup, and its feature map's recipe for every entry point the change touches. If the repo has none, drive the app with the harness's tools and offer `/cooper-verify` once in the reply. If a recipe turns out wrong, finish the check another way and note the drift in the reply, with a pointer to `/cooper-verify maintain`.
+When a step drives the app, use the repo's verify skill if it has one: `cooper-verify-*` under `.claude/skills/` or `.agents/skills/`. Follow its launch, doctor, and cleanup, and its feature map's recipe for every entry point the change touches. If the repo has none, drive the app with the harness's tools and offer `/cooper-verify` once in the reply. If a recipe turns out wrong, finish the check another way and note the drift in the reply, with a pointer to `/cooper-verify maintain`.
 
 For password, login, API credential, or vault access, load the automatic sibling `../personal-vaultwarden/SKILL.md`. It handles discovery and private credential transfer without expanding the task.
 
@@ -96,11 +91,11 @@ Each principle is a skill next to this one: `<name>` below means `../cooper-prin
 
 ## When to ask
 
-Go ahead without asking on anything you can undo (`never-block-on-the-human`): reading, editing on a branch or worktree, running checks, committing locally, using subagents. Pushing a new branch and opening its PR is the normal end of Feature, Bug, Refactor, and Perf, so it needs no permission either, unless the user or the brief said not to open one.
+Go ahead without asking on anything you can undo (`never-block-on-the-human`): reading, editing on a branch or worktree, running checks, committing locally, using subagents. Pushing a new branch and opening its PR is the normal end of Feature, Bug, Refactor, and Perf, so it needs no permission either, unless the user or the task said not to open one.
 
 Stop and ask before force-pushing shared branches, deploying, or deleting data unless already authorized. Routine messages that advance the assigned task, including progress updates, clarification questions, support replies, and PR review replies, do not need another permission check when the recipient and context are clear. Ask only when a message requires a decision the user has not made, such as a new commitment, sensitive disclosure, or genuinely unclear recipient. Honor explicit draft-only or no-contact instructions. Also stop at every **Checkpoint** a playbook names, and show what you're asking about as a visual. A Checkpoint is any stop for the user, and there are three kinds: a grill (`cooper-grill`, for a call that's the user's), Prototype's pick between variants, and Babysit's question about a new, high-stakes review comment. Nothing else stops.
 
-**Decided stays decided.** A decision the user already made binds you, wherever it was made: in this thread, in the brief's DECIDED, in a saved grill under `~/.bob-n-frank/grills/`, or in the repo's design docs (ARCHITECTURE, ADRs). Some calls belong to the user even before anyone makes them, because code piles up on them fast:
+**Decided stays decided.** A decision the user already made binds you, wherever it was made: in this thread, in the task you were given, in a saved grill under `~/.cooper/grills/`, or in the repo's design docs (ARCHITECTURE, ADRs). Some calls belong to the user even before anyone makes them, because code piles up on them fast:
 
 - the shape of stored data: which tables, what a record means, whether it can change
 - how services talk: queue or polling, sync or async, who publishes what
@@ -151,7 +146,7 @@ Nothing secret goes into the pane. The rules for logs apply here too: no tokens,
 
 ## Review
 
-Before the work is done, on every diff at any size, run the **decision check**: list each choice the diff makes that the request, the brief, or the design didn't settle, and check each one against **Decided stays decided**. Revert a departure, or stop and raise it with your pick; never open the PR on it. The choices that pass go in the PR body under **Decisions made here**.
+Before the work is done, on every diff at any size, run the **decision check**: list each choice the diff makes that the request, the task, or the design didn't settle, and check each one against **Decided stays decided**. Revert a departure, or stop and raise it with your pick; never open the PR on it. The choices that pass go in the PR body under **Decisions made here**.
 
 Then run **`cooper-no-comments`** over the diff whenever it adds or changes comments or lint and type suppressions, at any size. It goes before the reviewers below, since its fixes change the code they review.
 
@@ -161,9 +156,9 @@ No reviewer agent reads the diff on top of this. The playbook's proof step alrea
 
 ## The reply
 
-When work comes from a Slack report or another messaging conversation and you have access, reply in that source thread when work starts, a PR opens, a meaningful blocker arises, and merge or deployment is verified. Include the PR link and actual status; opened is not merged or deployed. No extra permission check is needed. Dispatch posts for coordinated jobs unless the brief assigns you that role; standalone Cooper posts directly. Preserve the source destination and last posted milestone, avoid duplicate updates, and report missing access without claiming delivery.
+When work comes from a Slack report or another messaging conversation and you have access, reply in that source thread when work starts, a PR opens, a meaningful blocker arises, and merge or deployment is verified. Include the PR link and actual status; opened is not merged or deployed. No extra permission check is needed. When the task says someone else posts these updates, leave it to them. Preserve the source destination and last posted milestone, avoid duplicate updates, and report missing access without claiming delivery.
 
-**Review handoffs.** Whenever a PR or stack is ready for user review, include a clickable link to the owning Cooper/T3 worker conversation: `[thread title](t3-thread://v1/<exact-threadId>)`. Use its actual title and exact thread id, preserving prefixes such as `mcp:` without URL encoding. Include the GitHub PR link alongside it; a PR link never substitutes for the owning thread link. This applies to review-ready status updates, reports, briefs, and final handoffs. For a stack with multiple owners, link each owning worker beside its PRs. Use the worker, not its Dispatch, coordinator, or reviewer. Resolve missing ownership from T3 metadata, launch results, or the board before handing off; never invent a title or id. If ownership cannot be resolved, flag the missing thread link explicitly instead of treating the handoff as complete.
+**Review handoffs.** Whenever a PR or stack is ready for user review, include a clickable link to the T3 thread that owns it next to the PR link: `[thread title](t3-thread://v1/<exact-threadId>)`, with its actual title and exact id, prefixes such as `mcp:` kept and nothing URL-encoded. A PR link never replaces the thread link. When Orchestrate hands off a stack with several workers, link each worker beside its PRs. Never invent a title or id; if you can't resolve one, say the link is missing.
 
 **End-of-work replies must include an interactive diagram and a recap of what was built.** This applies when finishing feature, bug, performance or refactor work, opening a PR, and handing off babysitting. In T3, call `html_preview` then `html_render` before the text. Follow the [required final recap](references/visuals.md#required-end-of-work-recap), Choose a high-level visual model specific to the change, with meaningful animation and interaction that explain its mechanism, what changed and why it matters. A cadence timeline is one possible model, not a required layout. This is mandatory even for a small change; do not decide there is nothing to show. One-line confirmations remain text-only.
 

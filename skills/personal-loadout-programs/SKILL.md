@@ -18,8 +18,9 @@ Ask once, in one line, after doing what Dan asked: "This looks cross-machine. Ad
 ## Where it goes
 
 - `tags/development.toml`: locally selected development machines. Paperclip and Stapler opt in; MacBook Pro is base-only.
-- `machines/<name>.toml`: exceptional configuration only, currently Grokbot. Do not register normal machines; select development locally.
-- `loadout.toml`: every machine, including the Grok Bot box. Rare.
+- `loadout.toml`: every machine, MacBook Pro included. Rare.
+
+Don't add `machines/<name>.toml`; machines select development locally.
 
 ## How to declare it
 

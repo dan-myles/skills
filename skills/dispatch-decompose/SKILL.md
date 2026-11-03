@@ -12,7 +12,7 @@ Read the [Dispatch role](../dispatch/SKILL.md), [work-item rules](../dispatch/re
 
 Reconcile known workers first, without queue refill. Find the existing item, its source, and Dan's actual authorization. A goal that leaves reserved decisions open needs the [decision procedure](../dispatch/references/decisions.md). Do not infer Wayfinder from size; only Dan starts that planning mode.
 
-Split only where units have independent acceptance, ownership, or dependencies. Prefer one bounded Cooper job when it can finish within its timebox. Every Cooper job, read-only included, gets its own T3 worktree off the repo's verified default branch; no two workers share a checkout or branch. Save the whole brief before launch. A program that truly needs Cooper Orchestrate gets an explicit program scope and standing orders, including Dan's merge policy, rather than an unbounded delegation.
+Split only where units have independent acceptance, ownership, or dependencies. Prefer one bounded Cooper job when it can finish within its timebox. Every Cooper job, read-only included, gets its own T3 worktree off the repo's verified default branch; no two workers share a checkout or branch. Save the whole brief before launch. A program that truly needs Cooper Orchestrate gets one brief with an explicit program scope, rather than an unbounded delegation; its workers stop at merge-ready like any other.
 
 For every unit, state the outcome, allowed paths, forbidden actions, acceptance, verification, timebox, applicable user decisions, and dependency evidence. Paste upstream findings rather than a path the worker cannot read. Use the shared report contract, including its PR ownership instructions when the worker will open or update a PR.
 

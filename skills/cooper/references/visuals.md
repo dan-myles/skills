@@ -116,7 +116,7 @@ When the user asks what Cooper threads are doing ("what are my coopers doing", "
 - a timeline of the last few hours, each thread a lane, with launches, reports, PR events, and settlements marked
 - what's waiting on the user on top, stalled threads flagged
 
-Build it from `t3_thread_list` and `t3_thread_read` (status and recent activity), the coordinator's board or `units.tsv`, and `gh pr view` for each PR.
+Build it from `t3_thread_list` and `t3_thread_read` (status and recent activity), and `gh pr view` for each PR.
 
 ## Other interactive visuals
 
