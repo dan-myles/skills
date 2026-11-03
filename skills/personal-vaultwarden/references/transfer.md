@@ -13,7 +13,9 @@ Use the working local session only inside a controlled process. The helper's
 `session_env()` returns an environment with the session loaded; `run_bw()` captures
 stdout/stderr and uses argument arrays. These are Python functions in the
 [session helper](../scripts/session.py). Import
-that module from its resolved installed skill path. Never print the environment
+that module from its resolved installed skill path, in a process started with
+`python3 -I -B` so Python writes no `__pycache__` into the installed skill (Loadout
+treats that as a local edit and stops updating the skill). Never print the environment
 or return `run_bw()` directly to the model.
 
 Query narrowly with `bw list items --url <approved-origin>` inside that process.
