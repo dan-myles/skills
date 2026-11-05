@@ -9,13 +9,23 @@ Draw by default. Text alone is the exception: a yes or no, one fact, or a one-li
 Draw at each of these moments, not just at the end:
 
 - **The plan.** Right after sorting a task, show the playbook's steps as a pipeline, with the helpers each step will run and where the checkpoints are.
-- **Every checkpoint.** Show the thing being decided: the draft design, the target shape, the variants, the lists to pick from.
+- **Every checkpoint.** Catch the user up and show the thing being decided, per **Checkpoint catch-up** below: the draft design, the target shape, the variants, the lists to pick from.
 - **Every question to the user.** Show the options as cards side by side, the one you'd pick marked, each with its cost.
 - **Progress on long work.** When a step finishes something the user should see (a reproduction, a profile, a design comparison, a review), show it then, not only at the end. Mark where you are in the plan.
 - **Explanations.** Any "how", "why", or "what is" answer: draw the mental model first, then zoom into the part that matters.
 - **The final reply.** Always show an interactive diagram and a built-work recap under the required contract below. A completed job or handoff is never exempt because the change is small.
 
 More than one page in a reply is fine when they show different things, such as the result and the evidence.
+
+## Checkpoint catch-up
+
+A checkpoint's visual is a catch-up for someone who just walked in. One page, read top to bottom:
+
+1. **Where we are.** The goal in one line and the plan as a pipeline, finished steps checked and this stop highlighted.
+2. **The problem.** Draw the mechanism that forces the decision, not a summary of it: the code path or data flow where the options split, the failing case, the conflicting constraint, the review comment beside the code it's about. Use real names, files, and numbers, each with where it came from.
+3. **The options.** Cards side by side, each showing what it does to the drawing above (what's added, removed, or rerouted), its cost, and whether it can be undone. Mark your pick.
+
+Someone who reads only this page should be able to answer the question that follows it.
 
 ## Required end-of-work recap
 

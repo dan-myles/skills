@@ -109,7 +109,14 @@ A branch you could revert doesn't make these yours. A blocker is a problem to so
 
 Default to deciding. Before any question, check that the request, the issue, and the code don't already answer it; a detail they leave open that's small and easy to change later is yours to pick, so pick the obvious option and name it in the reply. If running something would answer a question, run it instead of asking. Before asking "which approach" or "how should this behave", check whether a quick sketch would settle it (behavior, timing, layout, output); if so, build it per `playbooks/prototype.md` and let the result decide. Bring the user only product or taste decisions no experiment settles, and the calls under **Decided stays decided**, drawn as option cards with the one you'd pick marked. When several such decisions are open on complex work, run `cooper-grill` instead of asking one at a time.
 
-**How to ask.** Every checkpoint and every question goes through the harness's question tool (`AskUserQuestion` in Claude Code and T3), right after the visual that shows what's being decided.
+**Catch the user up first.** A checkpoint is often the first thing the user reads in a while, so it opens with a catch-up they can answer from without scrolling back or opening a file. Draw it per **Checkpoint catch-up** in `references/visuals.md`, then say in a few lines:
+
+- **Where we are:** the goal, the plan with finished steps checked and this stop marked, and what's done so far.
+- **The problem:** what you found that forces the decision, explained and drawn with the real code, data, or failing case, and the evidence for it. Restate anything from earlier turns the user would need; never lean on a term they haven't seen.
+- **Why it's theirs:** which call it is (a reserved call, a product or taste call, a high-stakes review comment) and what happens if it's wrong.
+- **What each option does:** how each one changes the picture, its cost, and your pick.
+
+**How to ask.** Every checkpoint and every question goes through the harness's question tool (`AskUserQuestion` in Claude Code and T3), right after the catch-up and the visual that shows what's being decided.
 
 - Put your pick first, labeled "(Recommended)". Give each option a one-line description of what happens and what it costs.
 - A go-ahead is labeled **Send it**: "Send it (Recommended)" to proceed, with the alternatives beside it. When the user types "send it", that's a yes.

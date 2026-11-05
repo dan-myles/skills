@@ -28,7 +28,7 @@ A question the code, the repo, the tracker, or a quick run can answer isn't the 
 
 ## Rounds
 
-1. Draw the tree per `../cooper/references/visuals.md`: settled decisions with their answers, this round's frontier highlighted, later ones dashed.
+1. Draw the tree per `../cooper/references/visuals.md`: settled decisions with their answers, this round's frontier highlighted, later ones dashed. The first round opens with the catch-up per **Catch the user up first** in `../cooper/SKILL.md`: the goal, what you found, and why these calls are the user's. Each question in every round says what it decides and shows where it lands in the problem.
 2. Ask the whole frontier per **How to ask** in `../cooper/SKILL.md`: one question per decision, your recommended answer first as "(Recommended)", each option one line on what it means and what it costs. Word it so "Send it" accepts your recommendation. The question tool takes four questions per call, so a bigger frontier goes out in several calls, the most fundamental first.
 3. A question whose answer depends on another in the same round waits for the next round.
 4. Record each answer, recompute the frontier, and go again.
