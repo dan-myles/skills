@@ -9,7 +9,7 @@ Run it with T3's own tools and keep no store. The program's state is what T3 and
 ## Topology
 
 - **This thread coordinates.** It frames, writes kickoffs, reads results, and decides. It never writes or edits product code; conflict fixes and restacks are units like any other.
-- **One worker per unit, in its own worktree.** Start each with `t3_thread_launch`: title `cooper: <what the unit does>` in plain words, `modelSelection` `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent`, `workspaceStrategy: {type: "worktree", baseRef: <base>, branch: <unit branch>, startFromOrigin: false}`, and the kickoff as `message`. The worker runs Cooper's matching playbook, so it ships its own PR and babysits it to merge-ready. It's the only writer of its branch; only it pushes, rebases, or retargets.
+- **One worker per unit, in its own worktree.** Start each with `t3_thread_launch`: a title that names what the unit does in a few plain words, the way a good PR title would ("Migrate billing call sites to the v2 client"), with no prefix, `modelSelection` `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent`, `workspaceStrategy: {type: "worktree", baseRef: <base>, branch: <unit branch>, startFromOrigin: false}`, and the kickoff as `message`. The worker runs Cooper's matching playbook, so it ships its own PR and babysits it to merge-ready. It's the only writer of its branch; only it pushes, rebases, or retargets.
 - **One verifier per PR that isn't its author,** on the other model family: a `delegate_task` child using `gpt-6.1-sol` with `{reasoningEffort: high}` on provider family `codex`, per [launch mechanics](../references/delegation.md). It runs the checks and edits nothing. Its completion wakes this thread.
 - **Two levels only:** this thread and its workers. Keep at most four workers in flight, since worktree threads run on this machine, and start the next as each finishes instead of waiting on a batch.
 
@@ -38,7 +38,7 @@ A worker can't see this thread or its siblings, so the kickoff carries everythin
 - Read the diff or the artifact, not only the report. Green CI feeds a verdict; it isn't one. A verdict covers one head SHA, so a new push needs a new one.
 - Judge a stalled or looping worker by its pushes and PR activity, not its status text. Never message a worker to check on it. Retry by cause: a smaller scope after a context limit, the same kickoff after a dropped connection, a fresh worker after a tool error. After two retries, drop the unit and replan around it.
 - A worker that comes back late gets checked against the PR's current state; hand any unique findings to a fresh worker.
-- After a restart or a summarized conversation, rebuild the picture from `t3_thread_list` (your `cooper:` workers), their latest replies, and `gh pr list`, never from memory.
+- After a restart or a summarized conversation, rebuild the picture from this thread's own history (`t3_thread_read` on it: the launch results and the workers' reports), each worker's latest reply, and `gh pr list`, never from memory.
 
 ## What reaches the user
 

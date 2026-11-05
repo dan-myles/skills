@@ -23,7 +23,7 @@ An ambiguous goal, scope, desired behavior, or reserved choice is not auto-dispa
 
 ## Dispatch
 
-Write and launch the brief through [dispatch-decompose](../../dispatch-decompose/SKILL.md) and the [worker contract](cooper-workers.md). Save exact worker ID/title/link, destination, and launch result. Titles are `cooper: <plain job description>`; ticket IDs belong in the brief. REPORT-BACK names the exact current owner thread, store, attempt and ownership generation. Only Dispatch writes its store.
+Write and launch the brief through [dispatch-decompose](../../dispatch-decompose/SKILL.md) and the [worker contract](cooper-workers.md). Save exact worker ID/title/link, destination, and launch result. Titles name the job in a few plain words, the way a good PR title would, with no prefix; ticket IDs belong in the brief. REPORT-BACK names the exact current owner thread, store, attempt and ownership generation. Only Dispatch writes its store.
 
 An authorized unit's dependency must have accepted evidence before launch. Count executing workers and uncertain launches against capacity. Keep open-PR ownership distinct from execution capacity. No coding, verification, prototype, or restack is performed by Dispatch itself.
 

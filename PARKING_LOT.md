@@ -127,6 +127,7 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 - **PRs read visually first (2026-11-03).** Dan: a reviewer should open the PR and understand the change quickly and visually. The body now runs Why, Architecture diagram, Proof, then the text sections.
 - **Every PR carries an architecture diagram (2026-11-03).** Dan's call. Open PR adds a Mermaid diagram (GitHub renders it natively) of what the PR modifies: services, stores, and queues for backend; routes, screens, components, and state for frontend; both, joined at the API, for full stack. Changed parts highlighted; checked with mermaid-cli before posting.
 - **Investigation verifies (2026-11-03).** Explain mode runs something for each claim the answer rests on and shows the output, so every playbook has a verification step.
+- **Worker threads are named for the work (2026-11-05).** Orchestrate and Dispatch title each worker thread like a good PR title, in plain words with no `cooper:` prefix. Orchestrate finds its workers again from its own thread history, not a title prefix.
 
 ## Where we stopped
 

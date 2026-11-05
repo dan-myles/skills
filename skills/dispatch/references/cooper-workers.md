@@ -8,13 +8,13 @@ If work came from Slack or another messaging conversation, carry its source dest
 
 Use the current verified T3 project for this repository. For another machine, discover live `t3_environment_links`, then verify the same repository with `t3_project_list`/`t3_project_read` on that environment. Pass its `environmentId` consistently. IDs saved by a prior user are provenance, not proof that a destination is accessible now. Do not guess routes from titles or silently fall back to the local machine.
 
-Every Cooper launch, read-only investigations, validators, research and prototypes included, gets its own T3-bound worktree (Dan, 2026-11-02). Never launch a Cooper on the project root, omit the workspace strategy, or reuse another worker's checkout. Discover live tool signatures before calling. Launch with `t3_thread_launch` with a unique `clientRequestId`, `projectId`, title `cooper: <plain job description>`, and an explicit workspace strategy:
+Every Cooper launch, read-only investigations, validators, research and prototypes included, gets its own T3-bound worktree (Dan, 2026-11-02). Never launch a Cooper on the project root, omit the workspace strategy, or reuse another worker's checkout. Discover live tool signatures before calling. Launch with `t3_thread_launch` with a unique `clientRequestId`, `projectId`, a title that names the job in a few plain words, the way a good PR title would, with no prefix, and an explicit workspace strategy:
 
 ```javascript
 await t3_thread_launch({
   clientRequestId: "<store-id>-I001-a1-launch",
   projectId: "<verified same-repository project>",
-  title: "cooper: <plain description>",
+  title: "<what the job does, in plain words>",
   workspaceStrategy: {
     type: "worktree",
     baseRef: "main",
