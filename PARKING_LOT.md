@@ -130,6 +130,7 @@ Cooper babysits every PR he opens unless told not to, and replies to human revie
 - **Worker threads are named for the work (2026-11-05).** Orchestrate and Dispatch title each worker thread like a good PR title, in plain words with no `cooper:` prefix. Orchestrate finds its workers again from its own thread history, not a title prefix.
 - **Checkpoints catch the user up first (2026-11-05).** Every checkpoint opens with a catch-up the user can answer from alone: where the work is in the plan, the problem drawn with the real code and evidence, why it's their call, and what each option changes.
 - **Worker threads run at high effort (2026-11-05).** Dispatch's workers and its Orchestrate coordinator moved from Opus 5.5 medium to high, matching Orchestrate's own workers.
+- **Cooper ships to Amp as a workspace plugin (2026-11-07).** `amp/cooper-plugin/` holds the plugin (Cooper mode, model-pinned subagents, checkpoint dialogs, guardrails) and `amp/skills/` the Amp copy of Cooper's skills. The two copies stay in step by hand per `AGENTS.md`; loadout doesn't sync Amp. Auto-continue, status labels and quick actions, and the Ship prompt are deferred.
 
 ## Where we stopped
 
