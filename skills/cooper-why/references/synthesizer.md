@@ -83,7 +83,6 @@ One line per source, including empty and skipped ones:
 - **Git and PRs:** files, number of commits read, PR numbers, comments searched.
 - **Tickets:** IDs and searches, or "not searched: no tool in this session".
 - **Docs:** pages and searches, or the reason it wasn't searched.
-- **Chat:** channels, date ranges, and searches, or the reason.
 - **Telemetry:** dashboards, monitors, metrics, logs, traces, or incidents checked, or the reason.
 - **Error tracking:** issues, events, or releases checked, or the reason.
 - **Product analytics:** tables or insights queried, time windows, and the numbers that mattered, or the reason.

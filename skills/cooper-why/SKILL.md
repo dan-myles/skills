@@ -1,7 +1,7 @@
 ---
 name: cooper-why
 disable-model-invocation: true
-description: "Find out why code is the way it is: design rationale, why an option was picked, what caused a regression, postmortems, and where a threshold came from. Searches every evidence source the session can reach (git and PRs, tickets, docs, chat, telemetry, error tracking, analytics) in parallel and returns a cited answer that separates fact from inference. For how code behaves at runtime, use `cooper-how`."
+description: "Find out why code is the way it is: design rationale, why an option was picked, what caused a regression, postmortems, and where a threshold came from. Searches every evidence source the session can reach (git and PRs, tickets, docs, telemetry, error tracking, analytics) in parallel and returns a cited answer that separates fact from inference. For how code behaves at runtime, use `cooper-how`."
 ---
 
 # Why
@@ -44,7 +44,6 @@ Check which tools and MCP servers this session can reach. Sort them into these e
 | Git and PRs | Rationale written down at review time. Always available. | `references/sources/git.md` |
 | Tickets | The product or business reason behind the work | `references/sources/tickets.md` |
 | Docs | Design reasoning written before the code | `references/sources/docs.md` |
-| Chat | Decisions argued out in conversation and never written up | `references/sources/chat.md` |
 | Telemetry | Production conditions the code reacts to (timeouts, retries, limits) | `references/sources/telemetry.md` |
 | Error tracking | The exceptions that led to defensive code | `references/sources/errors.md` |
 | Product analytics | Usage data, experiments, and where a number came from | `references/sources/analytics.md` |
