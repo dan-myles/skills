@@ -48,7 +48,7 @@ Check which tools and MCP servers this session can reach. Sort them into these e
 | Error tracking | The exceptions that led to defensive code | `references/sources/errors.md` |
 | Product analytics | Usage data, experiments, and where a number came from | `references/sources/analytics.md` |
 
-Start one investigator subagent per reachable source using `claude-sonnet-5-5` with `{effort: medium}` on provider family `claudeAgent`, all at once, one source each. Follow [launch mechanics](../cooper/references/delegation.md). Each one gets:
+Start one investigator subagent per reachable source using `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent`, all at once, one source each. Follow [launch mechanics](../cooper/references/delegation.md). Each one gets:
 
 1. the brief in `references/investigator.md`
 2. that source's guide

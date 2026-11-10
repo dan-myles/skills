@@ -50,8 +50,8 @@ Click a playbook for its steps.
 1. **Learn the ground** with `cooper-how` (and `cooper-why` on code that looks deliberate). File map of the area.
 2. **Checkpoint**, only if the feature touches one of your calls: grill it.
 3. **Draft the design**: data shape, where it lives, signatures, callers. `cooper-architect` for a new service, module, or interface. A call of yours that turns up here grills too.
-4. **Plan** as four items: what goes first, what runs in parallel, what's contended, how many workers.
-5. **Build, verifying each piece.** Subagents build from briefs that name the check; each runs it, Cooper reruns it, then commits.
+4. **Plan** the build order, one check per piece; what the rest depends on goes first.
+5. **Build, verifying each piece.** Cooper writes the code itself, runs each piece's check, then commits.
 6. **Review.**
 7. **Verify it all on the final code** where you'd use it, through the repo's verify skill. Shown as a Proof gallery.
 8. **Ship:** Open PR, then Babysit.
@@ -65,7 +65,7 @@ Click a playbook for its steps.
 2. **Evidence:** narrow the cause with real output each round, ruled-out suspects struck through.
 3. **Plan** the smallest fix. **Checkpoint** if it touches one of your calls. When only the right behavior is unclear, Cooper picks what the code, tests, and docs point to and names it in the PR.
 4. **Write the regression test** and watch it fail. Commit it.
-5. **Build the fix** with a subagent; the test turns green, Cooper reruns it, commits on top.
+5. **Build the fix** itself; the test turns green, then Cooper commits on top.
 6. **Review.**
 7. **Final verification:** rerun the step 1 reproduction on the same surface, before next to after.
 8. **Ship:** Open PR, then Babysit.
@@ -79,7 +79,7 @@ Click a playbook for its steps.
 2. **Name what's missing:** the state machine, typed model, or table the branches stand in for.
 3. **Name the target shape.** **Checkpoint** if it touches one of your calls, including breaking a public interface.
 4. **Delete first,** rerun the pin, commit.
-5. **Reshape in small steps.** The pin runs after every step, by the subagent and again by Cooper.
+5. **Reshape in small steps.** The pin runs after every step.
 6. **Worth keeping?** Fewer layers or less state, or it's reverted.
 7. **Review.**
 8. **Verify nothing changed** on the final code: pin, repo checks, every entry point, old vs new.
@@ -132,6 +132,8 @@ Name the decision, gather references, build throwaway variants in `/tmp` behind 
 - A fix reruns the playbook's final check before it's pushed, and that proof is posted as a PR comment.
 - Waits with T3's PR watch, not polling. Stops at merge-ready. Never merges.
 
+At merge-ready, a **verifier** on GPT-6 Astra, a different model family from the author, checks out each PR's head, reruns the checks and the proof, and returns pass or fail for that SHA.
+
 </details>
 
 <details>
@@ -153,7 +155,7 @@ Answer **Send it** to take Cooper's pick. When Dispatch runs Cooper headless, it
 
 ### Review
 
-Every diff gets a **decision check** against what you've already decided. `cooper-no-comments` strips the comments a diff adds and fixes the code they were excusing. `cooper-blast-radius` proves what the change can't break outside its diff, by running code. No agent reads the diff for opinions; the final verification runs it instead.
+Every diff gets a **decision check** against what you've already decided. `cooper-no-comments` strips the comments a diff adds and fixes the code they were excusing. `cooper-blast-radius` proves what the change can't break outside its diff, by running code. A **contested** change (the architect judge and Cooper disagreed, two designs were close, or someone disputes the approach) also gets `cooper-adversarial-review`: adversaries on Opus and GPT try to break it, and only findings a run proves survive. Otherwise no agent reads the diff for opinions; the final verification runs it instead.
 
 ### What it feels like
 
@@ -162,7 +164,7 @@ you:     /cooper add a weekly leaderboard to the tournaments page
 
 cooper:  [plan: Feature → learn → design → build → review → verify → ship]
          [file map of every new and changed file]
-         [GPT subagents build it piece by piece, each piece checked]
+         [builds it piece by piece, each piece checked]
          [checked in the real app: before/after screenshots]
          PR #412 opened ready for review. CI green, Bugbot's review answered.
          Merge-ready, waiting on you.
@@ -194,6 +196,7 @@ The store, takeover, and model declarations: [docs/dispatch.md](docs/dispatch.md
 | `/cooper-how`, `/cooper-why` | How code works, and why it ended up that way, as interactive pages. |
 | `/cooper-architect` | Two designers on two model families, a judge, one merged design. |
 | `/cooper-blast-radius` | What a change breaks outside its diff, proven by running code. |
+| `/cooper-adversarial-review` | Adversaries on two model families try to break a change; only run-proven findings survive. |
 | `/cooper-no-comments` | Comment Sicko strips the diff's comments; the code they excused gets fixed. |
 | `/cooper-verify` | Writes a repo's own `cooper-verify-<app>` skill so Cooper can drive the real app. |
 | `/cooper-sharpen <prompt>` | Rewrites a prompt to ask for a deeper task, not a bigger one. |

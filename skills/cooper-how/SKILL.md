@@ -19,7 +19,7 @@ When unsure, treat it as small.
 
 ## 2. Explore in parallel (large questions)
 
-Split the question into two to four angles that don't overlap, such as entry points, data model, outbound integrations, and failure handling. Start one explorer subagent per angle, all at once. Brief each with `references/explorer.md` and its angle. They use `claude-sonnet-5-5` with `{effort: medium}` on provider family `claudeAgent` and only read. Start them per [launch mechanics](../cooper/references/delegation.md).
+Split the question into two to four angles that don't overlap, such as entry points, data model, outbound integrations, and failure handling. Start one explorer subagent per angle, all at once. Brief each with `references/explorer.md` and its angle. They use `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent` and only read. Start them per [launch mechanics](../cooper/references/delegation.md).
 
 ## 3. Explain
 

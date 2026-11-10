@@ -1,12 +1,12 @@
 # Starting a subagent
 
-The launching skill states the exact model and effort beside the step that starts it ("uses `gpt-6.1-sol` with `{reasoningEffort: high}`"). Use those values directly, unless the user explicitly overrides this job; preserve the override's source and scope. The provider family in the declaration is for other harnesses; ignore it here.
+The launching skill states the exact model and effort beside the step that starts it ("uses `claude-opus-5-5` with `{effort: high}`"). Use those values directly, unless the user explicitly overrides this job; preserve the override's source and scope. The provider family in the declaration is for other harnesses; ignore it here.
 
 ## `cooper_subagent`
 
 Start every declared subagent with the Cooper plugin's `cooper_subagent` tool:
 
-- `model`: the declared model, exactly as written (`claude-opus-5-5`, `claude-sonnet-5-5`, or `gpt-6.1-sol`).
+- `model`: the declared model, exactly as written (`claude-fable-5-2`, `claude-opus-5-5`, `gpt-6-astra`, or `gpt-6.1-sol`).
 - `effort`: the declared `effort` or `reasoningEffort` value.
 - `brief`: a standalone brief: the goal, absolute paths, scope, what done looks like, the user's decisions it must keep, and where to write output. The subagent sees nothing else from this thread. Never include secrets.
 - `timeoutMinutes`: optional, 30 by default. Raise it for a long build.

@@ -11,7 +11,7 @@ Maintain the model choices written directly in the skills. This is an authoring 
 ## Use
 
 - `/cooper-models`: inventory current choices, validate availability, and recommend changes without editing.
-- `/cooper-models <change>`: make an explicit source change, such as "upgrade the architect designers", "put build subagents on <model> high", or "update every use of <model>".
+- `/cooper-models <change>`: make an explicit source change, such as "upgrade the architect designers", "put the per-PR verifier on <model> high", or "update every use of <model>".
 - Recommendations from `/cooper-improve models` are evidence to assess, not approval to apply them.
 
 A change to shared skill source affects future launches wherever that source is installed. A request limited to one project/job is an explicit brief override, not permission to rewrite shared defaults. Record the instruction and scope in the current job brief. Honor that scope without asking again; do not introduce a hidden project model registry. Identify that scope before editing. Model edits do not change already-running threads, install skills, or sync a machine.
@@ -22,13 +22,13 @@ Resolve the authoring repository and read its instructions first. If only an ins
 
 Search actual source, not a cached role registry. Start with `rg -n 'modelSelection|reasoningEffort|effort:|provider family|claude-|gpt-' skills/ README.md PARKING_LOT.md`. Follow every caller and launch example for an affected role. Include active README/PARKING_LOT summaries and any current human documentation reached by those references. Read each match in context so a historical note, model in evidence, or unrelated role is not accidentally changed. Dated validation reports describe their original commits and stay unchanged.
 
-Build a table with role, source file/step, provider family, exact model/options, thread or subagent transport, and whether the setting is authoritative or a matching example. Include every launch site the search finds, Cooper's build and hard roles, How/Why, architect and judge, comment review, verify readers, Improve reflection and eval, and Orchestrate workers and verifiers among them. The table is a review artifact, not a new runtime configuration file.
+Build a table with role, source file/step, provider family, exact model/options, thread or subagent transport, and whether the setting is authoritative or a matching example. Include every launch site the search finds, How/Why, architect and judge, adversarial review, the per-PR verifier, comment review, verify readers, Improve reflection and eval, and Orchestrate workers and verifiers among them. The table is a review artifact, not a new runtime configuration file.
 
 ## Check and recommend
 
 Use the current thread's capability result, calling `orchestrator_capabilities` before its first `delegate_task` or `t3_thread_launch` if not already read and refreshing only after an error or user-named provider change. Inspect enabled instances using [live provider resolution](../cooper/references/delegation.md). Distinguish a disabled instance from an unavailable family/model. Check exact options and launch capability, not only model names. Preserve account-specific instance IDs as runtime observations, never shared defaults. Do not start test workers just to inventory choices.
 
-Flag unavailable models/settings, drift between a declaration and example, lost Claude/GPT diversity, and verifiers on the same model family as their workers. Check that Comment Sicko differs from the build-subagent family, the divergent reflection lens differs from judgment/tooling, and eval candidates cover models Cooper actually runs. A same-family override does not satisfy a second-family gate. Preserve job scope, approval rules, panel counts, ordering and read-only restrictions unless the user explicitly changes them.
+Flag unavailable models/settings, drift between a declaration and example, lost Claude/GPT diversity, and verifiers on the same model family as their workers. Check that the per-PR verifier and one adversary differ from the family Cooper runs on, the divergent reflection lens differs from judgment/tooling, and eval candidates cover models Cooper actually runs. A same-family override does not satisfy a second-family gate. Preserve job scope, approval rules, panel counts, ordering and read-only restrictions unless the user explicitly changes them.
 
 For recommendations, show role/file, before and after, evidence, expected quality/latency/cost tradeoff and uncertainty. Availability is not a ranking. Use official provider documentation or observed session evidence for upgrade claims; do not infer superiority from a version number alone. Keep current choices when evidence does not justify a change. No silent fallback is permitted.
 

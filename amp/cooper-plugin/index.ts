@@ -5,6 +5,7 @@ import type { PluginAPI, ThreadID } from '@ampcode/plugin'
 const LISTED = ['cooper']
 
 const UNLISTED = [
+	'cooper-adversarial-review',
 	'cooper-architect',
 	'cooper-blast-radius',
 	'cooper-grill',
@@ -41,8 +42,9 @@ const UNLISTED = [
 ]
 
 const MODELS = {
+	'claude-fable-5-2': 'anthropic/claude-fable-5-2',
 	'claude-opus-5-5': 'anthropic/claude-opus-5-5',
-	'claude-sonnet-5-5': 'anthropic/claude-sonnet-5-5',
+	'gpt-6-astra': 'openai/gpt-6-astra',
 	'gpt-6.1-sol': 'openai/gpt-6.1-sol',
 } as const
 const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'] as const
@@ -73,11 +75,11 @@ export default async function (amp: PluginAPI) {
 	const cooper = amp.createAgent({
 		name: 'Cooper',
 		extends: 'high',
-		model: MODELS['claude-opus-5-5'],
+		model: MODELS['claude-fable-5-2'],
 		reasoningEffort: 'high',
 		instructions: MODE_INSTRUCTIONS,
 		tools: {
-			add: ['plugin__*', 'create_thread', 'list_agent_modes', 'get_thread_status', 'send_thread_message', 'wait_for_threads', 'read_thread', 'find_thread'],
+			add: ['plugin__*', 'read_thread', 'find_thread'],
 		},
 		display: { label: 'Cooper', color: '#d97706' },
 	})
@@ -136,7 +138,11 @@ export default async function (amp: PluginAPI) {
 				parentThreadID: ctx.thread.id,
 				timeoutMs: minutes * 60 * 1000,
 			})
-			return `Subagent https://ampcode.com/threads/${result.threadID} (${model}, ${effort}):\n\n${result.text}`
+			const archived = await ctx.tools
+				.call('update_thread', { thread: result.threadID, archived: true })
+				.then(() => 'archived')
+				.catch((error) => `not archived: ${String(error)}`)
+			return `Subagent https://ampcode.com/threads/${result.threadID} (${model}, ${effort}, ${archived}):\n\n${result.text}`
 		},
 	})
 

@@ -10,7 +10,7 @@ Run it with T3's own tools and keep no store. The program's state is what T3 and
 
 - **This thread coordinates.** It frames, writes kickoffs, reads results, and decides. It never writes or edits product code; conflict fixes and restacks are units like any other.
 - **One worker per unit, in its own worktree.** Start each with `t3_thread_launch`: a title that names what the unit does in a few plain words, the way a good PR title would ("Migrate billing call sites to the v2 client"), with no prefix, `modelSelection` `claude-opus-5-5` with `{effort: high}` on provider family `claudeAgent`, `workspaceStrategy: {type: "worktree", baseRef: <base>, branch: <unit branch>, startFromOrigin: false}`, and the kickoff as `message`. The worker runs Cooper's matching playbook, so it ships its own PR and babysits it to merge-ready. It's the only writer of its branch; only it pushes, rebases, or retargets.
-- **One verifier per PR that isn't its author,** on the other model family: a `delegate_task` child using `gpt-6.1-sol` with `{reasoningEffort: high}` on provider family `codex`, per [launch mechanics](../references/delegation.md). It runs the checks and edits nothing. Its completion wakes this thread.
+- **One verifier per PR that isn't its author,** on the other model family: a `delegate_task` child using `gpt-6-astra` with `{reasoningEffort: xhigh}` on provider family `codex`, per [launch mechanics](../references/delegation.md). It runs the checks and edits nothing. Its completion wakes this thread.
 - **Two levels only:** this thread and its workers. Keep at most four workers in flight, since worktree threads run on this machine, and start the next as each finishes instead of waiting on a batch.
 
 ## The kickoff
