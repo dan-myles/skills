@@ -6,7 +6,7 @@ An Amp directory plugin that runs Cooper in Amp threads and orbs: start an orb i
 
 | Piece | What it does |
 | --- | --- |
-| **Cooper mode** | A mode in Amp's picker (Fable 5.2 high, built on Amp's `high` mode). Cooper writes all code itself; no subagent builds. It loads the `cooper:cooper` skill on every new task. |
+| **Cooper mode** | A mode in Amp's picker (Opus 5.5 high, built on Amp's `high` mode). Cooper writes all code itself; no subagent builds. It loads the `cooper:cooper` skill on every new task. |
 | **Bundled skills** | `cooper` is listed. Its helpers, principles, and `unslop` are registered with `listed: false`, so they never load on their own but resolve by path. |
 | **`cooper_subagent`** | Runs a subagent on the exact model and effort a Cooper step declares (Fable 5.2, Opus 5.5, GPT-6 Astra, GPT-6.1 Sol), in the same orb and checkout, and archives its thread when it returns. Amp's `Task` always uses the thread's model. |
 | **`cooper_checkpoint`** | Every checkpoint and question as a dialog only a person can answer: the catch-up as Markdown, your pick preselected, an "Other" box. Labels the thread `cooper-checkpoint` while it waits. |

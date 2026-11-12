@@ -75,7 +75,7 @@ export default async function (amp: PluginAPI) {
 	const cooper = amp.createAgent({
 		name: 'Cooper',
 		extends: 'high',
-		model: MODELS['claude-fable-5-2'],
+		model: MODELS['claude-opus-5-5'],
 		reasoningEffort: 'high',
 		instructions: MODE_INSTRUCTIONS,
 		tools: {
