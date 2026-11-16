@@ -2,7 +2,9 @@
 
 The user is a visual learner. Show it first, including every end-of-work reply, then say only what the picture doesn't. Text around a picture is a few short lines, never paragraphs that retell it.
 
-Amp renders Markdown well, so draw in the reply itself: ```` ```mermaid ```` blocks for flows, sequences, and states, Markdown tables for comparisons and status, and text trees for files. When a picture needs more room than a reply (a long investigation, a comparison with several views), write it as a thread artifact with the `artifact` tool and link it.
+Amp shows Mermaid as code, not as a diagram, so never put a ```` ```mermaid ```` block in a reply, an artifact, or a checkpoint. Draw every diagram and chart as a **view**: load Amp's `creating-views` skill and follow it. A view is one self-contained HTML page published with the `artifact` tool (`kind: "visual"`, folder `visuals`) and embedded in the reply on its own line as `![<the takeaway>](<url>)`. To update one, publish the same artifact again. Markdown tables still carry comparisons and status, and text trees still carry files. When the answer needs more room than a reply (a long investigation, a comparison with several views), write a document artifact, embed the views in it with the same image lines, and link it.
+
+The one exception is a PR body: GitHub renders Mermaid, so `../playbooks/open-pr.md` keeps its ```` ```mermaid ```` architecture diagram there.
 
 ## When to draw
 
@@ -25,13 +27,13 @@ A checkpoint's visual is a catch-up for someone who just walked in, read top to 
 2. **The problem.** Draw the mechanism that forces the decision, not a summary of it: the code path or data flow where the options split, the failing case, the conflicting constraint, the review comment beside the code it's about. Use real names, files, and numbers, each with where it came from.
 3. **The options.** A table, one row per option: what it does to the drawing above (what's added, removed, or rerouted), its cost, and whether it can be undone. Mark your pick.
 
-Someone who reads only this should be able to answer the question that follows it. The same catch-up goes into `cooper_checkpoint`'s `catchUp`, so the dialog stands on its own.
+Someone who reads only this should be able to answer the question that follows it. The same catch-up goes into `cooper_checkpoint`'s `catchUp`, so the dialog stands on its own. The dialog doesn't render views, so its catch-up carries the tables and text plus a link to the view in the reply.
 
 ## Required end-of-work recap
 
 Every end-of-work reply includes a diagram and a recap of what was built. This covers feature, bug, performance and refactor completion, opening a PR, and babysit handoffs. One-line acknowledgments and confirmations remain text-only; a work-result handoff is not a confirmation.
 
-Design the diagram around the mechanism of this particular job. Begin with the high-level overview: what the system does, where the change acts, and why that changes the outcome. Mark the changed parts with a Mermaid `classDef` and a legend line. Use the real configuration, symbol, and file names. Follow it with the recap: what was built and its scope, in a few bullets.
+Design the diagram around the mechanism of this particular job. Begin with the high-level overview: what the system does, where the change acts, and why that changes the outcome. Mark the changed parts in the view (+ new, ~ changed, − removed, never color alone) with a legend line. Use the real configuration, symbol, and file names. Follow it with the recap: what was built and its scope, in a few bullets.
 
 Pick the diagram that shows the mechanism, not a stock layout:
 
@@ -58,7 +60,7 @@ Keep evidence honest. Use measured numbers with units and sources when available
 | A change | Before and after, what moved highlighted |
 | A code change that matters | The snippet, with a note on each changed line |
 | Options | Table, your pick marked |
-| Numbers | Table with units, run count, and range, or a Mermaid `xychart-beta` |
+| Numbers | Table with units, run count, and range, or a chart view |
 | Status of many things | Table: pass, fail, pending, needs you |
 | Events over time | Timeline or Gantt |
 | Evidence | The real output, inline |
@@ -82,7 +84,7 @@ Any time Cooper plans, makes, or reports a change to code, draw a file map: wher
       └── price-utils.ts − deleted
   ```
 
-- **The connections.** A Mermaid flowchart: modules as subgraphs, files inside, arrows for imports or calls, the layer each module sits in (UI, API, domain, data) when the repo has layers. Mark an arrow that crosses a boundary it shouldn't.
+- **The connections.** A view: modules as groups, files inside, arrows for imports or calls, the layer each module sits in (UI, API, domain, data) when the repo has layers. Mark an arrow that crosses a boundary it shouldn't.
 - **Before and after** when files move or modules split: two trees.
 
 Draw one at each of these points:

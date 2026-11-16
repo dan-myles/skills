@@ -33,7 +33,7 @@ The few types, services, or ideas the rest depends on, each with a short definit
 ### How it works
 The main section. Walk the flow: what starts it, each step in order, where data goes, and where decisions happen. Write prose, not pseudocode. Point to files and functions so the reader knows where to look. Include a code snippet only when the point needs it.
 
-When several components talk to each other or data passes through stages, add a diagram: mermaid for sequences, flowcharts, and component graphs, or plain ASCII for something small. Skip it when prose already makes the flow clear.
+When several components talk to each other or data passes through stages, describe the diagram Cooper should draw: each node with its `file:line`, each edge with what passes along it, in order, and the path that matters. Cooper draws it as a view; don't write Mermaid or ASCII art. Skip it when prose already makes the flow clear.
 
 ### Where things live
 A short map of the files and folders someone would open first.

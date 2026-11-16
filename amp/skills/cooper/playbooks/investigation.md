@@ -4,7 +4,7 @@ The answer is yours. Change nothing: no edits, commits, or PRs.
 
 **The answer is a picture, not prose.** Every investigation answers with diagrams per `../references/visuals.md` before any text, in the reply or, when it's long, as a thread artifact. The text after it is a few lines at most. A text-only answer to an investigation is a failed answer. Make the diagrams do the explaining:
 
-- the flow as a diagram (Mermaid), `file:line` on every node, numbered in the order things happen
+- the flow as a diagram view, `file:line` on every node, numbered in the order things happen
 - a file map of the area: where each piece lives and how the pieces connect
 - the key ideas, each with the code that shows it
 - for "why", a timeline of the decisions and their evidence, confidence marked
@@ -24,7 +24,7 @@ If you conclude the code needs to change, stop there and say so. The user picks 
 2. When the question is "why", run `cooper-why` on the target. It works through the history and every other evidence source the session can reach.
 3. Lay out the answer in `cooper-how`'s sections: overview, the ideas you need, how it works step by step, where it lives (`file:line`), and the traps. Add `cooper-why`'s findings with their confidence levels. When the question is a choice, recommend one and back it with a table comparing the options. When the answer rests on a measured number, apply `explain-the-number` first.
 4. Verify what the answer rests on. For each claim the conclusion depends on, run something that shows it: a request, a test, a script, a log line, the app through the repo's verify skill. Put the output next to the claim. A claim you couldn't run stays marked as read from code.
-5. Draw the answer, check that each Mermaid block parses, then write the few lines it doesn't say. Run `unslop` on those.
+5. Draw the answer as views per `creating-views`, open each embed to check it shows its point, then write the few lines it doesn't say. Run `unslop` on those.
 
 **Reply:** the answer, each claim tied to code, history, or a run, or flagged as a guess. On "are we sure?" questions, give your honest call and challenge the question if it rests on a wrong assumption. **Show:** the diagrams above: the numbered flow, file map, key ideas, plus the timeline for "why" or the comparison for a choice.
 

@@ -26,7 +26,7 @@ Not built yet: auto-continue after a turn, status labels and quick actions, the 
 The skills are a second copy of the repo's `skills/`, kept in step by hand; see `AGENTS.md` at the repo root. This copy's Amp-only parts:
 
 - Questions go through `cooper_checkpoint`; subagents through `cooper_subagent` (`skills/cooper/references/delegation.md`).
-- Visuals are Mermaid, Markdown tables, and text trees, with a thread artifact for long ones (`skills/cooper/references/visuals.md`). No HTML pages.
+- Diagrams and charts are visual artifacts drawn with Amp's `creating-views` skill and embedded in the reply; Amp shows Mermaid as code, so Mermaid stays only in PR bodies, where GitHub renders it. Tables and text trees stay Markdown (`skills/cooper/references/visuals.md`).
 - Grills are saved as thread artifacts, since an orb keeps no home folder.
 - Babysit waits on Amp's GitHub subscriptions. PR bodies end with the thread URL; handoffs link `https://ampcode.com/threads/<T-id>`.
 - Credentials come from the project's Amp secrets.
