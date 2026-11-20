@@ -63,7 +63,18 @@ const SUBAGENT_INSTRUCTIONS = [
 	'You are a subagent started by Cooper. Do exactly what the brief asks, in the checkout you were given.',
 	'Your work gets reviewed: report what you changed, what you ran and its output, and anything you could not do.',
 	'When the brief says read-only, change no files.',
+	'No one will answer questions: never ask the user anything. Decide from the brief and the code, and list each assumption you made in your final reply.',
 ].join(' ')
+
+async function archive(ctx: { tools: { call(name: string, input: Record<string, unknown>): Promise<unknown> } }, thread: { id: string; state: { get(): Promise<string> } }) {
+	for (let attempt = 0; attempt < 10 && (await thread.state.get().catch(() => 'idle')) === 'running'; attempt++) {
+		await new Promise((resolve) => setTimeout(resolve, 1000))
+	}
+	return ctx.tools
+		.call('update_thread', { thread: thread.id, archived: true, stop_running_turn: true })
+		.then(() => 'archived')
+		.catch((error) => `not archived: ${String(error)}`)
+}
 
 type Option = { label: string; detail?: string }
 type Question = { question: string; options: Option[]; allowOther?: boolean }
@@ -101,7 +112,7 @@ export default async function (amp: PluginAPI) {
 				model: MODELS[model],
 				reasoningEffort: effort,
 				instructions: SUBAGENT_INSTRUCTIONS,
-				tools: { include: ['*'], exclude: ['cooper_subagent', 'cooper_checkpoint', 'create_thread'] },
+				tools: { include: ['*'], exclude: ['cooper_subagent', 'cooper_checkpoint', 'create_thread', 'ask_user_choice'] },
 			})
 			subagents.set(key, agent)
 		}
@@ -134,15 +145,23 @@ export default async function (amp: PluginAPI) {
 			if (!EFFORTS.includes(effort)) return `Unknown effort ${String(input.effort)}. Use one of: ${EFFORTS.join(', ')}.`
 			if (!brief) return 'Missing brief.'
 			const minutes = typeof input.timeoutMinutes === 'number' && input.timeoutMinutes > 0 ? input.timeoutMinutes : 30
-			const result = await subagent(model, effort).run(brief, {
-				parentThreadID: ctx.thread.id,
-				timeoutMs: minutes * 60 * 1000,
-			})
-			const archived = await ctx.tools
-				.call('update_thread', { thread: result.threadID, archived: true })
-				.then(() => 'archived')
-				.catch((error) => `not archived: ${String(error)}`)
-			return `Subagent https://ampcode.com/threads/${result.threadID} (${model}, ${effort}, ${archived}):\n\n${result.text}`
+			const thread = await subagent(model, effort).createThread({ parentThreadID: ctx.thread.id })
+			const reply = thread.waitForResponse({ timeoutMs: minutes * 60 * 1000 })
+			const stop = () => void thread.cancel()
+			ctx.signal.addEventListener('abort', stop)
+			let text: string
+			try {
+				await thread.appendUserMessage({ type: 'user-message', content: brief })
+				const message = await reply
+				text = message.content.flatMap((block) => (block.type === 'text' ? [block.text] : [])).join('\n\n')
+			} catch (error) {
+				await thread.cancel().catch(() => {})
+				text = `The subagent did not finish: ${String(error)}`
+			} finally {
+				ctx.signal.removeEventListener('abort', stop)
+			}
+			const archived = await archive(ctx, thread)
+			return `Subagent https://ampcode.com/threads/${thread.id} (${model}, ${effort}, ${archived}):\n\n${text}`
 		},
 	})
 
